@@ -1,40 +1,46 @@
 ---
 name: frontend-development
-description: Use when touching any file under /frontend/src — adding pages, components, hooks, services, connecting React Query, wiring Zod validation, fixing frontend bugs, or building any React/TypeScript feature for the my-olx / PiațăRo marketplace.
+description: Use when touching any file under /frontend/src — adding pages, components, hooks, connecting React Query, wiring Zod validation, fixing frontend bugs, or building any React/TypeScript feature for the my-olx digital-assets marketplace.
 ---
 
 # Frontend Development — my-olx (React/TypeScript)
 
 ## Stack
 
-React 19 · TanStack Router v1 · TanStack Query v5 · Axios · Zustand · React Hook Form · Zod · react-i18next · Tailwind CSS v4 · @base-ui/react 1.4.1 · Material Symbols Outlined
+React 19 · React Router v7 · TanStack Query v5 · Axios · Zustand · React Hook Form · Zod · react-i18next · Tailwind CSS v4 · @base-ui/react 1.4.1 · Material Symbols Outlined
 
 ## Directory Structure
 
+**New split (core + app):**
+
 ```
 src/
-├── components/          # Shared, reusable across features
+├── core/                # Shared engine & UI library
 │   ├── layout/          # Navbar, Footer, PageShell
-│   └── ui/              # 28 components — see Shared UI Components below
-├── hooks/               # Global custom hooks (useAuth, useToast)
-├── types/               # Global TypeScript interfaces/types
-├── apis/                # (reserved for global API concerns)
-├── queries/             # (reserved for global query concerns)
-├── lib/                 # Config & providers
-│   ├── axios.ts         # Single Axios instance
-│   ├── queryClient.ts   # React Query client + QueryClientProvider
-│   ├── i18n.ts          # react-i18next setup (ro default, en fallback)
-│   └── auth.ts          # Zustand auth store
-├── routes/              # React Router route declarations only
-└── modules/             # One folder per feature
-    └── listings/
-        ├── pages/       # Route-level components (ListingsPage.tsx)
-        ├── components/  # Feature UI components (ListingCard.tsx)
-        ├── hooks/       # Feature hooks (useListingFilters.ts)
-        ├── types/       # Feature types (Listing, ListingFilter)
-        ├── apis/        # Axios calls (listingsApi.ts)
-        └── queries/     # TanStack queryOptions factories (listingQueries.ts)
+│   ├── ui/              # 28+ shared components (Button, Input, Modal, etc.)
+│   ├── hooks/           # Global hooks (useAuth, useToast)
+│   ├── types/           # Global types & interfaces
+│   ├── lib/             # Config & providers
+│   │   ├── axios.ts     # Axios instance + Bearer token injection
+│   │   ├── queryClient.ts  # React Query client + QueryClientProvider
+│   │   ├── i18n.ts      # react-i18next setup (ro default)
+│   │   └── auth.ts      # Zustand auth store
+│   └── routes/          # Route declarations only
+├── app/                 # Feature modules
+│   └── {feature}/       # One folder per feature (e.g., listings, users, assets)
+│       ├── pages/       # Route-level components (ListingsPage.tsx)
+│       ├── components/  # Feature UI components (ListingCard.tsx)
+│       ├── hooks/       # Feature hooks (useListingFilters.ts)
+│       ├── types/       # Feature types (Listing, ListingFilter)
+│       ├── apis/        # Axios calls (listingsApi.ts)
+│       └── queries/     # React Query factories (listingQueries.ts)
+└── App.tsx              # Root + router setup
 ```
+
+**Path aliases:**
+- `@/` → `src/`
+- `@core/*` → `src/core/`
+- `@app/*` → `src/app/`
 
 ## Styling Rules
 
@@ -51,10 +57,10 @@ src/
 
 ## Data Fetching Pattern
 
-Define query options as factories in `modules/<feature>/queries/`:
+Define query options as factories in `app/<feature>/queries/`:
 
 ```ts
-// modules/listings/queries/listingQueries.ts
+// app/listings/queries/listingQueries.ts
 import { queryOptions } from '@tanstack/react-query'
 import { listingsApi } from '../apis/listingsApi'
 
@@ -82,16 +88,16 @@ Wrap page components with `<Suspense fallback={<Skeleton />}>` and `<ErrorBounda
 
 ## API Layer
 
-Single Axios instance in `lib/axios.ts`:
+Single Axios instance in `core/lib/axios.ts`:
 - `baseURL` from `import.meta.env.VITE_API_URL`
 - Request interceptor: attach JWT from Zustand auth store
 - Response interceptor: 401 → redirect to login; surface typed errors
 
-Feature API calls live in `modules/<feature>/apis/`:
+Feature API calls live in `app/<feature>/apis/`:
 
 ```ts
-// modules/listings/apis/listingsApi.ts
-import { axiosInstance } from '@/lib/axios'
+// app/listings/apis/listingsApi.ts
+import { axiosInstance } from '@core/lib/axios'
 
 export const listingsApi = {
   getAll: (filters: ListingFilter) =>
@@ -103,7 +109,7 @@ export const listingsApi = {
 
 ## Auth State
 
-Zustand store in `lib/auth.ts` exposes `{ user, isAuthenticated, login, logout }`. Access via `useAuth()` hook. JWT stored in `localStorage`.
+Zustand store in `core/lib/auth.ts` exposes `{ user, isAuthenticated, login, logout }`. Access via `useAuth()` hook. JWT stored in `localStorage`.
 
 ## Forms
 
@@ -118,18 +124,18 @@ Never use raw `useState` for form fields with more than one input.
 
 ## Routing
 
-- `routes/` contains React Router declarations only — no component logic
+- `core/routes/` contains React Router declarations only — no component logic
 - Use `<Link>` for user-driven navigation, `useNavigate()` for logic-driven
-- Page components live in `modules/<feature>/pages/`
+- Page components live in `app/<feature>/pages/`
 - All routes wrapped with Suspense + ErrorBoundary at route level
 
 ## Localization
 
 - UI strings in Romanian by default via react-i18next (`t('key')`)
-- English translations added as fallback in `lib/i18n.ts`
+- English translations added as fallback in `core/lib/i18n.ts`
 - No hardcoded English strings in JSX
 - Romanian diacritics must be correct: **ș ț ă â î** (not cedilla variants ş ţ)
-- Currency: `formatPrice(ron)` → `"1.200 RON"` via `lib/formatters.ts`
+- Currency: `formatPrice(ron)` → `"1.200 RON"` via `core/lib/formatters.ts`
 - Dates: `Intl.DateTimeFormat('ro-RO')`
 
 ## Accessibility Guidelines (WCAG 2.1 AA — best effort)
@@ -143,18 +149,18 @@ Never use raw `useState` for form fields with more than one input.
 ## Task Checklist
 
 ### New feature module
-1. Create `modules/<feature>/` with subfolders: `pages`, `components`, `hooks`, `types`, `apis`, `queries`
-2. Define types in `modules/<feature>/types/`
-3. Define API calls in `modules/<feature>/apis/`
-4. Define query factories in `modules/<feature>/queries/`
+1. Create `app/<feature>/` with subfolders: `pages`, `components`, `hooks`, `types`, `apis`, `queries`
+2. Define types in `app/<feature>/types/`
+3. Define API calls in `app/<feature>/apis/`
+4. Define query factories in `app/<feature>/queries/`
 5. Build components using `useSuspenseQuery`
-6. Add page component in `modules/<feature>/pages/`
-7. Register route in `routes/`
+6. Add page component in `app/<feature>/pages/`
+7. Register route in `core/routes/`
 8. All strings via `t()` with Romanian as default
 
-## Shared UI Components (`components/ui/`)
+## Shared UI Components (`core/ui/`)
 
-All exported from `@/components/ui`. Full list:
+All exported from `@core/ui`. Full list:
 
 | Component | Primitive | Notes |
 |-----------|-----------|-------|
@@ -192,16 +198,16 @@ All exported from `@/components/ui`. Full list:
 - `data-[popup-open]` — Menu/Tooltip Trigger when open
 
 ### New shared component
-1. Place in `components/ui/` (primitive) or `components/layout/` (structural)
+1. Place in `core/ui/` (primitive) or `core/layout/` (structural)
 2. Use design token Tailwind classes only — no hex values
-3. Export as named export from `components/ui/index.ts`
+3. Export as named export from `core/ui/index.ts`
 4. Add `aria-label` / semantic HTML
 5. Prefer `@base-ui/react` primitives for interactive/overlay components
 
 ### Connecting a form
 1. Define Zod schema
 2. Wire `useForm({ resolver: zodResolver(schema) })`
-3. Define mutation in `modules/<feature>/queries/` using `mutationOptions`
+3. Define mutation in `app/<feature>/queries/` using `mutationOptions`
 4. Call mutation in `handleSubmit`
 
 ## Common Mistakes
@@ -211,7 +217,8 @@ All exported from `@/components/ui`. Full list:
 | Hardcoded hex in className | Use token class (`text-primary`, `bg-surface-low`) |
 | `useQuery` with manual loading state | Use `useSuspenseQuery` + Suspense boundary |
 | Form with raw `useState` | Use React Hook Form + Zod |
-| Axios call directly in component | Move to `modules/<feature>/apis/` |
+| Axios call directly in component | Move to `app/<feature>/apis/` |
 | English string hardcoded in JSX | Use `t('key')` |
-| Page component outside module | Move to `modules/<feature>/pages/` |
+| Page component outside module | Move to `app/<feature>/pages/` |
 | Wrong diacritics (ş ţ) | Use correct Romanian chars (ș ț) |
+| Imports from wrong path | Use `@core/*` for engine/ui, `@app/*` for features |

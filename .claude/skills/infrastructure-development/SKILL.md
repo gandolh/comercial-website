@@ -1,18 +1,18 @@
 ---
 name: infrastructure-development
-description: Use when working on local dev infrastructure (docker-compose, migrations, env setup) or production AWS infrastructure (CDK, ECS Fargate, Dockerfiles) for my-olx / PiațăRo
+description: Use when working on local dev infrastructure (docker-compose, migrations, env setup) or production AWS infrastructure (CDK, ECS Fargate, Dockerfiles) for my-olx digital-assets marketplace
 ---
 
-# DevOps & Infrastructure — my-olx (PiațăRo)
+# DevOps & Infrastructure — my-olx
 
 ## Structure
 
 ```
-infrastructure/local/        ← docker-compose (Postgres, Redis, LocalStack)
-cdk/                         ← AWS CDK TypeScript stacks (dev + prod)
-backend/migrations/          ← sqlx migration files
-backend/Dockerfile           ← multi-stage Rust build
-frontend/Dockerfile          ← multi-stage Node build → nginx
+infrastructure/my-olx-local/     ← docker-compose (Postgres, LocalStack, MailHog)
+cdk/                             ← AWS CDK TypeScript stacks (dev + prod)
+backend/migrations/              ← raw .sql migration files
+backend/Dockerfile               ← multi-stage Node build
+frontend/Dockerfile              ← multi-stage Node build → nginx
 ```
 
 ---
@@ -21,14 +21,14 @@ frontend/Dockerfile          ← multi-stage Node build → nginx
 
 ### Services (docker-compose)
 
-All local services live in `infrastructure/local/docker-compose.yml`:
+All local services live in `infrastructure/my-olx-local/docker-compose.yml`:
 
 - PostgreSQL 16 — primary database
-- Redis 7 — cache / session
 - LocalStack 3 — S3 emulation (`my-olx-uploads` bucket)
+- MailHog — local email testing (SMTP on 1025, Web UI on 8025)
 
 ```bash
-cd infrastructure/local
+cd infrastructure/my-olx-local
 docker-compose up -d      # start all services
 docker-compose down       # stop (data persists in named volumes)
 docker-compose down -v    # stop + wipe volumes (clean slate)
@@ -44,56 +44,70 @@ docker-compose down -v    # stop + wipe volumes (clean slate)
 
 ### Database Migrations
 
-Migrations always run against the local Postgres (or RDS in production). **Always create the migration before writing Rust code** — sqlx compile-checks queries against the schema.
+Migrations always run against local Postgres (or RDS in production). Raw `.sql` files in `backend/migrations/` run in lexicographic order via custom migrator. **Always create the migration before writing TypeScript code**.
 
 ```bash
-# From backend/
-sqlx migrate add <description>          # creates migrations/{timestamp}_{description}.sql
-sqlx migrate run                         # apply pending migrations
-sqlx migrate revert                      # roll back last migration
+# From backend/, manually create file (no CLI helper yet)
+touch migrations/001_create_users_table.sql
 ```
 
 Migration file structure:
 
 ```sql
 -- UP
-CREATE TABLE ...;
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
--- DOWN (always include)
-DROP TABLE ...;
+-- DOWN
+DROP TABLE users;
 ```
 
 Apply migrations before running the backend:
 
 ```bash
-cd infrastructure/local && docker-compose up -d
-cd backend && sqlx migrate run && cargo run
+cd infrastructure/my-olx-local && docker-compose up -d
+cd backend && npm run migrate && npm run dev
 ```
+
+Migrations are tracked in `_migrations` table; pending migrations auto-run on `npm run migrate`.
 
 ---
 
 ## Dockerfiles
 
-### Backend (`backend/Dockerfile`) — multi-stage Rust
+### Backend (`backend/Dockerfile`) — multi-stage Node
 
 ```dockerfile
-# Stage 1: build
-FROM rust:1.82-slim AS builder
+# Stage 1: dependencies
+FROM node:22-alpine AS dependencies
 WORKDIR /app
-RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
-COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs && cargo build --release && rm -rf src
-COPY . .
-RUN cargo build --release
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-# Stage 2: runtime
-FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y ca-certificates libssl3 && rm -rf /var/lib/apt/lists/*
+# Stage 2: build
+FROM node:22-alpine AS builder
 WORKDIR /app
-COPY --from=builder /app/target/release/backend .
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 3: runtime
+FROM node:22-alpine
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=builder /app/core/dist ./core/dist
+COPY --from=builder /app/app/dist ./app/dist
 COPY --from=builder /app/migrations ./migrations
+COPY package.json ./
 EXPOSE 8080
-CMD ["./backend"]
+ENV NODE_ENV=production
+CMD ["npm", "start"]
 ```
 
 ### Frontend (`frontend/Dockerfile`) — multi-stage Node → nginx
@@ -218,16 +232,16 @@ npx cdk destroy MyOlxDev   # tear down dev stack
 
 ## Checklist — new local service
 
-- [ ] Service added to `infrastructure/local/docker-compose.yml` with health check
-- [ ] Init scripts added to `infrastructure/local/<service>/` if needed
-- [ ] `infrastructure/local/.env.example` updated
+- [ ] Service added to `infrastructure/my-olx-local/docker-compose.yml` with health check
+- [ ] Init scripts added to `infrastructure/my-olx-local/<service>/` if needed
+- [ ] `infrastructure/my-olx-local/.env.example` updated (if applicable)
 - [ ] `backend/.env.example` updated to match
 - [ ] Corresponding AWS CDK resource planned for production
 
 ## Checklist — new migration
 
-- [ ] Migration created with `sqlx migrate add <description>`
+- [ ] Migration created manually as `backend/migrations/{timestamp}_{description}.sql`
 - [ ] UP SQL written (creates/alters schema)
 - [ ] DOWN SQL written (drops/reverts)
-- [ ] `sqlx migrate run` executed against local Postgres
-- [ ] `cargo build` passes (sqlx compile-checks queries)
+- [ ] `npm run migrate` executed against local Postgres to verify
+- [ ] `npm run build` passes (TypeScript compile-check)

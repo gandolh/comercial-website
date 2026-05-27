@@ -4,29 +4,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**my-olx** ("PiațăRo") is a Romanian classifieds marketplace (OLX competitor). Monorepo with a Rust/Axum backend and React/TypeScript frontend. Early stage — backend auth/listings implemented, most frontend routes are `<ComingSoon />`.
+**my-olx** (formerly "PiațăRo") is a **digital-assets marketplace**: sellers upload downloadable files (zip, pdf, psd, mp4, etc.), buyers download them. No physical goods, no shipping, no location/city. Asset categories: software, grafica (grafică), sabloane (șabloane), audio, video, ebook, fonturi, cod-sursa (cod sursă), diverse.
+
+Monorepo: **Node.js/TypeScript + Fastify** backend (npm workspace with `@my-olx/core` engine + `@my-olx/app` implementation), **React/TypeScript + Vite** frontend. Exact-pinned dependencies; Kysely + raw SQL + custom migrator for DB; early stage — auth/listings core implemented.
 
 ## Commands
 
 ### Local Infrastructure (start first)
 
 ```bash
-cd infrastructure/local
-docker-compose up -d          # starts PostgreSQL 16, Redis 7, LocalStack (S3)
+cd infrastructure/my-olx-local
+docker-compose up -d          # starts PostgreSQL 16, LocalStack (S3), MailHog
 ```
 
-### Backend (Rust/Axum)
+### Backend (Node.js/TypeScript + Fastify)
 
 ```bash
 cd backend
-cp .env.example .env          # first time only
-cargo run                     # start server on 0.0.0.0:8080
-cargo test                    # all tests
-cargo test <test_fn_name>     # single test (e.g. cargo test test_register)
-cargo clippy                  # lint
+npm install                   # first time only (installs both @my-olx/core and @my-olx/app)
+npm run dev                   # tsx watch — server on 0.0.0.0:8080
+npm run build                 # tsc -b (compiles core then app)
+npm test                      # vitest
+npm run migrate               # apply backend/migrations/*.sql to local Postgres
 ```
 
-Backend `.env` values must match docker-compose defaults (already do in `.env.example`).
+Backend uses `@my-olx/core` (engine: db, auth, storage, config) and `@my-olx/app` (routes/handlers/services/repos/dto for digital assets). `.env` values must match docker-compose defaults.
 
 ### Frontend (React/Vite)
 
@@ -42,40 +44,60 @@ Frontend reads `VITE_API_URL` (default: `http://localhost:8080`) from `.env`.
 
 ## Architecture
 
-### Backend: 4-Layer Architecture
+### Backend: npm Workspace with 4-Layer App
 
+**Structure:**
+```
+backend/
+  core/                 ← @my-olx/core (shared engine)
+    src/db/            ← Kysely + raw SQL + custom migrator
+    src/auth/          ← JWT + Argon2 password hashing
+    src/storage/       ← S3 client
+    src/config/        ← env parsing
+    src/http.ts        ← Fastify factory
+    src/errors.ts      ← AppError enum
+  app/                  ← @my-olx/app (marketplace implementation)
+    src/
+      routes/          ← Fastify route assembly
+      handlers/        ← thin HTTP extraction/response
+      services/        ← business logic
+      repositories/    ← db queries (trait + Postgres impl)
+      dto/             ← request/response JSON shapes
+  migrations/           ← raw .sql files (run via npm run migrate)
+```
+
+**Within `app/` (4-layer):**
 ```
 routes/ → handlers/ → services/ → repositories/ → models/
 ```
 
-- **`routes/`** — Axum router assembly (`/auth`, `/listings`, `/users`)
-- **`handlers/`** — Thin: extract request, call service, return response; protected endpoints use `AuthUser` extractor
-- **`services/`** — Business logic; generic over repository traits (`AuthService<R: UserRepository>`)
-- **`repositories/`** — sqlx queries only; defined as traits so services can be unit-tested with mocks
-- **`models/`** — DB row structs (`#[derive(sqlx::FromRow)]`)
-- **`dto/`** — Request/response JSON shapes (separate from models, use `validator` crate)
-- **`middleware/auth.rs`** — JWT extractor as Axum `FromRequestParts` → `AuthUser { user_id }`
-- **`error.rs`** — Single `AppError` enum; all layers return `Result<T, AppError>`; maps to HTTP status + JSON
-- **`state.rs`** — `AppState { db: PgPool, redis: Client, s3: Client, config: Arc<Config> }`
-- **`router.rs`** — Top-level router; middleware stack: CORS (Any), Brotli compression, tower-http tracing
+- **routes/** — Fastify route assembly (`/auth`, `/listings`, `/assets`, etc.)
+- **handlers/** — Thin: parse request, call service, return response; protected endpoints use `user_id` from JWT
+- **services/** — Business logic; generic over repository traits for unit testing with mocks
+- **repositories/** — Kysely queries + raw SQL; defined as traits
+- **dto/** — Request/response JSON shapes (separate from DB models)
 
-Auth: JWT (`jsonwebtoken`) + Argon2 password hashing. `password_hash` only, never plaintext.
+**Core engine:**
+- **db/** — Kysely instance + custom migrator (`npm run migrate` applies `backend/migrations/*.sql`)
+- **auth/** — JWT creation/verification + Argon2 hashing; `password_hash` only, never plaintext
+- **storage/** — S3 client (LocalStack in dev)
+- **http.ts** — Fastify factory with middleware: CORS, compression, tracing
+- **errors.ts** — Single `AppError` enum; all layers return `Result<T, AppError>`; maps to HTTP status + JSON
 
-Database migrations: `backend/migrations/` — currently empty; no schema applied yet.
+**Key:** Exact-pinned npm versions (`package-lock.json`); `@my-olx/core` is stable, `@my-olx/app` depends on it.
 
-### Frontend: React Router + React Query
+### Frontend: React Router + React Query with Core/App Split
 
-- **Routing:** React Router DOM v7 — `BrowserRouter` in `App.tsx`; routes defined in `src/routes/index.tsx`
-- **Server state:** `@tanstack/react-query` + axios (`src/lib/axios.ts` — adds Bearer token, handles 401 redirect)
-- **Styling:** Tailwind CSS v4 via Vite plugin (no `tailwind.config.js`); path alias `@/` → `src/`
+- **Routing:** React Router v7 — `BrowserRouter` in `App.tsx`; routes in `src/routes/`
+- **Layout:** `src/core/layout/` (Navbar, Footer, PageShell)
+- **Shared UI:** `src/core/ui/` — reusable components (Button, Input, Modal, etc.)
+- **Server state:** React Query v5 + Axios (`src/core/lib/axios.ts` — adds Bearer token, handles 401)
+- **Styling:** Tailwind CSS v4; path aliases `@/` → `src/`, `@core/*` → `src/core/`, `@app/*` → `src/app/`
 - **Forms:** React Hook Form + Zod
-- **Headless UI:** `@base-ui/react`
-- **i18n:** `i18next` with Romanian (`ro`) default; translations in `public/locales/{lang}/common.json`
-- **State:** Zustand installed but unused — prefer React Query for server state
+- **i18n:** react-i18next with Romanian default; translations in `public/locales/{lang}/common.json`
+- **State:** Zustand available; prefer React Query for server state
 
-Route layout: `Navbar` + `<AppRoutes>` + `Footer`. Only `/` (HomePage) is implemented.
-
-Feature modules live under `src/modules/{feature}/` with sub-folders `pages/`, `components/`, `types/`.
+**Feature modules:** `src/app/{feature}/` with subfolders `pages/`, `components/`, `hooks/`, `types/`, `apis/`, `queries/`.
 
 ### Design System: Carpathian Clear
 
@@ -87,8 +109,12 @@ Tokens: `design/design-system/carpathian-clear.json` (Material Design 3 conventi
 
 ### Key Business Rules
 
-- Free tier: 5 listings/week per user (`WEEKLY_POST_LIMIT` in `services/listings.rs`)
-- Listings auto-expire after 30 days (`expires_at = NOW() + INTERVAL '30 days'` set at creation)
-- Currency: RON (`price_ron: Option<i64>`; `None` = free listing)
-- Romanian localization required throughout UI (diacritics: ă, â, î, ș, ț)
-- Target: < 3 min listing creation, WCAG 2.1 AA accessibility
+- **Free tier:** 5 listings/week per user (enforced in `services/listings.ts`)
+- **Listings expire:** 30 days after creation (auto-set at creation)
+- **Digital assets required:** Publishing requires ≥1 uploaded downloadable file (not images alone); images are optional preview screenshots
+- **Asset fields:** file_format, file_size_bytes, download_count; license_type (personal | commercial | extended)
+- **New endpoints:** `GET /listings/:id/assets/*` (list downloads), `GET /listings/:id/download` (authenticated download)
+- **Currency:** RON (optional pricing; `None` = free listing)
+- **Categories:** software, grafica, sabloane, audio, video, ebook, fonturi, cod-sursa, diverse
+- **Romanian localization:** Required throughout UI; correct diacritics (ă, â, î, ș, ț)
+- **Target:** < 3 min listing creation, WCAG 2.1 AA accessibility

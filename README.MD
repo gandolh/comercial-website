@@ -1,95 +1,79 @@
-# CLAUDE.md
+# my-olx — Digital Assets Marketplace
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+A modern Romanian marketplace for selling/buying digital files: software, graphics, templates, audio, video, ebooks, fonts, source code, and more.
 
-## Project Overview
+**Stack:** Node.js/TypeScript + Fastify (backend) · React/TypeScript + Vite (frontend) · PostgreSQL + LocalStack S3
 
-**my-olx** ("PiațăRo") is a Romanian classifieds marketplace (OLX competitor). Monorepo with a Rust/Axum backend and React/TypeScript frontend. Early stage — backend auth/listings implemented, most frontend routes are `<ComingSoon />`.
+---
 
-## Commands
+## Quick Start
 
-### Local Infrastructure (start first)
+### 1. Start local infrastructure (Postgres, S3, MailHog)
 
 ```bash
-cd infrastructure/local
-docker-compose up -d          # starts PostgreSQL 16, Redis 7, LocalStack (S3)
+cd infrastructure/my-olx-local
+docker-compose up -d
 ```
 
-### Backend (Rust/Axum)
+### 2. Install backend dependencies & run migrations
 
 ```bash
 cd backend
-cp .env.example .env          # first time only
-cargo run                     # start server on 0.0.0.0:8080
-cargo test                    # all tests
-cargo test <test_fn_name>     # single test (e.g. cargo test test_register)
-cargo clippy                  # lint
+npm install
+npm run migrate
+npm run dev          # server runs on http://localhost:8080
 ```
 
-Backend `.env` values must match docker-compose defaults (already do in `.env.example`).
-
-### Frontend (React/Vite)
+### 3. Install frontend & start dev server
 
 ```bash
 cd frontend
 npm install
-npm run dev                   # dev server with HMR (proxies API to localhost:8080)
-npm run build                 # tsc + vite build
-npm run lint                  # ESLint
+npm run dev          # opens http://localhost:5173 (proxies API to :8080)
 ```
 
-Frontend reads `VITE_API_URL` (default: `http://localhost:8080`) from `.env`.
+---
 
-## Architecture
+## Architecture Snapshot
 
-### Backend: 4-Layer Architecture
+**Backend:** npm workspace with `@my-olx/core` (engine: Kysely DB, auth, storage) + `@my-olx/app` (routes/handlers/services/repos for listings & assets). Fastify + raw SQL migrations.
 
-```
-routes/ → handlers/ → services/ → repositories/ → models/
-```
+**Frontend:** React Router + React Query. Organized as `src/core/` (shared UI engine) + `src/app/` (feature modules). Tailwind CSS v4.
 
-- **`routes/`** — Axum router assembly (`/auth`, `/listings`, `/users`)
-- **`handlers/`** — Thin: extract request, call service, return response; protected endpoints use `AuthUser` extractor
-- **`services/`** — Business logic; generic over repository traits (`AuthService<R: UserRepository>`)
-- **`repositories/`** — sqlx queries only; defined as traits so services can be unit-tested with mocks
-- **`models/`** — DB row structs (`#[derive(sqlx::FromRow)]`)
-- **`dto/`** — Request/response JSON shapes (separate from models, use `validator` crate)
-- **`middleware/auth.rs`** — JWT extractor as Axum `FromRequestParts` → `AuthUser { user_id }`
-- **`error.rs`** — Single `AppError` enum; all layers return `Result<T, AppError>`; maps to HTTP status + JSON
-- **`state.rs`** — `AppState { db: PgPool, redis: Client, s3: Client, config: Arc<Config> }`
-- **`router.rs`** — Top-level router; middleware stack: CORS (Any), Brotli compression, tower-http tracing
+---
 
-Auth: JWT (`jsonwebtoken`) + Argon2 password hashing. `password_hash` only, never plaintext.
+## Documentation
 
-Database migrations: `backend/migrations/` — currently empty; no schema applied yet.
+- **CLAUDE.md** — Full dev guide: commands, architecture, business rules, design system
+- **backend/.env.example** — Backend config (must match docker-compose defaults)
+- **frontend/.env** — Frontend config (VITE_API_URL defaults to http://localhost:8080)
 
-### Frontend: React Router + React Query
+---
 
-- **Routing:** React Router DOM v7 — `BrowserRouter` in `App.tsx`; routes defined in `src/routes/index.tsx`
-- **Server state:** `@tanstack/react-query` + axios (`src/lib/axios.ts` — adds Bearer token, handles 401 redirect)
-- **Styling:** Tailwind CSS v4 via Vite plugin (no `tailwind.config.js`); path alias `@/` → `src/`
-- **Forms:** React Hook Form + Zod
-- **Headless UI:** `@base-ui/react`
-- **i18n:** `i18next` with Romanian (`ro`) default; translations in `public/locales/{lang}/common.json`
-- **State:** Zustand installed but unused — prefer React Query for server state
+## Key Features
 
-Route layout: `Navbar` + `<AppRoutes>` + `Footer`. Only `/` (HomePage) is implemented.
+- **Digital-asset focused:** Sellers upload downloadable files; buyers download. No physical shipping.
+- **Free tier:** 5 listings/week per user. Listings auto-expire after 30 days.
+- **Asset management:** File format, size, license type (personal/commercial/extended), download tracking.
+- **Romanian marketplace:** Full localization with correct diacritics (ă, â, î, ș, ț).
+- **Modern UX:** Carpathian Clear design system; < 3 min listing creation target.
 
-Feature modules live under `src/modules/{feature}/` with sub-folders `pages/`, `components/`, `types/`.
+---
 
-### Design System: Carpathian Clear
+## Development Commands
 
-Tokens: `design/design-system/carpathian-clear.json` (Material Design 3 conventions).
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` (backend) | Start Fastify dev server with hot reload |
+| `npm run build` (backend) | TypeScript build (core → app) |
+| `npm test` (backend) | Run vitest suite |
+| `npm run migrate` (backend) | Apply SQL migrations to Postgres |
+| `npm run dev` (frontend) | Vite dev server with HMR |
+| `npm run build` (frontend) | Production build (tsc + Vite) |
+| `npm run lint` (frontend) | ESLint check |
 
-- Primary: `#0056D2` (blue), Secondary: `#008B8B` (teal), Tertiary: `#2E7D32` (green)
-- Fonts: Manrope (headlines), Inter (body)
-- Border radius: 8px (`rounded-xl`)
-- HTML mockups for reference: `design/screens/` and `design/code/`
+---
 
-### Key Business Rules
+## For Detailed Guidance
 
-- Free tier: 5 listings/week per user (`WEEKLY_POST_LIMIT` in `services/listings.rs`)
-- Listings auto-expire after 30 days (`expires_at = NOW() + INTERVAL '30 days'` set at creation)
-- Currency: RON (`price_ron: Option<i64>`; `None` = free listing)
-- Romanian localization required throughout UI (diacritics: ă, â, î, ș, ț)
-- Target: < 3 min listing creation, WCAG 2.1 AA accessibility
+See **CLAUDE.md** in the repo root for architecture, 4-layer backend design, frontend module structure, business rules, and design system specifics.
