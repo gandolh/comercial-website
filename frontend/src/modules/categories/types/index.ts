@@ -28,13 +28,13 @@ export const CITIES: { slug: string; label: string }[] = [
 ];
 
 export const CATEGORY_LABELS: Record<string, string> = {
-  electronice: "Electronice",
-  auto: "Auto, moto și ambarcațiuni",
-  imobiliare: "Imobiliare",
-  "casa-gradina": "Casă și grădină",
-  moda: "Modă și frumusețe",
-  joburi: "Locuri de muncă",
-  servicii: "Servicii, afaceri",
-  sport: "Sport și timp liber",
-  gratuit: "Oferite gratuit",
+  software: "Software și aplicații",
+  grafica: "Grafică și ilustrații",
+  sabloane: "Șabloane și teme",
+  audio: "Audio și muzică",
+  video: "Video și animație",
+  ebook: "Cărți electronice",
+  fonturi: "Fonturi",
+  "cod-sursa": "Cod sursă",
+  diverse: "Diverse",
 };
