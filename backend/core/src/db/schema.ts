@@ -35,13 +35,39 @@ export interface ListingsTable {
   price_ron: number | null;
   is_negotiable: ColumnType<boolean, boolean | undefined, boolean>;
   category: string;
-  city: string;
+  city: ColumnType<string, string | undefined, string>; // digital listings may omit (default '')
   active: ColumnType<boolean, boolean | undefined, boolean>;
   view_count: ColumnType<number, number | undefined, number>;
   expires_at: Timestamp;
   created_at: Generated<Timestamp>;
   updated_at: Generated<Timestamp>;
+  // Digital-asset columns (added in 20260601000000_digital_assets.sql)
+  asset_type: ColumnType<string, string | undefined, string>;
+  file_format: string | null;
+  file_size_bytes: number | null;
+  license_type: ColumnType<string, string | undefined, string>;
+  download_count: ColumnType<number, number | undefined, number>;
   // search_tsv is maintained by a DB trigger; not selected/inserted directly.
+}
+
+export interface ListingAssetsTable {
+  id: Generated<string>;
+  listing_id: string;
+  s3_key: string;
+  original_filename: string;
+  file_size_bytes: number;
+  content_type: string;
+  checksum_sha256: string | null;
+  position: number;
+  created_at: Generated<Timestamp>;
+}
+
+export interface DownloadsTable {
+  id: Generated<string>;
+  listing_id: string;
+  user_id: string;
+  asset_id: string | null;
+  downloaded_at: Generated<Timestamp>;
 }
 
 export interface ListingImagesTable {
@@ -115,6 +141,8 @@ export interface MigrationsTable {
 export interface Database {
   users: UsersTable;
   listings: ListingsTable;
+  listing_assets: ListingAssetsTable;
+  downloads: DownloadsTable;
   listing_images: ListingImagesTable;
   email_verification_tokens: EmailVerificationTokensTable;
   password_reset_tokens: PasswordResetTokensTable;
