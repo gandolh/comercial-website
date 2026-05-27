@@ -24,3 +24,9 @@ target
 .worktrees
 .superpowers
 .env
+
+# Node
+node_modules
+dist
+*.tsbuildinfo
+npm-debug.log*

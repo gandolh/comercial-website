@@ -1,0 +1,23 @@
+{
+  "name": "my-olx-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "core",
+    "app"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @my-olx/app",
+    "build": "npm run build --workspace @my-olx/core && npm run build --workspace @my-olx/app",
+    "test": "vitest run",
+    "typecheck": "tsc -b core app",
+    "migrate": "npm run migrate --workspace @my-olx/app"
+  },
+  "devDependencies": {
+    "typescript": "5.7.3",
+    "tsx": "4.19.2",
+    "vitest": "2.1.8",
+    "@types/node": "22.10.5"
+  }
+}
