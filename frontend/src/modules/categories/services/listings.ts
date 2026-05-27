@@ -54,7 +54,8 @@ export async function searchListings(params: {
   const search: Record<string, string | number | boolean> = {};
   if (params.category) search.category = params.category;
   if (params.q) search.q = params.q;
-  if (params.filters.loc) search.city = params.filters.loc;
+  if (params.filters.licenta) search.license_type = params.filters.licenta;
+  if (params.filters.format) search.file_format = params.filters.format;
   if (params.filters.pret_min != null)
     search.price_min = params.filters.pret_min;
   if (params.filters.pret_max != null)

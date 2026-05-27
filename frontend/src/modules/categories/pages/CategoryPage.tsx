@@ -13,7 +13,8 @@ import type { FilterState } from "../types";
 
 function parseFilters(params: URLSearchParams): FilterState {
   return {
-    loc: params.get("loc"),
+    licenta: params.get("licenta"),
+    format: params.get("format"),
     pret_min: params.get("pret_min") ? Number(params.get("pret_min")) : null,
     pret_max: params.get("pret_max") ? Number(params.get("pret_max")) : null,
     data: (params.get("data") as FilterState["data"]) ?? "oricand",

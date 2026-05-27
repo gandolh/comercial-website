@@ -132,6 +132,25 @@
     "notFound": "Categorie inexistentă",
     "categoryNotFound": "Categoria {{slug}} nu a fost găsită."
   },
+  "filters": {
+    "license": "Tip Licență",
+    "licenseOptions": {
+      "all": "Toate",
+      "personal": "Personală",
+      "commercial": "Comercială",
+      "extended": "Extinsă"
+    },
+    "format": "Format Fișier",
+    "formatOptions": {
+      "all": "Toate",
+      "zip": "ZIP",
+      "pdf": "PDF",
+      "psd": "PSD",
+      "mp4": "MP4",
+      "wav": "WAV",
+      "otf": "OTF"
+    }
+  },
   "dashboard": {
     "greeting": "Bună",
     "subtitle": "Iată ce se întâmplă cu contul tău astăzi.",

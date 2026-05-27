@@ -2,7 +2,7 @@ import { Select } from "@/components/ui/Select";
 import { Slider } from "@/components/ui/Slider";
 import { Button } from "@/components/ui/Button";
 import type { FilterState } from "../types";
-import { CITIES } from "../types";
+import { LICENSE_OPTIONS, FORMAT_OPTIONS } from "../types";
 
 interface FilterSidebarProps {
   filters: FilterState;
@@ -20,11 +20,6 @@ const DATE_OPTIONS = [
   { value: "24h", label: "Ultimele 24 ore" },
   { value: "saptamana", label: "Ultima săptămână" },
 ] as const;
-
-const CITY_OPTIONS = [
-  { value: "", label: "Toată România" },
-  ...CITIES.map((c) => ({ value: c.slug, label: c.label })),
-];
 
 function formatRON(v: number) {
   return v >= PRICE_MAX
@@ -50,14 +45,57 @@ export function FilterSidebar({
   return (
     <aside className="w-72 flex-shrink-0 hidden md:block">
       <div className="sticky top-28 space-y-8">
-        {/* Locație */}
-        <Select
-          label="Locație"
-          value={filters.loc ?? ""}
-          onChange={(e) => onChange("loc", e.target.value || null)}
-          options={CITY_OPTIONS}
-          fullWidth
-        />
+        {/* Tip Licență */}
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">
+            Tip Licență
+          </h3>
+          <div className="space-y-2">
+            {LICENSE_OPTIONS.map(({ value, label }) => (
+              <label
+                key={value}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="radio"
+                  name="licenta"
+                  checked={filters.licenta === value}
+                  onChange={() => onChange("licenta", value || null)}
+                  className="w-4 h-4 text-primary focus:ring-0 border-outline-variant accent-primary"
+                />
+                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
+                  {label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Format Fișier */}
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">
+            Format Fișier
+          </h3>
+          <div className="space-y-2">
+            {FORMAT_OPTIONS.map(({ value, label }) => (
+              <label
+                key={value}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="radio"
+                  name="format"
+                  checked={filters.format === value}
+                  onChange={() => onChange("format", value || null)}
+                  className="w-4 h-4 text-primary focus:ring-0 border-outline-variant accent-primary"
+                />
+                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
+                  {label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
 
         {/* Preț */}
         <Slider
@@ -96,11 +134,11 @@ export function FilterSidebar({
           </div>
         </div>
 
-        {/* Vânzători verificați */}
+        {/* Autor verificat */}
         <div className="pt-6 border-t border-surface-container-high">
           <label className="flex items-center justify-between cursor-pointer">
             <span className="text-sm font-bold text-on-surface">
-              Vânzători Verificați
+              Autor Verificat
             </span>
             <div className="relative inline-flex items-center">
               <input
