@@ -187,5 +187,29 @@
   "comingSoon": {
     "title": "În curând",
     "subtitle": "Această pagină este în curs de dezvoltare."
+  },
+  "createListing": {
+    "assets": {
+      "title": "Adaugă fișierele de descărcare",
+      "subtitle": "Aceasta este cea mai importantă parte - anunțurile cu fișiere clare primesc mai multe descărcări.",
+      "dragPrompt": "Trage fișierele aici sau selectează din calculator",
+      "uploadProgress": "Se încarcă fișierele...",
+      "deleteButton": "Șterge",
+      "uploadError": "Eroare la încărcarea fișierelor",
+      "deleteError": "Eroare la ștergerea fișierului",
+      "minimumRequirement": "Încarcă cel puțin un fișier pentru a putea publica anunțul.",
+      "fileCount": "Fișierele tale ({{count}})"
+    },
+    "photos": {
+      "title": "Imagini de previzualizare",
+      "subtitle": "Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).",
+      "emptyMessage": "Adaugă imagini opționale pentru a face anunțul mai atractiv."
+    },
+    "price": {
+      "title": "Stabilește prețul",
+      "subtitle": "Cât costă produsul tău?",
+      "priceLabel": "Preț (RON)",
+      "freeLabel": "Gratuit"
+    }
   }
 }

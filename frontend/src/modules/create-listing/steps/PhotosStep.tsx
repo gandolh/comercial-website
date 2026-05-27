@@ -35,11 +35,10 @@ export function PhotosStep({
           className="text-2xl font-black"
           style={{ fontFamily: "var(--font-headline)" }}
         >
-          Adaugă fotografii
+          Imagini de previzualizare
         </h2>
         <p className="text-on-surface-variant">
-          Anunțurile cu poze clare primesc de până la 5 ori mai multe
-          vizualizări.
+          Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).
         </p>
       </div>
 
@@ -75,7 +74,7 @@ export function PhotosStep({
               add_a_photo
             </span>
             <p className="text-on-surface-variant text-sm max-w-xs mx-auto">
-              Încarcă prima poză pentru a previzualiza cum va arăta anunțul tău.
+              Adaugă imagini opționale pentru a face anunțul mai atractiv.
             </p>
           </div>
         )}
@@ -92,13 +91,9 @@ export function PhotosStep({
           </button>
           <button
             type="button"
-            disabled={!hasImages || isUploading}
+            disabled={isUploading}
             onClick={onNext}
-            className={`flex-[2] px-8 py-4 rounded-full font-bold transition-all shadow-md ${
-              hasImages && !isUploading
-                ? "bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container"
-                : "bg-surface-container-highest text-outline cursor-not-allowed shadow-none"
-            }`}
+            className="flex-[2] px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md disabled:opacity-50"
           >
             {isUploading ? "Se încarcă..." : "Continuă"}
           </button>
