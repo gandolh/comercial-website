@@ -2,6 +2,7 @@ import { z } from "zod";
 import { verifyToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
+import { AssetsRepository } from "../repositories/assets.repo.js";
 import {
   categoryLabel,
   imageUrl,
@@ -13,6 +14,7 @@ import {
   type ListingsPageResponse,
   type ListingDetailResponse,
   type SellerSummary,
+  type AssetResponse,
 } from "../listings-helpers.js";
 import { AppError } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
@@ -42,7 +44,7 @@ const CreateListingRequestSchema = z.object({
   price_ron: z.number().int().nullable().optional(),
   is_negotiable: z.boolean().default(true),
   category: z.string().min(1),
-  city: z.string().min(1),
+  city: z.string().default(""),
   active: z.boolean().default(true),
 });
 
@@ -52,7 +54,7 @@ const UpdateListingRequestSchema = z.object({
   price_ron: z.number().int().nullable().optional(),
   is_negotiable: z.boolean().optional(),
   category: z.string().min(1).optional(),
-  city: z.string().min(1).optional(),
+  city: z.string().optional(),
 });
 
 const ListingFiltersSchema = z.object({
@@ -77,6 +79,7 @@ const SuggestQuerySchema = z.object({
 
 export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
   const repo = new ListingsRepository(ctx.db);
+  const assetsRepo = new AssetsRepository(ctx.db);
   const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
@@ -255,6 +258,16 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     // Get images
     const images = await repo.getImages(id);
 
+    // Get assets
+    const assets = await assetsRepo.getAssetsByListingId(id);
+    const assetResponses: AssetResponse[] = assets.map((asset) => ({
+      id: asset.id,
+      original_filename: asset.original_filename,
+      file_size_bytes: asset.file_size_bytes,
+      content_type: asset.content_type,
+      position: asset.position,
+    }));
+
     // Get seller info
     const seller = await repo.getSeller(listing.user_id);
     if (!seller) throw AppError.notFound();
@@ -262,7 +275,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const activeListingsCount = await repo.countActiveListings(listing.user_id);
     const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config);
 
-    const detail = toListingDetailResponse(listing, images, sellerSummary, ctx.config);
+    const detail = toListingDetailResponse(listing, images, sellerSummary, ctx.config, assetResponses);
 
     return reply.send(detail);
   });
@@ -323,7 +336,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
 
   /**
    * POST /listings/:id/publish — Publish listing (protected, owner only)
-   * Rules: email_verified, ≥1 image, weekly limit 5, then set active=true
+   * Rules: email_verified, ≥1 asset (downloadable file), weekly limit 5, then set active=true
    */
   app.post("/listings/:id/publish", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
     const userId = request.userId!;
@@ -347,21 +360,24 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       throw AppError.forbidden();
     }
 
-    // Validate title, description, category, city
+    // Validate title, description, category
     if (
       listing.title.length < 5 ||
       listing.title.length > 200 ||
       listing.description.length < 10 ||
-      !listing.category ||
-      !listing.city
+      !listing.category
     ) {
       throw AppError.validation("Invalid listing data");
     }
 
-    // Check ≥1 image
-    const images = await repo.getImages(id);
-    if (images.length === 0) {
-      throw AppError.validation("cel puțin o imagine este necesară pentru publicare");
+    // Check ≥1 asset (downloadable file)
+    const assets = await ctx.db
+      .selectFrom("listing_assets")
+      .selectAll()
+      .where("listing_id", "=", id)
+      .execute();
+    if (assets.length === 0) {
+      throw AppError.validation("cel puțin un fișier descărcabil este necesar pentru publicare");
     }
 
     // Check weekly limit (5)

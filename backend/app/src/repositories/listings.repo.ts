@@ -15,6 +15,12 @@ export interface ListingRow {
   expires_at: Date | string;
   created_at: Date | string;
   updated_at: Date | string;
+  // Digital asset fields
+  asset_type: string;
+  file_format: string | null;
+  file_size_bytes: number | null;
+  license_type: string;
+  download_count: number;
 }
 
 export interface ListingImageRow {
@@ -97,7 +103,9 @@ export class ListingsRepository {
     priceRon?: number | null,
     isNegotiable?: boolean,
     category?: string,
-    city?: string
+    city?: string,
+    fileFormat?: string,
+    fileSizeBytes?: number
   ): Promise<ListingRow> {
     const updates: any = {};
     if (title !== undefined) updates.title = title;
@@ -106,6 +114,8 @@ export class ListingsRepository {
     if (isNegotiable !== undefined) updates.is_negotiable = isNegotiable;
     if (category !== undefined) updates.category = category;
     if (city !== undefined) updates.city = city;
+    if (fileFormat !== undefined) updates.file_format = fileFormat;
+    if (fileSizeBytes !== undefined) updates.file_size_bytes = fileSizeBytes;
 
     return (
       (await this.db

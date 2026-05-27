@@ -16,6 +16,7 @@ import { registerUsersRoutes } from "./modules/users.js";
 import { registerFavoritesRoutes } from "./modules/favorites.js";
 import { registerListingsRoutes } from "./modules/listings.js";
 import { registerImagesRoutes } from "./modules/images.js";
+import { registerAssetsRoutes } from "./modules/assets.js";
 import { registerMessagingRoutes } from "./modules/messaging.js";
 import { registerLocationsRoutes } from "./modules/locations.js";
 
@@ -50,6 +51,7 @@ async function main(): Promise<void> {
   registerFavoritesRoutes(app, ctx);
   registerListingsRoutes(app, ctx);
   registerImagesRoutes(app, ctx);
+  registerAssetsRoutes(app, ctx);
   registerMessagingRoutes(app, ctx);
   registerLocationsRoutes(app, ctx);
 

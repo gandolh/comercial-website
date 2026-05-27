@@ -169,13 +169,19 @@ export interface ListingDetailResponse {
   expires_at: string;
   active: boolean;
   seller: SellerSummary;
+  license_type: string;
+  file_format: string | null;
+  file_size_bytes: number | null;
+  download_count: number;
+  assets: AssetResponse[];
 }
 
 export function toListingDetailResponse(
   listing: ListingRow,
   images: ListingImageRow[],
   seller: SellerSummary,
-  config: Config
+  config: Config,
+  assets: AssetResponse[] = []
 ): ListingDetailResponse {
   const createdAt = typeof listing.created_at === 'string'
     ? listing.created_at
@@ -202,6 +208,11 @@ export function toListingDetailResponse(
     expires_at: expiresAt,
     active: listing.active,
     seller,
+    license_type: listing.license_type,
+    file_format: listing.file_format,
+    file_size_bytes: listing.file_size_bytes,
+    download_count: listing.download_count,
+    assets,
   };
 }
 
@@ -213,4 +224,15 @@ export interface ListingsPageResponse {
   total_count: number;
   total_pages: number;
   page: number;
+}
+
+/**
+ * Asset response for listing detail
+ */
+export interface AssetResponse {
+  id: string;
+  original_filename: string;
+  file_size_bytes: number;
+  content_type: string;
+  position: number;
 }
