@@ -1,15 +1,15 @@
 import { z } from "zod";
 
 export const CATEGORY_SLUGS = [
-  "electronice",
-  "auto",
-  "imobiliare",
-  "casa-gradina",
-  "moda",
-  "joburi",
-  "servicii",
-  "sport",
-  "gratuit",
+  "software",
+  "grafica",
+  "sabloane",
+  "audio",
+  "video",
+  "ebook",
+  "fonturi",
+  "cod-sursa",
+  "diverse",
 ] as const;
 
 export type CategorySlug = (typeof CATEGORY_SLUGS)[number];

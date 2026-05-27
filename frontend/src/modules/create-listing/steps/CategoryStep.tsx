@@ -1,13 +1,13 @@
 const CATEGORIES = [
-  { icon: "devices", label: "Electronice", slug: "electronice" },
-  { icon: "directions_car", label: "Auto, moto și ambarcațiuni", slug: "auto" },
-  { icon: "home", label: "Imobiliare", slug: "imobiliare" },
-  { icon: "chair", label: "Casă și grădină", slug: "casa-gradina" },
-  { icon: "apparel", label: "Modă și frumusețe", slug: "moda" },
-  { icon: "work", label: "Locuri de muncă", slug: "joburi" },
-  { icon: "build", label: "Servicii, afaceri", slug: "servicii" },
-  { icon: "fitness_center", label: "Sport și timp liber", slug: "sport" },
-  { icon: "volunteer_activism", label: "Oferite gratuit", slug: "gratuit" },
+  { icon: "code", label: "Software și aplicații", slug: "software" },
+  { icon: "palette", label: "Grafică și ilustrații", slug: "grafica" },
+  { icon: "dashboard_customize", label: "Șabloane și teme", slug: "sabloane" },
+  { icon: "music_note", label: "Audio și muzică", slug: "audio" },
+  { icon: "movie", label: "Video și animație", slug: "video" },
+  { icon: "menu_book", label: "Cărți electronice", slug: "ebook" },
+  { icon: "font_download", label: "Fonturi", slug: "fonturi" },
+  { icon: "terminal", label: "Cod sursă", slug: "cod-sursa" },
+  { icon: "category", label: "Diverse", slug: "diverse" },
 ];
 
 interface CategoryStepProps {
