@@ -24,6 +24,15 @@ export interface ListingImage {
   position: number
 }
 
+export interface ListingAsset {
+  id: string
+  s3_key: string
+  original_filename: string
+  file_size_bytes: number
+  content_type: string
+  public_url: string
+}
+
 export interface ListingSeller {
   id: string
   displayName: string | null
@@ -43,6 +52,7 @@ export interface ListingDetail {
   categoryLabel: string
   city: string
   images: ListingImage[]
+  assets: ListingAsset[]
   viewCount: number
   postedAt: string
   expiresAt: string

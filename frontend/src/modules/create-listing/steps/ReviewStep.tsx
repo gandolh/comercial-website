@@ -83,6 +83,31 @@ export function ReviewStep({
                 description={draft.description}
                 features={[]}
               />
+              {draft.assets && draft.assets.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg">Fișierele pentru descărcare</h3>
+                  <div className="space-y-3">
+                    {draft.assets.map((asset) => (
+                      <div
+                        key={asset.id}
+                        className="bg-surface-container border border-outline-variant rounded-xl p-4 flex items-center gap-4"
+                      >
+                        <span className="material-symbols-outlined text-primary shrink-0">
+                          file_present
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">
+                            {asset.original_filename}
+                          </p>
+                          <p className="text-xs text-on-surface-variant">
+                            {Math.round(asset.file_size_bytes / 1024)} KB
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="space-y-6">
               <PricingCard

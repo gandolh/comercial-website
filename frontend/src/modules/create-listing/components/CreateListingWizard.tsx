@@ -6,12 +6,13 @@ import type { ListingDraft } from "../services/drafts";
 import { createDraft, updateDraft, publishDraft } from "../services/drafts";
 import { CategoryStep } from "../steps/CategoryStep";
 import { DetailsStep } from "../steps/DetailsStep";
+import { AssetUploadStep } from "../steps/AssetUploadStep";
 import { PhotosStep } from "../steps/PhotosStep";
-import { LocationPriceStep } from "../steps/LocationPriceStep";
+import { PriceStep } from "../steps/PriceStep";
 import { ReviewStep } from "../steps/ReviewStep";
-import type { DetailsStepInput, LocationPriceInput } from "../schemas";
+import type { DetailsStepInput, PriceStepInput } from "../schemas";
 
-type Step = "category" | "details" | "photos" | "location-price" | "review";
+type Step = "category" | "details" | "assets" | "photos" | "price" | "review";
 
 interface CreateListingWizardProps {
   draftId: string | null;
@@ -35,13 +36,10 @@ export function CreateListingWizard({
     if (draftId && draft) {
       if (!draft.title || !draft.description) {
         setStep("details");
-      } else if (draft.images.length === 0) {
-        setStep("photos");
-      } else if (
-        !draft.city ||
-        (draft.priceRon === null && !draft.isNegotiable)
-      ) {
-        setStep("location-price");
+      } else if (draft.assets.length === 0) {
+        setStep("assets");
+      } else if (draft.priceRon === null && !draft.isNegotiable) {
+        setStep("price");
       } else {
         setStep("review");
       }
@@ -110,17 +108,18 @@ export function CreateListingWizard({
         is_negotiable: data.isNegotiable,
       },
     });
-    setStep("photos");
+    setStep("assets");
   };
 
-  const handlePhotosNext = () => setStep("location-price");
+  const handleAssetsNext = () => setStep("photos");
 
-  const handleLocationPriceNext = (data: LocationPriceInput) => {
+  const handlePhotosNext = () => setStep("price");
+
+  const handlePriceNext = (data: PriceStepInput) => {
     if (!draftId) return;
     updateMutation.mutate({
       id: draftId,
       payload: {
-        city: data.city,
         price_ron: data.isFree ? 0 : data.priceRon,
       },
     });
@@ -164,15 +163,17 @@ export function CreateListingWizard({
           {[
             { id: "category", label: "Categorie" },
             { id: "details", label: "Detalii" },
-            { id: "photos", label: "Foto" },
-            { id: "location-price", label: "Preț" },
+            { id: "assets", label: "Fișiere" },
+            { id: "photos", label: "Imagini" },
+            { id: "price", label: "Preț" },
             { id: "review", label: "Final" },
           ].map((s, idx) => {
             const steps = [
               "category",
               "details",
+              "assets",
               "photos",
-              "location-price",
+              "price",
               "review",
             ];
             const currentIdx = steps.indexOf(step);
@@ -205,7 +206,7 @@ export function CreateListingWizard({
                 >
                   {s.label}
                 </span>
-                {idx < 4 && (
+                {idx < 5 && (
                   <div className="w-4 md:w-8 h-[2px] bg-surface-container-highest ml-2" />
                 )}
               </div>
@@ -232,6 +233,19 @@ export function CreateListingWizard({
               onBack={() => setStep("category")}
             />
           )}
+          {step === "assets" && draftId && (
+            <AssetUploadStep
+              listingId={draftId}
+              assets={draft?.assets || []}
+              onAssetsChange={() =>
+                queryClient.invalidateQueries({
+                  queryKey: ["listing", draftId],
+                })
+              }
+              onNext={handleAssetsNext}
+              onBack={() => setStep("details")}
+            />
+          )}
           {step === "photos" && draftId && (
             <PhotosStep
               listingId={draftId}
@@ -242,17 +256,16 @@ export function CreateListingWizard({
                 })
               }
               onNext={handlePhotosNext}
-              onBack={() => setStep("details")}
+              onBack={() => setStep("assets")}
             />
           )}
-          {step === "location-price" && (
-            <LocationPriceStep
+          {step === "price" && (
+            <PriceStep
               initialData={{
-                city: draft?.city,
                 priceRon: draft?.priceRon,
                 isFree: draft?.priceRon === 0,
               }}
-              onNext={handleLocationPriceNext}
+              onNext={handlePriceNext}
               onBack={() => setStep("photos")}
             />
           )}
@@ -260,7 +273,7 @@ export function CreateListingWizard({
             <ReviewStep
               draft={draft}
               onPublish={handlePublish}
-              onBack={() => setStep("location-price")}
+              onBack={() => setStep("price")}
               isPublishing={publishMutation.isPending}
             />
           )}

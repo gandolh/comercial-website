@@ -30,8 +30,7 @@ export const detailsStepSchema = z.object({
   isNegotiable: z.boolean(),
 });
 
-export const locationPriceStepSchema = z.object({
-  city: z.string().min(1, "Selectează un oraș"),
+export const priceStepSchema = z.object({
   priceRon: z
     .number()
     .int("Prețul trebuie să fie un număr întreg")
@@ -48,5 +47,5 @@ export const reviewStepSchema = z.object({
 });
 
 export type DetailsStepInput = z.infer<typeof detailsStepSchema>;
-export type LocationPriceInput = z.infer<typeof locationPriceStepSchema>;
+export type PriceStepInput = z.infer<typeof priceStepSchema>;
 export type ReviewStepInput = z.infer<typeof reviewStepSchema>;
