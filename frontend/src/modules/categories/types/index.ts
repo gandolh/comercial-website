@@ -1,7 +1,8 @@
 import type { ListingCard } from "@/types/listing";
 
 export interface FilterState {
-  loc: string | null;
+  licenta: string | null;
+  format: string | null;
   pret_min: number | null;
   pret_max: number | null;
   data: "24h" | "saptamana" | "oricand";
@@ -17,6 +18,23 @@ export interface ListingsResponse {
 }
 
 export const PAGE_SIZE = 12;
+
+export const LICENSE_OPTIONS = [
+  { value: "", label: "Toate" },
+  { value: "personal", label: "Personală" },
+  { value: "commercial", label: "Comercială" },
+  { value: "extended", label: "Extinsă" },
+];
+
+export const FORMAT_OPTIONS = [
+  { value: "", label: "Toate" },
+  { value: "zip", label: "ZIP" },
+  { value: "pdf", label: "PDF" },
+  { value: "psd", label: "PSD" },
+  { value: "mp4", label: "MP4" },
+  { value: "wav", label: "WAV" },
+  { value: "otf", label: "OTF" },
+];
 
 export const CITIES: { slug: string; label: string }[] = [
   { slug: "bucuresti", label: "București" },
