@@ -8,10 +8,12 @@ interface ListingDescriptionProps {
   id: string
   description: string
   features: Feature[]
+  digitalSpecs?: Feature[]
 }
 
-export function ListingDescription({ id, description, features }: ListingDescriptionProps) {
+export function ListingDescription({ id, description, features, digitalSpecs = [] }: ListingDescriptionProps) {
   const paragraphs = description.split('\n\n').filter(Boolean)
+  const allSpecs = [...features, ...digitalSpecs]
 
   return (
     <section className="space-y-8">
@@ -27,9 +29,9 @@ export function ListingDescription({ id, description, features }: ListingDescrip
           <p key={i}>{p}</p>
         ))}
 
-        {features.length > 0 && (
+        {allSpecs.length > 0 && (
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
-            {features.map((f, i) => (
+            {allSpecs.map((f, i) => (
               <li key={i} className="flex items-center gap-3 bg-surface-container-low p-4 rounded-xl">
                 <span className="material-symbols-outlined text-secondary">{f.icon}</span>
                 <div>

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth";
 import { useNavigate } from "@/lib/router";
 import { useState } from "react";
-import { fetchSellerPhone } from "@/modules/listings/services/listings";
+import { downloadAsset } from "@/modules/listings/services/listings";
 import { ContactSellerModal } from "@/modules/messaging/components/ContactSellerModal";
 
 interface PricingCardProps {
@@ -15,6 +15,8 @@ interface PricingCardProps {
   priceRon: number | null;
   location: string;
   viewCount: number;
+  downloadCount?: number;
+  isDigitalAsset?: boolean;
 }
 
 export function PricingCard({
@@ -25,6 +27,8 @@ export function PricingCard({
   priceRon,
   location,
   viewCount,
+  downloadCount = 0,
+  isDigitalAsset = false,
 }: PricingCardProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -33,24 +37,27 @@ export function PricingCard({
     priceRon != null ? `${priceRon.toLocaleString("ro-RO")} RON` : "Gratuit";
 
   const navigate = useNavigate();
-  const [phone, setPhone] = useState<string | null>(null);
-  const [loadingPhone, setLoadingPhone] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
-  const handleShowPhone = async () => {
+  const handleDownload = async () => {
     if (!user) {
       navigate("/autentificare");
       return;
     }
-    if (phone) return;
-    setLoadingPhone(true);
+    setIsDownloading(true);
     try {
-      const result = await fetchSellerPhone(listingId);
-      setPhone(result);
-    } catch {
-      setPhone("Număr indisponibil");
+      const result = await downloadAsset(listingId);
+      const link = document.createElement("a");
+      link.href = result.download_url;
+      link.download = result.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Download failed:", error);
     } finally {
-      setLoadingPhone(false);
+      setIsDownloading(false);
     }
   };
 
@@ -78,6 +85,27 @@ export function PricingCard({
             <span className="material-symbols-outlined">edit</span>
             {t("listing.actions.edit")}
           </Link>
+        ) : isDigitalAsset ? (
+          <>
+            <button
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="w-full bg-primary text-on-primary py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all disabled:opacity-60"
+            >
+              <span className="material-symbols-outlined">download</span>
+              {isDownloading ? "Se descarcă..." : t("listing.download.button")}
+            </button>
+            <button
+              onClick={() => {
+                if (!user) { navigate("/autentificare"); return; }
+                setIsContactModalOpen(true);
+              }}
+              className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined">mail</span>
+              {t("listing.download.contactAuthor")}
+            </button>
+          </>
         ) : (
           <>
             <button
@@ -90,24 +118,6 @@ export function PricingCard({
               <span className="material-symbols-outlined">chat</span>
               Trimite Mesaj
             </button>
-            {phone ? (
-              <a
-                href={`tel:${phone}`}
-                className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all no-underline"
-              >
-                <span className="material-symbols-outlined">call</span>
-                {phone}
-              </a>
-            ) : (
-              <button
-                onClick={handleShowPhone}
-                disabled={loadingPhone}
-                className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all disabled:opacity-60"
-              >
-                <span className="material-symbols-outlined">call</span>
-                {loadingPhone ? "Se încarcă..." : "Arată Numărul de Telefon"}
-              </button>
-            )}
           </>
         )}
       </div>
@@ -121,10 +131,21 @@ export function PricingCard({
 
       <div className="flex items-center justify-between pt-4 border-t border-surface-container-high">
         <div className="flex items-center gap-2 text-outline text-sm">
-          <span className="material-symbols-outlined text-[18px]">
-            location_on
-          </span>
-          {location}
+          {isDigitalAsset ? (
+            <>
+              <span className="material-symbols-outlined text-[18px]">
+                download
+              </span>
+              {t("listing.specs.downloads", { count: downloadCount })}
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-[18px]">
+                location_on
+              </span>
+              {location}
+            </>
+          )}
         </div>
         <div className="flex items-center gap-2 text-outline text-sm">
           <span className="material-symbols-outlined text-[18px]">

@@ -35,6 +35,18 @@
       "deactivate": "Pauzează",
       "activate": "Activează",
       "delete": "Șterge"
+    },
+    "download": {
+      "button": "Descarcă Asset",
+      "contactAuthor": "Contactează Autorul"
+    },
+    "specs": {
+      "format": "Format",
+      "fileSize": "Dimensiune",
+      "license": "Licență",
+      "downloads_one": "1 descărcare",
+      "downloads_few": "{{count}} descărcări",
+      "downloads_other": "{{count}} descărcări"
     }
   },
   "edit": {

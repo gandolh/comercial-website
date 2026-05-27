@@ -24,6 +24,14 @@ export interface ListingImage {
   position: number
 }
 
+export interface ListingAsset {
+  id: string
+  originalFilename: string
+  fileSizeBytes: number
+  contentType: string
+  position: number
+}
+
 export interface ListingSeller {
   id: string
   displayName: string | null
@@ -48,4 +56,9 @@ export interface ListingDetail {
   expiresAt: string
   active: boolean
   seller: ListingSeller
+  licenseType?: 'personal' | 'commercial' | 'extended'
+  fileFormat?: string
+  fileSizeBytes?: number
+  downloadCount?: number
+  assets?: ListingAsset[]
 }

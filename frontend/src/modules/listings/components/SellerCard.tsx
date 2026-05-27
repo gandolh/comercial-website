@@ -8,13 +8,14 @@ import type { SellerSummary } from "../types";
 interface SellerCardProps {
   seller: SellerSummary;
   listingId: string;
+  isDigitalAsset?: boolean;
 }
 
-export function SellerCard({ seller, listingId }: SellerCardProps) {
+export function SellerCard({ seller, listingId, isDigitalAsset = false }: SellerCardProps) {
   const { user, isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const sellerName = seller.displayName || "Vânzător PiațăRo";
+  const sellerName = seller.displayName || (isDigitalAsset ? "Autor PiațăRo" : "Vânzător PiațăRo");
 
   const isOwner = user?.id === seller.id;
 
@@ -87,7 +88,7 @@ export function SellerCard({ seller, listingId }: SellerCardProps) {
           iconLeft="mail"
           className="w-full"
         >
-          Contactează vânzătorul
+          {isDigitalAsset ? "Contactează autorul" : "Contactează vânzătorul"}
         </Button>
       )}
 

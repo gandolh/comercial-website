@@ -11,6 +11,8 @@ import { RelatedListings } from "../components/RelatedListings";
 import { useMemo } from "react";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
+import { formatBytes } from "@/utils/formatBytes";
+import { useTranslation } from "react-i18next";
 
 function PageLoader() {
   return (
@@ -37,11 +39,49 @@ export function ListingDetailPage() {
   const { id = "" } = useParams<{ id: string }>();
   const { data, isFetching, isError, refetch } = useListingDetail(id);
   const relatedListings = useRelatedListings(id);
+  const { t } = useTranslation();
 
   const isExpired = useMemo(() => {
     if (!data?.expiresAt) return false;
     return new Date(data.expiresAt) < new Date();
   }, [data?.expiresAt]);
+
+  const isDigitalAsset = useMemo(() => {
+    return !!data?.fileFormat;
+  }, [data?.fileFormat]);
+
+  const licenseLabels: Record<string, string> = {
+    personal: "Personală",
+    commercial: "Comercială",
+    extended: "Extinsă",
+  };
+
+  const digitalSpecs = useMemo(() => {
+    if (!isDigitalAsset || !data) return [];
+    const specs = [];
+    if (data.fileFormat) {
+      specs.push({
+        icon: "description",
+        label: t("listing.specs.format"),
+        value: data.fileFormat.toUpperCase(),
+      });
+    }
+    if (data.fileSizeBytes) {
+      specs.push({
+        icon: "storage",
+        label: t("listing.specs.fileSize"),
+        value: formatBytes(data.fileSizeBytes),
+      });
+    }
+    if (data.licenseType) {
+      specs.push({
+        icon: "verified",
+        label: t("listing.specs.license"),
+        value: licenseLabels[data.licenseType] || data.licenseType,
+      });
+    }
+    return specs;
+  }, [isDigitalAsset, data, t]);
 
   if (isFetching) return <PageLoader />;
 
@@ -113,7 +153,7 @@ export function ListingDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left column */}
         <div className="lg:col-span-8 space-y-12">
-          <ListingGallery images={data.images} title={data.title} />
+          <ListingGallery images={data.images} title={data.title} fileFormat={data.fileFormat} />
 
           {/* Mobile-only title + price */}
           <div className="lg:hidden">
@@ -132,6 +172,7 @@ export function ListingDetailPage() {
             id={data.id}
             description={data.description}
             features={[]}
+            digitalSpecs={digitalSpecs}
           />
 
           <div className="pt-8 border-t border-surface-container-high text-xs text-outline flex items-center gap-4">
@@ -156,9 +197,11 @@ export function ListingDetailPage() {
             priceRon={data.priceRon}
             location={data.city}
             viewCount={data.viewCount}
+            downloadCount={data.downloadCount}
+            isDigitalAsset={isDigitalAsset}
           />
 
-          <SellerCard seller={data.seller} listingId={data.id} />
+          <SellerCard seller={data.seller} listingId={data.id} isDigitalAsset={isDigitalAsset} />
 
           {/* Safety tip */}
           <div className="flex items-start gap-4 px-4">

@@ -8,6 +8,14 @@ interface ListingImageApi {
   position: number;
 }
 
+interface ListingAssetApi {
+  id: string;
+  original_filename: string;
+  file_size_bytes: number;
+  content_type: string;
+  position: number;
+}
+
 interface ListingSellerApi {
   id: string;
   display_name: string | null;
@@ -32,6 +40,11 @@ interface ListingDetailApi {
   expires_at: string;
   active: boolean;
   seller: ListingSellerApi;
+  license_type?: 'personal' | 'commercial' | 'extended';
+  file_format?: string;
+  file_size_bytes?: number;
+  download_count?: number;
+  assets?: ListingAssetApi[];
 }
 
 export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
@@ -57,6 +70,17 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
       memberSince: detail.seller.member_since,
       activeListingsCount: detail.seller.active_listings_count,
     },
+    licenseType: detail.license_type,
+    fileFormat: detail.file_format,
+    fileSizeBytes: detail.file_size_bytes,
+    downloadCount: detail.download_count,
+    assets: detail.assets?.map(asset => ({
+      id: asset.id,
+      originalFilename: asset.original_filename,
+      fileSizeBytes: asset.file_size_bytes,
+      contentType: asset.content_type,
+      position: asset.position,
+    })),
   };
 }
 
@@ -135,4 +159,18 @@ export async function fetchSellerPhone(listingId: string): Promise<string> {
     `/listings/${listingId}/seller-phone`,
   );
   return response.data.phone;
+}
+
+export interface DownloadAssetResponse {
+  download_url: string;
+  filename: string;
+}
+
+export async function downloadAsset(
+  listingId: string,
+): Promise<DownloadAssetResponse> {
+  const response = await axiosInstance.get<DownloadAssetResponse>(
+    `/listings/${listingId}/download`,
+  );
+  return response.data;
 }
