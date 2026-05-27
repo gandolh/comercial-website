@@ -74,7 +74,7 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
     fileFormat: detail.file_format,
     fileSizeBytes: detail.file_size_bytes,
     downloadCount: detail.download_count,
-    assets: detail.assets?.map(asset => ({
+    assets: (detail.assets ?? []).map(asset => ({
       id: asset.id,
       originalFilename: asset.original_filename,
       fileSizeBytes: asset.file_size_bytes,

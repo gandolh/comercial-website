@@ -46,6 +46,20 @@ export const reviewStepSchema = z.object({
   }),
 });
 
+// Retained for the listing EDIT flow (EditListingPage), which still allows
+// editing the legacy city field. The CREATE wizard uses priceStepSchema (no city).
+export const locationPriceStepSchema = z.object({
+  city: z.string().optional(),
+  priceRon: z
+    .number()
+    .int("Prețul trebuie să fie un număr întreg")
+    .positive("Preț invalid")
+    .nullable()
+    .optional(),
+  isFree: z.boolean(),
+});
+
 export type DetailsStepInput = z.infer<typeof detailsStepSchema>;
 export type PriceStepInput = z.infer<typeof priceStepSchema>;
 export type ReviewStepInput = z.infer<typeof reviewStepSchema>;
+export type LocationPriceInput = z.infer<typeof locationPriceStepSchema>;

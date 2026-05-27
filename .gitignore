@@ -30,3 +30,5 @@ node_modules
 dist
 *.tsbuildinfo
 npm-debug.log*
+# stray agent worktrees
+.claude/worktrees

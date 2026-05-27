@@ -97,10 +97,10 @@ export function ReviewStep({
                         </span>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate">
-                            {asset.original_filename}
+                            {asset.originalFilename}
                           </p>
                           <p className="text-xs text-on-surface-variant">
-                            {Math.round(asset.file_size_bytes / 1024)} KB
+                            {Math.round(asset.fileSizeBytes / 1024)} KB
                           </p>
                         </div>
                       </div>

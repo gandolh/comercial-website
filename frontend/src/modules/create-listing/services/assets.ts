@@ -1,6 +1,9 @@
 import axios from "axios";
 
 import { axiosInstance } from "@/lib/axios";
+import type { ListingAsset } from "@/types/listing";
+
+export type { ListingAsset };
 
 interface UploadUrlRequest {
   content_type: string;
@@ -20,15 +23,6 @@ interface CommitAssetRequest {
   content_type: string;
 }
 
-export interface ListingAsset {
-  id: string;
-  s3_key: string;
-  original_filename: string;
-  file_size_bytes: number;
-  content_type: string;
-  public_url: string;
-}
-
 interface ListingAssetApi {
   id: string;
   listing_id: string;
@@ -36,7 +30,8 @@ interface ListingAssetApi {
   original_filename: string;
   file_size_bytes: number;
   content_type: string;
-  public_url: string;
+  position: number;
+  public_url?: string;
 }
 
 export interface PutFileOptions {
@@ -100,10 +95,11 @@ export async function deleteAsset(
 function mapAsset(asset: ListingAssetApi): ListingAsset {
   return {
     id: asset.id,
-    s3_key: asset.s3_key,
-    original_filename: asset.original_filename,
-    file_size_bytes: asset.file_size_bytes,
-    content_type: asset.content_type,
-    public_url: asset.public_url,
+    originalFilename: asset.original_filename,
+    fileSizeBytes: asset.file_size_bytes,
+    contentType: asset.content_type,
+    position: asset.position,
+    s3Key: asset.s3_key,
+    publicUrl: asset.public_url,
   };
 }

@@ -180,10 +180,10 @@ export function AssetUploadStep({
                     </span>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">
-                        {asset.original_filename}
+                        {asset.originalFilename}
                       </p>
                       <p className="text-xs text-on-surface-variant">
-                        {formatFileSize(asset.file_size_bytes)}
+                        {formatFileSize(asset.fileSizeBytes)}
                       </p>
                     </div>
                   </div>

@@ -1,4 +1,3 @@
-import { Select } from "@/components/ui/Select";
 import { Slider } from "@/components/ui/Slider";
 import { Button } from "@/components/ui/Button";
 import type { FilterState } from "../types";

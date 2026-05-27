@@ -81,7 +81,7 @@ export function MyListingsPage() {
 
       <Tabs
         value={activeTab}
-        onValueChange={(v) => {
+        onValueChange={(v: string) => {
           setActiveTab(v as TabType);
           setPage(1);
         }}
