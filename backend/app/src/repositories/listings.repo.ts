@@ -1,4 +1,4 @@
-import { sql } from "kysely";
+import { sql, type SqlBool } from "kysely";
 import type { Db } from "@my-olx/core";
 
 export interface ListingRow {
@@ -198,16 +198,12 @@ export class ListingsRepository {
     } else {
       query = query
         .where("active", "=", true)
-        .where(sql`expires_at > now()`, "=", true);
+        .where(sql<SqlBool>`expires_at > now()`);
     }
 
     // Full-text search
     if (q && q.trim()) {
-      query = query.where(
-        sql`search_tsv @@ websearch_to_tsquery('simple', ${q})`,
-        "=",
-        true
-      );
+      query = query.where(sql<SqlBool>`search_tsv @@ websearch_to_tsquery('simple', ${q})`);
     }
 
     // Category filter
@@ -222,18 +218,18 @@ export class ListingsRepository {
 
     // Price range
     if (priceMin !== undefined) {
-      query = query.where(sql`price_ron >= ${priceMin}`, "=", true);
+      query = query.where(sql<SqlBool>`price_ron >= ${priceMin}`);
     }
     if (priceMax !== undefined) {
-      query = query.where(sql`price_ron <= ${priceMax}`, "=", true);
+      query = query.where(sql<SqlBool>`price_ron <= ${priceMax}`);
     }
 
     // Date filter
     if (dateFilter && dateFilter !== "oricand") {
       if (dateFilter === "24h") {
-        query = query.where(sql`created_at >= now() - interval '1 day'`, "=", true);
+        query = query.where(sql<SqlBool>`created_at >= now() - interval '1 day'`);
       } else if (dateFilter === "saptamana") {
-        query = query.where(sql`created_at >= now() - interval '7 days'`, "=", true);
+        query = query.where(sql<SqlBool>`created_at >= now() - interval '7 days'`);
       }
     }
 
@@ -250,7 +246,7 @@ export class ListingsRepository {
       // Use ts_rank for relevance
       sortedQuery = query
         .select(
-          sql`ts_rank(search_tsv, websearch_to_tsquery('simple', ${q})) as rank`.as(
+          sql`ts_rank(search_tsv, websearch_to_tsquery('simple', ${q}))`.as(
             "rank"
           )
         )
@@ -277,21 +273,21 @@ export class ListingsRepository {
     } else {
       countQuery = countQuery
         .where("active", "=", true)
-        .where(sql`expires_at > now()`, "=", true);
+        .where(sql<SqlBool>`expires_at > now()`);
     }
     if (category) countQuery = countQuery.where("category", "=", category);
     if (city) countQuery = countQuery.where("city", "=", city);
     if (priceMin !== undefined) {
-      countQuery = countQuery.where(sql`price_ron >= ${priceMin}`, "=", true);
+      countQuery = countQuery.where(sql<SqlBool>`price_ron >= ${priceMin}`);
     }
     if (priceMax !== undefined) {
-      countQuery = countQuery.where(sql`price_ron <= ${priceMax}`, "=", true);
+      countQuery = countQuery.where(sql<SqlBool>`price_ron <= ${priceMax}`);
     }
     if (dateFilter && dateFilter !== "oricand") {
       if (dateFilter === "24h") {
-        countQuery = countQuery.where(sql`created_at >= now() - interval '1 day'`, "=", true);
+        countQuery = countQuery.where(sql<SqlBool>`created_at >= now() - interval '1 day'`);
       } else if (dateFilter === "saptamana") {
-        countQuery = countQuery.where(sql`created_at >= now() - interval '7 days'`, "=", true);
+        countQuery = countQuery.where(sql<SqlBool>`created_at >= now() - interval '7 days'`);
       }
     }
     if (verified) {
@@ -322,7 +318,7 @@ export class ListingsRepository {
         .selectAll()
         .leftJoin("users", "listings.user_id", "users.id")
         .where("listings.active", "=", true)
-        .where(sql`listings.expires_at > now()`, "=", true)
+        .where(sql<SqlBool>`listings.expires_at > now()`)
         .orderBy("users.phone_verified", "desc")
         .orderBy("listings.created_at", "desc")
         .limit(8)
@@ -356,7 +352,7 @@ export class ListingsRepository {
       .select(sql`count(*)`.as("count"))
       .where("user_id", "=", userId)
       .where("active", "=", true)
-      .where(sql`expires_at > now()`, "=", true)
+      .where(sql<SqlBool>`expires_at > now()`)
       .executeTakeFirst();
 
     return parseInt((result as any)?.count ?? "0", 10);
@@ -370,7 +366,7 @@ export class ListingsRepository {
       .selectFrom("listings")
       .select(sql`count(*)`.as("count"))
       .where("user_id", "=", userId)
-      .where(sql`created_at >= now() - interval '7 days'`, "=", true)
+      .where(sql<SqlBool>`created_at >= now() - interval '7 days'`)
       .executeTakeFirst();
 
     return parseInt((result as any)?.count ?? "0", 10);
@@ -384,7 +380,7 @@ export class ListingsRepository {
       .selectFrom("listings")
       .select("created_at")
       .where("user_id", "=", userId)
-      .where(sql`created_at >= now() - interval '7 days'`, "=", true)
+      .where(sql<SqlBool>`created_at >= now() - interval '7 days'`)
       .orderBy("created_at", "asc")
       .limit(1)
       .executeTakeFirst();
@@ -409,7 +405,7 @@ export class ListingsRepository {
         .where("category", "=", category)
         .where("id", "!=", listingId)
         .where("active", "=", true)
-        .where(sql`expires_at > now()`, "=", true)
+        .where(sql<SqlBool>`expires_at > now()`)
         .orderBy("created_at", "desc")
         .limit(4)
         .execute()) as unknown as ListingRow[]

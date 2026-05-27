@@ -31,10 +31,20 @@ interface CitiesByCounties {
 function loadCitiesData(): CitiesByCounties {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const dataPath = join(__dirname, "../data/cities-by-counties.json");
-
-  const raw = readFileSync(dataPath, "utf8");
-  return JSON.parse(raw) as CitiesByCounties;
+  // Works whether running compiled (dist/modules → dist/data, copied at build)
+  // or via tsx from source (src/modules → src/data).
+  const candidates = [
+    join(__dirname, "../data/cities-by-counties.json"),
+    join(__dirname, "../../src/data/cities-by-counties.json"),
+  ];
+  for (const dataPath of candidates) {
+    try {
+      return JSON.parse(readFileSync(dataPath, "utf8")) as CitiesByCounties;
+    } catch {
+      // try next candidate
+    }
+  }
+  throw new Error("cities-by-counties.json not found in expected locations");
 }
 
 const citiesData = loadCitiesData();

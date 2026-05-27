@@ -27,13 +27,6 @@ const createMessageSchema = z.object({
   body: z.string().min(1).max(2000),
 });
 
-// Type extend FastifyInstance to include authenticate
-declare module "fastify" {
-  interface FastifyInstance {
-    authenticate: (request: FastifyRequest, reply: any) => Promise<void>;
-  }
-}
-
 export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   // POST /listings/:id/conversations — start a conversation
   app.post<{ Params: { id: string }; Body: unknown }>(

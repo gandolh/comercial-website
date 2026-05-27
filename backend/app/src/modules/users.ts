@@ -2,14 +2,6 @@ import { randomUUID } from "crypto";
 import { z } from "zod";
 import type { RouteRegistrar } from "../context.js";
 import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
-import type { FastifyInstance } from "fastify";
-
-declare module "fastify" {
-  interface FastifyInstance {
-    authenticate: any;
-  }
-}
-
 // Helpers
 function imageUrl(s3Key: string, config: any): string {
   if (!s3Key) return null as any;
@@ -271,8 +263,8 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       // Messaging stats
       const unreadResult = await ctx.db
         .selectFrom("messages")
-        .select(ctx.db.fn.count("id").as("count"))
         .innerJoin("conversations", "messages.conversation_id", "conversations.id")
+        .select(ctx.db.fn.count("messages.id").as("count"))
         .where("messages.sender_id", "!=", userId)
         .where("messages.read_at", "is", null)
         .where(eb => eb.or([

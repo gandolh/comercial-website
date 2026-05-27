@@ -1,12 +1,5 @@
 import type { RouteRegistrar } from "../context.js";
 import { AppError } from "@my-olx/core";
-import type { FastifyInstance } from "fastify";
-
-declare module "fastify" {
-  interface FastifyInstance {
-    authenticate: any;
-  }
-}
 
 interface ListingCardResponse {
   id: string;
