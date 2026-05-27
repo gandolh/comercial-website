@@ -26,11 +26,13 @@ export interface ListingImage {
 
 export interface ListingAsset {
   id: string
-  s3_key: string
-  original_filename: string
-  file_size_bytes: number
-  content_type: string
-  public_url: string
+  originalFilename: string
+  fileSizeBytes: number
+  contentType: string
+  position: number
+  // Present when freshly uploaded via the create-listing wizard.
+  s3Key?: string
+  publicUrl?: string
 }
 
 export interface ListingSeller {
@@ -58,4 +60,8 @@ export interface ListingDetail {
   expiresAt: string
   active: boolean
   seller: ListingSeller
+  licenseType?: 'personal' | 'commercial' | 'extended'
+  fileFormat?: string
+  fileSizeBytes?: number
+  downloadCount?: number
 }
