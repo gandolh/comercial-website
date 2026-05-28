@@ -1,18 +1,17 @@
 import type { ColumnType, Generated } from "kysely";
 
 /**
- * Full database schema for the my-olx PostgreSQL database, typed for Kysely.
+ * Full database schema for the my-olx SQLite database, typed for Kysely.
  *
  * Conventions:
- * - `Generated<T>` for columns with DB defaults (id, created_at, ...).
+ * - `Generated<string>` for TEXT columns with DB defaults (id, created_at, ...).
  * - `ColumnType<Select, Insert, Update>` where insert/update differ from select.
- * - Timestamps are `Date` on read; inserts may omit them (DB default).
+ * - Timestamps are stored as TEXT (ISO 8601) in SQLite.
+ * - Booleans are stored as INTEGER (0/1) in SQLite.
  *
  * Digital-asset columns (asset_type, file_format, file_size_bytes, license_type,
  * download_count) and the listing_assets / downloads tables are added in Wave 3.
  */
-
-type Timestamp = ColumnType<Date, Date | string | undefined, Date | string>;
 
 export interface UsersTable {
   id: Generated<string>;
@@ -21,10 +20,10 @@ export interface UsersTable {
   display_name: string | null;
   avatar_url: string | null;
   phone: string | null;
-  phone_verified: ColumnType<boolean, boolean | undefined, boolean>;
-  email_verified: ColumnType<boolean, boolean | undefined, boolean>;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  phone_verified: ColumnType<number, number | undefined, number>;
+  email_verified: ColumnType<number, number | undefined, number>;
+  created_at: Generated<string>;
+  updated_at: Generated<string>;
 }
 
 export interface ListingsTable {
@@ -33,21 +32,20 @@ export interface ListingsTable {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: ColumnType<boolean, boolean | undefined, boolean>;
+  is_negotiable: ColumnType<number, number | undefined, number>;
   category: string;
-  city: ColumnType<string, string | undefined, string>; // digital listings may omit (default '')
-  active: ColumnType<boolean, boolean | undefined, boolean>;
+  city: ColumnType<string, string | undefined, string>;
+  active: ColumnType<number, number | undefined, number>;
   view_count: ColumnType<number, number | undefined, number>;
-  expires_at: Timestamp;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  expires_at: string;
+  created_at: Generated<string>;
+  updated_at: Generated<string>;
   // Digital-asset columns (added in 20260601000000_digital_assets.sql)
   asset_type: ColumnType<string, string | undefined, string>;
   file_format: string | null;
   file_size_bytes: number | null;
   license_type: ColumnType<string, string | undefined, string>;
   download_count: ColumnType<number, number | undefined, number>;
-  // search_tsv is maintained by a DB trigger; not selected/inserted directly.
 }
 
 export interface ListingAssetsTable {
@@ -59,7 +57,7 @@ export interface ListingAssetsTable {
   content_type: string;
   checksum_sha256: string | null;
   position: number;
-  created_at: Generated<Timestamp>;
+  created_at: Generated<string>;
 }
 
 export interface DownloadsTable {
@@ -67,7 +65,7 @@ export interface DownloadsTable {
   listing_id: string;
   user_id: string;
   asset_id: string | null;
-  downloaded_at: Generated<Timestamp>;
+  downloaded_at: Generated<string>;
 }
 
 export interface ListingImagesTable {
@@ -78,23 +76,23 @@ export interface ListingImagesTable {
   width: number | null;
   height: number | null;
   bytes: number | null;
-  created_at: Generated<Timestamp>;
+  created_at: Generated<string>;
 }
 
 export interface EmailVerificationTokensTable {
   token: string;
   user_id: string;
-  expires_at: Timestamp;
-  used_at: Timestamp | null;
-  created_at: Generated<Timestamp>;
+  expires_at: string;
+  used_at: string | null;
+  created_at: Generated<string>;
 }
 
 export interface PasswordResetTokensTable {
   token: string;
   user_id: string;
-  expires_at: Timestamp;
-  used_at: Timestamp | null;
-  created_at: Generated<Timestamp>;
+  expires_at: string;
+  used_at: string | null;
+  created_at: Generated<string>;
 }
 
 export interface PhoneVerificationCodesTable {
@@ -103,15 +101,15 @@ export interface PhoneVerificationCodesTable {
   phone: string;
   code_hash: string;
   attempts: ColumnType<number, number | undefined, number>;
-  expires_at: Timestamp;
-  consumed_at: Timestamp | null;
-  created_at: Generated<Timestamp>;
+  expires_at: string;
+  consumed_at: string | null;
+  created_at: Generated<string>;
 }
 
 export interface FavoritesTable {
   user_id: string;
   listing_id: string;
-  created_at: Generated<Timestamp>;
+  created_at: Generated<string>;
 }
 
 export interface ConversationsTable {
@@ -119,8 +117,8 @@ export interface ConversationsTable {
   listing_id: string;
   buyer_id: string;
   seller_id: string;
-  created_at: Generated<Timestamp>;
-  last_message_at: ColumnType<Date, Date | string | undefined, Date | string>;
+  created_at: Generated<string>;
+  last_message_at: ColumnType<string, string | undefined, string>;
 }
 
 export interface MessagesTable {
@@ -128,14 +126,14 @@ export interface MessagesTable {
   conversation_id: string;
   sender_id: string;
   body: string;
-  read_at: Timestamp | null;
-  created_at: Generated<Timestamp>;
+  read_at: string | null;
+  created_at: Generated<string>;
 }
 
 /** Tracks applied SQL migrations (managed by the core migrator). */
 export interface MigrationsTable {
   name: string;
-  applied_at: Generated<Timestamp>;
+  applied_at: Generated<string>;
 }
 
 export interface Database {

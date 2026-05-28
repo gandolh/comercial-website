@@ -1,3 +1,4 @@
+import "@fastify/multipart";
 import { z } from "zod";
 import { sql } from "kysely";
 import { listingAssetKey, AppError } from "@my-olx/core";
@@ -5,31 +6,10 @@ import type { RouteRegistrar } from "../context.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import type { FastifyInstance } from "fastify";
-
-/**
- * Validation schemas
- */
-const UploadUrlRequestSchema = z.object({
-  content_type: z.string().min(1),
-  filename: z.string().min(1),
-});
-
-const CreateAssetRequestSchema = z.object({
-  s3_key: z.string().min(1),
-  original_filename: z.string().min(1),
-  file_size_bytes: z.number().int().positive(),
-  content_type: z.string().min(1),
-  checksum_sha256: z.string().optional(),
-});
-
-/**
- * Response types
- */
-interface UploadUrlResponse {
-  upload_url: string;
-  s3_key: string;
-  public_url: string;
-}
+import { pipeline } from "node:stream/promises";
+import { createWriteStream, createReadStream } from "node:fs";
+import { mkdir, stat } from "node:fs/promises";
+import path from "node:path";
 
 interface AssetResponse {
   id: string;
@@ -47,21 +27,6 @@ interface DownloadResponse {
   filename: string;
 }
 
-/**
- * Helper to extract file extension from filename
- */
-function getFileExtension(filename: string): string {
-  const parts = filename.split(".");
-  if (parts.length > 1) {
-    const ext = parts[parts.length - 1];
-    return ext ? ext.toLowerCase() : "";
-  }
-  return "";
-}
-
-/**
- * Map listing asset row to response
- */
 function toAssetResponse(asset: any): AssetResponse {
   const createdAt = typeof asset.created_at === "string"
     ? asset.created_at
@@ -78,62 +43,19 @@ function toAssetResponse(asset: any): AssetResponse {
   };
 }
 
+function getFileExtension(filename: string): string {
+  const parts = filename.split(".");
+  return parts.length > 1 ? (parts[parts.length - 1]?.toLowerCase() ?? "") : "";
+}
+
 export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
   const assetsRepo = new AssetsRepository(ctx.db);
   const listingsRepo = new ListingsRepository(ctx.db);
   const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
-   * POST /listings/:id/assets/upload-url (protected, owner-only)
-   * Generate a presigned upload URL for an asset
-   */
-  app.post(
-    "/listings/:id/assets/upload-url",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id: listingId } = request.params as { id: string };
-
-      const listing = await listingsRepo.getById(listingId);
-      if (!listing) throw AppError.notFound();
-
-      if (listing.user_id !== userId) {
-        throw AppError.forbidden();
-      }
-
-      const parsed = UploadUrlRequestSchema.safeParse(request.body);
-      if (!parsed.success) {
-        throw AppError.validation("Invalid request body");
-      }
-
-      const { content_type, filename } = parsed.data;
-
-      // Check max 10 assets
-      const assetCount = await assetsRepo.countAssetsByListingId(listingId);
-      if (assetCount >= 10) {
-        throw AppError.validation("Maxim 10 fișiere pe anunț");
-      }
-
-      // Generate S3 key
-      const s3Key = listingAssetKey(listingId, filename);
-
-      // Generate presigned URL
-      const uploadUrl = await ctx.storage.presignPut(s3Key, content_type);
-      const publicUrl = ctx.storage.publicUrl(s3Key);
-
-      const response: UploadUrlResponse = {
-        upload_url: uploadUrl,
-        s3_key: s3Key,
-        public_url: publicUrl,
-      };
-
-      return reply.send(response);
-    }
-  );
-
-  /**
-   * POST /listings/:id/assets (protected, owner-only)
-   * Create an asset after file is uploaded to S3
+   * POST /listings/:id/assets  (multipart upload)
+   * Upload and register a downloadable asset file.
    */
   app.post(
     "/listings/:id/assets",
@@ -144,44 +66,40 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
+      if (listing.user_id !== userId) throw AppError.forbidden();
 
-      if (listing.user_id !== userId) {
-        throw AppError.forbidden();
-      }
-
-      const parsed = CreateAssetRequestSchema.safeParse(request.body);
-      if (!parsed.success) {
-        throw AppError.validation("Invalid request body");
-      }
-
-      const { s3_key, original_filename, file_size_bytes, content_type, checksum_sha256 } =
-        parsed.data;
-
-      // Check max 10 assets
       const assetCount = await assetsRepo.countAssetsByListingId(listingId);
-      if (assetCount >= 10) {
-        throw AppError.validation("Maxim 10 fișiere pe anunț");
-      }
+      if (assetCount >= 10) throw AppError.validation("Maxim 10 fișiere pe anunț");
 
-      // Get next position
+      const data = await request.file();
+      if (!data) throw AppError.validation("no file provided");
+
+      const originalFilename = data.filename || "file";
+      const contentType = data.mimetype || "application/octet-stream";
+      const key = listingAssetKey(listingId, originalFilename);
+      const dest = path.join(ctx.config.uploadsDir, key);
+      await mkdir(path.dirname(dest), { recursive: true });
+      await pipeline(data.file, createWriteStream(dest));
+
+      const fileStat = await stat(dest);
+      const fileSizeBytes = fileStat.size;
+
       const maxPos = await assetsRepo.getMaxPositionForListing(listingId);
       const nextPosition = maxPos + 1;
 
-      // Create asset
       const asset = await assetsRepo.createAsset(
         listingId,
-        s3_key,
-        original_filename,
-        file_size_bytes,
-        content_type,
-        checksum_sha256 ?? null,
+        key,
+        originalFilename,
+        fileSizeBytes,
+        contentType,
+        null,
         nextPosition
       );
 
-      // If this is the primary (position 0), update listing file_format and file_size_bytes
       if (nextPosition === 0) {
-        const ext = getFileExtension(original_filename);
-        await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, undefined, undefined, ext, file_size_bytes);
+        const ext = getFileExtension(originalFilename);
+        await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, undefined, undefined, ext, fileSizeBytes);
       }
 
       return reply.send(toAssetResponse(asset));
@@ -189,8 +107,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   /**
-   * DELETE /listings/:id/assets/:asset_id (protected, owner-only)
-   * Delete an asset and its S3 object
+   * DELETE /listings/:id/assets/:asset_id
    */
   app.delete(
     "/listings/:id/assets/:asset_id",
@@ -201,20 +118,12 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
-
-      if (listing.user_id !== userId) {
-        throw AppError.forbidden();
-      }
+      if (listing.user_id !== userId) throw AppError.forbidden();
 
       const asset = await assetsRepo.getAssetById(assetId);
-      if (!asset || asset.listing_id !== listingId) {
-        throw AppError.notFound();
-      }
+      if (!asset || asset.listing_id !== listingId) throw AppError.notFound();
 
-      // Delete from S3
       await ctx.storage.deleteObject(asset.s3_key);
-
-      // Delete from DB
       await assetsRepo.deleteAsset(assetId);
 
       return reply.send({});
@@ -222,8 +131,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   /**
-   * GET /listings/:id/assets (public)
-   * Get all assets for a listing (metadata only, no download URLs)
+   * GET /listings/:id/assets  (public — metadata only)
    */
   app.get("/listings/:id/assets", async (request, reply) => {
     const { id: listingId } = request.params as { id: string };
@@ -233,20 +141,17 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
     const assets = await assetsRepo.getAssetsByListingId(listingId);
 
-    const response = assets.map((asset) => ({
+    return reply.send(assets.map((asset) => ({
       id: asset.id,
       original_filename: asset.original_filename,
       file_size_bytes: asset.file_size_bytes,
       content_type: asset.content_type,
       position: asset.position,
-    }));
-
-    return reply.send(response);
+    })));
   });
 
   /**
-   * GET /listings/:id/download (protected)
-   * Download the primary asset (position 0)
+   * GET /listings/:id/download  (protected — streams the primary asset file)
    */
   app.get(
     "/listings/:id/download",
@@ -258,31 +163,25 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
 
-      // Get primary asset (position 0)
       const asset = await assetsRepo.getPrimaryAsset(listingId);
-      if (!asset) {
-        throw AppError.notFound();
-      }
+      if (!asset) throw AppError.notFound();
 
-      // Record download
       await assetsRepo.recordDownload(listingId, userId, asset.id);
-
-      // Increment listing download count
       await ctx.db
         .updateTable("listings")
         .set({ download_count: sql`download_count + 1` })
         .where("id", "=", listingId)
         .execute();
 
-      // Generate presigned download URL (5 min expiry)
-      const downloadUrl = await ctx.storage.presignGet(asset.s3_key, 300);
+      const filePath = path.join(ctx.config.uploadsDir, asset.s3_key);
+      const fileStat = await stat(filePath).catch(() => null);
+      if (!fileStat) throw AppError.notFound();
 
-      const response: DownloadResponse = {
-        download_url: downloadUrl,
-        filename: asset.original_filename,
-      };
+      reply.header("Content-Disposition", `attachment; filename="${asset.original_filename}"`);
+      reply.header("Content-Type", asset.content_type);
+      reply.header("Content-Length", fileStat.size);
 
-      return reply.send(response);
+      return reply.send(createReadStream(filePath));
     }
   );
 };

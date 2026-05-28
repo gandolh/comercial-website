@@ -7,11 +7,11 @@ CREATE TABLE counties (
 );
 
 CREATE TABLE cities (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     county_code TEXT NOT NULL REFERENCES counties(code),
-    longitude DOUBLE PRECISION NOT NULL,
-    latitude DOUBLE PRECISION NOT NULL,
+    longitude REAL NOT NULL,
+    latitude REAL NOT NULL,
     population INTEGER NOT NULL
 );
 

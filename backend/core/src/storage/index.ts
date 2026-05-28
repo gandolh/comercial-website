@@ -1,67 +1,53 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { randomUUID } from "crypto";
+import { mkdir, unlink } from "node:fs/promises";
+import { createWriteStream, existsSync } from "node:fs";
+import path from "node:path";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 
 export interface StorageConfig {
-  region: string;
-  bucket: string;
-  endpointUrl?: string;
-  publicBaseUrl: string;
-}
-
-export function createS3Client(cfg: StorageConfig): S3Client {
-  const clientConfig: any = {
-    region: cfg.region,
-  };
-
-  if (cfg.endpointUrl) {
-    clientConfig.endpoint = cfg.endpointUrl;
-    clientConfig.forcePathStyle = true;
-    clientConfig.credentials = {
-      accessKeyId: "test",
-      secretAccessKey: "test",
-    };
-  }
-
-  return new S3Client(clientConfig);
+  uploadsDir: string;   // absolute path to uploads directory on disk
+  publicBaseUrl: string; // e.g. http://localhost:8080/uploads
 }
 
 export class StorageService {
-  constructor(
-    private client: S3Client,
-    private cfg: StorageConfig,
-  ) {}
+  constructor(private cfg: StorageConfig) {}
 
-  async presignPut(key: string, contentType: string, expiresSeconds = 300): Promise<string> {
-    const command = new PutObjectCommand({
-      Bucket: this.cfg.bucket,
-      Key: key,
-      ContentType: contentType,
-    });
-
-    return getSignedUrl(this.client, command, { expiresIn: expiresSeconds });
+  /** Ensure the uploads directory tree exists for a given key. */
+  private async ensureDir(key: string): Promise<void> {
+    const dir = path.dirname(path.join(this.cfg.uploadsDir, key));
+    await mkdir(dir, { recursive: true });
   }
 
-  async presignGet(key: string, expiresSeconds = 300): Promise<string> {
-    const command = new GetObjectCommand({
-      Bucket: this.cfg.bucket,
-      Key: key,
-    });
-
-    return getSignedUrl(this.client, command, { expiresIn: expiresSeconds });
+  /** Absolute path on disk for a given storage key. */
+  absolutePath(key: string): string {
+    return path.join(this.cfg.uploadsDir, key);
   }
 
-  async deleteObject(key: string): Promise<void> {
-    const command = new DeleteObjectCommand({
-      Bucket: this.cfg.bucket,
-      Key: key,
-    });
-
-    await this.client.send(command);
-  }
-
+  /** Public HTTP URL for a stored file. */
   publicUrl(key: string): string {
-    return `${this.cfg.publicBaseUrl}/${key}`;
+    const base = this.cfg.publicBaseUrl.replace(/\/$/, "");
+    return `${base}/${key}`;
+  }
+
+  /** Write a Buffer or Readable stream to disk under `key`. */
+  async putObject(key: string, data: Buffer | Readable): Promise<void> {
+    await this.ensureDir(key);
+    const dest = this.absolutePath(key);
+    if (data instanceof Buffer) {
+      const { writeFile } = await import("node:fs/promises");
+      await writeFile(dest, data);
+    } else {
+      await pipeline(data, createWriteStream(dest));
+    }
+  }
+
+  /** Delete a file from disk. Does not throw if the file is missing. */
+  async deleteObject(key: string): Promise<void> {
+    const filePath = this.absolutePath(key);
+    if (existsSync(filePath)) {
+      await unlink(filePath);
+    }
   }
 }
 

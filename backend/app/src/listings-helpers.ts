@@ -1,24 +1,14 @@
 import type { Config } from "@my-olx/core";
 import type { ListingImageRow, ListingRow, SellerRow } from "./repositories/listings.repo.js";
 
-/**
- * Convert S3 key to public image URL
- */
 export function imageUrl(s3Key: string | null, config: Config): string | null {
   if (!s3Key) return null;
-
-  if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) {
-    return s3Key;
-  }
-
-  const baseUrl = config.s3PublicBaseUrl.replace(/\/$/, "");
+  if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) return s3Key;
+  const base = config.publicBaseUrl.replace(/\/$/, "");
   const key = s3Key.replace(/^\//, "");
-  return `${baseUrl}/${key}`;
+  return `${base}/uploads/${key}`;
 }
 
-/**
- * Category slug to label mapping
- */
 const CATEGORY_LABELS: Record<string, string> = {
   electronice: "Electronice",
   auto: "Auto, moto și ambarcațiuni",
@@ -35,9 +25,6 @@ export function categoryLabel(slug: string): string {
   return CATEGORY_LABELS[slug] ?? "Diverse";
 }
 
-/**
- * Listing -> ListingCardResponse mapping
- */
 export interface ListingCardResponse {
   id: string;
   title: string;
@@ -58,12 +45,6 @@ export function toListingCardResponse(
   config: Config
 ): ListingCardResponse {
   const coverImage = images.find((img) => img.position === 0);
-  const createdAt = typeof listing.created_at === 'string'
-    ? listing.created_at
-    : listing.created_at.toISOString();
-  const expiresAt = typeof listing.expires_at === 'string'
-    ? listing.expires_at
-    : listing.expires_at.toISOString();
   return {
     id: listing.id,
     title: listing.title,
@@ -72,15 +53,12 @@ export function toListingCardResponse(
     category: listing.category,
     cover_url: imageUrl(coverImage?.s3_key ?? null, config),
     seller_verified: sellerVerified,
-    posted_at: createdAt,
-    active: listing.active,
-    expires_at: expiresAt,
+    posted_at: listing.created_at,
+    active: Boolean(listing.active),
+    expires_at: listing.expires_at,
   };
 }
 
-/**
- * Listing -> ListingResponse mapping
- */
 export interface ListingResponse {
   id: string;
   user_id: string;
@@ -96,30 +74,21 @@ export interface ListingResponse {
 }
 
 export function toListingResponse(listing: ListingRow): ListingResponse {
-  const createdAt = typeof listing.created_at === 'string'
-    ? listing.created_at
-    : listing.created_at.toISOString();
-  const expiresAt = typeof listing.expires_at === 'string'
-    ? listing.expires_at
-    : listing.expires_at.toISOString();
   return {
     id: listing.id,
     user_id: listing.user_id,
     title: listing.title,
     description: listing.description,
     price_ron: listing.price_ron,
-    is_negotiable: listing.is_negotiable,
+    is_negotiable: Boolean(listing.is_negotiable),
     category: listing.category,
     city: listing.city,
-    active: listing.active,
-    expires_at: expiresAt,
-    created_at: createdAt,
+    active: Boolean(listing.active),
+    expires_at: listing.expires_at,
+    created_at: listing.created_at,
   };
 }
 
-/**
- * SellerRow -> SellerSummary mapping
- */
 export interface SellerSummary {
   id: string;
   display_name: string | null;
@@ -134,22 +103,24 @@ export function toSellerSummary(
   activeListingsCount: number,
   config: Config
 ): SellerSummary {
-  const memberSince = typeof seller.created_at === 'string'
-    ? seller.created_at
-    : seller.created_at.toISOString();
   return {
     id: seller.id,
     display_name: seller.display_name,
     avatar_url: imageUrl(seller.avatar_url, config),
-    phone_verified: seller.phone_verified,
-    member_since: memberSince,
+    phone_verified: Boolean(seller.phone_verified),
+    member_since: seller.created_at,
     active_listings_count: activeListingsCount,
   };
 }
 
-/**
- * Listing + related data -> ListingDetailResponse mapping
- */
+export interface AssetResponse {
+  id: string;
+  original_filename: string;
+  file_size_bytes: number;
+  content_type: string;
+  position: number;
+}
+
 export interface ListingDetailResponse {
   id: string;
   title: string;
@@ -159,11 +130,7 @@ export interface ListingDetailResponse {
   category: string;
   category_label: string;
   city: string;
-  images: Array<{
-    id: string;
-    url: string | null;
-    position: number;
-  }>;
+  images: Array<{ id: string; url: string | null; position: number }>;
   view_count: number;
   posted_at: string;
   expires_at: string;
@@ -183,18 +150,12 @@ export function toListingDetailResponse(
   config: Config,
   assets: AssetResponse[] = []
 ): ListingDetailResponse {
-  const createdAt = typeof listing.created_at === 'string'
-    ? listing.created_at
-    : listing.created_at.toISOString();
-  const expiresAt = typeof listing.expires_at === 'string'
-    ? listing.expires_at
-    : listing.expires_at.toISOString();
   return {
     id: listing.id,
     title: listing.title,
     description: listing.description,
     price_ron: listing.price_ron,
-    is_negotiable: listing.is_negotiable,
+    is_negotiable: Boolean(listing.is_negotiable),
     category: listing.category,
     category_label: categoryLabel(listing.category),
     city: listing.city,
@@ -204,9 +165,9 @@ export function toListingDetailResponse(
       position: img.position,
     })),
     view_count: listing.view_count,
-    posted_at: createdAt,
-    expires_at: expiresAt,
-    active: listing.active,
+    posted_at: listing.created_at,
+    expires_at: listing.expires_at,
+    active: Boolean(listing.active),
     seller,
     license_type: listing.license_type,
     file_format: listing.file_format,
@@ -216,23 +177,9 @@ export function toListingDetailResponse(
   };
 }
 
-/**
- * Paginated listings response
- */
 export interface ListingsPageResponse {
   listings: ListingCardResponse[];
   total_count: number;
   total_pages: number;
   page: number;
-}
-
-/**
- * Asset response for listing detail
- */
-export interface AssetResponse {
-  id: string;
-  original_filename: string;
-  file_size_bytes: number;
-  content_type: string;
-  position: number;
 }

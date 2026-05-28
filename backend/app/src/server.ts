@@ -1,10 +1,8 @@
 // @my-olx/app — Fastify entrypoint for the digital-asset marketplace.
-// Reuses the @my-olx/core engine and wires the implementation route modules.
 import {
   buildApp,
   createDb,
   createEmailService,
-  createS3Client,
   loadConfig,
   registerAuth,
   registerErrorHandler,
@@ -19,31 +17,38 @@ import { registerImagesRoutes } from "./modules/images.js";
 import { registerAssetsRoutes } from "./modules/assets.js";
 import { registerMessagingRoutes } from "./modules/messaging.js";
 import { registerLocationsRoutes } from "./modules/locations.js";
+import { runMigrations } from "@my-olx/core";
+import Database from "better-sqlite3";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { mkdir } from "node:fs/promises";
 
 async function main(): Promise<void> {
   const config = loadConfig();
+
+  // Ensure data directories exist
+  await mkdir(path.dirname(config.databasePath), { recursive: true });
+  await mkdir(config.uploadsDir, { recursive: true });
+
+  // Run migrations before starting the server
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const migrationsDir = path.resolve(here, "../../migrations");
+  const sqliteDb = new Database(config.databasePath);
+  const ran = runMigrations(sqliteDb, migrationsDir);
+  if (ran.length > 0) {
+    console.log(`Applied ${ran.length} migration(s):`, ran);
+  }
+  sqliteDb.close();
 
   const app = await buildApp(config);
   registerErrorHandler(app);
   registerAuth(app, config.jwtSecret);
 
-  const storageConfig = {
-    region: config.awsRegion,
-    bucket: config.awsS3Bucket,
-    endpointUrl: config.awsEndpointUrl,
-    publicBaseUrl: config.s3PublicBaseUrl,
-  };
   const ctx: AppContext = {
-    db: createDb(config.databaseUrl),
+    db: createDb(config.databasePath),
     config,
-    storage: new StorageService(createS3Client(storageConfig), storageConfig),
-    email: createEmailService({
-      host: config.smtpHost,
-      port: config.smtpPort,
-      username: config.smtpUsername,
-      password: config.smtpPassword,
-      from: config.smtpFrom,
-    }),
+    storage: new StorageService({ uploadsDir: config.uploadsDir, publicBaseUrl: config.publicBaseUrl }),
+    email: createEmailService({}),
   };
 
   registerAuthRoutes(app, ctx);

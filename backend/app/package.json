@@ -14,10 +14,10 @@
     "@my-olx/core": "0.1.0",
     "fastify": "5.2.1",
     "kysely": "0.27.5",
-    "pg": "8.13.1",
+    "better-sqlite3": "11.7.0",
     "zod": "3.24.1"
   },
   "devDependencies": {
-    "@types/pg": "8.11.10"
+    "@types/better-sqlite3": "7.6.12"
   }
 }

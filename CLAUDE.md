@@ -6,29 +6,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **my-olx** (formerly "PiațăRo") is a **digital-assets marketplace**: sellers upload downloadable files (zip, pdf, psd, mp4, etc.), buyers download them. No physical goods, no shipping, no location/city. Asset categories: software, grafica (grafică), sabloane (șabloane), audio, video, ebook, fonturi, cod-sursa (cod sursă), diverse.
 
-Monorepo: **Node.js/TypeScript + Fastify** backend (npm workspace with `@my-olx/core` engine + `@my-olx/app` implementation), **React/TypeScript + Vite** frontend. Exact-pinned dependencies; Kysely + raw SQL + custom migrator for DB; early stage — auth/listings core implemented.
+Monorepo: **Node.js/TypeScript + Fastify** backend (npm workspace with `@my-olx/core` engine + `@my-olx/app` implementation), **React/TypeScript + Vite** frontend. Exact-pinned dependencies; Kysely + SQLite (`better-sqlite3`) + custom migrator for DB; files stored on disk; no Docker required; early stage — auth/listings core implemented.
 
 ## Commands
-
-### Local Infrastructure (start first)
-
-```bash
-cd infrastructure/my-olx-local
-docker-compose up -d          # starts PostgreSQL 16, LocalStack (S3), MailHog
-```
 
 ### Backend (Node.js/TypeScript + Fastify)
 
 ```bash
 cd backend
 npm install                   # first time only (installs both @my-olx/core and @my-olx/app)
-npm run dev                   # tsx watch — server on 0.0.0.0:8080
+npm run dev                   # tsx watch — server on 0.0.0.0:8080 (migrations run automatically on startup)
 npm run build                 # tsc -b (compiles core then app)
 npm test                      # vitest
-npm run migrate               # apply backend/migrations/*.sql to local Postgres
 ```
 
-Backend uses `@my-olx/core` (engine: db, auth, storage, config) and `@my-olx/app` (routes/handlers/services/repos/dto for digital assets). `.env` values must match docker-compose defaults.
+Backend uses `@my-olx/core` (engine: SQLite db, auth, disk storage, config) and `@my-olx/app` (routes/handlers/services/repos/dto for digital assets). Data stored in `backend/data/my-olx.db`; uploaded files in `backend/data/uploads/`. Migrations run automatically at server startup — no separate migrate step needed.
+
+**No Docker or external services required.** SQLite file is created automatically on first run.
 
 ### Frontend (React/Vite)
 
@@ -50,9 +44,9 @@ Frontend reads `VITE_API_URL` (default: `http://localhost:8080`) from `.env`.
 ```
 backend/
   core/                 ← @my-olx/core (shared engine)
-    src/db/            ← Kysely + raw SQL + custom migrator
+    src/db/            ← Kysely + SQLite dialect + custom migrator
     src/auth/          ← JWT + Argon2 password hashing
-    src/storage/       ← S3 client
+    src/storage/       ← Disk-based file storage
     src/config/        ← env parsing
     src/http.ts        ← Fastify factory
     src/errors.ts      ← AppError enum
@@ -74,14 +68,14 @@ routes/ → handlers/ → services/ → repositories/ → models/
 - **routes/** — Fastify route assembly (`/auth`, `/listings`, `/assets`, etc.)
 - **handlers/** — Thin: parse request, call service, return response; protected endpoints use `user_id` from JWT
 - **services/** — Business logic; generic over repository traits for unit testing with mocks
-- **repositories/** — Kysely queries + raw SQL; defined as traits
+- **repositories/** — Kysely queries + SQLite-compatible raw SQL; defined as traits
 - **dto/** — Request/response JSON shapes (separate from DB models)
 
 **Core engine:**
-- **db/** — Kysely instance + custom migrator (`npm run migrate` applies `backend/migrations/*.sql`)
+- **db/** — Kysely instance + SQLite dialect (`better-sqlite3`); migrations run automatically at startup from `backend/migrations/*.sql`
 - **auth/** — JWT creation/verification + Argon2 hashing; `password_hash` only, never plaintext
-- **storage/** — S3 client (LocalStack in dev)
-- **http.ts** — Fastify factory with middleware: CORS, compression, tracing
+- **storage/** — Disk-based storage; files stored under `UPLOADS_DIR`; served at `/uploads/<key>` via `@fastify/static`
+- **http.ts** — Fastify factory with middleware: CORS, compression, multipart, static file serving
 - **errors.ts** — Single `AppError` enum; all layers return `Result<T, AppError>`; maps to HTTP status + JSON
 
 **Key:** Exact-pinned npm versions (`package-lock.json`); `@my-olx/core` is stable, `@my-olx/app` depends on it.

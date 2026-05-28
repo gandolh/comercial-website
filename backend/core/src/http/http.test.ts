@@ -1,34 +1,31 @@
 import { describe, it, expect } from "vitest";
 import { buildApp } from "./index.js";
 import type { Config } from "../config/index.js";
+import { mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
+async function makeTestConfig(overrides: Partial<Config> = {}): Promise<Config> {
+  const uploadsDir = await mkdtemp(path.join(tmpdir(), "my-olx-test-"));
+  return {
+    databasePath: ":memory:",
+    uploadsDir,
+    publicBaseUrl: "http://localhost:8080",
+    jwtSecret: "test-secret",
+    jwtExpirySeconds: 86400,
+    corsAllowedOrigins: "http://localhost:5173",
+    host: "0.0.0.0",
+    port: 8080,
+    frontendBaseUrl: "http://localhost:5173",
+    ...overrides,
+  };
+}
 
 describe("buildApp", () => {
   it("should build a Fastify app with health endpoint", async () => {
-    const testConfig: Config = {
-      databaseUrl: "postgres://localhost/test",
-      jwtSecret: "test-secret",
-      jwtExpirySeconds: 86400,
-      awsRegion: "eu-central-1",
-      awsS3Bucket: "test-bucket",
-      s3PublicBaseUrl: "http://localhost:4566/test-bucket",
-      corsAllowedOrigins: "http://localhost:5173",
-      host: "0.0.0.0",
-      port: 8080,
-      smtpHost: "localhost",
-      smtpPort: 1025,
-      smtpUsername: "",
-      smtpPassword: "",
-      smtpFrom: "noreply@test.ro",
-      frontendBaseUrl: "http://localhost:5173",
-      phoneProvider: "stub",
-    };
+    const app = await buildApp(await makeTestConfig());
 
-    const app = await buildApp(testConfig);
-
-    const response = await app.inject({
-      method: "GET",
-      url: "/health",
-    });
+    const response = await app.inject({ method: "GET", url: "/health" });
 
     expect(response.statusCode).toBe(200);
     expect(JSON.parse(response.payload)).toEqual({ status: "ok" });
@@ -37,33 +34,14 @@ describe("buildApp", () => {
   });
 
   it("should have CORS configured", async () => {
-    const testConfig: Config = {
-      databaseUrl: "postgres://localhost/test",
-      jwtSecret: "test-secret",
-      jwtExpirySeconds: 86400,
-      awsRegion: "eu-central-1",
-      awsS3Bucket: "test-bucket",
-      s3PublicBaseUrl: "http://localhost:4566/test-bucket",
+    const app = await buildApp(await makeTestConfig({
       corsAllowedOrigins: "http://localhost:5173,https://example.com",
-      host: "0.0.0.0",
-      port: 8080,
-      smtpHost: "localhost",
-      smtpPort: 1025,
-      smtpUsername: "",
-      smtpPassword: "",
-      smtpFrom: "noreply@test.ro",
-      frontendBaseUrl: "http://localhost:5173",
-      phoneProvider: "stub",
-    };
-
-    const app = await buildApp(testConfig);
+    }));
 
     const response = await app.inject({
       method: "GET",
       url: "/health",
-      headers: {
-        origin: "http://localhost:5173",
-      },
+      headers: { origin: "http://localhost:5173" },
     });
 
     expect(response.statusCode).toBe(200);
@@ -73,33 +51,12 @@ describe("buildApp", () => {
   });
 
   it("should have compression registered", async () => {
-    const testConfig: Config = {
-      databaseUrl: "postgres://localhost/test",
-      jwtSecret: "test-secret",
-      jwtExpirySeconds: 86400,
-      awsRegion: "eu-central-1",
-      awsS3Bucket: "test-bucket",
-      s3PublicBaseUrl: "http://localhost:4566/test-bucket",
-      corsAllowedOrigins: "http://localhost:5173",
-      host: "0.0.0.0",
-      port: 8080,
-      smtpHost: "localhost",
-      smtpPort: 1025,
-      smtpUsername: "",
-      smtpPassword: "",
-      smtpFrom: "noreply@test.ro",
-      frontendBaseUrl: "http://localhost:5173",
-      phoneProvider: "stub",
-    };
-
-    const app = await buildApp(testConfig);
+    const app = await buildApp(await makeTestConfig());
 
     const response = await app.inject({
       method: "GET",
       url: "/health",
-      headers: {
-        "accept-encoding": "gzip",
-      },
+      headers: { "accept-encoding": "gzip" },
     });
 
     expect(response.statusCode).toBe(200);

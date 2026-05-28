@@ -19,9 +19,9 @@ function imageUrl(s3Key: string, config: any): string {
   if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) {
     return s3Key;
   }
-  const base = config.s3PublicBaseUrl.replace(/\/$/, "");
+  const base = config.publicBaseUrl.replace(/\/$/, "");
   const key = s3Key.replace(/^\//, "");
-  return `${base}/${key}`;
+  return `${base}/uploads/${key}`;
 }
 
 function toDate(val: any): Date {
@@ -136,9 +136,9 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
         city: l.city,
         category: l.category,
         cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id)!, ctx.config) : null,
-        seller_verified: sellerMap.get(l.user_id) || false,
+        seller_verified: Boolean(sellerMap.get(l.user_id)),
         posted_at: toISOString(l.created_at),
-        active: l.active,
+        active: Boolean(l.active),
         expires_at: toISOString(l.expires_at),
       }));
 

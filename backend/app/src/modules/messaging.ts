@@ -6,7 +6,7 @@ import { AppError } from "@my-olx/core";
 /**
  * Helper to construct image URL from S3 key.
  * If value starts with http(s)://, return as-is.
- * Otherwise: ${config.s3PublicBaseUrl.replace(/\/$/, '')}/${key.replace(/^\//, '')}
+ * Otherwise: ${config.publicBaseUrl.replace(/\/$/, '')}/${key.replace(/^\//, '')}
  */
 function imageUrl(s3KeyOrUrl: string | null, publicBaseUrl: string): string | null {
   if (!s3KeyOrUrl) return null;
@@ -15,7 +15,7 @@ function imageUrl(s3KeyOrUrl: string | null, publicBaseUrl: string): string | nu
   }
   const baseUrl = publicBaseUrl.replace(/\/$/, "");
   const key = s3KeyOrUrl.replace(/^\//, "");
-  return `${baseUrl}/${key}`;
+  return `${baseUrl}/uploads/${key}`;
 }
 
 // Validation schemas
@@ -77,7 +77,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
             listing_id: listingId,
             buyer_id: buyerId,
             seller_id: sellerId,
-            last_message_at: new Date(),
+            last_message_at: new Date().toISOString(),
           })
           .returning("id")
           .executeTakeFirst();
@@ -102,7 +102,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
       // Bump conversation.last_message_at = now
       await ctx.db
         .updateTable("conversations")
-        .set({ last_message_at: new Date() })
+        .set({ last_message_at: new Date().toISOString() })
         .where("id", "=", conversation.id)
         .execute();
 
@@ -205,8 +205,8 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
           conversation_id: m.conversation_id,
           sender_id: m.sender_id,
           body: m.body,
-          read_at: m.read_at ? (m.read_at instanceof Date ? m.read_at.toISOString() : m.read_at) : null,
-          created_at: m.created_at instanceof Date ? m.created_at.toISOString() : m.created_at,
+          read_at: m.read_at ? (m.read_at) : null,
+          created_at: m.created_at,
         }))
       );
     }
@@ -262,7 +262,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
       // Bump conversation.last_message_at = now
       await ctx.db
         .updateTable("conversations")
-        .set({ last_message_at: new Date() })
+        .set({ last_message_at: new Date().toISOString() })
         .where("id", "=", conversationId)
         .execute();
 
@@ -271,8 +271,8 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
         conversation_id: message.conversation_id,
         sender_id: message.sender_id,
         body: message.body,
-        read_at: message.read_at ? (message.read_at instanceof Date ? message.read_at.toISOString() : message.read_at) : null,
-        created_at: message.created_at instanceof Date ? message.created_at.toISOString() : message.created_at,
+        read_at: message.read_at ? (message.read_at) : null,
+        created_at: message.created_at,
       });
     }
   );
@@ -303,7 +303,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
       // Mark messages where sender_id != userId AND read_at IS NULL → read_at = now
       await ctx.db
         .updateTable("messages")
-        .set({ read_at: new Date() })
+        .set({ read_at: new Date().toISOString() })
         .where("conversation_id", "=", conversationId)
         .where("sender_id", "!=", userId)
         .where("read_at", "is", null)
@@ -350,7 +350,7 @@ async function buildConversationSummary(
   conversationId: string,
   userId: string
 ): Promise<any> {
-  const publicBaseUrl = ctx.config.s3PublicBaseUrl;
+  const publicBaseUrl = ctx.config.publicBaseUrl;
 
   // Fetch conversation
   const conversation = await ctx.db

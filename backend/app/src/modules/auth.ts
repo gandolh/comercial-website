@@ -36,20 +36,20 @@ function toUserSummary(user: {
   email: string;
   display_name: string | null;
   avatar_url: string | null;
-  email_verified: boolean;
+  email_verified: number | boolean;
   phone: string | null;
-  phone_verified: boolean;
-  created_at: Date;
+  phone_verified: number | boolean;
+  created_at: string | Date;
 }): UserSummary {
   return {
     id: user.id,
     email: user.email,
     display_name: user.display_name,
     avatar_url: user.avatar_url,
-    email_verified: user.email_verified,
+    email_verified: Boolean(user.email_verified),
     phone: user.phone,
-    phone_verified: user.phone_verified,
-    created_at: user.created_at.toISOString(),
+    phone_verified: Boolean(user.phone_verified),
+    created_at: user.created_at instanceof Date ? user.created_at.toISOString() : user.created_at,
   };
 }
 
@@ -423,9 +423,8 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
         await repo.storePhoneVerificationCode(userId, phone, expiresAtMs);
 
         // If stub provider, log the code; otherwise send via SMS provider
-        if (ctx.config.phoneProvider === "stub") {
-          console.log(`[PHONE] Code for ${phone}: 123456`);
-        }
+        // Phone provider is always stub (no SMS service configured)
+        console.log(`[PHONE] Code for ${phone}: 123456`);
 
         return reply.code(200).send({});
       } catch (error) {

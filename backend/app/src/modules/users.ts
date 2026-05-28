@@ -1,5 +1,7 @@
 import { randomUUID } from "crypto";
 import { z } from "zod";
+import { sql } from "kysely";
+import type { SqlBool } from "kysely";
 import type { RouteRegistrar } from "../context.js";
 import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
 // Helpers
@@ -8,9 +10,9 @@ function imageUrl(s3Key: string, config: any): string {
   if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) {
     return s3Key;
   }
-  const base = config.s3PublicBaseUrl.replace(/\/$/, "");
+  const base = config.publicBaseUrl.replace(/\/$/, "");
   const key = s3Key.replace(/^\//, "");
-  return `${base}/${key}`;
+  return `${base}/uploads/${key}`;
 }
 
 function getFileExtension(filename: string): string {
@@ -111,9 +113,9 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         email: user.email,
         display_name: user.display_name,
         avatar_url: user.avatar_url,
-        email_verified: user.email_verified,
+        email_verified: Boolean(user.email_verified),
         phone: user.phone,
-        phone_verified: user.phone_verified,
+        phone_verified: Boolean(user.phone_verified),
         created_at: toISOString(user.created_at),
       };
 
@@ -175,9 +177,9 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           email: user.email,
           display_name: user.display_name,
           avatar_url: user.avatar_url,
-          email_verified: user.email_verified,
+          email_verified: Boolean(user.email_verified),
           phone: user.phone,
-          phone_verified: user.phone_verified,
+          phone_verified: Boolean(user.phone_verified),
           created_at: toISOString(user.created_at),
         };
 
@@ -200,9 +202,9 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         email: user.email,
         display_name: user.display_name,
         avatar_url: user.avatar_url,
-        email_verified: user.email_verified,
+        email_verified: Boolean(user.email_verified),
         phone: user.phone,
-        phone_verified: user.phone_verified,
+        phone_verified: Boolean(user.phone_verified),
         created_at: toISOString(user.created_at),
       };
 
@@ -360,35 +362,42 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
     }
   );
 
-  // POST /users/me/avatar/upload-url — presign upload
+  // POST /users/me/avatar — multipart upload
   app.post(
-    "/users/me/avatar/upload-url",
+    "/users/me/avatar",
     { preHandler: app.authenticate },
     async (request, reply) => {
-      const schema = z.object({
-        content_type: z.string(),
-        filename: z.string(),
-      });
-
-      let body: any;
-      try {
-        body = schema.parse(request.body);
-      } catch (err) {
-        throw AppError.validation((err as any).errors[0]?.message || "invalid request");
-      }
-
       const userId = request.userId!;
-      const ext = getFileExtension(body.filename);
-      const s3Key = `avatars/${userId}/${randomUUID()}.${ext}`;
 
-      const uploadUrl = await ctx.storage.presignPut(s3Key, body.content_type);
+      const data = await (request as any).file();
+      if (!data) throw AppError.validation("no file provided");
+
+      const contentType: string = data.mimetype;
+      let ext: string;
+      if (contentType === "image/jpeg") ext = "jpg";
+      else if (contentType === "image/png") ext = "png";
+      else if (contentType === "image/webp") ext = "webp";
+      else throw AppError.validation("unsupported content type");
+
+      const { mkdir: mkdirFs } = await import("node:fs/promises");
+      const { createWriteStream: cws } = await import("node:fs");
+      const { pipeline: pipe } = await import("node:stream/promises");
+      const pathMod = await import("node:path");
+
+      const s3Key = `avatars/${userId}/${randomUUID()}.${ext}`;
+      const dest = pathMod.join(ctx.config.uploadsDir, s3Key);
+      await mkdirFs(pathMod.dirname(dest), { recursive: true });
+      await pipe(data.file, cws(dest));
+
       const publicUrl = ctx.storage.publicUrl(s3Key);
 
-      return reply.send({
-        upload_url: uploadUrl,
-        s3_key: s3Key,
-        public_url: publicUrl,
-      });
+      await ctx.db
+        .updateTable("users")
+        .set({ avatar_url: s3Key })
+        .where("id", "=", userId)
+        .execute();
+
+      return reply.send({ public_url: publicUrl, s3_key: s3Key });
     }
   );
 
@@ -407,13 +416,12 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     // Count active, non-expired listings
-    const now = new Date();
     const listingsResult = await ctx.db
       .selectFrom("listings")
       .select(ctx.db.fn.count("id").as("count"))
       .where("user_id", "=", id)
-      .where("active", "=", true)
-      .where("expires_at", ">", now)
+      .where(sql<SqlBool>`active = 1`)
+      .where(sql<SqlBool>`expires_at > datetime('now')`)
       .executeTakeFirst();
 
     const active_listings_count = listingsResult ? parseInt(String(listingsResult.count)) : 0;
@@ -422,7 +430,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       id: user.id,
       display_name: user.display_name,
       avatar_url: user.avatar_url,
-      phone_verified: user.phone_verified,
+      phone_verified: Boolean(user.phone_verified),
       member_since: toISOString(user.created_at),
       active_listings_count,
     };
@@ -452,8 +460,8 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
 
     // Filter by active status if specified
     if (active !== undefined) {
-      const activeFlag = active === "true" || active === true;
-      query = query.where("active", "=", activeFlag);
+      const activeFlag = active === "true" || active === true ? 1 : 0;
+      query = query.where(sql<SqlBool>`active = ${activeFlag}`);
     }
 
     const listings = await query.execute();
@@ -465,7 +473,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       .where("id", "=", id)
       .executeTakeFirst();
 
-    const seller_verified = seller?.phone_verified || false;
+    const seller_verified = Boolean(seller?.phone_verified);
 
     // Get cover images for each listing
     const coverImages = await ctx.db
@@ -485,7 +493,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id)!, ctx.config) : null,
       seller_verified,
       posted_at: toISOString(l.created_at),
-      active: l.active,
+      active: Boolean(l.active),
       expires_at: toISOString(l.expires_at),
     }));
 

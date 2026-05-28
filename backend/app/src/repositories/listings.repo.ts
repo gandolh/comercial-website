@@ -7,15 +7,14 @@ export interface ListingRow {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: boolean;
+  is_negotiable: number | boolean;
   category: string;
   city: string;
-  active: boolean;
+  active: number | boolean;
   view_count: number;
-  expires_at: Date | string;
-  created_at: Date | string;
-  updated_at: Date | string;
-  // Digital asset fields
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
   asset_type: string;
   file_format: string | null;
   file_size_bytes: number | null;
@@ -31,23 +30,20 @@ export interface ListingImageRow {
   width: number | null;
   height: number | null;
   bytes: number | null;
-  created_at: Date | string;
+  created_at: string;
 }
 
 export interface SellerRow {
   id: string;
   display_name: string | null;
   avatar_url: string | null;
-  phone_verified: boolean;
-  created_at: Date | string;
+  phone_verified: number | boolean;
+  created_at: string;
 }
 
 export class ListingsRepository {
   constructor(private db: Db) {}
 
-  /**
-   * Create a new listing
-   */
   async create(
     userId: string,
     title: string,
@@ -68,11 +64,11 @@ export class ListingsRepository {
         title,
         description,
         price_ron: priceRon,
-        is_negotiable: isNegotiable,
+        is_negotiable: isNegotiable ? 1 : 0,
         category,
         city,
-        active,
-        expires_at: expiresAt,
+        active: active ? 1 : 0,
+        expires_at: expiresAt.toISOString(),
       })
       .returningAll()
       .executeTakeFirstOrThrow();
@@ -80,9 +76,6 @@ export class ListingsRepository {
     return result as unknown as ListingRow;
   }
 
-  /**
-   * Get listing by ID
-   */
   async getById(id: string): Promise<ListingRow | undefined> {
     return (
       (await this.db
@@ -93,9 +86,6 @@ export class ListingsRepository {
     );
   }
 
-  /**
-   * Update listing (owner only)
-   */
   async update(
     id: string,
     title?: string,
@@ -111,7 +101,7 @@ export class ListingsRepository {
     if (title !== undefined) updates.title = title;
     if (description !== undefined) updates.description = description;
     if (priceRon !== undefined) updates.price_ron = priceRon;
-    if (isNegotiable !== undefined) updates.is_negotiable = isNegotiable;
+    if (isNegotiable !== undefined) updates.is_negotiable = isNegotiable ? 1 : 0;
     if (category !== undefined) updates.category = category;
     if (city !== undefined) updates.city = city;
     if (fileFormat !== undefined) updates.file_format = fileFormat;
@@ -127,44 +117,32 @@ export class ListingsRepository {
     );
   }
 
-  /**
-   * Delete listing
-   */
   async delete(id: string): Promise<void> {
     await this.db.deleteFrom("listings").where("id", "=", id).execute();
   }
 
-  /**
-   * Set listing active status
-   */
   async setActive(id: string, active: boolean): Promise<ListingRow> {
     return (
       (await this.db
         .updateTable("listings")
-        .set({ active })
+        .set({ active: active ? 1 : 0 })
         .where("id", "=", id)
         .returningAll()
         .executeTakeFirstOrThrow()) as unknown as ListingRow
     );
   }
 
-  /**
-   * Set expiry and update timestamp
-   */
   async setExpiry(id: string, expiresAt: Date): Promise<ListingRow> {
     return (
       (await this.db
         .updateTable("listings")
-        .set({ expires_at: expiresAt })
+        .set({ expires_at: expiresAt.toISOString() })
         .where("id", "=", id)
         .returningAll()
         .executeTakeFirstOrThrow()) as unknown as ListingRow
     );
   }
 
-  /**
-   * Increment view count
-   */
   async incrementViewCount(id: string): Promise<void> {
     await this.db
       .updateTable("listings")
@@ -173,10 +151,6 @@ export class ListingsRepository {
       .execute();
   }
 
-  /**
-   * Search listings with filters
-   * Returns paginated results
-   */
   async search(
     q?: string,
     category?: string,
@@ -197,36 +171,30 @@ export class ListingsRepository {
 
     let query = this.db.selectFrom("listings").selectAll();
 
-    // Filter by active/expired status
-    // If user_id filter is provided, respect the active filter
-    // Otherwise, show only active & not-expired
     if (userId) {
       query = query.where("user_id", "=", userId);
       if (active !== undefined) {
-        query = query.where("active", "=", active);
+        query = query.where(sql<SqlBool>`active = ${active ? 1 : 0}`);
       }
     } else {
       query = query
-        .where("active", "=", true)
-        .where(sql<SqlBool>`expires_at > now()`);
+        .where(sql<SqlBool>`active = 1`)
+        .where(sql<SqlBool>`expires_at > datetime('now')`);
     }
 
-    // Full-text search
     if (q && q.trim()) {
-      query = query.where(sql<SqlBool>`search_tsv @@ websearch_to_tsquery('simple', ${q})`);
+      const term = `%${q.trim()}%`;
+      query = query.where(sql<SqlBool>`(title LIKE ${term} OR description LIKE ${term})`);
     }
 
-    // Category filter
     if (category) {
       query = query.where("category", "=", category);
     }
 
-    // City filter (exact match)
     if (city) {
       query = query.where("city", "=", city);
     }
 
-    // Price range
     if (priceMin !== undefined) {
       query = query.where(sql<SqlBool>`price_ron >= ${priceMin}`);
     }
@@ -234,43 +202,29 @@ export class ListingsRepository {
       query = query.where(sql<SqlBool>`price_ron <= ${priceMax}`);
     }
 
-    // Date filter
     if (dateFilter && dateFilter !== "oricand") {
       if (dateFilter === "24h") {
-        query = query.where(sql<SqlBool>`created_at >= now() - interval '1 day'`);
+        query = query.where(sql<SqlBool>`created_at >= datetime('now', '-1 day')`);
       } else if (dateFilter === "saptamana") {
-        query = query.where(sql<SqlBool>`created_at >= now() - interval '7 days'`);
+        query = query.where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`);
       }
     }
 
-    // Verified filter (seller's phone_verified)
     if (verified) {
       query = query
         .leftJoin("users", "listings.user_id", "users.id")
-        .where("users.phone_verified", "=", true);
+        .where(sql<SqlBool>`users.phone_verified = 1`);
     }
 
-    // Sorting
     let sortedQuery = query;
-    if (sort === "relevanta" && q && q.trim()) {
-      // Use ts_rank for relevance
-      sortedQuery = query
-        .select(
-          sql`ts_rank(search_tsv, websearch_to_tsquery('simple', ${q}))`.as(
-            "rank"
-          )
-        )
-        .orderBy(sql`rank`, "desc");
-    } else if (sort === "pret_asc") {
+    if (sort === "pret_asc") {
       sortedQuery = query.orderBy("price_ron", "asc");
     } else if (sort === "pret_desc") {
       sortedQuery = query.orderBy("price_ron", "desc");
     } else {
-      // Default: "noi"
       sortedQuery = query.orderBy("created_at", "desc");
     }
 
-    // Get total count for pagination
     let countQuery: any = this.db
       .selectFrom("listings")
       .select(sql`count(*)`.as("count"));
@@ -278,12 +232,12 @@ export class ListingsRepository {
     if (userId) {
       countQuery = countQuery.where("user_id", "=", userId);
       if (active !== undefined) {
-        countQuery = countQuery.where("active", "=", active);
+        countQuery = countQuery.where(sql<SqlBool>`active = ${active ? 1 : 0}`);
       }
     } else {
       countQuery = countQuery
-        .where("active", "=", true)
-        .where(sql<SqlBool>`expires_at > now()`);
+        .where(sql<SqlBool>`active = 1`)
+        .where(sql<SqlBool>`expires_at > datetime('now')`);
     }
     if (category) countQuery = countQuery.where("category", "=", category);
     if (city) countQuery = countQuery.where("city", "=", city);
@@ -295,21 +249,25 @@ export class ListingsRepository {
     }
     if (dateFilter && dateFilter !== "oricand") {
       if (dateFilter === "24h") {
-        countQuery = countQuery.where(sql<SqlBool>`created_at >= now() - interval '1 day'`);
+        countQuery = countQuery.where(sql<SqlBool>`created_at >= datetime('now', '-1 day')`);
       } else if (dateFilter === "saptamana") {
-        countQuery = countQuery.where(sql<SqlBool>`created_at >= now() - interval '7 days'`);
+        countQuery = countQuery.where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`);
       }
     }
     if (verified) {
       countQuery = countQuery
         .leftJoin("users", "listings.user_id", "users.id")
-        .where("users.phone_verified", "=", true);
+        .where(sql<SqlBool>`users.phone_verified = 1`);
+    }
+
+    if (q && q.trim()) {
+      const term = `%${q.trim()}%`;
+      countQuery = countQuery.where(sql<SqlBool>`(title LIKE ${term} OR description LIKE ${term})`);
     }
 
     const countResult = await countQuery.executeTakeFirst();
     const total = parseInt((countResult as any)?.count ?? "0", 10);
 
-    // Get paginated results
     const listings = (await sortedQuery
       .limit(perPageClamped)
       .offset(offset)
@@ -318,17 +276,14 @@ export class ListingsRepository {
     return { listings, total };
   }
 
-  /**
-   * Get featured listings (limit 8, ordered by seller_verified desc, created_at desc)
-   */
   async getFeatured(): Promise<ListingRow[]> {
     return (
       (await this.db
         .selectFrom("listings")
         .selectAll()
         .leftJoin("users", "listings.user_id", "users.id")
-        .where("listings.active", "=", true)
-        .where(sql<SqlBool>`listings.expires_at > now()`)
+        .where(sql<SqlBool>`listings.active = 1`)
+        .where(sql<SqlBool>`listings.expires_at > datetime('now')`)
         .orderBy("users.phone_verified", "desc")
         .orderBy("listings.created_at", "desc")
         .limit(8)
@@ -337,9 +292,6 @@ export class ListingsRepository {
     );
   }
 
-  /**
-   * Get listings by user (for /users/:id/listings)
-   */
   async getByUserId(userId: string, active?: boolean): Promise<ListingRow[]> {
     let query = this.db
       .selectFrom("listings")
@@ -347,56 +299,47 @@ export class ListingsRepository {
       .where("user_id", "=", userId);
 
     if (active !== undefined) {
-      query = query.where("active", "=", active);
+      query = query.where("active", "=", active ? 1 : 0);
     }
 
     return (await query.execute()) as unknown as ListingRow[];
   }
 
-  /**
-   * Count active & non-expired listings for a user
-   */
   async countActiveListings(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
       .select(sql`count(*)`.as("count"))
       .where("user_id", "=", userId)
-      .where("active", "=", true)
-      .where(sql<SqlBool>`expires_at > now()`)
+      .where(sql<SqlBool>`active = 1`)
+      .where(sql<SqlBool>`expires_at > datetime('now')`)
       .executeTakeFirst();
 
     return parseInt((result as any)?.count ?? "0", 10);
   }
 
-  /**
-   * Count listings created in the last 7 days for a user
-   */
   async countWeeklyListings(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
       .select(sql`count(*)`.as("count"))
       .where("user_id", "=", userId)
-      .where(sql<SqlBool>`created_at >= now() - interval '7 days'`)
+      .where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`)
       .executeTakeFirst();
 
     return parseInt((result as any)?.count ?? "0", 10);
   }
 
-  /**
-   * Get the oldest listing created in last 7 days for weekly reset
-   */
   async getOldestWeeklyListing(userId: string): Promise<Date | null> {
     const result = await this.db
       .selectFrom("listings")
       .select("created_at")
       .where("user_id", "=", userId)
-      .where(sql<SqlBool>`created_at >= now() - interval '7 days'`)
+      .where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`)
       .orderBy("created_at", "asc")
       .limit(1)
       .executeTakeFirst();
 
     if (result) {
-      const d = new Date(result.created_at as unknown as string | Date);
+      const d = new Date(result.created_at as unknown as string);
       d.setDate(d.getDate() + 7);
       return d;
     }
@@ -404,9 +347,6 @@ export class ListingsRepository {
     return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   }
 
-  /**
-   * Get related listings (same category, excluding self, active & not expired, limit 4)
-   */
   async getRelated(listingId: string, category: string): Promise<ListingRow[]> {
     return (
       (await this.db
@@ -414,22 +354,19 @@ export class ListingsRepository {
         .selectAll()
         .where("category", "=", category)
         .where("id", "!=", listingId)
-        .where("active", "=", true)
-        .where(sql<SqlBool>`expires_at > now()`)
+        .where(sql<SqlBool>`active = 1`)
+        .where(sql<SqlBool>`expires_at > datetime('now')`)
         .orderBy("created_at", "desc")
         .limit(4)
         .execute()) as unknown as ListingRow[]
     );
   }
 
-  /**
-   * Get distinct titles for suggestions (ILIKE q%, limit default 20)
-   */
   async getSuggestTitles(q: string, limit: number = 20): Promise<string[]> {
     const results = (await this.db
       .selectFrom("listings")
       .select("title")
-      .where("title", "ilike", `${q}%`)
+      .where("title", "like", `${q}%`)
       .distinct()
       .limit(limit)
       .execute()) as Array<{ title: string }>;
@@ -437,9 +374,6 @@ export class ListingsRepository {
     return results.map((r) => r.title);
   }
 
-  /**
-   * Get listing images by listing ID
-   */
   async getImages(listingId: string): Promise<ListingImageRow[]> {
     return (
       (await this.db
@@ -451,9 +385,6 @@ export class ListingsRepository {
     );
   }
 
-  /**
-   * Get seller info
-   */
   async getSeller(userId: string): Promise<SellerRow | undefined> {
     return (
       (await this.db

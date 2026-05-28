@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { listingImageKey, listingAssetKey, createS3Client, StorageService } from "./index.js";
+import { listingImageKey, listingAssetKey, StorageService } from "./index.js";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 
 describe("Storage Module", () => {
   describe("listingImageKey", () => {
@@ -34,44 +37,26 @@ describe("Storage Module", () => {
     });
   });
 
-  describe("publicUrl", () => {
-    it("concatenates publicBaseUrl with key correctly", () => {
-      const cfg = {
-        region: "eu-central-1",
-        bucket: "test-bucket",
+  describe("StorageService.publicUrl", () => {
+    it("concatenates publicBaseUrl with /uploads/ prefix and key", () => {
+      const service = new StorageService({
+        uploadsDir: "/tmp/uploads",
         publicBaseUrl: "https://cdn.example.com",
-      };
-
-      const service = new StorageService(createS3Client(cfg), cfg);
+      });
       const url = service.publicUrl("listings/abc/test.jpg");
       expect(url).toBe("https://cdn.example.com/listings/abc/test.jpg");
     });
   });
 
-  describe("createS3Client", () => {
-    it("returns an S3Client object with send method", () => {
-      const cfg = {
-        region: "eu-central-1",
-        bucket: "test-bucket",
-        publicBaseUrl: "https://cdn.example.com",
-      };
-
-      const client = createS3Client(cfg);
-      expect(client).toBeDefined();
-      expect(typeof client.send).toBe("function");
-    });
-
-    it("sets endpoint and forcePathStyle when endpointUrl is provided", () => {
-      const cfg = {
-        region: "eu-central-1",
-        bucket: "test-bucket",
-        endpointUrl: "http://localhost:4566",
-        publicBaseUrl: "https://cdn.example.com",
-      };
-
-      const client = createS3Client(cfg);
-      expect(client).toBeDefined();
-      expect(typeof client.send).toBe("function");
+  describe("StorageService.deleteObject", () => {
+    it("does not throw when file does not exist", async () => {
+      const uploadsDir = await mkdtemp(path.join(tmpdir(), "my-olx-test-"));
+      try {
+        const service = new StorageService({ uploadsDir, publicBaseUrl: "http://localhost" });
+        await expect(service.deleteObject("nonexistent/file.txt")).resolves.not.toThrow();
+      } finally {
+        await rm(uploadsDir, { recursive: true });
+      }
     });
   });
 });

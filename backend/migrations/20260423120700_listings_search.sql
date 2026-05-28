@@ -1,8 +1,4 @@
-ALTER TABLE listings
-    ADD COLUMN search_tsv tsvector
-    GENERATED ALWAYS AS (
-        setweight(to_tsvector('simple', immutable_unaccent(coalesce(title, ''))), 'A') ||
-        setweight(to_tsvector('simple', immutable_unaccent(coalesce(description, ''))), 'B')
-    ) STORED;
-
-CREATE INDEX listings_search_tsv_idx ON listings USING GIN (search_tsv);
+-- SQLite: no native tsvector/full-text-search trigger.
+-- Search is handled in the repository layer using LIKE queries.
+-- This migration is a no-op kept for ordering continuity.
+SELECT 1;

@@ -121,7 +121,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
         const card = toListingCardResponse(
           listing,
           images,
-          seller.phone_verified,
+          Boolean(seller.phone_verified),
           ctx.config
         );
         cards.push(card);
@@ -202,7 +202,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
         const card = toListingCardResponse(
           listing,
           images,
-          seller.phone_verified,
+          Boolean(seller.phone_verified),
           ctx.config
         );
         cards.push(card);
@@ -499,7 +499,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
         const card = toListingCardResponse(
           item,
           images,
-          seller.phone_verified,
+          Boolean(seller.phone_verified),
           ctx.config
         );
         cards.push(card);

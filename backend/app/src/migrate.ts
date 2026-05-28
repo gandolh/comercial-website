@@ -1,8 +1,9 @@
-// Runs all SQL migrations in backend/migrations against DATABASE_URL.
+// Runs all SQL migrations in backend/migrations against DATABASE_PATH.
 // Usage: npm run migrate  (from backend/ or backend/app/)
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createPool, runMigrations } from "@my-olx/core";
+import Database from "better-sqlite3";
+import { runMigrations } from "@my-olx/core";
 import { loadConfig } from "@my-olx/core";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -11,9 +12,9 @@ const migrationsDir = path.resolve(here, "../../migrations");
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const pool = createPool(config.databaseUrl);
+  const db = new Database(config.databasePath);
   try {
-    const ran = await runMigrations(pool, migrationsDir);
+    const ran = runMigrations(db, migrationsDir);
     if (ran.length === 0) {
       console.log("No pending migrations.");
     } else {
@@ -21,7 +22,7 @@ async function main(): Promise<void> {
       for (const name of ran) console.log(`  - ${name}`);
     }
   } finally {
-    await pool.end();
+    db.close();
   }
 }
 
