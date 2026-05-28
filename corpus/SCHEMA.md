@@ -21,7 +21,8 @@ corpus/
     market/           ← market research, competitive analysis, product ideas
     tech/             ← architecture, stack decisions, design system
     entities/         ← core domain objects (Listing, Asset, User, …)
-    features/         ← individual feature specs (when needed)
+  todo/               ← feature backlog; one file per feature
+    <slug>.md         ← type: add | update | remove; priority: critical/high/medium/low; status: pending/in-progress/done
 ```
 
 ## Page frontmatter (required on every page except index.md and log.md)
