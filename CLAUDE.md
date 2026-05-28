@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Knowledge Base
+
+The project corpus is at `corpus/`. Read `corpus/pages/index.md` first to navigate all pages.
+- `corpus/SCHEMA.md` — conventions for maintaining the corpus
+- `corpus/pages/` — LLM-maintained wiki (overview, entities, tech, market research)
+- `corpus/raw/` — immutable source documents (never edit)
+
 ## Project Overview
 
 **my-olx** (formerly "PiațăRo") is a **digital-assets marketplace**: sellers upload downloadable files (zip, pdf, psd, mp4, etc.), buyers download them. No physical goods, no shipping, no location/city. Asset categories: software, grafica (grafică), sabloane (șabloane), audio, video, ebook, fonturi, cod-sursa (cod sursă), diverse.
@@ -52,12 +59,9 @@ backend/
     src/errors.ts      ← AppError enum
   app/                  ← @my-olx/app (marketplace implementation)
     src/
-      routes/          ← Fastify route assembly
-      handlers/        ← thin HTTP extraction/response
-      services/        ← business logic
-      repositories/    ← db queries (trait + Postgres impl)
-      dto/             ← request/response JSON shapes
-  migrations/           ← raw .sql files (run via npm run migrate)
+      modules/         ← route + handler logic per domain (auth, listings, images, assets, …)
+      repositories/    ← Kysely queries (SQLite-compatible raw SQL)
+  migrations/           ← raw .sql files (SQLite); auto-applied at startup
 ```
 
 **Within `app/` (4-layer):**
