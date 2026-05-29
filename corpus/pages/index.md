@@ -84,11 +84,17 @@ migration chain of 23 applies):
   (`20260621040000_drop_city_is_negotiable.sql`) and all code references. See [[accounts-and-profiles]],
   [[digital-pivot-cleanup]].
 
-### Remaining known gaps (genuinely not done)
+### Remaining backlog (tracked in `corpus/todo/`)
 
-- **Live e-Factura + live Stripe** paths remain untested — need ANAF OAuth sandbox creds and Stripe test
-  keys + `stripe listen`. Stripe webhook HMAC signature verification is still a documented stub. See [[invoicing]].
-- **Creator payout flow** (money-out to sellers) still unbuilt. See [[overview]].
+The genuinely-not-done items are now actionable backlog files:
+
+- [stripe-webhook-signature](../todo/stripe-webhook-signature.md) — **critical**: verify the
+  `Stripe-Signature` HMAC (webhook currently trusts the body — forgeable) + test live checkout with
+  Stripe test keys. See [[digital-asset-commerce]].
+- [verify-efactura-live](../todo/verify-efactura-live.md) — high: validate the UBL XML against the real
+  ANAF XSD/SDK and submit to the ANAF test endpoint. See [[invoicing]].
+- [creator-payouts](../todo/creator-payouts.md) — high: money-out to sellers (Stripe Connect + ledger +
+  platform fee) — design-first. See [[overview]].
 
 ---
 

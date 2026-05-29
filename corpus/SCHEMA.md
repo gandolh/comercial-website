@@ -22,7 +22,7 @@ corpus/
     tech/             ← architecture, stack decisions, design system
     entities/         ← core domain objects (Listing, Asset, User, …)
     features/         ← specs of shipped features (created when a todo is completed)
-  todo/               ← feature backlog; one file per feature (currently empty — all shipped)
+  todo/               ← feature backlog; one file per feature (3 open: stripe-webhook-signature, verify-efactura-live, creator-payouts)
     <slug>.md         ← type: add | update | remove; priority: critical/high/medium/low; status: pending/in-progress/done
 ```
 
