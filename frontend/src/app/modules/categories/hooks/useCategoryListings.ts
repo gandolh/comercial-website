@@ -6,10 +6,12 @@ export function useCategoryListings(
   slug: string | undefined,
   filters: FilterState,
   q?: string,
+  enabled = true,
 ) {
   return useQuery({
     queryKey: ["category-listings", slug, filters, q],
     queryFn: () => searchListings({ category: slug, q, filters }),
     placeholderData: (previousData) => previousData,
+    enabled,
   });
 }
