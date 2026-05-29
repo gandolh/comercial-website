@@ -1,4 +1,5 @@
 import { sql, type SqlBool } from "kysely";
+import { CompiledQuery } from "kysely";
 import type { Db } from "@my-olx/core";
 
 export interface ListingRow {
@@ -151,6 +152,22 @@ export class ListingsRepository {
       .execute();
   }
 
+  /**
+   * Build an FTS5 MATCH expression from a raw query string.
+   * Escapes characters with special meaning in FTS5 expressions.
+   * Appends '*' to the last token for prefix matching.
+   */
+  private buildFtsQuery(rawQ: string): string {
+    // Remove characters that have special meaning in FTS5 MATCH syntax
+    const sanitized = rawQ.replace(/["'()*^:]/g, " ").trim();
+    const tokens = sanitized.split(/\s+/).filter(Boolean);
+    if (tokens.length === 0) return '""';
+    // Wrap each token in double quotes; append '*' to last for prefix matching
+    return tokens
+      .map((t, i) => (i === tokens.length - 1 ? `"${t}"*` : `"${t}"`))
+      .join(" ");
+  }
+
   async search(
     q?: string,
     category?: string,
@@ -169,6 +186,25 @@ export class ListingsRepository {
     const pageNumber = Math.max(page, 1);
     const offset = (pageNumber - 1) * perPageClamped;
 
+    // When a text query is provided, delegate to FTS5-backed search.
+    if (q && q.trim()) {
+      return this._searchWithFts(
+        q.trim(),
+        category,
+        priceMin,
+        priceMax,
+        dateFilter,
+        verified,
+        sort,
+        pageNumber,
+        perPageClamped,
+        offset,
+        userId,
+        active
+      );
+    }
+
+    // Filter-only path (no text query): use Kysely query builder.
     let query = this.db.selectFrom("listings").selectAll();
 
     if (userId) {
@@ -180,11 +216,6 @@ export class ListingsRepository {
       query = query
         .where(sql<SqlBool>`active = 1`)
         .where(sql<SqlBool>`expires_at > datetime('now')`);
-    }
-
-    if (q && q.trim()) {
-      const term = `%${q.trim()}%`;
-      query = query.where(sql<SqlBool>`(title LIKE ${term} OR description LIKE ${term})`);
     }
 
     if (category) {
@@ -255,11 +286,6 @@ export class ListingsRepository {
         .where(sql<SqlBool>`users.phone_verified = 1`);
     }
 
-    if (q && q.trim()) {
-      const term = `%${q.trim()}%`;
-      countQuery = countQuery.where(sql<SqlBool>`(title LIKE ${term} OR description LIKE ${term})`);
-    }
-
     const countResult = await countQuery.executeTakeFirst();
     const total = parseInt((countResult as any)?.count ?? "0", 10);
 
@@ -267,6 +293,129 @@ export class ListingsRepository {
       .limit(perPageClamped)
       .offset(offset)
       .execute()) as unknown as ListingRow[];
+
+    return { listings, total };
+  }
+
+  /**
+   * FTS5-backed search.
+   *
+   * Joins the `listings_fts` virtual table with `listings` (alias `l`) to
+   * apply the full-text match and all other filters in a single query.
+   * Uses Kysely's `executeQuery(CompiledQuery.raw(...))` to run parameterised
+   * raw SQL while keeping the rest of the repository typed.
+   *
+   * Ordering:
+   *   - sort=relevanta (or default when q present): bm25(listings_fts) ASC
+   *     (SQLite returns negative BM25; lower value = better match)
+   *   - sort=noi: created_at DESC
+   *   - sort=pret_asc / pret_desc: price_ron ASC/DESC
+   */
+  private async _searchWithFts(
+    q: string,
+    category: string | undefined,
+    priceMin: number | undefined,
+    priceMax: number | undefined,
+    dateFilter: "24h" | "saptamana" | "oricand" | undefined,
+    verified: boolean | undefined,
+    sort: "noi" | "pret_asc" | "pret_desc" | "relevanta" | undefined,
+    _pageNumber: number,
+    limit: number,
+    offset: number,
+    userId: string | undefined,
+    active: boolean | undefined
+  ): Promise<{ listings: ListingRow[]; total: number }> {
+    const ftsMatch = this.buildFtsQuery(q);
+
+    // Collect parameterised extra WHERE conditions on the listings alias `l`.
+    const extraConditions: string[] = [];
+    const extraParams: unknown[] = [];
+
+    if (userId) {
+      extraConditions.push("l.user_id = ?");
+      extraParams.push(userId);
+      if (active !== undefined) {
+        extraConditions.push("l.active = ?");
+        extraParams.push(active ? 1 : 0);
+      }
+    } else {
+      extraConditions.push("l.active = 1");
+      extraConditions.push("l.expires_at > datetime('now')");
+    }
+
+    if (category) {
+      extraConditions.push("l.category = ?");
+      extraParams.push(category);
+    }
+
+    if (priceMin !== undefined) {
+      extraConditions.push("l.price_ron >= ?");
+      extraParams.push(priceMin);
+    }
+    if (priceMax !== undefined) {
+      extraConditions.push("l.price_ron <= ?");
+      extraParams.push(priceMax);
+    }
+
+    if (dateFilter && dateFilter !== "oricand") {
+      if (dateFilter === "24h") {
+        extraConditions.push("l.created_at >= datetime('now', '-1 day')");
+      } else if (dateFilter === "saptamana") {
+        extraConditions.push("l.created_at >= datetime('now', '-7 days')");
+      }
+    }
+
+    // Optional JOIN for verified-seller filter
+    const verifiedJoin = verified
+      ? "INNER JOIN users u ON l.user_id = u.id AND u.phone_verified = 1"
+      : "";
+
+    const andExtra =
+      extraConditions.length > 0
+        ? " AND " + extraConditions.join(" AND ")
+        : "";
+
+    let orderBy: string;
+    if (sort === "pret_asc") {
+      orderBy = "ORDER BY l.price_ron ASC";
+    } else if (sort === "pret_desc") {
+      orderBy = "ORDER BY l.price_ron DESC";
+    } else if (sort === "noi") {
+      orderBy = "ORDER BY l.created_at DESC";
+    } else {
+      // relevanta or default when q is present: BM25 relevance (lower = better)
+      orderBy = "ORDER BY bm25(listings_fts) ASC";
+    }
+
+    const dataSQL = `
+      SELECT l.*
+      FROM listings_fts
+      INNER JOIN listings l ON listings_fts.listing_id = l.id
+      ${verifiedJoin}
+      WHERE listings_fts MATCH ?${andExtra}
+      ${orderBy}
+      LIMIT ? OFFSET ?
+    `;
+
+    const countSQL = `
+      SELECT count(*) AS count
+      FROM listings_fts
+      INNER JOIN listings l ON listings_fts.listing_id = l.id
+      ${verifiedJoin}
+      WHERE listings_fts MATCH ?${andExtra}
+    `;
+
+    const [dataResult, countResult] = await Promise.all([
+      this.db.executeQuery(
+        CompiledQuery.raw(dataSQL, [ftsMatch, ...extraParams, limit, offset])
+      ),
+      this.db.executeQuery(
+        CompiledQuery.raw(countSQL, [ftsMatch, ...extraParams])
+      ),
+    ]);
+
+    const listings = (dataResult.rows ?? []) as ListingRow[];
+    const total = parseInt((countResult.rows?.[0] as any)?.count ?? "0", 10);
 
     return { listings, total };
   }
