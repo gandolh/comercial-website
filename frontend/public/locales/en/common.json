@@ -301,5 +301,52 @@
       "saveError": "Error saving. Please try again.",
       "loadError": "Could not load billing profile."
     }
+  },
+  "orders": {
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "buyButton": {
+      "label": "Buy — {{price}} RON",
+      "loading": "Processing...",
+      "owned": "Purchased — ready to download",
+      "error": "Error initiating payment. Please try again.",
+      "ariaLabel": "Buy this digital asset for {{price}} RON"
+    },
+    "download": {
+      "lockedButton": "Locked",
+      "paywall": {
+        "title": "Paid digital asset",
+        "body": "Purchase this asset to download it. Download is available immediately after payment confirmation."
+      }
+    },
+    "list": {
+      "title": "My Orders",
+      "loadError": "Could not load orders. Please try again.",
+      "empty": "You have no orders yet.",
+      "browse": "Browse digital assets",
+      "listingLink": "Listing",
+      "downloadAction": "Download"
+    },
+    "confirmation": {
+      "loading": "Verifying payment...",
+      "noOrderId": "Order ID missing from URL.",
+      "loadError": "Could not load order. Please try again.",
+      "errorTitle": "Error",
+      "successTitle": "Payment confirmed!",
+      "successBody": "Thank you! You can now download the digital asset.",
+      "pendingTitle": "Payment pending",
+      "pendingBody": "Payment has not been confirmed yet. Check back later.",
+      "orderId": "Order ID",
+      "amount": "Amount",
+      "status": "Status",
+      "paidAt": "Paid at",
+      "goDownload": "Download asset",
+      "viewOrders": "All my orders",
+      "backHome": "Back home"
+    }
   }
 }

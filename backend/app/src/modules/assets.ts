@@ -5,6 +5,7 @@ import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
+import { hasPaidOrder, isFree } from "./orders.js";
 import type { FastifyInstance } from "fastify";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
@@ -207,6 +208,12 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
 
+      // Payment gate: paid listings require a completed order (free listings skip this).
+      if (!isFree(listing.price_ron) && listing.user_id !== userId) {
+        const paid = await hasPaidOrder(ctx, userId, listingId);
+        if (!paid) throw AppError.forbidden();
+      }
+
       const asset = await assetsRepo.getPrimaryAsset(listingId);
       if (!asset) throw AppError.notFound();
 
@@ -249,6 +256,12 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
+
+      // Payment gate: paid listings require a completed order (free listings skip this).
+      if (!isFree(listing.price_ron) && listing.user_id !== userId) {
+        const paid = await hasPaidOrder(ctx, userId, listingId);
+        if (!paid) throw AppError.forbidden();
+      }
 
       const asset = await assetsRepo.getAssetByIdForListing(assetId, listingId);
       if (!asset) throw AppError.notFound();

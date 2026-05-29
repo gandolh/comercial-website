@@ -189,6 +189,22 @@ export interface InvoicesTable {
   created_at: Generated<string>;
 }
 
+/** Orders table: tracks purchase orders for paid digital-asset listings (added in 20260620020000_orders.sql). */
+export interface OrdersTable {
+  id: Generated<string>;
+  buyer_user_id: string;
+  listing_id: string;
+  seller_user_id: string;
+  amount_ron: number;
+  currency: ColumnType<string, string | undefined, string>;
+  /** 'pending' | 'paid' | 'failed' | 'cancelled' */
+  status: ColumnType<string, string | undefined, string>;
+  provider: ColumnType<string, string | undefined, string>;
+  provider_ref: string | null;
+  created_at: Generated<string>;
+  paid_at: string | null;
+}
+
 export interface Database {
   users: UsersTable;
   listings: ListingsTable;
@@ -203,5 +219,6 @@ export interface Database {
   messages: MessagesTable;
   user_invoice_profiles: UserInvoiceProfilesTable;
   invoices: InvoicesTable;
+  orders: OrdersTable;
   _migrations: MigrationsTable;
 }

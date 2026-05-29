@@ -479,5 +479,52 @@
       "saveError": "Eroare la salvare. Încearcă din nou.",
       "loadError": "Nu am putut încărca profilul de facturare."
     }
+  },
+  "orders": {
+    "status": {
+      "pending": "În așteptare",
+      "paid": "Plătit",
+      "failed": "Eșuat",
+      "cancelled": "Anulat"
+    },
+    "buyButton": {
+      "label": "Cumpără — {{price}} RON",
+      "loading": "Se procesează...",
+      "owned": "Achiziționat — poți descărca",
+      "error": "Eroare la inițierea plății. Încearcă din nou.",
+      "ariaLabel": "Cumpără acest activ digital pentru {{price}} RON"
+    },
+    "download": {
+      "lockedButton": "Blocat",
+      "paywall": {
+        "title": "Activ digital plătit",
+        "body": "Achiziționează acest activ pentru a-l descărca. Descărcarea este disponibilă imediat după confirmarea plății."
+      }
+    },
+    "list": {
+      "title": "Comenzile mele",
+      "loadError": "Nu am putut încărca comenzile. Încearcă din nou.",
+      "empty": "Nu ai nicio comandă încă.",
+      "browse": "Explorează active digitale",
+      "listingLink": "Anunț",
+      "downloadAction": "Descarcă"
+    },
+    "confirmation": {
+      "loading": "Se verifică plata...",
+      "noOrderId": "ID comandă lipsă din URL.",
+      "loadError": "Nu am putut încărca comanda. Încearcă din nou.",
+      "errorTitle": "Eroare",
+      "successTitle": "Plată confirmată!",
+      "successBody": "Mulțumim! Poți descărca activul digital acum.",
+      "pendingTitle": "Plată în așteptare",
+      "pendingBody": "Plata nu a fost încă confirmată. Verifică mai târziu.",
+      "orderId": "ID comandă",
+      "amount": "Sumă",
+      "status": "Status",
+      "paidAt": "Plătit la",
+      "goDownload": "Descarcă activul",
+      "viewOrders": "Toate comenzile mele",
+      "backHome": "Înapoi acasă"
+    }
   }
 }
