@@ -50,11 +50,24 @@ that listing is required, else `403`. Free listings (`price_ron` null or ≤ 0) 
 Frontend: a `Buy`/`Cumpără` button on `ListingDetailPage` for paid listings, plus an orders module
 (`/comenzi`-style history + confirmation page). i18n under `orders.*`.
 
+## Stripe config hardening (added 2026-05-29)
+
+`selectProvider()` now **fails fast**: if exactly one of `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET`
+is set it throws at boot (both-or-neither), and it minimally validates key prefixes (`sk_` / `whsec_`).
+With neither set it cleanly falls back to `FakePaymentProvider` and the server boots. Covered by 24
+vitest cases (selection matrix + `verifyWebhook` rejects malformed payloads). Verified live: a
+partial-config boot throws the expected error.
+
 ## Open questions
 
-- Real Stripe wiring is unverified (no keys in this environment); the fake provider is the only tested path.
+- ⚠️ **Real Stripe still unverified** (no keys here); the fake provider remains the only end-to-end-tested
+  path. The live `createCheckout` fetch and the webhook **HMAC-SHA256 signature verification** are
+  untested — the webhook handler still parses the payload WITHOUT verifying the `Stripe-Signature` header
+  (documented stub; must not go to production without it). Verify with `sk_test_…`, a webhook secret, and
+  `stripe listen --forward-to localhost:8080/orders/webhook`.
 - No refund / chargeback flow.
-- Platform fee / payout split to sellers is not modeled — `orders` records the gross only.
+- Platform fee / payout split to sellers is not modeled — `orders` records the gross only (creator
+  payout flow remains unbuilt).
 
 ## See also
 

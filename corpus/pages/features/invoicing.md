@@ -39,9 +39,22 @@ Scope decision: **download only — no ANAF OAuth / SPV submission.**
   `InvoiceProfileForm` and `CreateInvoiceForm` calls `GET /anaf/company/:cui`. i18n under `invoices.*`.
 - **Zero new npm dependencies.**
 
+## Hardening (added 2026-05-29)
+
+An **offline UBL structural validator** (`validateUblInvoice`) now runs before XML is emitted and the
+`GET /invoices/:id/xml` endpoint **fails loudly** (`AppError.validation`) on a structurally-invalid
+e-Factura rather than emitting bad XML. It checks: non-empty seller/buyer name, currency == RON, ISO
+issue/due dates, ≥1 line item, per-line description/qty>0/unit_price≥0/vat_rate∈{0,5,9,19}, CUI shape
+(optional `RO` + 2–10 digits), and internal monetary consistency (Σ line extensions == subtotal;
+Σ per-line VAT == vat_amount; subtotal + vat == total, ±0.02). Covered by 36 vitest cases (valid passes,
+several invalid variants rejected, Romanian diacritics survive into the XML escaped).
+
 ## Open questions
 
-- XML is not run through the official ANAF e-Factura SDK validator — conformance is by-construction only.
+- ⚠️ **STILL UNVERIFIED against live ANAF:** the validator only checks structure we can verify offline —
+  the XML has NOT been submitted to ANAF, nor validated against the full CIUS-RO 1.0.1 XSD, nor put
+  through the official e-Factura SDK. Conformance remains by-construction. To verify: ANAF OAuth sandbox
+  creds → token → POST the XML to the ANAF test upload endpoint.
 - PDF diacritics are best-effort: ș/ț fall back to near-equivalents (not in standard WinAnsi).
 - No direct SPV/e-Factura upload (OAuth) — explicitly out of v1 scope.
 

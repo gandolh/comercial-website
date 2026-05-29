@@ -54,10 +54,14 @@ was needed.
 > Note: this supersedes the 9-category list still quoted in `SCHEMA.md` "Domain context" and `CLAUDE.md`
 > — the canonical list is the 12 above.
 
-## Open questions
+## Resolved follow-ups (2026-05-29)
 
-- **Old category slugs do not 404/redirect** — they simply have no listings. No explicit redirect shipped.
-- `city` / `is_negotiable` DB columns linger unused, awaiting a future drop migration.
+- ✅ **Unknown category slugs now redirect** to `/categorii` — `CategoryPage` derives `isKnownSlug` from
+  `CATEGORY_LABELS` and returns `<Navigate to="/categorii" replace />` for unknown slugs (the query is
+  disabled for them). Valid-but-empty slugs still render the normal empty-listings state.
+- ✅ **`city` / `is_negotiable` columns dropped** — all code references removed and migration
+  `20260621040000_drop_city_is_negotiable.sql` (`ALTER TABLE listings DROP COLUMN`, no table-rebuild
+  needed) drops both. Verified on a fresh-DB boot.
 
 ## See also
 

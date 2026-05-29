@@ -39,11 +39,16 @@ to match the current disk-based backend contract:
 - Avatar → `POST /users/me/avatar`, multipart, field `file`.
 - The axios instance must not force `application/json` on FormData (lets the browser set the multipart boundary).
 
+## Resolved follow-ups (2026-05-29)
+
+- ✅ **Total-downloads count now shown** on the public profile — `SUM(download_count)` over the seller's
+  active (non-expired) listings via `getTotalDownloadsForUser`, surfaced through `SellerSummary`
+  (`total_downloads`) and `GET /users/:id`; rendered on `PublicProfilePage` next to active-listings count.
+- ✅ **Avatar `window.fetch` monkey-patch removed** — callers use the direct `uploadAvatar` multipart
+  `POST /users/me/avatar`; the `pending://` shim, the token→s3_key map, and `getAvatarUploadUrl` are gone.
+
 ## Open questions
 
-- **Profile "total downloads count" is NOT shown** — only bio/website/social shipped. Deferred follow-up.
-- The avatar fix retains a `window.fetch` monkey-patch shim to preserve the old hook's two-step call
-  surface — it works but is hacky; should be replaced by updating the hook directly.
 - `lucide-react` v1.11 lacks brand icons (Twitter/Instagram/GitHub) — generic icons substituted.
 
 ## See also

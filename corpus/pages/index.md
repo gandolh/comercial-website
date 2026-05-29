@@ -57,20 +57,38 @@ The `corpus/todo/` backlog is now empty and removed — shipped work is document
 - [Legal & Compliance](features/legal-and-compliance.md) — 6 static legal pages + GDPR cookie consent | product | 2026-05-29
 - [Expiry-Reminder Emails](features/expiry-reminders.md) — in-process 6h interval job; 3-day + expiry-day reminders, opt-out aware | product | 2026-05-29
 - [Reviews & Ratings](features/reviews-ratings.md) — 1–5 stars, verified-purchase gated, aggregate on listing detail | product | 2026-05-29
-- [Event-Template Bundles](features/bundles.md) — bundle-as-listing + bundle_items; purchase grants child downloads ("Pachet Nuntă") | product | 2026-05-29
+- [Event-Template Bundles](features/bundles.md) — bundle-as-listing + bundle_items; purchase grants child downloads ("Pachet Nuntă"); bundle-builder UI on the edit page | product | 2026-05-29
 
 > Also shipped 2026-05-29: the **`invitatii` ("Invitații Digitale")** category for Romanian event
 > templates (nuntă, botez, cununie, logodnă, majorat, aniversări, sărbători). See [[digital-pivot-cleanup]] / [[business-rules]].
 
-### Deferred follow-ups (not yet built)
+### Deferred follow-ups — all cleared 2026-05-29
 
-Carried over from the shipped work — the next backlog candidates:
+The five carried-over follow-ups were all addressed in a second swarm (parallel Sonnet agents in
+worktrees, merged to `main`; backend 156 tests green, frontend typecheck + Vite build green, fresh-DB
+migration chain of 23 applies):
 
-- **Bundle-builder wizard + bundle-price discount** — children are set via API only; no create-listing bundle step, no discount logic. See [[bundles]].
-- **Old category slugs** do not 404/redirect — they just have no listings. See [[digital-pivot-cleanup]].
-- **Profile "total downloads count"** not shown (only bio/website/social shipped). See [[accounts-and-profiles]].
-- **e-Factura XML** not validated against the official ANAF SDK; **real Stripe** path untested (no keys). See [[invoicing]], [[digital-asset-commerce]].
-- **Tech debt:** avatar upload uses a `window.fetch` monkey-patch shim; unused `city`/`is_negotiable` DB columns await a drop migration. See [[accounts-and-profiles]], [[digital-pivot-cleanup]].
+- ✅ **Bundle-builder UI** — owners can mark a listing as a bundle and pick children from their own
+  listings on the edit page, with a price-comparison/discount helper. (Server-side discount enforcement
+  intentionally not added — bundle price is the listing's own price.) See [[bundles]].
+- ✅ **Unknown category slugs** now redirect to `/categorii` (`CATEGORY_LABELS` is the sole source of
+  truth; valid-but-empty slugs still show the normal empty state). See [[digital-pivot-cleanup]].
+- ✅ **Profile total-downloads count** — `SUM(download_count)` over a seller's active listings, shown on
+  the public profile. See [[accounts-and-profiles]].
+- ⚠️ **e-Factura XML / Stripe hardening** — added an offline UBL structural validator (fails loudly on
+  malformed e-Factura) and a Stripe fail-fast config guard (partial config throws at boot; key-prefix
+  checks). STILL UNVERIFIED against live ANAF submission and live Stripe checkout/webhook-signature (no
+  credentials in this environment). See [[invoicing]], [[digital-asset-commerce]].
+- ✅ **Tech debt** — removed the avatar-upload `window.fetch` monkey-patch (callers use the direct
+  `uploadAvatar` POST); dropped the unused `city`/`is_negotiable` columns
+  (`20260621040000_drop_city_is_negotiable.sql`) and all code references. See [[accounts-and-profiles]],
+  [[digital-pivot-cleanup]].
+
+### Remaining known gaps (genuinely not done)
+
+- **Live e-Factura + live Stripe** paths remain untested — need ANAF OAuth sandbox creds and Stripe test
+  keys + `stripe listen`. Stripe webhook HMAC signature verification is still a documented stub. See [[invoicing]].
+- **Creator payout flow** (money-out to sellers) still unbuilt. See [[overview]].
 
 ---
 

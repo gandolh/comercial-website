@@ -45,11 +45,23 @@ purchases behave exactly as before. See [[digital-asset-commerce]] for the order
 - On the listing detail page, when `isBundle` is true, a `<BundleContents>` section lists the child
   items as cards. i18n `bundles.*` in ro/en.
 
+## Bundle-builder UI (added 2026-05-29)
+
+Children are no longer API-only. `bundles/components/BundleManagerSection.tsx` renders on the listing
+**edit page** (`EditListingPage`): the owner toggles "this listing is a bundle", picks child listings
+from their own active listings (reuses `useMyListings({active:true})`, excludes the current listing),
+and saves via a new `useSetBundleItems` mutation hook wrapping the existing `setBundleItems` service. A
+**price-comparison helper** sums the selected children's prices ("Preț individual total") against the
+bundle's own price and shows the discount % (warns if the bundle price ≥ the sum). i18n `bundles.edit.*`.
+
+> Integrated manually onto `main` rather than merged: the rebuild branch had forked from a stale base
+> and would have reverted the `city`/`is_negotiable` removal. Only the genuinely-new files were taken.
+
 ## Open questions / limits
 
-- **No bundle-price discount logic or bundle-builder wizard UI** yet — children are set via the API;
-  the create-listing wizard has no dedicated "build a bundle" step. Pricing is just the bundle
-  listing's own price.
+- **No server-side discount enforcement** — bundle price is just the listing's own `price_ron`; the
+  discount helper is UI guidance only. No create-listing wizard step (the edit-page surface was the
+  must-have; a wizard step was skipped to avoid destabilising the 6-step happy path).
 - No guard against circular/nested bundles (a bundle listed as a child of another bundle); not expected
   in practice but unvalidated.
 
