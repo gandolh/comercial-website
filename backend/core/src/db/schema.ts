@@ -24,6 +24,12 @@ export interface UsersTable {
   email_verified: ColumnType<number, number | undefined, number>;
   /** Whether the user has opted in to transactional email notifications (default: 1 / true). */
   email_notifications: ColumnType<number, number | undefined, number>;
+  /** Seller profile fields (added in 20260615010000_user_profile_fields.sql). */
+  bio: string | null;
+  website: string | null;
+  social_twitter: string | null;
+  social_instagram: string | null;
+  social_github: string | null;
   created_at: Generated<string>;
   updated_at: Generated<string>;
 }

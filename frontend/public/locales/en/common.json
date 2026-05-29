@@ -50,6 +50,21 @@
     "title": "Coming Soon",
     "subtitle": "This page is under development."
   },
+  "seller": {
+    "bio": "About the seller",
+    "website": "Website",
+    "socialLinks": "Social media",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "github": "GitHub",
+    "memberSince": "Member since",
+    "activeListings": "active listings",
+    "verifiedSeller": "Verified Seller",
+    "noListings": "This seller has no active listings at the moment.",
+    "listingsTitle": "Listings by this seller",
+    "notFound": "User not found",
+    "notFoundDesc": "The profile you are looking for does not exist or has been deactivated."
+  },
   "settings": {
     "notifications": {
       "title": "Email Notifications",
@@ -57,6 +72,23 @@
       "emailNotificationsDescription": "You will be notified when you receive a new message or when someone downloads one of your assets.",
       "saveButton": "Save preferences",
       "savedMessage": "Preferences have been saved."
+    },
+    "profile": {
+      "title": "Public Profile",
+      "bioLabel": "Bio",
+      "bioPlaceholder": "Tell buyers who you are and what you sell... (max 500 characters)",
+      "bioHint": "Shown on your public profile. Maximum 500 characters.",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "https://example.com",
+      "twitterLabel": "Twitter (handle)",
+      "twitterPlaceholder": "@username",
+      "instagramLabel": "Instagram (handle)",
+      "instagramPlaceholder": "@username",
+      "githubLabel": "GitHub (username)",
+      "githubPlaceholder": "username",
+      "saveButton": "Save profile",
+      "savedMessage": "Profile updated.",
+      "errorMessage": "Could not save profile. Please check the fields and try again."
     }
   },
   "auth": {

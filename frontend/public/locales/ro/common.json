@@ -262,7 +262,39 @@
       "emailNotificationsDescription": "Vei fi notificat când primești un mesaj nou sau când cineva descarcă un activ al tău.",
       "saveButton": "Salvează preferințele",
       "savedMessage": "Preferințele au fost salvate."
+    },
+    "profile": {
+      "title": "Profil public",
+      "bioLabel": "Biografie",
+      "bioPlaceholder": "Spune-le cumpărătorilor cine ești și ce vinzi... (max 500 caractere)",
+      "bioHint": "Apare pe profilul tău public. Maxim 500 de caractere.",
+      "websiteLabel": "Site web",
+      "websitePlaceholder": "https://exemplu.ro",
+      "twitterLabel": "Twitter (handle)",
+      "twitterPlaceholder": "@utilizator",
+      "instagramLabel": "Instagram (handle)",
+      "instagramPlaceholder": "@utilizator",
+      "githubLabel": "GitHub (utilizator)",
+      "githubPlaceholder": "utilizator",
+      "saveButton": "Salvează profilul",
+      "savedMessage": "Profilul a fost actualizat.",
+      "errorMessage": "Nu s-a putut salva profilul. Verifică câmpurile și încearcă din nou."
     }
+  },
+  "seller": {
+    "bio": "Despre vânzător",
+    "website": "Site web",
+    "socialLinks": "Rețele sociale",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "github": "GitHub",
+    "memberSince": "Membru din",
+    "activeListings": "anunțuri active",
+    "verifiedSeller": "Vânzător Verificat",
+    "noListings": "Acest vânzător nu are niciun anunț activ momentan.",
+    "listingsTitle": "Anunțurile acestui vânzător",
+    "notFound": "Utilizator negăsit",
+    "notFoundDesc": "Profilul pe care îl cauți nu există sau a fost dezactivat."
   },
   "auth": {
     "forgotPassword": {

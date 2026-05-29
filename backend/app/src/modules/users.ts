@@ -37,6 +37,11 @@ interface UserSummary {
   phone: string | null;
   phone_verified: boolean;
   email_notifications: boolean;
+  bio: string | null;
+  website: string | null;
+  social_twitter: string | null;
+  social_instagram: string | null;
+  social_github: string | null;
   created_at: string;
 }
 
@@ -68,6 +73,11 @@ interface PublicUserResponse {
   phone_verified: boolean;
   member_since: string;
   active_listings_count: number;
+  bio: string | null;
+  website: string | null;
+  social_twitter: string | null;
+  social_instagram: string | null;
+  social_github: string | null;
 }
 
 interface ListingCardResponse {
@@ -101,6 +111,11 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           "phone",
           "phone_verified",
           "email_notifications",
+          "bio",
+          "website",
+          "social_twitter",
+          "social_instagram",
+          "social_github",
           "created_at",
         ])
         .where("id", "=", userId)
@@ -119,6 +134,11 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         phone: user.phone,
         phone_verified: Boolean(user.phone_verified),
         email_notifications: Boolean(user.email_notifications),
+        bio: (user as any).bio ?? null,
+        website: (user as any).website ?? null,
+        social_twitter: (user as any).social_twitter ?? null,
+        social_instagram: (user as any).social_instagram ?? null,
+        social_github: (user as any).social_github ?? null,
         created_at: toISOString(user.created_at),
       };
 
@@ -135,6 +155,11 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         display_name: z.string().min(2).max(60).optional(),
         avatar_s3_key: z.string().optional(),
         email_notifications: z.boolean().optional(),
+        bio: z.string().max(500).nullable().optional(),
+        website: z.string().url().nullable().optional().or(z.literal("").transform(() => null)),
+        social_twitter: z.string().max(50).nullable().optional(),
+        social_instagram: z.string().max(50).nullable().optional(),
+        social_github: z.string().max(50).nullable().optional(),
       });
 
       let body: any;
@@ -159,6 +184,29 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         updates.email_notifications = body.email_notifications ? 1 : 0;
       }
 
+      if ("bio" in body) updates.bio = body.bio ?? null;
+      if ("website" in body) updates.website = body.website ?? null;
+      if ("social_twitter" in body) updates.social_twitter = body.social_twitter ?? null;
+      if ("social_instagram" in body) updates.social_instagram = body.social_instagram ?? null;
+      if ("social_github" in body) updates.social_github = body.social_github ?? null;
+
+      const buildSummary = (u: any): UserSummary => ({
+        id: u.id,
+        email: u.email,
+        display_name: u.display_name,
+        avatar_url: u.avatar_url,
+        email_verified: Boolean(u.email_verified),
+        phone: u.phone,
+        phone_verified: Boolean(u.phone_verified),
+        email_notifications: Boolean(u.email_notifications),
+        bio: u.bio ?? null,
+        website: u.website ?? null,
+        social_twitter: u.social_twitter ?? null,
+        social_instagram: u.social_instagram ?? null,
+        social_github: u.social_github ?? null,
+        created_at: toISOString(u.created_at),
+      });
+
       if (Object.keys(updates).length === 0) {
         // No updates provided
         const user = await ctx.db
@@ -172,6 +220,11 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
             "phone",
             "phone_verified",
             "email_notifications",
+            "bio",
+            "website",
+            "social_twitter",
+            "social_instagram",
+            "social_github",
             "created_at",
           ])
           .where("id", "=", userId)
@@ -181,19 +234,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           throw AppError.notFound();
         }
 
-        const response: UserSummary = {
-          id: user.id,
-          email: user.email,
-          display_name: user.display_name,
-          avatar_url: user.avatar_url,
-          email_verified: Boolean(user.email_verified),
-          phone: user.phone,
-          phone_verified: Boolean(user.phone_verified),
-          email_notifications: Boolean(user.email_notifications),
-          created_at: toISOString(user.created_at),
-        };
-
-        return reply.send(response);
+        return reply.send(buildSummary(user));
       }
 
       const user = await ctx.db
@@ -207,19 +248,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         throw AppError.notFound();
       }
 
-      const response: UserSummary = {
-        id: user.id,
-        email: user.email,
-        display_name: user.display_name,
-        avatar_url: user.avatar_url,
-        email_verified: Boolean(user.email_verified),
-        phone: user.phone,
-        phone_verified: Boolean(user.phone_verified),
-        email_notifications: Boolean(user.email_notifications),
-        created_at: toISOString(user.created_at),
-      };
-
-      return reply.send(response);
+      return reply.send(buildSummary(user));
     }
   );
 
@@ -418,7 +447,18 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
 
     const user = await ctx.db
       .selectFrom("users")
-      .select(["id", "display_name", "avatar_url", "phone_verified", "created_at"])
+      .select([
+        "id",
+        "display_name",
+        "avatar_url",
+        "phone_verified",
+        "bio",
+        "website",
+        "social_twitter",
+        "social_instagram",
+        "social_github",
+        "created_at",
+      ])
       .where("id", "=", id)
       .executeTakeFirst();
 
@@ -444,6 +484,11 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       phone_verified: Boolean(user.phone_verified),
       member_since: toISOString(user.created_at),
       active_listings_count,
+      bio: (user as any).bio ?? null,
+      website: (user as any).website ?? null,
+      social_twitter: (user as any).social_twitter ?? null,
+      social_instagram: (user as any).social_instagram ?? null,
+      social_github: (user as any).social_github ?? null,
     };
 
     return reply.send(response);
