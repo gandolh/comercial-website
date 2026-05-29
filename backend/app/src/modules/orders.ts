@@ -48,7 +48,7 @@ export interface PaymentProvider {
 
 // ─── FakePaymentProvider (default — always active when no Stripe keys) ────────
 
-class FakePaymentProvider implements PaymentProvider {
+export class FakePaymentProvider implements PaymentProvider {
   readonly name = "fake";
 
   async createCheckout(order: {
@@ -80,7 +80,7 @@ class FakePaymentProvider implements PaymentProvider {
 
 // ─── StripePaymentProvider (stub — configure STRIPE_SECRET_KEY to enable) ────
 
-class StripePaymentProvider implements PaymentProvider {
+export class StripePaymentProvider implements PaymentProvider {
   readonly name = "stripe";
   private readonly secretKey: string;
   private readonly webhookSecret: string;
@@ -151,13 +151,83 @@ class StripePaymentProvider implements PaymentProvider {
 }
 
 // ─── Provider selector ────────────────────────────────────────────────────────
+//
+// NOTE — LIVE PATHS UNVERIFIED:
+//   StripePaymentProvider.createCheckout() makes a real HTTPS call to Stripe's
+//   API (https://api.stripe.com/v1/checkout/sessions).  Without real Stripe test
+//   keys, this path is NOT exercised in CI.  To verify:
+//     1. Create a Stripe test-mode account → Dashboard → Developers → API keys.
+//     2. Set STRIPE_SECRET_KEY=sk_test_... and STRIPE_WEBHOOK_SECRET=whsec_...
+//     3. Run `stripe listen --forward-to localhost:8080/orders/webhook` (Stripe CLI).
+//     4. Exercise POST /orders with a paid listing to validate the full round-trip.
+//   StripePaymentProvider.verifyWebhook() currently parses the raw JSON without
+//   verifying the HMAC-SHA256 signature (full Stripe-Signature verification
+//   requires the `stripe` npm package or a hand-rolled HMAC check). This is a
+//   known gap — do NOT use in production without proper HMAC verification.
 
-function selectProvider(): PaymentProvider {
+/**
+ * Validate that Stripe environment variables are either both present or both
+ * absent.  A partial configuration (only one of the two keys set) indicates a
+ * misconfiguration and the server should refuse to start rather than silently
+ * operating in an inconsistent state.
+ *
+ * Also validates key shapes:
+ *   - STRIPE_SECRET_KEY must start with "sk_"
+ *   - STRIPE_WEBHOOK_SECRET must start with "whsec_"
+ *
+ * Returns the validated keys when both are present, or null when neither is
+ * present (→ use FakePaymentProvider).  Throws on partial / malformed config.
+ */
+export function resolveStripeConfig(): { secretKey: string; webhookSecret: string } | null {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
-  const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (stripeKey && stripeWebhookSecret) {
-    console.log("[orders] Using StripePaymentProvider");
-    return new StripePaymentProvider(stripeKey, stripeWebhookSecret);
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  const hasKey = Boolean(stripeKey && stripeKey.trim() !== "");
+  const hasWebhook = Boolean(webhookSecret && webhookSecret.trim() !== "");
+
+  if (!hasKey && !hasWebhook) {
+    // Neither set → use fake provider
+    return null;
+  }
+
+  if (hasKey && !hasWebhook) {
+    throw new Error(
+      "[orders] STRIPE_SECRET_KEY is set but STRIPE_WEBHOOK_SECRET is missing. " +
+        "Both must be provided together or neither. Fix your environment configuration."
+    );
+  }
+
+  if (!hasKey && hasWebhook) {
+    throw new Error(
+      "[orders] STRIPE_WEBHOOK_SECRET is set but STRIPE_SECRET_KEY is missing. " +
+        "Both must be provided together or neither. Fix your environment configuration."
+    );
+  }
+
+  // Both present — validate shapes
+  if (!stripeKey!.startsWith("sk_")) {
+    throw new Error(
+      `[orders] STRIPE_SECRET_KEY has unexpected format (expected prefix "sk_"). ` +
+        `Received key starting with "${stripeKey!.slice(0, 4)}". ` +
+        `Use a valid Stripe secret key (sk_test_... or sk_live_...).`
+    );
+  }
+  if (!webhookSecret!.startsWith("whsec_")) {
+    throw new Error(
+      `[orders] STRIPE_WEBHOOK_SECRET has unexpected format (expected prefix "whsec_"). ` +
+        `Received secret starting with "${webhookSecret!.slice(0, 6)}". ` +
+        `Copy the webhook signing secret from the Stripe Dashboard or Stripe CLI.`
+    );
+  }
+
+  return { secretKey: stripeKey!, webhookSecret: webhookSecret! };
+}
+
+export function selectProvider(): PaymentProvider {
+  const stripeConfig = resolveStripeConfig();
+  if (stripeConfig) {
+    console.log("[orders] Stripe credentials validated — using StripePaymentProvider");
+    return new StripePaymentProvider(stripeConfig.secretKey, stripeConfig.webhookSecret);
   }
   console.log("[orders] STRIPE_SECRET_KEY not set — using FakePaymentProvider (test mode)");
   return new FakePaymentProvider();
