@@ -6,6 +6,8 @@ export function Footer() {
   const links = [
     { key: "footer.terms", to: "/termeni" },
     { key: "footer.privacy", to: "/confidentialitate" },
+    { key: "footer.cookies", to: "/politica-cookies" },
+    { key: "footer.about", to: "/despre" },
     { key: "footer.help", to: "/ajutor" },
     { key: "footer.contact", to: "/contact" },
   ];

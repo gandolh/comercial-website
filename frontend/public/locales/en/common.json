@@ -29,6 +29,8 @@
     "copyright": "© {{year}} PiațăRo. All rights reserved.",
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "about": "About",
     "help": "Help",
     "contact": "Contact"
   },
@@ -172,5 +174,35 @@
     "policyLink": "Privacy Policy",
     "acceptAll": "Accept all",
     "rejectAll": "Reject all"
+  },
+  "legal": {
+    "terms": {
+      "title": "Terms and Conditions",
+      "lastUpdated": "Last updated"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated"
+    },
+    "cookiesPolicy": {
+      "title": "Cookie Policy",
+      "lastUpdated": "Last updated"
+    },
+    "about": {
+      "title": "About my-olx",
+      "mission": "Our Mission",
+      "cta": "Create free account"
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "We are here to help.",
+      "responseTime": "Response time"
+    },
+    "help": {
+      "title": "Help & FAQ",
+      "subtitle": "Quick answers to the most common questions.",
+      "notFound": "Didn't find your answer?",
+      "contactUs": "Send an email"
+    }
   }
 }
