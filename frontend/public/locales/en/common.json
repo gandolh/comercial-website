@@ -55,6 +55,7 @@
     "downloadButton": "Download",
     "downloading": "Downloading...",
     "loginRequired": "Log in to download"
+  },
   "dashboard": {
     "expiringSoon": {
       "title": "Listings expiring soon",
