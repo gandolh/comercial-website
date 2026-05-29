@@ -10,6 +10,7 @@ const CATEGORIES = [
   { icon: "description", label: "Documente & Template-uri Legale", slug: "documente" },
   { icon: "view_in_ar", label: "Modele 3D & AR", slug: "3d" },
   { icon: "brush", label: "Artizanat Digital", slug: "mestesugart" },
+  { icon: "celebration", label: "Invitații Digitale", slug: "invitatii" },
   { icon: "category", label: "Diverse", slug: "diverse" },
 ];
 

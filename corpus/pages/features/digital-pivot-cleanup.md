@@ -45,6 +45,12 @@ Updated in backend `CATEGORY_LABELS` (`listings-helpers.ts`), frontend HomePage/
 pages, and i18n `categories.*`. Category is a free TEXT column (no CHECK constraint), so no migration
 was needed.
 
+> **Update 2026-05-29:** a 13th category `invitatii` ("Invitații Digitale") was added for Romanian
+> event-invitation templates (nuntă, botez, cununie, logodnă, majorat, aniversări, sărbători). Same
+> add-only edit pattern: backend `CATEGORY_LABELS`, frontend `CATEGORY_SLUGS` (Zod enum) +
+> `CATEGORY_LABELS` + the three `CATEGORIES` arrays (icon `celebration`), and `ro`/`en` i18n. No
+> migration. Event type (nuntă/botez/…) is expressed in the listing title, not as separate categories.
+
 > Note: this supersedes the 9-category list still quoted in `SCHEMA.md` "Domain context" and `CLAUDE.md`
 > — the canonical list is the 12 above.
 

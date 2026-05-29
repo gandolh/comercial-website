@@ -45,7 +45,9 @@ Enforced constraints that define how the marketplace operates. All violations ar
 
 ## Categories (exhaustive)
 
-`software`, `grafica`, `sabloane`, `audio`, `video`, `ebook`, `fonturi`, `cod-sursa`, `diverse`
+`grafica`, `sabloane`, `software`, `cod-sursa`, `audio`, `video`, `ebook`, `fonturi`, `documente`, `3d`, `mestesugart`, `invitatii`, `diverse`
+
+> Canonical list is the 13 above (see [[digital-pivot-cleanup]] for the 12-category overhaul; `invitatii` — "Invitații Digitale" — added 2026-05-29 for Romanian event templates: nuntă, botez, cununie, logodnă, majorat, aniversări, sărbători).
 
 ## Localization
 

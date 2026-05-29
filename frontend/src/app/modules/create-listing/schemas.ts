@@ -12,6 +12,7 @@ export const CATEGORY_SLUGS = [
   "documente",
   "3d",
   "mestesugart",
+  "invitatii",
   "diverse",
 ] as const;
 

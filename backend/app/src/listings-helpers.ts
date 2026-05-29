@@ -21,6 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   documente: "Documente & Template-uri Legale",
   "3d": "Modele 3D & AR",
   mestesugart: "Artizanat Digital",
+  invitatii: "Invitații Digitale",
   diverse: "Diverse",
 };
 
