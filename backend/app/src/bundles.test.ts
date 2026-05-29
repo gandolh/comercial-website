@@ -63,7 +63,6 @@ async function createListing(
       description: "test",
       price_ron: priceRon,
       category: "software",
-      city: "București",
       active: 1,
       expires_at: expires.toISOString(),
     })
