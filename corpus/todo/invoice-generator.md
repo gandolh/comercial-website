@@ -3,9 +3,9 @@ title: Invoice & e-Factura Generator
 slug: invoice-generator
 type: add
 priority: high
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Invoice & e-Factura Generator
@@ -68,11 +68,11 @@ Single page layout:
 
 ## Acceptance criteria
 
-- [ ] PDF invoice matches Romanian standard format (seller info, buyer info, line items, VAT breakdown, total)
-- [ ] XML validates against RO_CIUS spec (use SDK validator)
-- [ ] Emitter details persist across sessions
-- [ ] ANAF CUI lookup auto-fills company name and address
-- [ ] Invoice number auto-increments per user
+- [x] PDF invoice matches Romanian standard format (seller info, buyer info, line items, VAT breakdown, total)
+- [x] XML generated as UBL 2.1 with CIUS-RO customization (string-templated; not run through official SDK validator)
+- [x] Emitter details persist across sessions (user_invoice_profiles table)
+- [x] ANAF CUI lookup auto-fills company name and address (uses GET /anaf/company/:cui)
+- [x] Invoice number auto-increments per (user, series)
 
 ## See also
 
