@@ -94,12 +94,14 @@ export interface SellerSummary {
   phone_verified: boolean;
   member_since: string;
   active_listings_count: number;
+  total_downloads: number;
 }
 
 export function toSellerSummary(
   seller: SellerRow,
   activeListingsCount: number,
-  config: Config
+  config: Config,
+  totalDownloads: number = 0
 ): SellerSummary {
   return {
     id: seller.id,
@@ -108,6 +110,7 @@ export function toSellerSummary(
     phone_verified: Boolean(seller.phone_verified),
     member_since: seller.created_at,
     active_listings_count: activeListingsCount,
+    total_downloads: totalDownloads,
   };
 }
 

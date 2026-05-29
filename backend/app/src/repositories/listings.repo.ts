@@ -464,6 +464,18 @@ export class ListingsRepository {
     return parseInt((result as any)?.count ?? "0", 10);
   }
 
+  async getTotalDownloadsForUser(userId: string): Promise<number> {
+    const result = await this.db
+      .selectFrom("listings")
+      .select(sql`COALESCE(SUM(download_count), 0)`.as("total"))
+      .where("user_id", "=", userId)
+      .where(sql<SqlBool>`active = 1`)
+      .where(sql<SqlBool>`expires_at > datetime('now')`)
+      .executeTakeFirst();
+
+    return parseInt((result as any)?.total ?? "0", 10);
+  }
+
   async countWeeklyListings(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
