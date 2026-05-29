@@ -203,6 +203,8 @@
       "subtitle": "Quick answers to the most common questions.",
       "notFound": "Didn't find your answer?",
       "contactUs": "Send an email"
+    }
+  },
   "createListing": {
     "preview": {
       "heading": "Review and publish",
