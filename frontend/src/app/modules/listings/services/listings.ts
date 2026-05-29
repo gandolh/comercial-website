@@ -45,6 +45,7 @@ interface ListingDetailApi {
   file_size_bytes?: number;
   download_count?: number;
   assets?: ListingAssetApi[];
+  is_bundle?: boolean;
 }
 
 export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
@@ -81,6 +82,7 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
       contentType: asset.content_type,
       position: asset.position,
     })),
+    isBundle: detail.is_bundle ?? false,
   };
 }
 

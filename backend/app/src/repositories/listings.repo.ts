@@ -21,6 +21,8 @@ export interface ListingRow {
   file_size_bytes: number | null;
   license_type: string;
   download_count: number;
+  /** 0 or 1 — whether this listing is a bundle (added in 20260621030000_bundles.sql). */
+  is_bundle: number | boolean;
 }
 
 export interface ListingImageRow {

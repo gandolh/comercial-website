@@ -54,6 +54,15 @@ export interface ListingsTable {
   file_size_bytes: number | null;
   license_type: ColumnType<string, string | undefined, string>;
   download_count: ColumnType<number, number | undefined, number>;
+  // Bundle flag (added in 20260621030000_bundles.sql)
+  is_bundle: ColumnType<number, number | undefined, number>;
+}
+
+/** Bundle items join table: links a bundle listing to its child listings. */
+export interface BundleItemsTable {
+  bundle_listing_id: string;
+  child_listing_id: string;
+  position: number;
 }
 
 export interface ListingAssetsTable {
@@ -220,5 +229,6 @@ export interface Database {
   user_invoice_profiles: UserInvoiceProfilesTable;
   invoices: InvoicesTable;
   orders: OrdersTable;
+  bundle_items: BundleItemsTable;
   _migrations: MigrationsTable;
 }

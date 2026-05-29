@@ -64,4 +64,6 @@ export interface ListingDetail {
   fileFormat?: string
   fileSizeBytes?: number
   downloadCount?: number
+  /** True when this listing is a bundle containing several child listings. */
+  isBundle?: boolean
 }

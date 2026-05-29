@@ -136,6 +136,8 @@ export interface ListingDetailResponse {
   file_size_bytes: number | null;
   download_count: number;
   assets: AssetResponse[];
+  /** True when this listing is a bundle that groups several child listings. */
+  is_bundle: boolean;
 }
 
 export function toListingDetailResponse(
@@ -167,6 +169,7 @@ export function toListingDetailResponse(
     file_size_bytes: listing.file_size_bytes,
     download_count: listing.download_count,
     assets,
+    is_bundle: Boolean(listing.is_bundle),
   };
 }
 
