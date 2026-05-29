@@ -55,6 +55,41 @@
     "downloadButton": "Download",
     "downloading": "Downloading...",
     "loginRequired": "Log in to download"
+  "dashboard": {
+    "expiringSoon": {
+      "title": "Listings expiring soon",
+      "expiresIn": "Expires in",
+      "expiresInDays": "Expires in {{count}} days",
+      "expiresInDays_0": "Expires today",
+      "renewAction": "Renew now",
+      "banner": "You have {{count}} listing expiring soon. Renew it before it disappears.",
+      "bannerAction": "View listings"
+    },
+    "renew": {
+      "rateLimited": "Renewal available in {{minutes}} min",
+      "rateLimitedToast": "You can renew again in {{minutes}} minutes"
+    },
+    "listings": {
+      "title": "My Listings",
+      "subtitle": "Manage and update your listings.",
+      "error": "Could not load listings.",
+      "postedAt": "Posted on",
+      "expiresIn": "Expires in",
+      "expiresInDays": "Expires in {{count}} days",
+      "expired": "Expired",
+      "expiredBanner": "Expired listings are no longer visible to buyers. Renew them to reactivate.",
+      "deleteConfirm": "Are you sure you want to delete this listing? This action cannot be undone.",
+      "deleteTitle": "Delete listing",
+      "tabs": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "expired": "Expired"
+      },
+      "empty": {
+        "title": "No listings in this category",
+        "subtitle": "Get inspired and post your first listing right now!"
+      }
+    }
   },
   "comingSoon": {
     "title": "Coming Soon",
