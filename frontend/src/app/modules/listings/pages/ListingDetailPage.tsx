@@ -19,6 +19,7 @@ import { getAssetDownloadUrl } from "../services/listings";
 import type { ListingAsset } from "@app/types/listing";
 import { BuyButton } from "@app/modules/orders/components/BuyButton";
 import { ordersService } from "@app/modules/orders/services/orders.service";
+import { ReviewsSection } from "@app/modules/reviews/components/ReviewsSection";
 
 interface AssetFileListProps {
   listingId: string;
@@ -365,6 +366,8 @@ export function ListingDetailPage() {
           />
 
           <SellerCard seller={data.seller} listingId={data.id} isDigitalAsset={isDigitalAsset} />
+
+          <ReviewsSection listingId={data.id} canReview={hasPaidOrder && user?.id !== data.seller.id} />
 
           {/* Safety tip */}
           <div className="flex items-start gap-4 px-4">

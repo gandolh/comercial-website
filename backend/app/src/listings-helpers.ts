@@ -137,6 +137,10 @@ export interface ListingDetailResponse {
   file_size_bytes: number | null;
   download_count: number;
   assets: AssetResponse[];
+  /** Average star rating (null if no reviews yet). */
+  rating_avg: number | null;
+  /** Total number of reviews. */
+  rating_count: number;
 }
 
 export function toListingDetailResponse(
@@ -144,7 +148,9 @@ export function toListingDetailResponse(
   images: ListingImageRow[],
   seller: SellerSummary,
   config: Config,
-  assets: AssetResponse[] = []
+  assets: AssetResponse[] = [],
+  ratingAvg: number | null = null,
+  ratingCount: number = 0
 ): ListingDetailResponse {
   return {
     id: listing.id,
@@ -168,6 +174,8 @@ export function toListingDetailResponse(
     file_size_bytes: listing.file_size_bytes,
     download_count: listing.download_count,
     assets,
+    rating_avg: ratingAvg,
+    rating_count: ratingCount,
   };
 }
 
