@@ -144,6 +144,51 @@ export interface MigrationsTable {
   applied_at: Generated<string>;
 }
 
+/** Invoice issuer profile saved per user (added in 20260620010000_invoices.sql). */
+export interface UserInvoiceProfilesTable {
+  user_id: string;
+  company_name: string | null;
+  cui: string | null;
+  reg_com: string | null;
+  address: string | null;
+  iban: string | null;
+  bank_name: string | null;
+  email: string | null;
+  phone: string | null;
+  updated_at: Generated<string>;
+}
+
+/** Generated invoices (added in 20260620010000_invoices.sql). */
+export interface InvoicesTable {
+  id: Generated<string>;
+  user_id: string;
+  series: ColumnType<string, string | undefined, string>;
+  number: number;
+  issue_date: string;
+  due_date: string | null;
+  // Seller / issuer snapshot
+  seller_name: string;
+  seller_cui: string | null;
+  seller_reg_com: string | null;
+  seller_address: string | null;
+  seller_iban: string | null;
+  seller_bank: string | null;
+  seller_email: string | null;
+  // Buyer / client
+  buyer_name: string;
+  buyer_cui: string | null;
+  buyer_address: string | null;
+  /** JSON array of line items: [{description, qty, unit_price, vat_rate}] */
+  line_items: string;
+  currency: ColumnType<string, string | undefined, string>;
+  subtotal: number;
+  vat_amount: number;
+  total: number;
+  /** Optional reference to a future orders table — no FK, orders table not yet created. */
+  order_id: number | null;
+  created_at: Generated<string>;
+}
+
 export interface Database {
   users: UsersTable;
   listings: ListingsTable;
@@ -156,5 +201,7 @@ export interface Database {
   favorites: FavoritesTable;
   conversations: ConversationsTable;
   messages: MessagesTable;
+  user_invoice_profiles: UserInvoiceProfilesTable;
+  invoices: InvoicesTable;
   _migrations: MigrationsTable;
 }

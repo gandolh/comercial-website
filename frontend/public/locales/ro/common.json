@@ -408,5 +408,76 @@
       "notFound": "Nu ai găsit răspunsul?",
       "contactUs": "Trimite un email"
     }
+  },
+  "invoices": {
+    "page": {
+      "title": "Facturi",
+      "subtitle": "Generează și descarcă facturi PDF și e-Factura XML.",
+      "tabList": "Istoricul meu",
+      "tabCreate": "Factură nouă",
+      "tabProfile": "Profil facturare"
+    },
+    "list": {
+      "heading": "Facturi generate",
+      "empty": "Nu ai generat nicio factură încă.",
+      "error": "Nu am putut încărca facturile.",
+      "buyer": "Client:",
+      "due": "Scadență:",
+      "downloading": "Se descarcă..."
+    },
+    "create": {
+      "heading": "Factură nouă",
+      "series": "Serie",
+      "issueDate": "Data emiterii",
+      "dueDate": "Scadență (opțional)",
+      "sellerSection": "Furnizor",
+      "sellerName": "Denumire furnizor",
+      "sellerCui": "CUI",
+      "sellerRegCom": "Reg. Com.",
+      "sellerAddress": "Adresă furnizor",
+      "sellerIban": "IBAN",
+      "sellerBank": "Bancă",
+      "buyerSection": "Client",
+      "buyerCui": "CUI / CNP client",
+      "buyerName": "Denumire client",
+      "buyerAddress": "Adresă client",
+      "autofill": "Auto-completare ANAF",
+      "cuiNotFound": "CUI-ul nu a fost găsit în ANAF.",
+      "loading": "Se încarcă...",
+      "lineItems": "Produse / Servicii",
+      "description": "Descriere",
+      "qty": "Cant.",
+      "unitPrice": "Preț unit. (RON)",
+      "vatRate": "TVA",
+      "removeLine": "Șterge linie",
+      "addLine": "+ Adaugă linie",
+      "subtotal": "Subtotal fără TVA",
+      "vatTotal": "Total TVA",
+      "total": "TOTAL",
+      "submit": "Generează factura",
+      "creating": "Se generează...",
+      "error": "Eroare la generarea facturii. Încearcă din nou."
+    },
+    "profile": {
+      "heading": "Profilul de facturare",
+      "description": "Datele salvate aici vor pre-completa automat câmpurile furnizorului la fiecare factură nouă.",
+      "cui": "CUI / CIF",
+      "cuiRequired": "Introduceți un CUI pentru auto-completare.",
+      "cuiNotFound": "CUI-ul nu a fost găsit în ANAF.",
+      "autofill": "Auto-completare ANAF",
+      "loading": "Se încarcă...",
+      "companyName": "Denumire firmă / Nume",
+      "regCom": "Nr. Reg. Comerțului",
+      "address": "Adresă",
+      "iban": "IBAN",
+      "bankName": "Bancă",
+      "email": "Email facturare",
+      "phone": "Telefon",
+      "save": "Salvează profilul de facturare",
+      "saving": "Se salvează...",
+      "saved": "Profilul a fost salvat.",
+      "saveError": "Eroare la salvare. Încearcă din nou.",
+      "loadError": "Nu am putut încărca profilul de facturare."
+    }
   }
 }

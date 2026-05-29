@@ -230,5 +230,76 @@
       "publishButton": "Publish listing",
       "publishing": "Publishing..."
     }
+  },
+  "invoices": {
+    "page": {
+      "title": "Invoices",
+      "subtitle": "Generate and download PDF invoices and e-Invoice XML.",
+      "tabList": "My history",
+      "tabCreate": "New invoice",
+      "tabProfile": "Billing profile"
+    },
+    "list": {
+      "heading": "Generated invoices",
+      "empty": "You haven't generated any invoices yet.",
+      "error": "Could not load invoices.",
+      "buyer": "Client:",
+      "due": "Due:",
+      "downloading": "Downloading..."
+    },
+    "create": {
+      "heading": "New invoice",
+      "series": "Series",
+      "issueDate": "Issue date",
+      "dueDate": "Due date (optional)",
+      "sellerSection": "Seller",
+      "sellerName": "Seller name",
+      "sellerCui": "CUI",
+      "sellerRegCom": "Reg. No.",
+      "sellerAddress": "Seller address",
+      "sellerIban": "IBAN",
+      "sellerBank": "Bank",
+      "buyerSection": "Buyer",
+      "buyerCui": "CUI / CNP (buyer)",
+      "buyerName": "Buyer name",
+      "buyerAddress": "Buyer address",
+      "autofill": "Auto-fill from ANAF",
+      "cuiNotFound": "CUI not found in ANAF.",
+      "loading": "Loading...",
+      "lineItems": "Products / Services",
+      "description": "Description",
+      "qty": "Qty.",
+      "unitPrice": "Unit price (RON)",
+      "vatRate": "VAT",
+      "removeLine": "Remove line",
+      "addLine": "+ Add line",
+      "subtotal": "Subtotal (excl. VAT)",
+      "vatTotal": "Total VAT",
+      "total": "TOTAL",
+      "submit": "Generate invoice",
+      "creating": "Generating...",
+      "error": "Error generating invoice. Please try again."
+    },
+    "profile": {
+      "heading": "Billing profile",
+      "description": "Details saved here will auto-fill the seller fields on every new invoice.",
+      "cui": "CUI / CIF",
+      "cuiRequired": "Enter a CUI to auto-fill.",
+      "cuiNotFound": "CUI not found in ANAF.",
+      "autofill": "Auto-fill from ANAF",
+      "loading": "Loading...",
+      "companyName": "Company name",
+      "regCom": "Company registration no.",
+      "address": "Address",
+      "iban": "IBAN",
+      "bankName": "Bank",
+      "email": "Billing email",
+      "phone": "Phone",
+      "save": "Save billing profile",
+      "saving": "Saving...",
+      "saved": "Profile saved.",
+      "saveError": "Error saving. Please try again.",
+      "loadError": "Could not load billing profile."
+    }
   }
 }
