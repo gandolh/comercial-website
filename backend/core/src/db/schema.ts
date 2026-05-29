@@ -22,6 +22,8 @@ export interface UsersTable {
   phone: string | null;
   phone_verified: ColumnType<number, number | undefined, number>;
   email_verified: ColumnType<number, number | undefined, number>;
+  /** Whether the user has opted in to transactional email notifications (default: 1 / true). */
+  email_notifications: ColumnType<number, number | undefined, number>;
   created_at: Generated<string>;
   updated_at: Generated<string>;
 }

@@ -36,6 +36,7 @@ interface UserSummary {
   email_verified: boolean;
   phone: string | null;
   phone_verified: boolean;
+  email_notifications: boolean;
   created_at: string;
 }
 
@@ -99,6 +100,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           "email_verified",
           "phone",
           "phone_verified",
+          "email_notifications",
           "created_at",
         ])
         .where("id", "=", userId)
@@ -116,6 +118,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         email_verified: Boolean(user.email_verified),
         phone: user.phone,
         phone_verified: Boolean(user.phone_verified),
+        email_notifications: Boolean(user.email_notifications),
         created_at: toISOString(user.created_at),
       };
 
@@ -123,7 +126,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
     }
   );
 
-  // PATCH /users/me — update display_name and/or avatar
+  // PATCH /users/me — update display_name and/or avatar and/or email_notifications
   app.patch(
     "/users/me",
     { preHandler: app.authenticate },
@@ -131,6 +134,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       const schema = z.object({
         display_name: z.string().min(2).max(60).optional(),
         avatar_s3_key: z.string().optional(),
+        email_notifications: z.boolean().optional(),
       });
 
       let body: any;
@@ -151,6 +155,10 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         updates.avatar_url = imageUrl(body.avatar_s3_key, ctx.config);
       }
 
+      if (body.email_notifications !== undefined) {
+        updates.email_notifications = body.email_notifications ? 1 : 0;
+      }
+
       if (Object.keys(updates).length === 0) {
         // No updates provided
         const user = await ctx.db
@@ -163,6 +171,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
             "email_verified",
             "phone",
             "phone_verified",
+            "email_notifications",
             "created_at",
           ])
           .where("id", "=", userId)
@@ -180,6 +189,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           email_verified: Boolean(user.email_verified),
           phone: user.phone,
           phone_verified: Boolean(user.phone_verified),
+          email_notifications: Boolean(user.email_notifications),
           created_at: toISOString(user.created_at),
         };
 
@@ -205,6 +215,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         email_verified: Boolean(user.email_verified),
         phone: user.phone,
         phone_verified: Boolean(user.phone_verified),
+        email_notifications: Boolean(user.email_notifications),
         created_at: toISOString(user.created_at),
       };
 

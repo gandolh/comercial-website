@@ -49,5 +49,14 @@
   "comingSoon": {
     "title": "Coming Soon",
     "subtitle": "This page is under development."
+  },
+  "settings": {
+    "notifications": {
+      "title": "Email Notifications",
+      "emailNotificationsLabel": "Receive email notifications",
+      "emailNotificationsDescription": "You will be notified when you receive a new message or when someone downloads one of your assets.",
+      "saveButton": "Save preferences",
+      "savedMessage": "Preferences have been saved."
+    }
   }
 }
