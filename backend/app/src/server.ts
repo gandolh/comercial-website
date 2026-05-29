@@ -16,6 +16,7 @@ import { registerListingsRoutes } from "./modules/listings.js";
 import { registerImagesRoutes } from "./modules/images.js";
 import { registerAssetsRoutes } from "./modules/assets.js";
 import { registerMessagingRoutes } from "./modules/messaging.js";
+import { registerAnafRoutes } from "./modules/anaf.js";
 import { runMigrations } from "@my-olx/core";
 import Database from "better-sqlite3";
 import path from "node:path";
@@ -57,6 +58,7 @@ async function main(): Promise<void> {
   registerImagesRoutes(app, ctx);
   registerAssetsRoutes(app, ctx);
   registerMessagingRoutes(app, ctx);
+  registerAnafRoutes(app, ctx);
 
   await app.listen({ host: config.host, port: config.port });
 }
