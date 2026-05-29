@@ -1,8 +1,8 @@
 import "@fastify/multipart";
 import { z } from "zod";
 import { sql } from "kysely";
-import { listingAssetKey, AppError } from "@my-olx/core";
-import type { RouteRegistrar } from "../context.js";
+import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
+import type { RouteRegistrar, AppContext } from "../context.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import type { FastifyInstance } from "fastify";
@@ -10,6 +10,50 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
+
+/**
+ * Fire-and-forget: notify the listing owner when their asset reaches 1 download.
+ * Never throws — a failed email must not break the download response.
+ */
+async function sendFirstDownloadNotification(
+  ctx: AppContext,
+  listingId: string,
+  downloadCount: number
+): Promise<void> {
+  if (downloadCount !== 1) return; // only trigger on the very first download
+
+  try {
+    const listing = await ctx.db
+      .selectFrom("listings")
+      .select(["title", "user_id"])
+      .where("id", "=", listingId)
+      .executeTakeFirst();
+
+    if (!listing) return;
+
+    const owner = await ctx.db
+      .selectFrom("users")
+      .select(["email", "display_name", "email_notifications"])
+      .where("id", "=", listing.user_id)
+      .executeTakeFirst();
+
+    if (!owner) return;
+    if (!owner.email_notifications) return; // opted out
+
+    const msg = firstDownloadEmail({
+      ownerEmail: owner.email,
+      ownerName: owner.display_name,
+      listingTitle: listing.title,
+      listingId,
+      downloadCount,
+      unsubscribeUserId: listing.user_id,
+    });
+
+    await ctx.email.send(msg);
+  } catch (err) {
+    console.error("[assets] failed to send first-download notification:", err);
+  }
+}
 
 interface AssetResponse {
   id: string;
@@ -167,11 +211,16 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       if (!asset) throw AppError.notFound();
 
       await assetsRepo.recordDownload(listingId, userId, asset.id);
-      await ctx.db
+      const updatedListing = await ctx.db
         .updateTable("listings")
         .set({ download_count: sql`download_count + 1` })
         .where("id", "=", listingId)
-        .execute();
+        .returning("download_count")
+        .executeTakeFirst();
+
+      // Notify owner on first download (fire-and-forget)
+      const newDownloadCount = updatedListing?.download_count ?? 1;
+      void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
 
       const filePath = path.join(ctx.config.uploadsDir, asset.s3_key);
       const fileStat = await stat(filePath).catch(() => null);

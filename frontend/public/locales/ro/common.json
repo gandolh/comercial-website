@@ -254,5 +254,14 @@
       "priceLabel": "Preț (RON)",
       "freeLabel": "Gratuit"
     }
+  },
+  "settings": {
+    "notifications": {
+      "title": "Notificări prin email",
+      "emailNotificationsLabel": "Primește notificări prin email",
+      "emailNotificationsDescription": "Vei fi notificat când primești un mesaj nou sau când cineva descarcă un activ al tău.",
+      "saveButton": "Salvează preferințele",
+      "savedMessage": "Preferințele au fost salvate."
+    }
   }
 }

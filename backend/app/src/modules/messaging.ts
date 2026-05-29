@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { RouteRegistrar, AppContext } from "../context.js";
-import { AppError } from "@my-olx/core";
+import { AppError, newMessageEmail } from "@my-olx/core";
 
 /**
  * Helper to construct image URL from S3 key.
@@ -26,6 +26,65 @@ const createConversationSchema = z.object({
 const createMessageSchema = z.object({
   body: z.string().min(1).max(2000),
 });
+
+/**
+ * Fire-and-forget: send an email to the counterparty of a conversation when a
+ * new message arrives.  Never throws — a failed email must not break the request.
+ */
+async function sendNewMessageNotification(
+  ctx: AppContext,
+  conversationId: string,
+  senderId: string,
+  messageBody: string,
+  listingTitle: string
+): Promise<void> {
+  try {
+    // Determine recipient (the other participant)
+    const conversation = await ctx.db
+      .selectFrom("conversations")
+      .select(["buyer_id", "seller_id"])
+      .where("id", "=", conversationId)
+      .executeTakeFirst();
+
+    if (!conversation) return;
+
+    const recipientId =
+      senderId === conversation.buyer_id
+        ? conversation.seller_id
+        : conversation.buyer_id;
+
+    // Fetch recipient
+    const recipient = await ctx.db
+      .selectFrom("users")
+      .select(["email", "display_name", "email_notifications"])
+      .where("id", "=", recipientId)
+      .executeTakeFirst();
+
+    if (!recipient) return;
+    if (!recipient.email_notifications) return; // user opted out
+
+    // Fetch sender display name
+    const sender = await ctx.db
+      .selectFrom("users")
+      .select(["display_name"])
+      .where("id", "=", senderId)
+      .executeTakeFirst();
+
+    const msg = newMessageEmail({
+      recipientEmail: recipient.email,
+      recipientName: recipient.display_name,
+      senderName: sender?.display_name ?? null,
+      messagePreview: messageBody,
+      conversationId,
+      listingTitle,
+      unsubscribeUserId: recipientId,
+    });
+
+    await ctx.email.send(msg);
+  } catch (err) {
+    console.error("[messaging] failed to send new-message notification:", err);
+  }
+}
 
 export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   // POST /listings/:id/conversations — start a conversation
@@ -105,6 +164,14 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
         .set({ last_message_at: new Date().toISOString() })
         .where("id", "=", conversation.id)
         .execute();
+
+      // Notify the seller about the new message (fire-and-forget)
+      const listing2 = await ctx.db
+        .selectFrom("listings")
+        .select("title")
+        .where("id", "=", listingId)
+        .executeTakeFirst();
+      void sendNewMessageNotification(ctx, conversation.id, buyerId, body, listing2?.title ?? "");
 
       // Return ConversationSummary
       const summary = await buildConversationSummary(ctx, conversation.id, buyerId);
@@ -265,6 +332,15 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
         .set({ last_message_at: new Date().toISOString() })
         .where("id", "=", conversationId)
         .execute();
+
+      // Notify the counterparty (fire-and-forget)
+      const msgListing = await ctx.db
+        .selectFrom("listings")
+        .innerJoin("conversations", "listings.id", "conversations.listing_id")
+        .select("listings.title")
+        .where("conversations.id", "=", conversationId)
+        .executeTakeFirst();
+      void sendNewMessageNotification(ctx, conversationId, userId, body, msgListing?.title ?? "");
 
       return reply.send({
         id: message.id,
