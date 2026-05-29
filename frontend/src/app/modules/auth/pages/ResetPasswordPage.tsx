@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, useNavigate, Link } from "@core/lib/router";
 import { AuthCardShell } from "../components/AuthCardShell";
 import { Input, Button } from "@core/components/ui";
@@ -7,6 +8,7 @@ import { resetSchema, type ResetInput } from "../schemas";
 import { useResetPasswordMutation } from "../hooks/useResetPasswordMutation";
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
@@ -29,13 +31,13 @@ export function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <AuthCardShell title="Link invalid">
+      <AuthCardShell title={t("auth.resetPassword.invalidTokenTitle")}>
         <div className="text-center">
           <p className="text-on-surface-variant mb-4">
-            Link-ul de resetare este invalid sau lipsește.
+            {t("auth.resetPassword.invalidTokenMessage")}
           </p>
           <Link to="/parola-uitata">
-            <Button>Solicită un nou link</Button>
+            <Button>{t("auth.resetPassword.requestNewLink")}</Button>
           </Link>
         </div>
       </AuthCardShell>
@@ -44,7 +46,7 @@ export function ResetPasswordPage() {
 
   if (resetMutation.isSuccess) {
     return (
-      <AuthCardShell title="Parolă resetată!">
+      <AuthCardShell title={t("auth.resetPassword.successTitle")}>
         <div className="text-center">
           <span
             className="material-symbols-outlined text-tertiary mb-4"
@@ -53,13 +55,13 @@ export function ResetPasswordPage() {
             check_circle
           </span>
           <p className="text-on-surface mb-2 font-medium">
-            Parola ta a fost resetată cu succes!
+            {t("auth.resetPassword.successMessage")}
           </p>
           <p className="text-on-surface-variant text-sm mb-6">
-            Acum te poți autentifica cu noua parolă.
+            {t("auth.resetPassword.successSubMessage")}
           </p>
           <Button onClick={() => navigate("/autentificare")}>
-            Autentifică-te
+            {t("auth.resetPassword.loginButton")}
           </Button>
         </div>
       </AuthCardShell>
@@ -68,12 +70,12 @@ export function ResetPasswordPage() {
 
   return (
     <AuthCardShell
-      title="Setează o parolă nouă"
-      description="Introdu noua ta parolă"
+      title={t("auth.resetPassword.title")}
+      description={t("auth.resetPassword.description")}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Parolă nouă"
+          label={t("auth.resetPassword.newPasswordLabel")}
           type="password"
           {...register("password")}
           error={errors.password?.message}
@@ -82,7 +84,7 @@ export function ResetPasswordPage() {
         />
 
         <Input
-          label="Confirmă parola nouă"
+          label={t("auth.resetPassword.confirmPasswordLabel")}
           type="password"
           {...register("passwordConfirm")}
           error={errors.passwordConfirm?.message}
@@ -92,13 +94,16 @@ export function ResetPasswordPage() {
 
         {resetMutation.isError && (
           <div className="p-3 rounded-lg bg-error-container text-on-error-container text-sm">
-            Link-ul a expirat sau a fost deja folosit. Te rugăm să soliciți un
-            nou link de resetare.
+            {t("auth.resetPassword.errorMessage")}
           </div>
         )}
 
-        <Button type="submit" loading={resetMutation.isPending} className="w-full">
-          Resetează parola
+        <Button
+          type="submit"
+          loading={resetMutation.isPending}
+          className="w-full"
+        >
+          {t("auth.resetPassword.submitButton")}
         </Button>
       </form>
     </AuthCardShell>

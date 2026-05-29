@@ -254,5 +254,34 @@
       "priceLabel": "Preț (RON)",
       "freeLabel": "Gratuit"
     }
+  },
+  "auth": {
+    "forgotPassword": {
+      "title": "Resetează parola",
+      "description": "Introdu adresa ta de email pentru a primi instrucțiuni",
+      "emailLabel": "Email",
+      "submitButton": "Trimite link de resetare",
+      "successTitle": "Email trimis!",
+      "successMessage": "Dacă emailul există în sistemul nostru, vei primi un link de resetare a parolei. Verifică-ți inbox-ul și folderul de spam.",
+      "backToLogin": "Înapoi la autentificare",
+      "rememberPassword": "Îți amintești parola?",
+      "loginLink": "Autentifică-te",
+      "errorMessage": "A apărut o eroare. Te rugăm să încerci din nou."
+    },
+    "resetPassword": {
+      "title": "Setează o parolă nouă",
+      "description": "Introdu noua ta parolă",
+      "newPasswordLabel": "Parolă nouă",
+      "confirmPasswordLabel": "Confirmă parola nouă",
+      "submitButton": "Resetează parola",
+      "successTitle": "Parolă resetată!",
+      "successMessage": "Parola ta a fost resetată cu succes!",
+      "successSubMessage": "Acum te poți autentifica cu noua parolă.",
+      "loginButton": "Autentifică-te",
+      "invalidTokenTitle": "Link invalid",
+      "invalidTokenMessage": "Link-ul de resetare este invalid sau lipsește.",
+      "requestNewLink": "Solicită un nou link",
+      "errorMessage": "Link-ul a expirat sau a fost deja folosit. Te rugăm să soliciți un nou link de resetare."
+    }
   }
 }

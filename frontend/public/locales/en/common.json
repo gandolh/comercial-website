@@ -49,5 +49,34 @@
   "comingSoon": {
     "title": "Coming Soon",
     "subtitle": "This page is under development."
+  },
+  "auth": {
+    "forgotPassword": {
+      "title": "Reset password",
+      "description": "Enter your email address to receive instructions",
+      "emailLabel": "Email",
+      "submitButton": "Send reset link",
+      "successTitle": "Email sent!",
+      "successMessage": "If the email exists in our system, you will receive a password reset link. Check your inbox and spam folder.",
+      "backToLogin": "Back to login",
+      "rememberPassword": "Remember your password?",
+      "loginLink": "Log in",
+      "errorMessage": "An error occurred. Please try again."
+    },
+    "resetPassword": {
+      "title": "Set a new password",
+      "description": "Enter your new password",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "submitButton": "Reset password",
+      "successTitle": "Password reset!",
+      "successMessage": "Your password has been successfully reset!",
+      "successSubMessage": "You can now log in with your new password.",
+      "loginButton": "Log in",
+      "invalidTokenTitle": "Invalid link",
+      "invalidTokenMessage": "The reset link is invalid or missing.",
+      "requestNewLink": "Request a new link",
+      "errorMessage": "The link has expired or has already been used. Please request a new reset link."
+    }
   }
 }
