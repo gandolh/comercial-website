@@ -3,9 +3,9 @@ title: Search Improvements (FTS, Filters, Romanian Diacritics)
 slug: search-improvements
 type: update
 priority: medium
-status: pending
+status: done
 area: backend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Search Improvements
@@ -58,8 +58,8 @@ Update `ListingsRepository.search()`:
 
 ## Acceptance criteria
 
-- [ ] Searching "sablon" finds listings with "șablon" in title/description
-- [ ] Searching "grafic" finds listings with "grafică"
-- [ ] Results ranked by relevance when query is provided
-- [ ] Filter-only searches (category, price) still work without FTS
-- [ ] No performance regression on category browse (no text query)
+- [x] Searching "sablon" finds listings with "șablon" in title/description
+- [x] Searching "grafic" finds listings with "grafică"
+- [x] Results ranked by relevance when query is provided
+- [x] Filter-only searches (category, price) still work without FTS
+- [x] No performance regression on category browse (no text query)

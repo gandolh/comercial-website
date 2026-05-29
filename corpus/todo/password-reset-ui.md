@@ -3,9 +3,9 @@ title: Password Reset UI
 slug: password-reset-ui
 type: update
 priority: medium
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Password Reset UI
@@ -32,8 +32,8 @@ The `SmtpEmailService` was connected to MailHog (`localhost:1025`) in dev. MailH
 
 ## Acceptance criteria
 
-- [ ] Forgot password form submits without error
-- [ ] Reset token logged to console in dev
-- [ ] Reset password form accepts token from URL and resets password
-- [ ] User can log in with new password after reset
-- [ ] Old token rejected after use (consumed = 1)
+- [x] Forgot password form submits without error
+- [x] Reset token logged to console in dev (LogEmailService)
+- [x] Reset password form accepts token from URL and resets password
+- [x] User can log in with new password after reset
+- [x] Old token rejected after use (consumed = 1)

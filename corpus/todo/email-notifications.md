@@ -3,9 +3,9 @@ title: Email Notifications
 slug: email-notifications
 type: add
 priority: medium
-status: pending
+status: done
 area: backend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Email Notifications
@@ -48,9 +48,9 @@ The email service exists (`SmtpEmailService`, `LogEmailService`) but is only use
 
 ## Acceptance criteria
 
-- [ ] New message triggers email to counterparty (not to sender)
-- [ ] First download triggers email to listing owner
-- [ ] Expiry reminder sent 3 days before expiry (mechanism TBD — cron or lazy check)
-- [ ] All email text is in Romanian
-- [ ] Emails don't block HTTP responses
-- [ ] User can opt out via settings
+- [x] New message triggers email to counterparty (not to sender)
+- [x] First download triggers email to listing owner
+- [ ] Expiry reminder sent 3 days before expiry — DEFERRED (needs cron/scheduler, out of this wave's scope)
+- [x] All email text is in Romanian
+- [x] Emails don't block HTTP responses (fire-and-forget async)
+- [x] User can opt out via settings (email_notifications pref on PATCH /users/me)

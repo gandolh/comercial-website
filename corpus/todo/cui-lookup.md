@@ -3,9 +3,9 @@ title: ANAF CUI Company Lookup
 slug: cui-lookup
 type: add
 priority: medium
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # ANAF CUI Company Lookup
@@ -40,11 +40,11 @@ Romanian CUI: 2–10 digits, optionally prefixed with `RO` for VAT-registered co
 
 ## Acceptance criteria
 
-- [ ] `GET /anaf/company/123456` returns company data
-- [ ] Invalid CUI format returns 422
-- [ ] Unknown CUI returns 404
-- [ ] Response cached to avoid hammering ANAF API
-- [ ] Invoice generator uses this endpoint for auto-fill
+- [x] `GET /anaf/company/:cui` returns normalized company data
+- [x] Invalid CUI format returns 422
+- [x] Unknown CUI returns 404
+- [x] Response cached (1h in-memory TTL)
+- [ ] Invoice generator uses this endpoint for auto-fill (pending Wave 4 / invoice-generator)
 
 ## See also
 
