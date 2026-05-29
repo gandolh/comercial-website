@@ -195,7 +195,7 @@ export function ListingDetailPage() {
             sellerName={data.seller.displayName ?? ""}
             title={data.title}
             priceRon={data.priceRon}
-            location={data.city}
+            location=""
             viewCount={data.viewCount}
             downloadCount={data.downloadCount}
             isDigitalAsset={isDigitalAsset}

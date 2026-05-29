@@ -142,7 +142,19 @@
     "browseTitle": "Răsfoiește toate categoriile",
     "browseSubtitle": "Găsește exact ceea ce cauți printre mii de anunțuri verificate.",
     "notFound": "Categorie inexistentă",
-    "categoryNotFound": "Categoria {{slug}} nu a fost găsită."
+    "categoryNotFound": "Categoria {{slug}} nu a fost găsită.",
+    "grafica": "Grafică & Ilustrații",
+    "sabloane": "Șabloane & Template-uri",
+    "software": "Software & Aplicații",
+    "cod-sursa": "Cod Sursă",
+    "audio": "Audio & Muzică",
+    "video": "Video & Motion",
+    "ebook": "E-Bookuri & Cursuri",
+    "fonturi": "Fonturi",
+    "documente": "Documente & Template-uri Legale",
+    "3d": "Modele 3D & AR",
+    "mestesugart": "Artizanat Digital",
+    "diverse": "Diverse"
   },
   "filters": {
     "license": "Tip Licență",

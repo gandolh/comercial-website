@@ -3,27 +3,28 @@ import { useNavigate } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
 import { CardSkeleton } from "@core/components/ui/Skeleton";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
-import { CityAutocomplete } from "@core/components/ui/CityAutocomplete";
 import { SearchAutocomplete } from "@core/components/ui/SearchAutocomplete";
 import { ListingCard } from "../components/ListingCard";
 import { useFeaturedListings } from "../hooks/useFeaturedListings";
 import type { HomeCategory } from "../types";
 
 const CATEGORIES: HomeCategory[] = [
-  { icon: "code", label: "Software și aplicații", slug: "software" },
-  { icon: "palette", label: "Grafică și ilustrații", slug: "grafica" },
-  { icon: "dashboard_customize", label: "Șabloane și teme", slug: "sabloane" },
-  { icon: "music_note", label: "Audio și muzică", slug: "audio" },
-  { icon: "movie", label: "Video și animație", slug: "video" },
-  { icon: "menu_book", label: "Cărți electronice", slug: "ebook" },
+  { icon: "palette", label: "Grafică & Ilustrații", slug: "grafica" },
+  { icon: "dashboard_customize", label: "Șabloane & Template-uri", slug: "sabloane" },
+  { icon: "apps", label: "Software & Aplicații", slug: "software" },
+  { icon: "terminal", label: "Cod Sursă", slug: "cod-sursa" },
+  { icon: "music_note", label: "Audio & Muzică", slug: "audio" },
+  { icon: "movie", label: "Video & Motion", slug: "video" },
+  { icon: "menu_book", label: "E-Bookuri & Cursuri", slug: "ebook" },
   { icon: "font_download", label: "Fonturi", slug: "fonturi" },
-  { icon: "terminal", label: "Cod sursă", slug: "cod-sursa" },
+  { icon: "description", label: "Documente & Template-uri Legale", slug: "documente" },
+  { icon: "view_in_ar", label: "Modele 3D & AR", slug: "3d" },
+  { icon: "brush", label: "Artizanat Digital", slug: "mestesugart" },
   { icon: "category", label: "Diverse", slug: "diverse" },
 ];
 
 export function HomePage() {
   const [search, setSearch] = useState("");
-  const [location, setLocation] = useState("");
   const navigate = useNavigate();
   const { t } = useTranslation();
   const featuredListings = useFeaturedListings();
@@ -32,7 +33,6 @@ export function HomePage() {
     e.preventDefault();
     const params = new URLSearchParams();
     if (search) params.set("q", search);
-    if (location) params.set("city", location);
     navigate(`/anunturi?${params.toString()}`);
   };
 
@@ -64,24 +64,10 @@ export function HomePage() {
                 onSelect={(val) => {
                   const params = new URLSearchParams();
                   if (val) params.set("q", val);
-                  if (location) params.set("city", location);
                   navigate(`/anunturi?${params.toString()}`);
                 }}
                 placeholder={t("home.searchPlaceholder")}
                 className="w-full"
-              />
-            </div>
-            <div
-              className="hidden md:flex items-center px-4 gap-2"
-              style={{
-                borderLeft:
-                  "1px solid color-mix(in srgb, var(--color-outline-variant) 30%, transparent)",
-              }}
-            >
-              <CityAutocomplete
-                value={location}
-                onChange={setLocation}
-                placeholder={t("home.locationPlaceholder")}
               />
             </div>
             <button

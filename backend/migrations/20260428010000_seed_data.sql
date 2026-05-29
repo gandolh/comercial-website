@@ -9,20 +9,20 @@ VALUES
 
 INSERT OR IGNORE INTO listings (id, user_id, title, description, price_ron, is_negotiable, category, city, expires_at)
 VALUES
-    ('10000000000000000000000000000001', '00000000000000000000000000000002', 'iPhone 15 Pro 256GB Titanium', 'Vând iPhone 15 Pro, stare impecabilă, garanție 1 an. Pachet complet.', 5400, 1, 'electronice', 'bucuresti', datetime('now', '+30 days')),
-    ('10000000000000000000000000000002', '00000000000000000000000000000002', 'BMW Seria 3 2020 M-Sport', 'BMW 320d G20, pachet M de fabrică, 60.000km reali, revizii doar la reprezentanță.', 145000, 0, 'auto', 'cluj-napoca', datetime('now', '+30 days')),
-    ('10000000000000000000000000000003', '00000000000000000000000000000001', 'Apartament 2 camere Ultracentral', 'Apartament spațios în zona Piața Victoriei, mobilat modern, proaspăt renovat.', 450000, 1, 'imobiliare', 'bucuresti', datetime('now', '+30 days')),
-    ('10000000000000000000000000000004', '00000000000000000000000000000002', 'Canapea Extensibilă IKEA', 'Vând canapea IKEA 3 locuri, stare foarte bună, utilizată puțin.', 850, 0, 'casa-gradina', 'brasov', datetime('now', '+30 days')),
-    ('10000000000000000000000000000005', '00000000000000000000000000000001', 'Geacă de piele Zara M', 'Vând geacă de piele naturală, mărimea M, purtată de câteva ori.', 250, 0, 'moda', 'iasi', datetime('now', '+30 days'));
+    ('10000000000000000000000000000001', '00000000000000000000000000000002', 'UI Kit Dashboar Pro — Figma', 'Kit complet de componente Figma pentru dashboard-uri moderne. Include 200+ componente, 20 de template-uri și documentație completă.', 149, 0, 'grafica', '', datetime('now', '+30 days')),
+    ('10000000000000000000000000000002', '00000000000000000000000000000002', 'Pachet Fonturi Premium — 12 Familii', 'Colecție de 12 familii de fonturi cu licență comercială. Include serif, sans-serif și display fonts.', 89, 0, 'fonturi', '', datetime('now', '+30 days')),
+    ('10000000000000000000000000000003', '00000000000000000000000000000001', 'Template CV Modern — Word & Google Docs', 'Template CV profesional, ușor de editat în Word și Google Docs. 3 variante de culori incluse.', 29, 0, 'sabloane', '', datetime('now', '+30 days')),
+    ('10000000000000000000000000000004', '00000000000000000000000000000002', 'Cod Sursă — API REST Node.js cu autentificare JWT', 'Starter kit complet pentru un API REST în Node.js/TypeScript cu autentificare JWT, bază de date SQLite și documentație Swagger.', 199, 0, 'cod-sursa', '', datetime('now', '+30 days')),
+    ('10000000000000000000000000000005', '00000000000000000000000000000001', 'Pack Muzică Ambient — 20 Track-uri Royalty Free', 'Colecție de 20 de track-uri muzicale ambient, royalty-free, ideale pentru videoclipuri și prezentări.', 59, 0, 'audio', '', datetime('now', '+30 days'));
 
 INSERT OR IGNORE INTO listing_images (listing_id, s3_key, position)
 VALUES
-    ('10000000000000000000000000000001', 'iphone1.jpg', 0),
-    ('10000000000000000000000000000001', 'iphone2.jpg', 1),
-    ('10000000000000000000000000000002', 'bmw1.jpg', 0),
-    ('10000000000000000000000000000003', 'apart1.jpg', 0),
-    ('10000000000000000000000000000004', 'sofa1.jpg', 0),
-    ('10000000000000000000000000000005', 'jacket1.jpg', 0);
+    ('10000000000000000000000000000001', 'uikit1.jpg', 0),
+    ('10000000000000000000000000000001', 'uikit2.jpg', 1),
+    ('10000000000000000000000000000002', 'fonts1.jpg', 0),
+    ('10000000000000000000000000000003', 'cv1.jpg', 0),
+    ('10000000000000000000000000000004', 'code1.jpg', 0),
+    ('10000000000000000000000000000005', 'audio1.jpg', 0);
 
 INSERT OR IGNORE INTO favorites (user_id, listing_id)
 VALUES

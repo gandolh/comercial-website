@@ -2,14 +2,17 @@ import { useNavigate } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
 
 const CATEGORIES = [
-  { icon: "code", label: "Software și aplicații", slug: "software" },
-  { icon: "palette", label: "Grafică și ilustrații", slug: "grafica" },
-  { icon: "dashboard_customize", label: "Șabloane și teme", slug: "sabloane" },
-  { icon: "music_note", label: "Audio și muzică", slug: "audio" },
-  { icon: "movie", label: "Video și animație", slug: "video" },
-  { icon: "menu_book", label: "Cărți electronice", slug: "ebook" },
+  { icon: "palette", label: "Grafică & Ilustrații", slug: "grafica" },
+  { icon: "dashboard_customize", label: "Șabloane & Template-uri", slug: "sabloane" },
+  { icon: "apps", label: "Software & Aplicații", slug: "software" },
+  { icon: "terminal", label: "Cod Sursă", slug: "cod-sursa" },
+  { icon: "music_note", label: "Audio & Muzică", slug: "audio" },
+  { icon: "movie", label: "Video & Motion", slug: "video" },
+  { icon: "menu_book", label: "E-Bookuri & Cursuri", slug: "ebook" },
   { icon: "font_download", label: "Fonturi", slug: "fonturi" },
-  { icon: "terminal", label: "Cod sursă", slug: "cod-sursa" },
+  { icon: "description", label: "Documente & Template-uri Legale", slug: "documente" },
+  { icon: "view_in_ar", label: "Modele 3D & AR", slug: "3d" },
+  { icon: "brush", label: "Artizanat Digital", slug: "mestesugart" },
   { icon: "category", label: "Diverse", slug: "diverse" },
 ];
 
