@@ -266,6 +266,30 @@
       "subtitle": "Cât costă produsul tău?",
       "priceLabel": "Preț (RON)",
       "freeLabel": "Gratuit"
+    },
+    "preview": {
+      "heading": "Verifică și publică",
+      "subheading": "Aruncă o ultimă privire înainte ca anunțul tău să devină public.",
+      "previewBanner": "Previzualizare — exact cum vor vedea cumpărătorii anunțul tău",
+      "cardLabel": "Previzualizare anunț",
+      "summaryCategory": "Categorie",
+      "summaryPrice": "Preț",
+      "summaryLicense": "Licență",
+      "summaryFiles": "Fișiere",
+      "fileCountSize": "{{count}} fișier(e) · {{size}}",
+      "free": "Gratuit",
+      "license_personal": "Personal",
+      "license_commercial": "Comercial",
+      "license_extended": "Extins",
+      "downloadFilesHeading": "Fișierele pentru descărcare",
+      "untitledPlaceholder": "(fără titlu)",
+      "verifySellerTitle": "Devino vânzător verificat",
+      "verifySellerBody": "Adaugă numărul de telefon verificat pentru a apărea ca vânzător verificat și a câștiga încrederea cumpărătorilor.",
+      "verifySellerCta": "Verifică acum",
+      "termsConfirm": "Confirm că datele introduse sunt corecte și sunt de acord cu Termenii și Condițiile platformei.",
+      "backButton": "Înapoi",
+      "publishButton": "Publică anunțul",
+      "publishing": "Se publică..."
     }
   },
   "settings": {

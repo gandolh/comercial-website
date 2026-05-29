@@ -203,6 +203,30 @@
       "subtitle": "Quick answers to the most common questions.",
       "notFound": "Didn't find your answer?",
       "contactUs": "Send an email"
+  "createListing": {
+    "preview": {
+      "heading": "Review and publish",
+      "subheading": "Take one last look before your listing goes public.",
+      "previewBanner": "Preview — exactly how buyers will see your listing",
+      "cardLabel": "Listing preview",
+      "summaryCategory": "Category",
+      "summaryPrice": "Price",
+      "summaryLicense": "License",
+      "summaryFiles": "Files",
+      "fileCountSize": "{{count}} file(s) · {{size}}",
+      "free": "Free",
+      "license_personal": "Personal",
+      "license_commercial": "Commercial",
+      "license_extended": "Extended",
+      "downloadFilesHeading": "Downloadable files",
+      "untitledPlaceholder": "(untitled)",
+      "verifySellerTitle": "Become a verified seller",
+      "verifySellerBody": "Add a verified phone number to appear as a verified seller and build trust with buyers.",
+      "verifySellerCta": "Verify now",
+      "termsConfirm": "I confirm that the entered data is correct and I agree with the Terms and Conditions of the platform.",
+      "backButton": "Back",
+      "publishButton": "Publish listing",
+      "publishing": "Publishing..."
     }
   }
 }
