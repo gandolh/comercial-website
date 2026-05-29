@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams, Link } from "@core/lib/router";
-import { useTranslation } from "react-i18next";
+import { useParams, useSearchParams, Navigate } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useCategoryListings } from "../hooks/useCategoryListings";
 import { FilterSidebar } from "../components/FilterSidebar";
@@ -27,14 +26,16 @@ function parseFilters(params: URLSearchParams): FilterState {
 export function CategoryPage() {
   const { slug = "" } = useParams<{ slug: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
+  const isKnownSlug = Boolean(CATEGORY_LABELS[slug]);
   const filters = parseFilters(searchParams);
 
   const { data, isFetching, isError, refetch } = useCategoryListings(
     slug,
     filters,
+    undefined,
+    isKnownSlug,
   );
 
   function setFilter(
@@ -71,28 +72,8 @@ export function CategoryPage() {
     });
   }
 
-  if (!CATEGORY_LABELS[slug]) {
-    return (
-      <main className="mt-24 flex-grow max-w-screen-2xl mx-auto w-full px-8 pb-16 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <p
-            className="text-2xl font-black text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
-            {t("categories.notFound")}
-          </p>
-          <p className="text-on-surface-variant">
-            {t("categories.categoryNotFound", { slug })}
-          </p>
-          <Link
-            to="/"
-            className="inline-block mt-4 px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold text-sm hover:opacity-90 transition-opacity"
-          >
-            Înapoi la pagina principală
-          </Link>
-        </div>
-      </main>
-    );
+  if (!isKnownSlug) {
+    return <Navigate to="/categorii" replace />;
   }
 
   return (

@@ -35,6 +35,10 @@
     "contact": "Contact"
   },
   "categories": {
+    "browseTitle": "Browse all categories",
+    "browseSubtitle": "Find exactly what you are looking for among thousands of verified listings.",
+    "notFound": "Category not found",
+    "categoryNotFound": "The category {{slug}} was not found.",
     "grafica": "Graphics & Illustrations",
     "sabloane": "Templates",
     "software": "Software & Applications",
