@@ -195,7 +195,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
   });
 
   /**
-   * GET /listings/:id/download  (protected — streams the primary asset file)
+   * GET /listings/:id/download  (protected — streams the primary asset file, legacy)
    */
   app.get(
     "/listings/:id/download",
@@ -208,6 +208,49 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       if (!listing) throw AppError.notFound();
 
       const asset = await assetsRepo.getPrimaryAsset(listingId);
+      if (!asset) throw AppError.notFound();
+
+      await assetsRepo.recordDownload(listingId, userId, asset.id);
+      const updatedListing = await ctx.db
+        .updateTable("listings")
+        .set({ download_count: sql`download_count + 1` })
+        .where("id", "=", listingId)
+        .returning("download_count")
+        .executeTakeFirst();
+
+      // Notify owner on first download (fire-and-forget)
+      const newDownloadCount = updatedListing?.download_count ?? 1;
+      void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
+
+      const filePath = path.join(ctx.config.uploadsDir, asset.s3_key);
+      const fileStat = await stat(filePath).catch(() => null);
+      if (!fileStat) throw AppError.notFound();
+
+      reply.header("Content-Disposition", `attachment; filename="${asset.original_filename}"`);
+      reply.header("Content-Type", asset.content_type);
+      reply.header("Content-Length", fileStat.size);
+
+      return reply.send(createReadStream(filePath));
+    }
+  );
+
+  /**
+   * GET /listings/:id/assets/:asset_id/download  (protected — streams a specific asset file)
+   */
+  app.get(
+    "/listings/:id/assets/:asset_id/download",
+    { preHandler: appWithAuth.authenticate },
+    async (request, reply) => {
+      const userId = request.userId!;
+      const { id: listingId, asset_id: assetId } = request.params as {
+        id: string;
+        asset_id: string;
+      };
+
+      const listing = await listingsRepo.getById(listingId);
+      if (!listing) throw AppError.notFound();
+
+      const asset = await assetsRepo.getAssetByIdForListing(assetId, listingId);
       if (!asset) throw AppError.notFound();
 
       await assetsRepo.recordDownload(listingId, userId, asset.id);

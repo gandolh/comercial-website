@@ -46,6 +46,16 @@
     "mestesugart": "Digital Crafts",
     "diverse": "Miscellaneous"
   },
+  "listing_files": {
+    "title": "Included files",
+    "count_one": "1 file included",
+    "count_few": "{{count}} files included",
+    "count_other": "{{count}} files included",
+    "totalSize": "Total size: {{size}}",
+    "downloadButton": "Download",
+    "downloading": "Downloading...",
+    "loginRequired": "Log in to download"
+  },
   "comingSoon": {
     "title": "Coming Soon",
     "subtitle": "This page is under development."

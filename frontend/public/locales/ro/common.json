@@ -264,6 +264,16 @@
       "savedMessage": "Preferințele au fost salvate."
     }
   },
+  "listing_files": {
+    "title": "Fișiere incluse",
+    "count_one": "1 fișier inclus",
+    "count_few": "{{count}} fișiere incluse",
+    "count_other": "{{count}} fișiere incluse",
+    "totalSize": "Dimensiune totală: {{size}}",
+    "downloadButton": "Descarcă",
+    "downloading": "Se descarcă...",
+    "loginRequired": "Conectează-te pentru a descărca"
+  },
   "auth": {
     "forgotPassword": {
       "title": "Resetează parola",

@@ -8,11 +8,98 @@ import { ListingDescription } from "../components/ListingDescription";
 import { PricingCard } from "../components/PricingCard";
 import { SellerCard } from "../components/SellerCard";
 import { RelatedListings } from "../components/RelatedListings";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import { formatBytes } from "@core/utils/formatBytes";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@core/lib/auth";
+import { useNavigate } from "@core/lib/router";
+import { getAssetDownloadUrl } from "../services/listings";
+import type { ListingAsset } from "@app/types/listing";
+
+interface AssetFileListProps {
+  listingId: string;
+  assets: ListingAsset[];
+}
+
+function AssetFileList({ listingId, assets }: AssetFileListProps) {
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+
+  if (assets.length === 0) return null;
+
+  const totalBytes = assets.reduce((sum, a) => sum + a.fileSizeBytes, 0);
+
+  const handleDownload = async (assetId: string, filename: string) => {
+    if (!user) {
+      navigate("/autentificare");
+      return;
+    }
+    setDownloadingId(assetId);
+    try {
+      const url = getAssetDownloadUrl(listingId, assetId);
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("Asset download failed:", err);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  return (
+    <section className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+          {t("listing_files.title")}
+        </h2>
+        <span className="text-sm text-outline">
+          {t("listing_files.count", { count: assets.length })}
+          {" · "}
+          {t("listing_files.totalSize", { size: formatBytes(totalBytes) })}
+        </span>
+      </div>
+      <ul className="divide-y divide-surface-container-high rounded-xl border border-surface-container-high overflow-hidden">
+        {assets.map((asset) => {
+          const isDownloading = downloadingId === asset.id;
+          return (
+            <li key={asset.id} className="flex items-center gap-4 px-5 py-4 bg-surface-container-lowest hover:bg-surface-container transition-colors">
+              <span className="material-symbols-outlined text-primary text-[24px]">draft</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-on-surface truncate">{asset.originalFilename}</p>
+                <p className="text-xs text-outline mt-0.5">{formatBytes(asset.fileSizeBytes)} · {asset.contentType}</p>
+              </div>
+              <button
+                onClick={() => handleDownload(asset.id, asset.originalFilename)}
+                disabled={isDownloading}
+                className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 whitespace-nowrap"
+                aria-label={`${t("listing_files.downloadButton")} ${asset.originalFilename}`}
+              >
+                <span className="material-symbols-outlined text-[18px]">download</span>
+                {isDownloading ? t("listing_files.downloading") : t("listing_files.downloadButton")}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
 
 function PageLoader() {
   return (
@@ -174,6 +261,10 @@ export function ListingDetailPage() {
             features={[]}
             digitalSpecs={digitalSpecs}
           />
+
+          {isDigitalAsset && data.assets && data.assets.length > 0 && (
+            <AssetFileList listingId={data.id} assets={data.assets} />
+          )}
 
           <div className="pt-8 border-t border-surface-container-high text-xs text-outline flex items-center gap-4">
             <span>

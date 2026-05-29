@@ -148,4 +148,19 @@ export class AssetsRepository {
       .where("id", "=", listingId)
       .execute();
   }
+
+  /**
+   * Get an asset by ID that belongs to a specific listing
+   */
+  async getAssetByIdForListing(
+    assetId: string,
+    listingId: string
+  ): Promise<ListingAssetRow | undefined> {
+    return (await this.db
+      .selectFrom("listing_assets")
+      .selectAll()
+      .where("id", "=", assetId)
+      .where("listing_id", "=", listingId)
+      .executeTakeFirst()) as unknown as ListingAssetRow | undefined;
+  }
 }

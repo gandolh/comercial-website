@@ -174,3 +174,30 @@ export async function downloadAsset(
   );
   return response.data;
 }
+
+export interface ListingAssetMeta {
+  id: string;
+  original_filename: string;
+  file_size_bytes: number;
+  content_type: string;
+  position: number;
+}
+
+export async function fetchListingAssets(
+  listingId: string,
+): Promise<ListingAssetMeta[]> {
+  const response = await axiosInstance.get<ListingAssetMeta[]>(
+    `/listings/${listingId}/assets`,
+  );
+  return response.data;
+}
+
+/**
+ * Trigger a per-asset download by navigating to the stream endpoint.
+ * The browser will handle the file download via Content-Disposition header.
+ * Returns the direct URL so callers can open it in a new tab or use an anchor.
+ */
+export function getAssetDownloadUrl(listingId: string, assetId: string): string {
+  const base = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
+  return `${base}/listings/${listingId}/assets/${assetId}/download`;
+}
