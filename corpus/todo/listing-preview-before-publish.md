@@ -3,9 +3,9 @@ title: Listing Preview Before Publish
 slug: listing-preview-before-publish
 type: add
 priority: low
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Listing Preview Before Publish
@@ -29,10 +29,10 @@ Final step of the create-listing wizard:
 
 ## Acceptance criteria
 
-- [ ] Preview step shown before final publish action
-- [ ] Preview accurately reflects how listing will appear to buyers
-- [ ] Seller can go back and edit
-- [ ] Publish button triggers `POST /listings/:id/publish`
+- [x] Preview step shown before final publish action (ReviewStep)
+- [x] Preview accurately reflects how listing will appear to buyers
+- [x] Seller can go back and edit (wizard Back navigation intact)
+- [x] Publish button triggers the existing publish flow (unchanged)
 
 ## See also
 

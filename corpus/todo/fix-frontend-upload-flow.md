@@ -3,9 +3,9 @@ title: Fix Frontend Upload Flow (Presigned URL → Direct Multipart)
 slug: fix-frontend-upload-flow
 type: update
 priority: critical
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Fix Frontend Upload Flow
@@ -56,8 +56,8 @@ const res = await axiosInstance.post(`/users/me/avatar`, form);
 
 ## Acceptance criteria
 
-- [ ] Image upload in CreateListingPage uses multipart POST, no S3 PUT step
-- [ ] Asset upload in CreateListingPage uses multipart POST
-- [ ] Avatar upload in SettingsPage uses multipart POST to `/users/me/avatar`
-- [ ] Upload progress still shown if applicable
-- [ ] Error handling preserved (file too large, wrong type)
+- [x] Image upload uses multipart POST, no S3 PUT step
+- [x] Asset upload uses multipart POST
+- [x] Avatar upload uses multipart POST to `/users/me/avatar`
+- [x] Upload progress preserved (component layer unchanged)
+- [x] Error handling preserved (file too large, wrong type)

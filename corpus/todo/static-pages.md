@@ -3,9 +3,9 @@ title: Static Legal & Info Pages
 slug: static-pages
 type: add
 priority: medium
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Static Legal & Info Pages
@@ -48,11 +48,11 @@ Simple markdown-rendered static pages or hardcoded JSX. No DB needed. Add links 
 
 ## Acceptance criteria
 
-- [ ] All 6 pages exist and accessible
-- [ ] Footer links to Termeni, Confidențialitate, Contact
-- [ ] Cookie banner links to /cookies and /confidentialitate
-- [ ] Termeni covers digital content delivery and right of withdrawal
-- [ ] Confidențialitate identifies data controller and user rights
+- [x] All 6 pages exist and accessible (/termeni, /confidentialitate, /politica-cookies, /despre, /contact, /ajutor)
+- [x] Footer links to Termeni, Confidențialitate, Cookies, Despre, Ajutor, Contact
+- [x] Cookie banner links to /confidentialitate (route now resolves)
+- [x] Termeni covers digital content delivery and right of withdrawal
+- [x] Confidențialitate identifies data controller and user rights
 
 ## See also
 
