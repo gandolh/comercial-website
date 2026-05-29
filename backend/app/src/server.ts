@@ -19,6 +19,7 @@ import { registerMessagingRoutes } from "./modules/messaging.js";
 import { registerAnafRoutes } from "./modules/anaf.js";
 import { registerInvoicesRoutes } from "./modules/invoices.js";
 import { registerOrdersRoutes } from "./modules/orders.js";
+import { registerReviewsRoutes } from "./modules/reviews.js";
 import { runMigrations } from "@my-olx/core";
 import Database from "better-sqlite3";
 import path from "node:path";
@@ -63,6 +64,7 @@ async function main(): Promise<void> {
   registerAnafRoutes(app, ctx);
   registerInvoicesRoutes(app, ctx);
   registerOrdersRoutes(app, ctx);
+  registerReviewsRoutes(app, ctx);
 
   await app.listen({ host: config.host, port: config.port });
 }

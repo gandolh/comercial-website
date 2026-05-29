@@ -64,4 +64,8 @@ export interface ListingDetail {
   fileFormat?: string
   fileSizeBytes?: number
   downloadCount?: number
+  /** Average rating (null if no reviews). */
+  ratingAvg?: number | null
+  /** Total review count. */
+  ratingCount?: number
 }

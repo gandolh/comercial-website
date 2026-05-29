@@ -45,6 +45,8 @@ interface ListingDetailApi {
   file_size_bytes?: number;
   download_count?: number;
   assets?: ListingAssetApi[];
+  rating_avg?: number | null;
+  rating_count?: number;
 }
 
 export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
@@ -81,6 +83,8 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
       contentType: asset.content_type,
       position: asset.position,
     })),
+    ratingAvg: detail.rating_avg ?? null,
+    ratingCount: detail.rating_count ?? 0,
   };
 }
 

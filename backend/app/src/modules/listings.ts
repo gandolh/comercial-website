@@ -3,6 +3,7 @@ import { verifyToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
+import { ReviewsRepository } from "../repositories/reviews.repo.js";
 import {
   categoryLabel,
   imageUrl,
@@ -75,6 +76,7 @@ const SuggestQuerySchema = z.object({
 export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
   const repo = new ListingsRepository(ctx.db);
   const assetsRepo = new AssetsRepository(ctx.db);
+  const reviewsRepo = new ReviewsRepository(ctx.db);
   const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
@@ -270,7 +272,18 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const activeListingsCount = await repo.countActiveListings(listing.user_id);
     const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config);
 
-    const detail = toListingDetailResponse(listing, images, sellerSummary, ctx.config, assetResponses);
+    // Get review aggregate
+    const reviewAggregate = await reviewsRepo.getAggregate(id);
+
+    const detail = toListingDetailResponse(
+      listing,
+      images,
+      sellerSummary,
+      ctx.config,
+      assetResponses,
+      reviewAggregate.rating_avg,
+      reviewAggregate.rating_count
+    );
 
     return reply.send(detail);
   });

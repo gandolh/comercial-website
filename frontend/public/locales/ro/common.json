@@ -480,6 +480,29 @@
       "loadError": "Nu am putut încărca profilul de facturare."
     }
   },
+  "reviews": {
+    "title": "Recenzii cumpărători",
+    "noReviewsYet": "Nu există recenzii încă. Fii primul care lasă o recenzie!",
+    "reviewCount_one": "1 recenzie",
+    "reviewCount_few": "{{count}} recenzii",
+    "reviewCount_other": "{{count}} recenzii",
+    "anonymousBuyer": "Cumpărător anonim",
+    "yourReview": "Recenzia ta",
+    "form": {
+      "heading": "Lasă o recenzie",
+      "editHeading": "Editează recenzia ta",
+      "ratingLabel": "Notă (1–5 stele)",
+      "ratingRequired": "Te rugăm să selectezi o notă.",
+      "bodyLabel": "Comentariu (opțional)",
+      "bodyPlaceholder": "Spune-le altor cumpărători ce crezi despre acest activ digital...",
+      "submit": "Trimite recenzia",
+      "update": "Actualizează recenzia",
+      "edit": "Editează",
+      "delete": "Șterge recenzia",
+      "cancelEdit": "Anulează editarea",
+      "submitError": "Eroare la trimiterea recenziei. Încearcă din nou."
+    }
+  },
   "orders": {
     "status": {
       "pending": "În așteptare",

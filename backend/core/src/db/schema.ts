@@ -205,6 +205,18 @@ export interface OrdersTable {
   paid_at: string | null;
 }
 
+/** Reviews table: verified-purchase-gated buyer ratings (added in 20260621020000_reviews.sql). */
+export interface ReviewsTable {
+  id: Generated<string>;
+  listing_id: string;
+  buyer_user_id: string;
+  /** 1–5 star rating. */
+  rating: number;
+  body: string | null;
+  created_at: Generated<string>;
+  updated_at: Generated<string>;
+}
+
 export interface Database {
   users: UsersTable;
   listings: ListingsTable;
@@ -220,5 +232,6 @@ export interface Database {
   user_invoice_profiles: UserInvoiceProfilesTable;
   invoices: InvoicesTable;
   orders: OrdersTable;
+  reviews: ReviewsTable;
   _migrations: MigrationsTable;
 }

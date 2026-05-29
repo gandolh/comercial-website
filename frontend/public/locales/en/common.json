@@ -302,6 +302,29 @@
       "loadError": "Could not load billing profile."
     }
   },
+  "reviews": {
+    "title": "Buyer reviews",
+    "noReviewsYet": "No reviews yet. Be the first to leave a review!",
+    "reviewCount_one": "1 review",
+    "reviewCount_few": "{{count}} reviews",
+    "reviewCount_other": "{{count}} reviews",
+    "anonymousBuyer": "Anonymous buyer",
+    "yourReview": "Your review",
+    "form": {
+      "heading": "Leave a review",
+      "editHeading": "Edit your review",
+      "ratingLabel": "Rating (1–5 stars)",
+      "ratingRequired": "Please select a rating.",
+      "bodyLabel": "Comment (optional)",
+      "bodyPlaceholder": "Tell other buyers what you think about this digital asset...",
+      "submit": "Submit review",
+      "update": "Update review",
+      "edit": "Edit",
+      "delete": "Delete review",
+      "cancelEdit": "Cancel edit",
+      "submitError": "Error submitting review. Please try again."
+    }
+  },
   "orders": {
     "status": {
       "pending": "Pending",
