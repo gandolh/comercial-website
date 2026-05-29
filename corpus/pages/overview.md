@@ -48,8 +48,8 @@ No existing platform combines: Romanian language + RON pricing + e-Factura gener
 ## Open questions
 
 - Payment processing (Stripe? Romanian PSP like Netopia/TWISPAY?)
-- Buyer review/rating system
-- Creator payout flow
+- ~~Buyer review/rating system~~ — shipped 2026-05-29, verified-purchase gated. See [[reviews-ratings]].
+- Creator payout flow (payment-in exists; money-out to sellers still unbuilt)
 - Premium seller tier (higher listing limit)
 - e-Factura generator as platform feature
 

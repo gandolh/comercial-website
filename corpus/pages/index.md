@@ -55,12 +55,18 @@ The `corpus/todo/` backlog is now empty and removed — shipped work is document
 - [Accounts & Seller Profiles](features/accounts-and-profiles.md) — password-reset UI, bio/website/social, upload fix | product | 2026-05-29
 - [Listing Lifecycle UI](features/listing-lifecycle.md) — preview-before-publish, renewal & expiry UI | product | 2026-05-29
 - [Legal & Compliance](features/legal-and-compliance.md) — 6 static legal pages + GDPR cookie consent | product | 2026-05-29
+- [Expiry-Reminder Emails](features/expiry-reminders.md) — in-process 6h interval job; 3-day + expiry-day reminders, opt-out aware | product | 2026-05-29
+- [Reviews & Ratings](features/reviews-ratings.md) — 1–5 stars, verified-purchase gated, aggregate on listing detail | product | 2026-05-29
+- [Event-Template Bundles](features/bundles.md) — bundle-as-listing + bundle_items; purchase grants child downloads ("Pachet Nuntă") | product | 2026-05-29
+
+> Also shipped 2026-05-29: the **`invitatii` ("Invitații Digitale")** category for Romanian event
+> templates (nuntă, botez, cununie, logodnă, majorat, aniversări, sărbători). See [[digital-pivot-cleanup]] / [[business-rules]].
 
 ### Deferred follow-ups (not yet built)
 
 Carried over from the shipped work — the next backlog candidates:
 
-- **Expiry-reminder emails** (3 days before / on expiry) — needs a scheduler (cron or lazy-check). See [[notifications]].
+- **Bundle-builder wizard + bundle-price discount** — children are set via API only; no create-listing bundle step, no discount logic. See [[bundles]].
 - **Old category slugs** do not 404/redirect — they just have no listings. See [[digital-pivot-cleanup]].
 - **Profile "total downloads count"** not shown (only bio/website/social shipped). See [[accounts-and-profiles]].
 - **e-Factura XML** not validated against the official ANAF SDK; **real Stripe** path untested (no keys). See [[invoicing]], [[digital-asset-commerce]].

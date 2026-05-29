@@ -26,8 +26,8 @@ Transactional emails fire on two events; users can opt out. Originated from todo
 
 ## Open questions
 
-- **Expiry-reminder emails (3 days before / on expiry) are NOT implemented** — they need a scheduler
-  (cron or lazy-check on read) that the swarm did not build. This is the main outstanding follow-up.
+- **Expiry-reminder emails (3 days before / on expiry) shipped 2026-05-29** via an in-process interval
+  job — see [[expiry-reminders]]. (Was previously the main outstanding follow-up here.)
 - Email link base URL is read from `FRONTEND_BASE_URL` at module load (defaults to localhost:5173).
 
 ## See also
