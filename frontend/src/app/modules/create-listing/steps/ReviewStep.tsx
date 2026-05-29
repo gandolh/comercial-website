@@ -224,7 +224,6 @@ export function ReviewStep({
                 sellerName={draft.seller.displayName ?? ""}
                 title={draft.title}
                 priceRon={draft.priceRon}
-                location={draft.city}
                 viewCount={draft.viewCount}
               />
               <SellerCard seller={draft.seller} listingId={draft.id} />

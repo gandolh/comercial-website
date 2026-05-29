@@ -13,7 +13,6 @@ interface PricingCardProps {
   sellerName: string;
   title: string;
   priceRon: number | null;
-  location: string;
   viewCount: number;
   downloadCount?: number;
   isDigitalAsset?: boolean;
@@ -25,7 +24,6 @@ export function PricingCard({
   sellerName,
   title,
   priceRon,
-  location,
   viewCount,
   downloadCount = 0,
   isDigitalAsset = false,
@@ -130,24 +128,15 @@ export function PricingCard({
       />
 
       <div className="flex items-center justify-between pt-4 border-t border-surface-container-high">
-        <div className="flex items-center gap-2 text-outline text-sm">
-          {isDigitalAsset ? (
-            <>
-              <span className="material-symbols-outlined text-[18px]">
-                download
-              </span>
-              {t("listing.specs.downloads", { count: downloadCount })}
-            </>
-          ) : (
-            <>
-              <span className="material-symbols-outlined text-[18px]">
-                location_on
-              </span>
-              {location}
-            </>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-outline text-sm">
+        {isDigitalAsset && (
+          <div className="flex items-center gap-2 text-outline text-sm">
+            <span className="material-symbols-outlined text-[18px]">
+              download
+            </span>
+            {t("listing.specs.downloads", { count: downloadCount })}
+          </div>
+        )}
+        <div className="flex items-center gap-2 text-outline text-sm ml-auto">
           <span className="material-symbols-outlined text-[18px]">
             visibility
           </span>

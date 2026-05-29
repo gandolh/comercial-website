@@ -5,7 +5,6 @@ interface ListingCardResponse {
   id: string;
   title: string;
   price_ron: number | null;
-  city: string;
   category: string;
   cover_url: string | null;
   seller_verified: boolean;
@@ -100,7 +99,6 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
           "id",
           "title",
           "price_ron",
-          "city",
           "category",
           "active",
           "expires_at",
@@ -133,7 +131,6 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
         id: l.id,
         title: l.title,
         price_ron: l.price_ron,
-        city: l.city,
         category: l.category,
         cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id)!, ctx.config) : null,
         seller_verified: Boolean(sellerMap.get(l.user_id)),

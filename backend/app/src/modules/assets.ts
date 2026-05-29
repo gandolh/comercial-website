@@ -165,7 +165,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
       if (nextPosition === 0) {
         const ext = getFileExtension(originalFilename);
-        await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, undefined, undefined, ext, fileSizeBytes);
+        await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, ext, fileSizeBytes);
       }
 
       return reply.send(toAssetResponse(asset));

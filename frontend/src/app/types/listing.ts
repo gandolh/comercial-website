@@ -2,7 +2,6 @@ export interface ListingCard {
   id: string
   title: string
   priceRon: number | null
-  city: string
   category: string
   coverUrl: string | null
   sellerVerified: boolean
@@ -49,10 +48,8 @@ export interface ListingDetail {
   title: string
   description: string
   priceRon: number | null
-  isNegotiable: boolean
   category: string
   categoryLabel: string
-  city: string
   images: ListingImage[]
   assets: ListingAsset[]
   viewCount: number

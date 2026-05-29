@@ -38,7 +38,7 @@ export function CreateListingWizard({
         setStep("details");
       } else if (draft.assets.length === 0) {
         setStep("assets");
-      } else if (draft.priceRon === null && !draft.isNegotiable) {
+      } else if (draft.priceRon === null) {
         setStep("price");
       } else {
         setStep("review");
@@ -105,7 +105,6 @@ export function CreateListingWizard({
       payload: {
         title: data.title,
         description: data.description,
-        is_negotiable: data.isNegotiable,
       },
     });
     setStep("assets");
@@ -227,7 +226,6 @@ export function CreateListingWizard({
               initialData={{
                 title: draft?.title,
                 description: draft?.description,
-                isNegotiable: draft?.isNegotiable,
               }}
               onNext={handleDetailsNext}
               onBack={() => setStep("category")}

@@ -40,9 +40,7 @@ export interface ListingsTable {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: ColumnType<number, number | undefined, number>;
   category: string;
-  city: ColumnType<string, string | undefined, string>;
   active: ColumnType<number, number | undefined, number>;
   view_count: ColumnType<number, number | undefined, number>;
   expires_at: string;

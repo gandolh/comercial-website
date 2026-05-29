@@ -6,7 +6,6 @@ export interface ListingCardApi {
   id: string;
   title: string;
   price_ron: number | null;
-  city: string;
   category: string;
   cover_url: string | null;
   seller_verified: boolean;
@@ -27,7 +26,6 @@ export function mapListingCard(listing: ListingCardApi): ListingCard {
     id: listing.id,
     title: listing.title,
     priceRon: listing.price_ron,
-    city: listing.city,
     category: listing.category,
     coverUrl: listing.cover_url,
     sellerVerified: listing.seller_verified,

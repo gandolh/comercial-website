@@ -12,7 +12,6 @@ export type UpdateDraftPayload = Partial<{
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: boolean;
   category: string;
   active: boolean;
 }>;
@@ -26,7 +25,6 @@ export async function createDraft(category: string): Promise<ListingDraft> {
     title: "",
     description: "",
     price_ron: null,
-    is_negotiable: false,
     category,
     active: false,
   });

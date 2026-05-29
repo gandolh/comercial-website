@@ -98,7 +98,6 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const { listings, total } = await repo.search(
       query.q,
       query.category,
-      undefined,
       query.price_min,
       query.price_max,
       query.date as "24h" | "saptamana" | "oricand" | undefined,
@@ -176,9 +175,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       body.title,
       body.description,
       body.price_ron ?? null,
-      false,
       body.category,
-      "",
       body.active
     );
 
@@ -315,7 +312,6 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       body.title,
       body.description,
       body.price_ron,
-      undefined,
       body.category
     );
 

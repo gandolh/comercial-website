@@ -94,7 +94,7 @@ export function ListingGrid({
               </span>
               <h3 className="font-bold text-on-surface">{l.title}</h3>
               <p className="text-xs text-outline uppercase tracking-wider font-medium">
-                {l.city} • {formatRelativeTime(l.postedAt)}
+                {formatRelativeTime(l.postedAt)}
               </p>
               {l.sellerVerified && (
                 <span className="text-xs font-bold text-white bg-tertiary-container px-2 py-0.5 rounded-full self-start">

@@ -30,10 +30,8 @@ interface ListingDetailApi {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: boolean;
   category: string;
   category_label: string;
-  city: string;
   images: ListingImageApi[];
   view_count: number;
   posted_at: string;
@@ -56,10 +54,8 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
     title: detail.title,
     description: detail.description,
     priceRon: detail.price_ron,
-    isNegotiable: detail.is_negotiable,
     category: detail.category,
     categoryLabel: detail.category_label,
-    city: detail.city,
     images: detail.images,
     viewCount: detail.view_count,
     postedAt: detail.posted_at,
@@ -94,9 +90,7 @@ export interface UpdateListingRequest {
   title?: string;
   description?: string;
   price_ron?: number | null;
-  is_negotiable?: boolean;
   category?: string;
-  city?: string;
   active?: boolean;
 }
 
@@ -147,7 +141,6 @@ export async function fetchRelatedListings(id: string): Promise<ListingCard[]> {
       id: string;
       title: string;
       price_ron: number | null;
-      city: string;
       category: string;
       cover_url: string | null;
       seller_verified: boolean;

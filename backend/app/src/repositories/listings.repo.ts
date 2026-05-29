@@ -8,9 +8,7 @@ export interface ListingRow {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: number | boolean;
   category: string;
-  city: string;
   active: number | boolean;
   view_count: number;
   expires_at: string;
@@ -64,9 +62,7 @@ export class ListingsRepository {
     title: string,
     description: string,
     priceRon: number | null,
-    isNegotiable: boolean,
     category: string,
-    city: string,
     active: boolean
   ): Promise<ListingRow> {
     const expiresAt = new Date();
@@ -79,9 +75,7 @@ export class ListingsRepository {
         title,
         description,
         price_ron: priceRon,
-        is_negotiable: isNegotiable ? 1 : 0,
         category,
-        city,
         active: active ? 1 : 0,
         expires_at: expiresAt.toISOString(),
       })
@@ -106,9 +100,7 @@ export class ListingsRepository {
     title?: string,
     description?: string,
     priceRon?: number | null,
-    isNegotiable?: boolean,
     category?: string,
-    city?: string,
     fileFormat?: string,
     fileSizeBytes?: number
   ): Promise<ListingRow> {
@@ -116,9 +108,7 @@ export class ListingsRepository {
     if (title !== undefined) updates.title = title;
     if (description !== undefined) updates.description = description;
     if (priceRon !== undefined) updates.price_ron = priceRon;
-    if (isNegotiable !== undefined) updates.is_negotiable = isNegotiable ? 1 : 0;
     if (category !== undefined) updates.category = category;
-    if (city !== undefined) updates.city = city;
     if (fileFormat !== undefined) updates.file_format = fileFormat;
     if (fileSizeBytes !== undefined) updates.file_size_bytes = fileSizeBytes;
 
@@ -185,7 +175,6 @@ export class ListingsRepository {
   async search(
     q?: string,
     category?: string,
-    city?: string,
     priceMin?: number,
     priceMax?: number,
     dateFilter?: "24h" | "saptamana" | "oricand",
