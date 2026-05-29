@@ -3,9 +3,9 @@ title: Download All Assets (Multi-file Listings)
 slug: download-all-assets
 type: update
 priority: medium
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Download All Assets (Multi-file Listings)
@@ -46,11 +46,11 @@ Start with Option A (per-asset endpoint). Option B can be added later as "Downlo
 
 ## Acceptance criteria
 
-- [ ] Each asset in a listing has its own download URL
-- [ ] Download is gated (auth required)
-- [ ] Download count incremented per download event
-- [ ] File list shown on listing detail page
-- [ ] Existing `/listings/:id/download` still works (position=0 backward compat)
+- [x] Each asset in a listing has its own download URL
+- [x] Download is gated (auth required)
+- [x] Download count incremented per download event
+- [x] File list shown on listing detail page
+- [x] Existing `/listings/:id/download` still works (position=0 backward compat)
 
 ## See also
 

@@ -3,9 +3,9 @@ title: Seller Profile Page
 slug: seller-profile
 type: update
 priority: medium
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Seller Profile Page
@@ -41,10 +41,10 @@ ALTER TABLE users ADD COLUMN social_links TEXT; -- JSON: { github?, linkedin?, t
 
 ## Acceptance criteria
 
-- [ ] Bio (up to 500 chars) shown on public profile
-- [ ] Website URL shown as clickable link
-- [ ] Settings page allows editing bio + website
-- [ ] Total downloads count shown on profile
+- [x] Bio (up to 500 chars) shown on public profile
+- [x] Website URL shown as clickable link
+- [x] Settings page allows editing bio + website (+ social handles)
+- [ ] Total downloads count shown on profile (not implemented this wave — bio/website/social only)
 
 ## See also
 

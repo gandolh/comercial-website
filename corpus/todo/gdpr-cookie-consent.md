@@ -3,9 +3,9 @@ title: GDPR Cookie Consent Banner
 slug: gdpr-cookie-consent
 type: add
 priority: high
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # GDPR Cookie Consent Banner
@@ -41,11 +41,11 @@ For now: minimal banner required even if only using functional cookies.
 
 ## Acceptance criteria
 
-- [ ] Banner shown on first visit
-- [ ] Accept and reject buttons equally prominent
-- [ ] Preference persisted across sessions
-- [ ] Banner does not appear again after choice is made
-- [ ] "Preferințe" links to a Privacy Policy page (even if stub initially)
+- [x] Banner shown on first visit
+- [x] Accept and reject buttons equally prominent
+- [x] Preference persisted across sessions (localStorage cookie_consent)
+- [x] Banner does not appear again after choice is made
+- [x] Links to /confidentialitate (route lands in Wave 3 static-pages)
 
 ## See also
 

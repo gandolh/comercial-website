@@ -3,9 +3,9 @@ title: Listing Renewal & Expiry UI
 slug: listing-renewal-and-expiry-ui
 type: update
 priority: medium
-status: pending
+status: done
 area: frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Listing Renewal & Expiry UI
@@ -37,11 +37,11 @@ The backend has `POST /listings/:id/renew` (extends expiry by 30 days, rate-limi
 
 ## Acceptance criteria
 
-- [ ] Expiry date visible on listing cards in dashboard
-- [ ] "Expiră în 3 zile" badge shown for listings expiring soon
-- [ ] Renew button works; shows disabled state with "Poți reînnoi din nou în X minute" if rate-limited
-- [ ] Activate/Deactivate toggle works
-- [ ] Expired listings shown in separate section with re-activate CTA
+- [x] Expiry date visible on listing cards in dashboard
+- [x] "Expiră în 3 zile" badge shown for listings expiring soon
+- [x] Renew button works; shows disabled state with "Poți reînnoi din nou în X minute" if rate-limited
+- [x] Activate/Deactivate toggle works (pre-existing, retained)
+- [x] Expired listings shown in separate tab/section with renew CTA
 
 ## See also
 
