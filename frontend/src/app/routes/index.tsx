@@ -24,6 +24,7 @@ import { publicProfileRoutes } from "@app/modules/public-profile/routes";
 import { messagingRoutes } from "@app/modules/messaging/routes";
 import { legalRoutes } from "@app/modules/legal/routes";
 import { invoicesRoutes } from "@app/modules/invoices/routes";
+import { ordersRoutes } from "@app/modules/orders/routes";
 
 const mainModuleRoutes: ModuleRoute[] = [
   ...homeRoutes,
@@ -38,6 +39,7 @@ const mainModuleRoutes: ModuleRoute[] = [
   ...messagingRoutes,
   ...legalRoutes,
   ...invoicesRoutes,
+  ...ordersRoutes,
 ];
 
 const fallbackRoute: ModuleRoute = {

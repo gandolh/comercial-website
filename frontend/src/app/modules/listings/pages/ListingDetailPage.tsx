@@ -8,7 +8,7 @@ import { ListingDescription } from "../components/ListingDescription";
 import { PricingCard } from "../components/PricingCard";
 import { SellerCard } from "../components/SellerCard";
 import { RelatedListings } from "../components/RelatedListings";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import { formatBytes } from "@core/utils/formatBytes";
@@ -17,13 +17,19 @@ import { useAuth } from "@core/lib/auth";
 import { useNavigate } from "@core/lib/router";
 import { getAssetDownloadUrl } from "../services/listings";
 import type { ListingAsset } from "@app/types/listing";
+import { BuyButton } from "@app/modules/orders/components/BuyButton";
+import { ordersService } from "@app/modules/orders/services/orders.service";
 
 interface AssetFileListProps {
   listingId: string;
   assets: ListingAsset[];
+  /** If true, the listing is paid and the user must have an order to download. */
+  isPaidListing?: boolean;
+  /** If true, the current user has a paid order for this listing. */
+  canDownload?: boolean;
 }
 
-function AssetFileList({ listingId, assets }: AssetFileListProps) {
+function AssetFileList({ listingId, assets, isPaidListing = false, canDownload = true }: AssetFileListProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -36,6 +42,10 @@ function AssetFileList({ listingId, assets }: AssetFileListProps) {
   const handleDownload = async (assetId: string, filename: string) => {
     if (!user) {
       navigate("/autentificare");
+      return;
+    }
+    // For paid listings that the user hasn't purchased, block download
+    if (isPaidListing && !canDownload) {
       return;
     }
     setDownloadingId(assetId);
@@ -77,6 +87,7 @@ function AssetFileList({ listingId, assets }: AssetFileListProps) {
       <ul className="divide-y divide-surface-container-high rounded-xl border border-surface-container-high overflow-hidden">
         {assets.map((asset) => {
           const isDownloading = downloadingId === asset.id;
+          const downloadBlocked = isPaidListing && !canDownload;
           return (
             <li key={asset.id} className="flex items-center gap-4 px-5 py-4 bg-surface-container-lowest hover:bg-surface-container transition-colors">
               <span className="material-symbols-outlined text-primary text-[24px]">draft</span>
@@ -84,15 +95,22 @@ function AssetFileList({ listingId, assets }: AssetFileListProps) {
                 <p className="text-sm font-medium text-on-surface truncate">{asset.originalFilename}</p>
                 <p className="text-xs text-outline mt-0.5">{formatBytes(asset.fileSizeBytes)} · {asset.contentType}</p>
               </div>
-              <button
-                onClick={() => handleDownload(asset.id, asset.originalFilename)}
-                disabled={isDownloading}
-                className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 whitespace-nowrap"
-                aria-label={`${t("listing_files.downloadButton")} ${asset.originalFilename}`}
-              >
-                <span className="material-symbols-outlined text-[18px]">download</span>
-                {isDownloading ? t("listing_files.downloading") : t("listing_files.downloadButton")}
-              </button>
+              {downloadBlocked ? (
+                <span className="flex items-center gap-1 text-outline text-sm px-4 py-2 rounded-full border border-outline-variant whitespace-nowrap">
+                  <span className="material-symbols-outlined text-[16px]">lock</span>
+                  {t("orders.download.lockedButton")}
+                </span>
+              ) : (
+                <button
+                  onClick={() => handleDownload(asset.id, asset.originalFilename)}
+                  disabled={isDownloading}
+                  className="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 active:scale-95 transition-all disabled:opacity-60 whitespace-nowrap"
+                  aria-label={`${t("listing_files.downloadButton")} ${asset.originalFilename}`}
+                >
+                  <span className="material-symbols-outlined text-[18px]">download</span>
+                  {isDownloading ? t("listing_files.downloading") : t("listing_files.downloadButton")}
+                </button>
+              )}
             </li>
           );
         })}
@@ -127,6 +145,24 @@ export function ListingDetailPage() {
   const { data, isFetching, isError, refetch } = useListingDetail(id);
   const relatedListings = useRelatedListings(id);
   const { t } = useTranslation();
+  const { user } = useAuth();
+
+  // Track whether the authenticated buyer has a paid order for this listing.
+  const [hasPaidOrder, setHasPaidOrder] = useState(false);
+
+  useEffect(() => {
+    if (!user || !id) return;
+    let cancelled = false;
+    ordersService.listOrders().then((orders) => {
+      if (!cancelled) {
+        const paid = orders.some(
+          (o) => o.listing_id === id && o.status === "paid"
+        );
+        setHasPaidOrder(paid);
+      }
+    }).catch(() => {/* silent — not logged in or network error */});
+    return () => { cancelled = true; };
+  }, [user, id]);
 
   const isExpired = useMemo(() => {
     if (!data?.expiresAt) return false;
@@ -136,6 +172,18 @@ export function ListingDetailPage() {
   const isDigitalAsset = useMemo(() => {
     return !!data?.fileFormat;
   }, [data?.fileFormat]);
+
+  // A listing is "paid" if price_ron is set and > 0.
+  const isPaidListing = useMemo(() => {
+    return data?.priceRon != null && data.priceRon > 0;
+  }, [data?.priceRon]);
+
+  // Buyer can download if: listing is free, OR they own it, OR they have a paid order.
+  const canDownload = useMemo(() => {
+    if (!isPaidListing) return true; // free listing
+    if (user?.id === data?.seller?.id) return true; // seller owns it
+    return hasPaidOrder;
+  }, [isPaidListing, user?.id, data?.seller?.id, hasPaidOrder]);
 
   const licenseLabels: Record<string, string> = {
     personal: "Personală",
@@ -262,8 +310,32 @@ export function ListingDetailPage() {
             digitalSpecs={digitalSpecs}
           />
 
+          {isDigitalAsset && isPaidListing && !canDownload && (
+            <section className="space-y-3">
+              <div className="bg-surface-container rounded-2xl p-6 space-y-4">
+                <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+                  {t("orders.download.paywall.title")}
+                </h2>
+                <p className="text-sm text-on-surface-variant">
+                  {t("orders.download.paywall.body")}
+                </p>
+                <BuyButton
+                  listingId={data.id}
+                  priceRon={data.priceRon!}
+                  hasPaidOrder={hasPaidOrder}
+                  onAlreadyPaid={() => setHasPaidOrder(true)}
+                />
+              </div>
+            </section>
+          )}
+
           {isDigitalAsset && data.assets && data.assets.length > 0 && (
-            <AssetFileList listingId={data.id} assets={data.assets} />
+            <AssetFileList
+              listingId={data.id}
+              assets={data.assets}
+              isPaidListing={isPaidListing}
+              canDownload={canDownload}
+            />
           )}
 
           <div className="pt-8 border-t border-surface-container-high text-xs text-outline flex items-center gap-4">
