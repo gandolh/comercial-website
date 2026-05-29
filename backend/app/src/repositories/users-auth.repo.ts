@@ -18,9 +18,22 @@ export type UserRow = {
   phone: string | null;
   phone_verified: number;
   email_verified: number;
+  bio: string | null;
+  website: string | null;
+  social_twitter: string | null;
+  social_instagram: string | null;
+  social_github: string | null;
   created_at: string;
   updated_at: string;
 };
+
+export interface UpdateProfileParams {
+  bio?: string | null;
+  website?: string | null;
+  social_twitter?: string | null;
+  social_instagram?: string | null;
+  social_github?: string | null;
+}
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -193,5 +206,25 @@ export class UsersAuthRepository {
       .set({ phone_verified: 1, phone })
       .where("id", "=", userId)
       .execute();
+  }
+
+  async updateProfileFields(userId: string, params: UpdateProfileParams): Promise<UserRow | undefined> {
+    const updates: Record<string, unknown> = {};
+    if ("bio" in params) updates.bio = params.bio ?? null;
+    if ("website" in params) updates.website = params.website ?? null;
+    if ("social_twitter" in params) updates.social_twitter = params.social_twitter ?? null;
+    if ("social_instagram" in params) updates.social_instagram = params.social_instagram ?? null;
+    if ("social_github" in params) updates.social_github = params.social_github ?? null;
+
+    if (Object.keys(updates).length === 0) {
+      return this.findById(userId);
+    }
+
+    return this.db
+      .updateTable("users")
+      .set(updates)
+      .where("id", "=", userId)
+      .returningAll()
+      .executeTakeFirst() as Promise<UserRow | undefined>;
   }
 }

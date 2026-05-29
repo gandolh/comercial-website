@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@core/lib/auth";
 import { Button } from "@core/components/ui";
 import PhoneVerifyModal from "../../auth/components/PhoneVerifyModal";
+import { ProfileSection } from "../components/ProfileSection";
 
 export function SettingsPage() {
   const { user } = useAuth();
@@ -56,6 +57,9 @@ export function SettingsPage() {
                 </div>
               </div>
             </section>
+
+            {/* Section: Seller Profile (bio, website, social) */}
+            <ProfileSection />
 
             {/* Section: Phone Verification */}
             <section className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant shadow-sm space-y-6">
