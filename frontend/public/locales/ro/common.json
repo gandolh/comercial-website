@@ -197,7 +197,15 @@
     "expiringSoon": {
       "title": "Anunțuri care expiră curând",
       "expiresIn": "Expiră în",
-      "renewAction": "Reînnoiește acum"
+      "expiresInDays": "Expiră în {{count}} zile",
+      "expiresInDays_0": "Expiră azi",
+      "renewAction": "Reînnoiește acum",
+      "banner": "Ai {{count}} anunț care expiră în curând. Reînnoiește-l înainte să dispară.",
+      "bannerAction": "Vezi anunțurile"
+    },
+    "renew": {
+      "rateLimited": "Reînnoire posibilă în {{minutes}} min",
+      "rateLimitedToast": "Poți reînnoi din nou în {{minutes}} minute"
     },
     "messages": {
       "recentTitle": "Conversații recente",
@@ -214,8 +222,11 @@
       "error": "Nu am putut încărca anunțurile.",
       "postedAt": "Postat pe",
       "expiresIn": "Expiră în",
+      "expiresInDays": "Expiră în {{count}} zile",
       "expired": "Expirat",
-      "deleteConfirm": "Ești sigur că vrei să ștergi acest anunț?",
+      "expiredBanner": "Anunțurile expirate nu mai sunt vizibile cumpărătorilor. Reînnoiește-le pentru a le reactiva.",
+      "deleteConfirm": "Ești sigur că vrei să ștergi acest anunț? Această acțiune nu poate fi anulată.",
+      "deleteTitle": "Șterge anunțul",
       "tabs": {
         "active": "Active",
         "inactive": "Inactive",

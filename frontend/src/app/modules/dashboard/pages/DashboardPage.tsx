@@ -18,7 +18,7 @@ export function DashboardPage() {
     isError: statsError,
     refetch: refetchStats,
   } = useMyStats();
-  const { data: expiringListings } = useMyListings({ active: true });
+  const { data: activeListings } = useMyListings({ active: true });
 
   const displayName =
     user?.display_name || user?.email?.split("@")[0] || "Utilizator";
@@ -53,13 +53,16 @@ export function DashboardPage() {
     );
   }
 
+  // Filter listings expiring within 7 days for the ExpiringSection
   const filteredExpiring =
-    expiringListings?.listings?.filter((l: { expiresAt: string }) => {
+    activeListings?.listings?.filter((l: { expiresAt: string }) => {
       const expiresAt = new Date(l.expiresAt);
       const now = new Date();
       const diff = expiresAt.getTime() - now.getTime();
       return diff > 0 && diff < 7 * 24 * 60 * 60 * 1000;
     }) || [];
+
+  const expiringSoonCount = stats?.listings.expiringSoon ?? 0;
 
   return (
     <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12 space-y-12">
@@ -75,6 +78,30 @@ export function DashboardPage() {
           {t("dashboard.subtitle", "Iată ce se întâmplă cu contul tău astăzi.")}
         </p>
       </header>
+
+      {/* Expiring-soon warning banner */}
+      {expiringSoonCount > 0 && (
+        <div
+          role="alert"
+          className="flex items-center gap-3 bg-error-container text-on-error-container px-5 py-4 rounded-2xl"
+        >
+          <span className="material-symbols-outlined text-2xl flex-shrink-0" aria-hidden="true">
+            warning
+          </span>
+          <p className="font-semibold">
+            {t("dashboard.expiringSoon.banner", {
+              count: expiringSoonCount,
+              defaultValue: `Ai ${expiringSoonCount} anunț care expiră în curând. Reînnoiește-l înainte să dispară.`,
+            })}
+          </p>
+          <Link
+            to="/cont/anunturi"
+            className="ml-auto flex-shrink-0 underline font-bold hover:opacity-80 transition-opacity"
+          >
+            {t("dashboard.expiringSoon.bannerAction", "Vezi anunțurile")}
+          </Link>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

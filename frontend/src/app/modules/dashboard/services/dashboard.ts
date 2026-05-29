@@ -1,4 +1,5 @@
 import { axiosInstance } from '@core/lib/axios'
+import type { AxiosError } from 'axios'
 
 export interface ListingStats {
   active: number
@@ -59,11 +60,38 @@ export async function fetchMyStats(): Promise<MyStatsResponse> {
   }
 }
 
-export async function fetchMyListings(params: { 
-  active?: boolean; 
-  expired?: boolean; 
-  page?: number 
+export async function fetchMyListings(params: {
+  active?: boolean;
+  expired?: boolean;
+  page?: number
 }) {
   const { data } = await axiosInstance.get('/me/listings', { params })
   return data
+}
+
+export interface RenewListingResult {
+  success: true
+  retryAfterSeconds?: never
+}
+
+export interface RenewListingRateLimited {
+  success: false
+  retryAfterSeconds: number
+}
+
+export type RenewResult = RenewListingResult | RenewListingRateLimited
+
+export async function renewListingDashboard(id: string): Promise<RenewResult> {
+  try {
+    await axiosInstance.post(`/listings/${id}/renew`)
+    return { success: true }
+  } catch (err) {
+    const axiosErr = err as AxiosError<{ retry_after_seconds?: number }>
+    if (axiosErr.response?.status === 429) {
+      const retryAfterSeconds =
+        axiosErr.response.data?.retry_after_seconds ?? 3600
+      return { success: false, retryAfterSeconds }
+    }
+    throw err
+  }
 }

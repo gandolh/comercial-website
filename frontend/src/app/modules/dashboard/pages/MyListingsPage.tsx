@@ -2,14 +2,54 @@ import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useMyListings } from "../hooks/useMyListings";
 import { useListingMutations } from "@app/modules/listings/hooks/useListingMutations";
-import { formatDistanceToNow, format } from "date-fns";
+import { RenewButton } from "@app/modules/listings/components/RenewButton";
+import { differenceInDays, format, formatDistanceToNow } from "date-fns";
 import { ro } from "date-fns/locale";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
-import { Tabs, ConfirmDialog } from "@core/components/ui";
+import { Tabs, ConfirmDialog, Badge } from "@core/components/ui";
 import { Link } from "@core/lib/router";
 import type { ListingCard as ListingCardType } from "@app/types/listing";
 
 type TabType = "active" | "inactive" | "expired";
+
+function ExpiryInfo({
+  expiresAt,
+  t,
+}: {
+  expiresAt: string;
+  t: (key: string, fallback?: string) => string;
+}) {
+  const expiryDate = new Date(expiresAt);
+  const now = new Date();
+  const isExpired = expiryDate <= now;
+  const daysLeft = differenceInDays(expiryDate, now);
+
+  if (isExpired) {
+    return (
+      <Badge variant="error" icon="schedule_send">
+        {t("dashboard.listings.expired", "Expirat")}
+      </Badge>
+    );
+  }
+
+  if (daysLeft <= 3) {
+    return (
+      <Badge variant="error" icon="warning">
+        {t("dashboard.listings.expiresInDays", `Expiră în ${daysLeft} zile`)}
+      </Badge>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1 text-sm text-on-surface-variant">
+      <span className="material-symbols-outlined text-sm" aria-hidden="true">
+        timer
+      </span>
+      {t("dashboard.listings.expiresIn", "Expiră în")}{" "}
+      {formatDistanceToNow(expiryDate, { locale: ro })}
+    </div>
+  );
+}
 
 export function MyListingsPage() {
   const { t } = useTranslation();
@@ -24,7 +64,7 @@ export function MyListingsPage() {
     page,
   });
 
-  const { renew, deactivate, activate, remove } = useListingMutations();
+  const { deactivate, activate, remove } = useListingMutations();
 
   const handleAction = async (action: () => Promise<unknown>) => {
     try {
@@ -90,6 +130,25 @@ export function MyListingsPage() {
         <></>
       </Tabs>
 
+      {/* Expired-tab banner */}
+      {activeTab === "expired" && (data?.listings?.length ?? 0) > 0 && (
+        <div
+          role="status"
+          className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-5 py-4 rounded-2xl text-sm text-on-surface-variant"
+        >
+          <span
+            className="material-symbols-outlined text-xl flex-shrink-0"
+            aria-hidden="true"
+          >
+            info
+          </span>
+          {t(
+            "dashboard.listings.expiredBanner",
+            "Anunțurile expirate nu mai sunt vizibile cumpărătorilor. Reînnoiește-le pentru a le reactiva.",
+          )}
+        </div>
+      )}
+
       {isLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -137,136 +196,140 @@ export function MyListingsPage() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {data?.listings.map((listing: ListingCardType) => (
-            <div
-              key={listing.id}
-              className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow"
-            >
-              {/* Image */}
-              <div className="w-full md:w-48 h-32 bg-surface-container-low rounded-xl overflow-hidden flex-shrink-0">
-                {listing.coverUrl ? (
-                  <img
-                    src={listing.coverUrl}
-                    alt={listing.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-outline">
-                    <span className="material-symbols-outlined text-4xl">
-                      image
-                    </span>
-                  </div>
-                )}
-              </div>
+          {data?.listings.map((listing: ListingCardType) => {
+            const expiryDate = new Date(listing.expiresAt);
+            const isExpired = expiryDate <= new Date();
+            const daysLeft = differenceInDays(expiryDate, new Date());
+            const isExpiringSoon =
+              !isExpired && daysLeft <= 7 && expiryDate.getTime() - now < 7 * 24 * 60 * 60 * 1000;
 
-              {/* Info */}
-              <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
-                    <span className="bg-surface-container-high px-2 py-0.5 rounded uppercase">
-                      {listing.category}
-                    </span>
-                    <span>•</span>
-                    <span>{listing.city}</span>
+            return (
+              <div
+                key={listing.id}
+                className={[
+                  "bg-surface-container-lowest border rounded-2xl p-4 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow",
+                  isExpired
+                    ? "border-error/40 bg-error-container/5"
+                    : daysLeft <= 3
+                      ? "border-error/30"
+                      : "border-outline-variant",
+                ].join(" ")}
+              >
+                {/* Image */}
+                <div className="w-full md:w-48 h-32 bg-surface-container-low rounded-xl overflow-hidden flex-shrink-0">
+                  {listing.coverUrl ? (
+                    <img
+                      src={listing.coverUrl}
+                      alt={listing.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-outline">
+                      <span className="material-symbols-outlined text-4xl">
+                        image
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap text-xs text-on-surface-variant font-medium">
+                      <span className="bg-surface-container-high px-2 py-0.5 rounded uppercase">
+                        {listing.category}
+                      </span>
+                      <span>•</span>
+                      <span>{listing.city}</span>
+                    </div>
+                    <h3 className="text-lg font-bold text-on-surface truncate">
+                      {listing.title}
+                    </h3>
+                    <div className="text-xl font-black text-primary">
+                      {listing.priceRon
+                        ? `${listing.priceRon} RON`
+                        : "Preț negociabil"}
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-on-surface truncate">
-                    {listing.title}
-                  </h3>
-                  <div className="text-xl font-black text-primary">
-                    {listing.priceRon
-                      ? `${listing.priceRon} RON`
-                      : "Preț negociabil"}
+
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant mt-4 md:mt-0">
+                    <div className="flex items-center gap-1">
+                      <span
+                        className="material-symbols-outlined text-sm"
+                        aria-hidden="true"
+                      >
+                        calendar_today
+                      </span>
+                      {t("dashboard.listings.postedAt", "Postat pe")}{" "}
+                      {format(new Date(listing.postedAt), "dd.MM.yyyy")}
+                    </div>
+                    <ExpiryInfo expiresAt={listing.expiresAt} t={t as (key: string, fallback?: string) => string} />
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-on-surface-variant mt-4 md:mt-0">
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">
-                      calendar_today
-                    </span>
-                    {t("dashboard.listings.postedAt", "Postat pe")}{" "}
-                    {format(new Date(listing.postedAt), "dd.MM.yyyy")}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">
-                      timer
-                    </span>
-                    {new Date(listing.expiresAt) > new Date()
-                      ? `${t("dashboard.listings.expiresIn", "Expiră în")} ${formatDistanceToNow(new Date(listing.expiresAt), { locale: ro })}`
-                      : t("dashboard.listings.expired", "Expirat")}
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex flex-row md:flex-col gap-2 justify-center">
-                <Link
-                  to={`/anunturi/${listing.id}/editeaza`}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-colors"
-                >
-                  <span className="material-symbols-outlined text-sm">
-                    edit
-                  </span>
-                  {t("listing.actions.edit")}
-                </Link>
-
-                {activeTab === "active" && (
-                  <button
-                    onClick={() =>
-                      handleAction(() => deactivate.mutateAsync(listing.id))
-                    }
+                {/* Actions */}
+                <div className="flex flex-row md:flex-col gap-2 justify-center flex-wrap">
+                  <Link
+                    to={`/anunturi/${listing.id}/editeaza`}
                     className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm">
-                      pause
+                      edit
                     </span>
-                    {t("listing.actions.deactivate")}
-                  </button>
-                )}
+                    {t("listing.actions.edit")}
+                  </Link>
 
-                {activeTab === "inactive" && (
+                  {activeTab === "active" && (
+                    <button
+                      onClick={() =>
+                        handleAction(() => deactivate.mutateAsync(listing.id))
+                      }
+                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm">
+                        pause
+                      </span>
+                      {t("listing.actions.deactivate")}
+                    </button>
+                  )}
+
+                  {activeTab === "inactive" && (
+                    <button
+                      onClick={() =>
+                        handleAction(() => activate.mutateAsync(listing.id))
+                      }
+                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm">
+                        play_arrow
+                      </span>
+                      {t("listing.actions.activate")}
+                    </button>
+                  )}
+
+                  {/* RenewButton shown for expired tab or expiring-soon active listings */}
+                  {(activeTab === "expired" || isExpiringSoon) && (
+                    <RenewButton
+                      listingId={listing.id}
+                      expiresAt={listing.expiresAt}
+                      alwaysShow={activeTab === "expired"}
+                      className="flex-1 md:flex-none rounded-xl"
+                    />
+                  )}
+
                   <button
-                    onClick={() =>
-                      handleAction(() => activate.mutateAsync(listing.id))
-                    }
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-colors"
+                    onClick={() => setDeleteTarget(listing.id)}
+                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-error hover:bg-error/10 rounded-xl font-bold transition-colors"
                   >
                     <span className="material-symbols-outlined text-sm">
-                      play_arrow
+                      delete
                     </span>
-                    {t("listing.actions.activate")}
+                    {t("listing.actions.delete")}
                   </button>
-                )}
-
-                {(activeTab === "expired" ||
-                  (activeTab === "active" &&
-                    new Date(listing.expiresAt).getTime() - now <
-                      7 * 24 * 60 * 60 * 1000)) && (
-                  <button
-                    onClick={() =>
-                      handleAction(() => renew.mutateAsync(listing.id))
-                    }
-                    className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-sm">
-                      refresh
-                    </span>
-                    {t("listing.actions.renew")}
-                  </button>
-                )}
-
-                <button
-                  onClick={() => setDeleteTarget(listing.id)}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-error hover:bg-error/10 rounded-xl font-bold transition-colors"
-                >
-                  <span className="material-symbols-outlined text-sm">
-                    delete
-                  </span>
-                  {t("listing.actions.delete")}
-                </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
