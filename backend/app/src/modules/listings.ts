@@ -267,8 +267,11 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const seller = await repo.getSeller(listing.user_id);
     if (!seller) throw AppError.notFound();
 
-    const activeListingsCount = await repo.countActiveListings(listing.user_id);
-    const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config);
+    const [activeListingsCount, totalDownloads] = await Promise.all([
+      repo.countActiveListings(listing.user_id),
+      repo.getTotalDownloadsForUser(listing.user_id),
+    ]);
+    const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config, totalDownloads);
 
     const detail = toListingDetailResponse(listing, images, sellerSummary, ctx.config, assetResponses);
 

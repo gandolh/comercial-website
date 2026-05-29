@@ -4,7 +4,7 @@ import type { PublicUserResponse } from "../services/profile";
 import { ListingCard } from "@app/modules/home/components/ListingCard";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
-import { ShieldCheck, Calendar, Package, Globe, AtSign, Link2, ExternalLink } from "lucide-react";
+import { ShieldCheck, Calendar, Package, Download, Globe, AtSign, Link2, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 /** Extended profile type including seller profile fields added in migration 20260615010000. */
@@ -14,6 +14,7 @@ interface SellerProfile extends PublicUserResponse {
   social_twitter: string | null;
   social_instagram: string | null;
   social_github: string | null;
+  total_downloads: number;
 }
 
 export default function PublicProfilePage() {
@@ -100,6 +101,10 @@ export default function PublicProfilePage() {
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5" />
                 <span>{profile.active_listings_count} {t("seller.activeListings")}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Download className="w-5 h-5" />
+                <span>{(profile.total_downloads ?? 0)} {t("seller.totalDownloads")}</span>
               </div>
             </div>
 

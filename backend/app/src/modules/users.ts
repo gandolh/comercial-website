@@ -73,6 +73,7 @@ interface PublicUserResponse {
   phone_verified: boolean;
   member_since: string;
   active_listings_count: number;
+  total_downloads: number;
   bio: string | null;
   website: string | null;
   social_twitter: string | null;
@@ -466,16 +467,26 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       throw AppError.notFound();
     }
 
-    // Count active, non-expired listings
-    const listingsResult = await ctx.db
-      .selectFrom("listings")
-      .select(ctx.db.fn.count("id").as("count"))
-      .where("user_id", "=", id)
-      .where(sql<SqlBool>`active = 1`)
-      .where(sql<SqlBool>`expires_at > datetime('now')`)
-      .executeTakeFirst();
+    // Count active, non-expired listings and sum download_count
+    const [listingsResult, downloadsResult] = await Promise.all([
+      ctx.db
+        .selectFrom("listings")
+        .select(ctx.db.fn.count("id").as("count"))
+        .where("user_id", "=", id)
+        .where(sql<SqlBool>`active = 1`)
+        .where(sql<SqlBool>`expires_at > datetime('now')`)
+        .executeTakeFirst(),
+      ctx.db
+        .selectFrom("listings")
+        .select(sql`COALESCE(SUM(download_count), 0)`.as("total"))
+        .where("user_id", "=", id)
+        .where(sql<SqlBool>`active = 1`)
+        .where(sql<SqlBool>`expires_at > datetime('now')`)
+        .executeTakeFirst(),
+    ]);
 
     const active_listings_count = listingsResult ? parseInt(String(listingsResult.count)) : 0;
+    const total_downloads = downloadsResult ? parseInt(String((downloadsResult as any).total)) : 0;
 
     const response: PublicUserResponse = {
       id: user.id,
@@ -484,6 +495,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       phone_verified: Boolean(user.phone_verified),
       member_since: toISOString(user.created_at),
       active_listings_count,
+      total_downloads,
       bio: (user as any).bio ?? null,
       website: (user as any).website ?? null,
       social_twitter: (user as any).social_twitter ?? null,

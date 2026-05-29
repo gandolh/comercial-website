@@ -8,6 +8,7 @@ export interface PublicUserResponse {
   phone_verified: boolean;
   member_since: string;
   active_listings_count: number;
+  total_downloads: number;
 }
 
 export interface ListingsPageResponse {
