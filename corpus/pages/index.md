@@ -45,21 +45,23 @@ Format: `[Title](path) — hook | category | updated`
 
 Format: `[Title](../../todo/file.md) — description | type | priority`
 
-- [Fix Frontend Upload Flow](../../todo/fix-frontend-upload-flow.md) — multipart migration; frontend still calls old presigned-URL endpoints | update | critical
-- [Remove Physical-Goods Remnants](../../todo/remove-physical-goods-remnants.md) — drop city field, locations module, old categories, dead seed data | remove | high
-- [Categories Update](../../todo/categories-update.md) — replace OLX-era slugs with 12 digital-native categories | update | high
-- [Payment Processing](../../todo/payment-processing.md) — integrate PSP (Netopia/Stripe); gate downloads behind paid orders | add | high
-- [GDPR Cookie Consent Banner](../../todo/gdpr-cookie-consent.md) — legally required; equal accept/reject buttons (Law 506/2004) | add | high
-- [Invoice & e-Factura Generator](../../todo/invoice-generator.md) — PDF + UBL 2.1 XML; saved emitter profile; ANAF CUI auto-fill | add | high
-- [ANAF CUI Company Lookup](../../todo/cui-lookup.md) — proxy ANAF public API; used by invoice generator | add | medium
-- [Download All Assets](../../todo/download-all-assets.md) — per-asset download endpoint; multi-file listing support | update | medium
-- [Search Improvements](../../todo/search-improvements.md) — SQLite FTS5 with diacritics folding; relevance ranking | update | medium
-- [Seller Profile](../../todo/seller-profile.md) — bio, website URL, total downloads count | update | medium
-- [Listing Renewal & Expiry UI](../../todo/listing-renewal-and-expiry-ui.md) — renew/deactivate/activate actions in dashboard; expiry warnings | update | medium
-- [Email Notifications](../../todo/email-notifications.md) — new message, first download, expiry reminders | add | medium
-- [Password Reset UI](../../todo/password-reset-ui.md) — verify end-to-end flow works post-MailHog removal | update | medium
-- [Static Legal Pages](../../todo/static-pages.md) — Termeni, Confidențialitate, Cookies, Despre, Contact, Ajutor | add | medium
-- [Listing Preview Before Publish](../../todo/listing-preview-before-publish.md) — preview step in create-listing wizard | add | low
+**Status: all 15 backlog items completed (2026-05-29)** via the parallel-swarm orchestration in `corpus/orchestration/` (5 waves, one branch per todo, merged to `main`). Each todo file's frontmatter is `status: done` with acceptance criteria ticked. A few criteria were deliberately deferred and are annotated inline in the respective todo files (e.g. email expiry reminders need a scheduler; old-category 404/redirect; profile total-downloads count; e-Factura SDK validation; real Stripe keys).
+
+- [Fix Frontend Upload Flow](../../todo/fix-frontend-upload-flow.md) — multipart migration; frontend still calls old presigned-URL endpoints | update | critical | ✓ done
+- [Remove Physical-Goods Remnants](../../todo/remove-physical-goods-remnants.md) — drop city field, locations module, old categories, dead seed data | remove | high | ✓ done
+- [Categories Update](../../todo/categories-update.md) — replace OLX-era slugs with 12 digital-native categories | update | high | ✓ done
+- [Payment Processing](../../todo/payment-processing.md) — integrate PSP (Netopia/Stripe); gate downloads behind paid orders | add | high | ✓ done
+- [GDPR Cookie Consent Banner](../../todo/gdpr-cookie-consent.md) — legally required; equal accept/reject buttons (Law 506/2004) | add | high | ✓ done
+- [Invoice & e-Factura Generator](../../todo/invoice-generator.md) — PDF + UBL 2.1 XML; saved emitter profile; ANAF CUI auto-fill | add | high | ✓ done
+- [ANAF CUI Company Lookup](../../todo/cui-lookup.md) — proxy ANAF public API; used by invoice generator | add | medium | ✓ done
+- [Download All Assets](../../todo/download-all-assets.md) — per-asset download endpoint; multi-file listing support | update | medium | ✓ done
+- [Search Improvements](../../todo/search-improvements.md) — SQLite FTS5 with diacritics folding; relevance ranking | update | medium | ✓ done
+- [Seller Profile](../../todo/seller-profile.md) — bio, website URL, total downloads count | update | medium | ✓ done
+- [Listing Renewal & Expiry UI](../../todo/listing-renewal-and-expiry-ui.md) — renew/deactivate/activate actions in dashboard; expiry warnings | update | medium | ✓ done
+- [Email Notifications](../../todo/email-notifications.md) — new message, first download, expiry reminders | add | medium | ✓ done
+- [Password Reset UI](../../todo/password-reset-ui.md) — verify end-to-end flow works post-MailHog removal | update | medium | ✓ done
+- [Static Legal Pages](../../todo/static-pages.md) — Termeni, Confidențialitate, Cookies, Despre, Contact, Ajutor | add | medium | ✓ done
+- [Listing Preview Before Publish](../../todo/listing-preview-before-publish.md) — preview step in create-listing wizard | add | low | ✓ done
 
 ---
 
