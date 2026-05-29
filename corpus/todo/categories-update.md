@@ -3,9 +3,9 @@ title: Update Categories for Digital-Assets Focus
 slug: categories-update
 type: update
 priority: high
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Update Categories for Digital-Assets Focus
@@ -56,8 +56,8 @@ Existing seed listings use old slugs (`electronice`, `auto`, etc.) — re-seed o
 
 ## Acceptance criteria
 
-- [ ] All 12 new categories shown on homepage
-- [ ] Create listing form offers new categories only
-- [ ] Category detail pages exist for each new slug
-- [ ] Old category slugs return 404 or redirect
-- [ ] CATEGORY_LABELS updated in backend response serialization
+- [x] All 12 new categories shown on homepage
+- [x] Create listing form offers new categories only
+- [x] Category detail pages exist for each new slug
+- [ ] Old category slugs return 404 or redirect (not implemented — old slugs simply have no listings; no explicit redirect)
+- [x] CATEGORY_LABELS updated in backend response serialization

@@ -3,9 +3,9 @@ title: Remove Physical-Goods Remnants
 slug: remove-physical-goods-remnants
 type: remove
 priority: high
-status: pending
+status: done
 area: backend, frontend
-updated: 2026-05-28
+updated: 2026-05-29
 ---
 
 # Remove Physical-Goods Remnants
@@ -42,12 +42,12 @@ The codebase has leftovers from the original OLX-clone physical goods phase. The
 
 ## Acceptance criteria
 
-- [ ] `POST /listings` no longer accepts or requires `city`
-- [ ] `ListingResponse` and `ListingDetailResponse` no longer include `city` or `is_negotiable`
-- [ ] `/locations/*` routes removed
-- [ ] Create-listing wizard has no city step
-- [ ] `cities-by-counties.json` deleted
-- [ ] Seed data updated to use digital categories
+- [x] `POST /listings` no longer accepts or requires `city`
+- [x] `ListingResponse` and `ListingDetailResponse` no longer include `city` or `is_negotiable`
+- [x] `/locations/*` routes removed
+- [x] Create-listing wizard has no city step
+- [x] `cities-by-counties.json` deleted
+- [x] Seed data updated to use digital categories
 
 ## See also
 
