@@ -55,12 +55,16 @@ No presigned URLs. File goes directly to the backend.
 
 ## Open questions
 
-- Multiple assets per listing: supported (position 1, 2, …), but download endpoint only serves position=0 today
-- Per-asset pricing vs one price for whole listing?
+- Per-asset pricing vs one price for whole listing? (today a listing has a single `price_ron`; paid downloads are gated per-listing — see [[digital-asset-commerce]])
 - Should there be a file size limit per asset? (currently 500 MB — set in `@fastify/multipart` config)
+
+> Resolved: each asset now has its own download URL (`GET /listings/:id/assets/:asset_id/download`);
+> the legacy `/listings/:id/download` (position 0) is retained. See [[digital-asset-commerce]].
 
 ## See also
 
 - [[listing]] — parent listing
 - [[business-rules]] — publish requirement, max counts, license types
 - [[stack]] — disk storage configuration
+- [[digital-asset-commerce]] — per-asset downloads + paid-order gate
+- [[accounts-and-profiles]] — the multipart upload contract assets are uploaded through

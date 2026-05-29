@@ -21,9 +21,13 @@ corpus/
     market/           ← market research, competitive analysis, product ideas
     tech/             ← architecture, stack decisions, design system
     entities/         ← core domain objects (Listing, Asset, User, …)
-  todo/               ← feature backlog; one file per feature
+    features/         ← specs of shipped features (created when a todo is completed)
+  todo/               ← feature backlog; one file per feature (currently empty — all shipped)
     <slug>.md         ← type: add | update | remove; priority: critical/high/medium/low; status: pending/in-progress/done
 ```
+
+When a todo is completed, document the shipped feature under `pages/features/` and remove the todo file
+(the backlog holds only outstanding work).
 
 ## Page frontmatter (required on every page except index.md and log.md)
 
@@ -106,7 +110,7 @@ Check for:
 
 **What it is:** Romanian digital-assets marketplace — sellers upload downloadable files (zip, pdf, psd, mp4, …), buyers download them. No physical goods. Romanian language throughout, prices in RON.
 
-**Categories:** software, grafica, sabloane, audio, video, ebook, fonturi, cod-sursa, diverse
+**Categories (12, post digital-pivot):** grafica, sabloane, software, cod-sursa, audio, video, ebook, fonturi, documente, 3d, mestesugart, diverse
 
 **Stack:** Node.js + TypeScript + Fastify + SQLite (better-sqlite3) + Kysely + React + Vite + Tailwind v4. No Docker. SQLite file at `backend/data/my-olx.db`. Uploads on disk at `backend/data/uploads/`.
 

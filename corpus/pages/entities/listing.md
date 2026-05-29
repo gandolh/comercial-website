@@ -66,3 +66,7 @@ Full-text search via `LIKE %q%` on `title` and `description` (no tsvector — SQ
 - [[asset]] — downloadable files attached to a listing
 - [[user]] — seller who owns the listing
 - [[business-rules]] — rate limits, expiry, publish rules, max assets
+- [[digital-asset-commerce]] — per-asset downloads + paid-order download gate
+- [[search]] — FTS5 search over listing title/description
+- [[listing-lifecycle]] — preview-before-publish, renewal & expiry UI
+- [[digital-pivot-cleanup]] — removal of `city`/`is_negotiable`; 12 new categories

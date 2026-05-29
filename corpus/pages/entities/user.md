@@ -44,13 +44,18 @@ An account on the platform. Seller and buyer are the same account type — a use
 
 ## Open questions
 
-- Seller profile: extended bio, social links, portfolio URL?
 - Seller verification / trust badge (verified_seller flag)?
 - Premium subscription tier (higher listing quota)?
-- Password reset flow: implemented in repo but UI may be incomplete
+
+> Resolved: seller profile now has `bio`, `website`, and social columns
+> (`social_twitter/instagram/github`); password-reset UI is wired end-to-end; users have an
+> `email_notifications` opt-out. See [[accounts-and-profiles]] and [[notifications]].
 
 ## See also
 
 - [[listing]] — listings owned by this user
 - [[business-rules]] — per-user rate limits
 - [[stack]] — JWT + Argon2 details
+- [[accounts-and-profiles]] — password reset, seller profile fields, uploads
+- [[notifications]] — `email_notifications` opt-out preference
+- [[invoicing]] — per-user invoice issuer profile

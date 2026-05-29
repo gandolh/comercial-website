@@ -111,4 +111,4 @@ The large players cover mid-market companies. Underserved segments:
 ## See Also
 
 - [[product-ideas]] — full brainstorm of all product categories
-- [[invoice-generator]] — the other compliance tool planned for the platform
+- [[invoicing]] — the other compliance tool, now shipped (PDF + UBL XML + ANAF lookup)

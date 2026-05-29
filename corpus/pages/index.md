@@ -41,27 +41,30 @@ Format: `[Title](path) — hook | category | updated`
 
 ---
 
-## Todo (feature backlog)
+## Features (shipped)
 
-Format: `[Title](../../todo/file.md) — description | type | priority`
+All 15 backlog items were implemented (2026-05-29) via the parallel-swarm orchestration in
+`corpus/orchestration/` (5 waves, one branch per todo, merged to `main`; build + 55 tests green).
+The `corpus/todo/` backlog is now empty and removed — shipped work is documented in `pages/features/`.
 
-**Status: all 15 backlog items completed (2026-05-29)** via the parallel-swarm orchestration in `corpus/orchestration/` (5 waves, one branch per todo, merged to `main`). Each todo file's frontmatter is `status: done` with acceptance criteria ticked. A few criteria were deliberately deferred and are annotated inline in the respective todo files (e.g. email expiry reminders need a scheduler; old-category 404/redirect; profile total-downloads count; e-Factura SDK validation; real Stripe keys).
+- [Digital Pivot — Cleanup & Categories](features/digital-pivot-cleanup.md) — dropped city/is_negotiable/locations; 12 digital categories | product | 2026-05-29
+- [Digital-Asset Commerce](features/digital-asset-commerce.md) — per-asset downloads + payments (Stripe/fake PSP) gating paid downloads | product | 2026-05-29
+- [Invoicing & ANAF CUI Lookup](features/invoicing.md) — PDF + UBL 2.1 XML invoices; `/anaf/company/:cui` auto-fill | product | 2026-05-29
+- [Search (FTS5)](features/search.md) — SQLite FTS5, diacritics-folding, BM25 ranking | tech | 2026-05-29
+- [Email Notifications](features/notifications.md) — new-message + first-download emails; opt-out | product | 2026-05-29
+- [Accounts & Seller Profiles](features/accounts-and-profiles.md) — password-reset UI, bio/website/social, upload fix | product | 2026-05-29
+- [Listing Lifecycle UI](features/listing-lifecycle.md) — preview-before-publish, renewal & expiry UI | product | 2026-05-29
+- [Legal & Compliance](features/legal-and-compliance.md) — 6 static legal pages + GDPR cookie consent | product | 2026-05-29
 
-- [Fix Frontend Upload Flow](../../todo/fix-frontend-upload-flow.md) — multipart migration; frontend still calls old presigned-URL endpoints | update | critical | ✓ done
-- [Remove Physical-Goods Remnants](../../todo/remove-physical-goods-remnants.md) — drop city field, locations module, old categories, dead seed data | remove | high | ✓ done
-- [Categories Update](../../todo/categories-update.md) — replace OLX-era slugs with 12 digital-native categories | update | high | ✓ done
-- [Payment Processing](../../todo/payment-processing.md) — integrate PSP (Netopia/Stripe); gate downloads behind paid orders | add | high | ✓ done
-- [GDPR Cookie Consent Banner](../../todo/gdpr-cookie-consent.md) — legally required; equal accept/reject buttons (Law 506/2004) | add | high | ✓ done
-- [Invoice & e-Factura Generator](../../todo/invoice-generator.md) — PDF + UBL 2.1 XML; saved emitter profile; ANAF CUI auto-fill | add | high | ✓ done
-- [ANAF CUI Company Lookup](../../todo/cui-lookup.md) — proxy ANAF public API; used by invoice generator | add | medium | ✓ done
-- [Download All Assets](../../todo/download-all-assets.md) — per-asset download endpoint; multi-file listing support | update | medium | ✓ done
-- [Search Improvements](../../todo/search-improvements.md) — SQLite FTS5 with diacritics folding; relevance ranking | update | medium | ✓ done
-- [Seller Profile](../../todo/seller-profile.md) — bio, website URL, total downloads count | update | medium | ✓ done
-- [Listing Renewal & Expiry UI](../../todo/listing-renewal-and-expiry-ui.md) — renew/deactivate/activate actions in dashboard; expiry warnings | update | medium | ✓ done
-- [Email Notifications](../../todo/email-notifications.md) — new message, first download, expiry reminders | add | medium | ✓ done
-- [Password Reset UI](../../todo/password-reset-ui.md) — verify end-to-end flow works post-MailHog removal | update | medium | ✓ done
-- [Static Legal Pages](../../todo/static-pages.md) — Termeni, Confidențialitate, Cookies, Despre, Contact, Ajutor | add | medium | ✓ done
-- [Listing Preview Before Publish](../../todo/listing-preview-before-publish.md) — preview step in create-listing wizard | add | low | ✓ done
+### Deferred follow-ups (not yet built)
+
+Carried over from the shipped work — the next backlog candidates:
+
+- **Expiry-reminder emails** (3 days before / on expiry) — needs a scheduler (cron or lazy-check). See [[notifications]].
+- **Old category slugs** do not 404/redirect — they just have no listings. See [[digital-pivot-cleanup]].
+- **Profile "total downloads count"** not shown (only bio/website/social shipped). See [[accounts-and-profiles]].
+- **e-Factura XML** not validated against the official ANAF SDK; **real Stripe** path untested (no keys). See [[invoicing]], [[digital-asset-commerce]].
+- **Tech debt:** avatar upload uses a `window.fetch` monkey-patch shim; unused `city`/`is_negotiable` DB columns await a drop migration. See [[accounts-and-profiles]], [[digital-pivot-cleanup]].
 
 ---
 
