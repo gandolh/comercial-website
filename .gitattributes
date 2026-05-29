@@ -1,0 +1,2 @@
+frontend/public/locales/*/common.json merge=union
+backend/app/src/server.ts merge=union
