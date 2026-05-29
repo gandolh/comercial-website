@@ -87,5 +87,12 @@
       "requestNewLink": "Request a new link",
       "errorMessage": "The link has expired or has already been used. Please request a new reset link."
     }
+  },
+  "cookies": {
+    "bannerLabel": "Cookie notice",
+    "bannerText": "We use essential cookies for site functionality. You can accept or reject optional cookies. Learn more in our",
+    "policyLink": "Privacy Policy",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all"
   }
 }

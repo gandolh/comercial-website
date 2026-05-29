@@ -4,6 +4,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { CardSkeleton } from "@core/components/ui/Skeleton";
 import { GlobalLoadingIndicator } from "@core/components/ui/GlobalLoadingIndicator";
+import { CookieConsent } from "@core/components/ui/CookieConsent";
 
 function PageLoader() {
   return (
@@ -26,6 +27,7 @@ export function MainLayout() {
         <Outlet />
       </Suspense>
       <Footer />
+      <CookieConsent />
     </div>
   );
 }

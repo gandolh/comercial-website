@@ -292,5 +292,12 @@
       "requestNewLink": "Solicită un nou link",
       "errorMessage": "Link-ul a expirat sau a fost deja folosit. Te rugăm să soliciți un nou link de resetare."
     }
+  },
+  "cookies": {
+    "bannerLabel": "Notificare cookie-uri",
+    "bannerText": "Folosim cookie-uri esențiale pentru funcționarea site-ului. Poți accepta sau respinge cookie-urile opționale. Află mai multe în",
+    "policyLink": "Politica de Confidențialitate",
+    "acceptAll": "Acceptă toate",
+    "rejectAll": "Respinge toate"
   }
 }
