@@ -36,23 +36,17 @@ export const FORMAT_OPTIONS = [
   { value: "otf", label: "OTF" },
 ];
 
-export const CITIES: { slug: string; label: string }[] = [
-  { slug: "bucuresti", label: "București" },
-  { slug: "cluj-napoca", label: "Cluj-Napoca" },
-  { slug: "timisoara", label: "Timișoara" },
-  { slug: "iasi", label: "Iași" },
-  { slug: "brasov", label: "Brașov" },
-  { slug: "constanta", label: "Constanța" },
-];
-
 export const CATEGORY_LABELS: Record<string, string> = {
-  software: "Software și aplicații",
-  grafica: "Grafică și ilustrații",
-  sabloane: "Șabloane și teme",
-  audio: "Audio și muzică",
-  video: "Video și animație",
-  ebook: "Cărți electronice",
+  grafica: "Grafică & Ilustrații",
+  sabloane: "Șabloane & Template-uri",
+  software: "Software & Aplicații",
+  "cod-sursa": "Cod Sursă",
+  audio: "Audio & Muzică",
+  video: "Video & Motion",
+  ebook: "E-Bookuri & Cursuri",
   fonturi: "Fonturi",
-  "cod-sursa": "Cod sursă",
+  documente: "Documente & Template-uri Legale",
+  "3d": "Modele 3D & AR",
+  mestesugart: "Artizanat Digital",
   diverse: "Diverse",
 };

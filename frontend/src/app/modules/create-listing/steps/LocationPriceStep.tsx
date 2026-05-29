@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { locationPriceStepSchema, type LocationPriceInput } from "../schemas";
-import { CITIES } from "@app/modules/categories/types";
 
 interface LocationPriceStepProps {
   initialData?: Partial<LocationPriceInput>;
@@ -27,7 +26,6 @@ export function LocationPriceStep({
   } = useForm<LocationPriceInput>({
     resolver: zodResolver(locationPriceStepSchema),
     defaultValues: {
-      city: initialData?.city || "",
       priceRon: initialData?.priceRon ?? null,
       isFree: initialData?.isFree ?? false,
     },
@@ -50,39 +48,14 @@ export function LocationPriceStep({
           className="text-2xl font-black"
           style={{ fontFamily: "var(--font-headline)" }}
         >
-          Locație și preț
+          Stabilește prețul
         </h2>
         <p className="text-on-surface-variant">
-          Unde se află produsul și cât costă?
+          Cât costă produsul tău digital?
         </p>
       </div>
 
       <div className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="city" className="block font-bold text-sm px-1">
-            Oraș*
-          </label>
-          <select
-            {...register("city")}
-            id="city"
-            className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all appearance-none ${
-              errors.city
-                ? "border-error"
-                : "border-transparent focus:border-primary"
-            }`}
-          >
-            <option value="">Selectează un oraș</option>
-            {CITIES.map((city) => (
-              <option key={city.slug} value={city.label}>
-                {city.label}
-              </option>
-            ))}
-          </select>
-          {errors.city && (
-            <p className="text-error text-xs px-1">{errors.city.message}</p>
-          )}
-        </div>
-
         <div className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="priceRon" className="block font-bold text-sm px-1">

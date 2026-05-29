@@ -32,6 +32,20 @@
     "help": "Help",
     "contact": "Contact"
   },
+  "categories": {
+    "grafica": "Graphics & Illustrations",
+    "sabloane": "Templates",
+    "software": "Software & Applications",
+    "cod-sursa": "Source Code",
+    "audio": "Audio & Music",
+    "video": "Video & Motion",
+    "ebook": "E-Books & Courses",
+    "fonturi": "Fonts",
+    "documente": "Documents & Legal Templates",
+    "3d": "3D Models & AR",
+    "mestesugart": "Digital Crafts",
+    "diverse": "Miscellaneous"
+  },
   "comingSoon": {
     "title": "Coming Soon",
     "subtitle": "This page is under development."

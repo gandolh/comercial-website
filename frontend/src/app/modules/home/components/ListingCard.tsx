@@ -70,11 +70,9 @@ export function ListingCard({ listing }: ListingCardProps) {
             className="material-symbols-outlined"
             style={{ fontSize: "18px" }}
           >
-            location_on
+            schedule
           </span>
-          <span>
-            {listing.city} • {postedAt}
-          </span>
+          <span>{postedAt}</span>
         </div>
       </div>
     </Link>

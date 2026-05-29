@@ -42,9 +42,7 @@ const CreateListingRequestSchema = z.object({
   title: z.string().min(5).max(200),
   description: z.string().min(10),
   price_ron: z.number().int().nullable().optional(),
-  is_negotiable: z.boolean().default(true),
   category: z.string().min(1),
-  city: z.string().default(""),
   active: z.boolean().default(true),
 });
 
@@ -52,15 +50,12 @@ const UpdateListingRequestSchema = z.object({
   title: z.string().min(5).max(200).optional(),
   description: z.string().min(10).optional(),
   price_ron: z.number().int().nullable().optional(),
-  is_negotiable: z.boolean().optional(),
   category: z.string().min(1).optional(),
-  city: z.string().optional(),
 });
 
 const ListingFiltersSchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  city: z.string().optional(),
   price_min: z.coerce.number().optional(),
   price_max: z.coerce.number().optional(),
   date: z.enum(["24h", "saptamana", "oricand"]).optional(),
@@ -101,7 +96,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const { listings, total } = await repo.search(
       query.q,
       query.category,
-      query.city,
+      undefined,
       query.price_min,
       query.price_max,
       query.date as "24h" | "saptamana" | "oricand" | undefined,
@@ -179,9 +174,9 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       body.title,
       body.description,
       body.price_ron ?? null,
-      body.is_negotiable,
+      false,
       body.category,
-      body.city,
+      "",
       body.active
     );
 
@@ -307,9 +302,8 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       body.title,
       body.description,
       body.price_ron,
-      body.is_negotiable,
-      body.category,
-      body.city
+      undefined,
+      body.category
     );
 
     return reply.send(toListingResponse(updated));

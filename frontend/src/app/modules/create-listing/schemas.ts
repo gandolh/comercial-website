@@ -1,14 +1,17 @@
 import { z } from "zod";
 
 export const CATEGORY_SLUGS = [
-  "software",
   "grafica",
   "sabloane",
+  "software",
+  "cod-sursa",
   "audio",
   "video",
   "ebook",
   "fonturi",
-  "cod-sursa",
+  "documente",
+  "3d",
+  "mestesugart",
   "diverse",
 ] as const;
 
@@ -46,8 +49,8 @@ export const reviewStepSchema = z.object({
   }),
 });
 
-// Retained for the listing EDIT flow (EditListingPage), which still allows
-// editing the legacy city field. The CREATE wizard uses priceStepSchema (no city).
+// Used by the listing EDIT flow (EditListingPage) for price editing.
+// city is kept as optional for backward compatibility with EditListingPage.
 export const locationPriceStepSchema = z.object({
   city: z.string().optional(),
   priceRon: z

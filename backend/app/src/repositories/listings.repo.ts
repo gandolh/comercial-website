@@ -191,10 +191,6 @@ export class ListingsRepository {
       query = query.where("category", "=", category);
     }
 
-    if (city) {
-      query = query.where("city", "=", city);
-    }
-
     if (priceMin !== undefined) {
       query = query.where(sql<SqlBool>`price_ron >= ${priceMin}`);
     }
@@ -240,7 +236,6 @@ export class ListingsRepository {
         .where(sql<SqlBool>`expires_at > datetime('now')`);
     }
     if (category) countQuery = countQuery.where("category", "=", category);
-    if (city) countQuery = countQuery.where("city", "=", city);
     if (priceMin !== undefined) {
       countQuery = countQuery.where(sql<SqlBool>`price_ron >= ${priceMin}`);
     }

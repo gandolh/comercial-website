@@ -10,15 +10,18 @@ export function imageUrl(s3Key: string | null, config: Config): string | null {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  electronice: "Electronice",
-  auto: "Auto, moto și ambarcațiuni",
-  imobiliare: "Imobiliare",
-  "casa-gradina": "Casă și grădină",
-  moda: "Modă și frumusețe",
-  joburi: "Locuri de muncă",
-  servicii: "Servicii, afaceri",
-  sport: "Sport și timp liber",
-  gratuit: "Oferite gratuit",
+  grafica: "Grafică & Ilustrații",
+  sabloane: "Șabloane & Template-uri",
+  software: "Software & Aplicații",
+  "cod-sursa": "Cod Sursă",
+  audio: "Audio & Muzică",
+  video: "Video & Motion",
+  ebook: "E-Bookuri & Cursuri",
+  fonturi: "Fonturi",
+  documente: "Documente & Template-uri Legale",
+  "3d": "Modele 3D & AR",
+  mestesugart: "Artizanat Digital",
+  diverse: "Diverse",
 };
 
 export function categoryLabel(slug: string): string {
@@ -29,7 +32,6 @@ export interface ListingCardResponse {
   id: string;
   title: string;
   price_ron: number | null;
-  city: string;
   category: string;
   cover_url: string | null;
   seller_verified: boolean;
@@ -49,7 +51,6 @@ export function toListingCardResponse(
     id: listing.id,
     title: listing.title,
     price_ron: listing.price_ron,
-    city: listing.city,
     category: listing.category,
     cover_url: imageUrl(coverImage?.s3_key ?? null, config),
     seller_verified: sellerVerified,
@@ -65,9 +66,7 @@ export interface ListingResponse {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: boolean;
   category: string;
-  city: string;
   active: boolean;
   expires_at: string;
   created_at: string;
@@ -80,9 +79,7 @@ export function toListingResponse(listing: ListingRow): ListingResponse {
     title: listing.title,
     description: listing.description,
     price_ron: listing.price_ron,
-    is_negotiable: Boolean(listing.is_negotiable),
     category: listing.category,
-    city: listing.city,
     active: Boolean(listing.active),
     expires_at: listing.expires_at,
     created_at: listing.created_at,
@@ -126,10 +123,8 @@ export interface ListingDetailResponse {
   title: string;
   description: string;
   price_ron: number | null;
-  is_negotiable: boolean;
   category: string;
   category_label: string;
-  city: string;
   images: Array<{ id: string; url: string | null; position: number }>;
   view_count: number;
   posted_at: string;
@@ -155,10 +150,8 @@ export function toListingDetailResponse(
     title: listing.title,
     description: listing.description,
     price_ron: listing.price_ron,
-    is_negotiable: Boolean(listing.is_negotiable),
     category: listing.category,
     category_label: categoryLabel(listing.category),
-    city: listing.city,
     images: images.map((img) => ({
       id: img.id,
       url: imageUrl(img.s3_key, config),
