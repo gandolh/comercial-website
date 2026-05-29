@@ -57,6 +57,15 @@ export interface ListingsTable {
   // Expiry-reminder tracking (added in 20260621010000_expiry_reminders.sql)
   reminder_3day_sent_at: string | null;
   reminder_expiry_sent_at: string | null;
+  // Bundle flag (added in 20260621030000_bundles.sql)
+  is_bundle: ColumnType<number, number | undefined, number>;
+}
+
+/** Bundle items join table: links a bundle listing to its child listings. */
+export interface BundleItemsTable {
+  bundle_listing_id: string;
+  child_listing_id: string;
+  position: number;
 }
 
 export interface ListingAssetsTable {
@@ -236,5 +245,6 @@ export interface Database {
   invoices: InvoicesTable;
   orders: OrdersTable;
   reviews: ReviewsTable;
+  bundle_items: BundleItemsTable;
   _migrations: MigrationsTable;
 }

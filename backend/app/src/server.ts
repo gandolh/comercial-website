@@ -21,6 +21,7 @@ import { registerInvoicesRoutes } from "./modules/invoices.js";
 import { registerOrdersRoutes } from "./modules/orders.js";
 import { startExpiryReminderJob } from "./jobs/expiry-reminders.js";
 import { registerReviewsRoutes } from "./modules/reviews.js";
+import { registerBundlesRoutes } from "./modules/bundles.js";
 import { runMigrations } from "@my-olx/core";
 import Database from "better-sqlite3";
 import path from "node:path";
@@ -66,6 +67,7 @@ async function main(): Promise<void> {
   registerInvoicesRoutes(app, ctx);
   registerOrdersRoutes(app, ctx);
   registerReviewsRoutes(app, ctx);
+  registerBundlesRoutes(app, ctx);
 
   await app.listen({ host: config.host, port: config.port });
 

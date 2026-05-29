@@ -23,6 +23,8 @@ export interface ListingRow {
   download_count: number;
   reminder_3day_sent_at: string | null;
   reminder_expiry_sent_at: string | null;
+  /** 0 or 1 — whether this listing is a bundle (added in 20260621030000_bundles.sql). */
+  is_bundle: number | boolean;
 }
 
 export interface ExpiryReminderRow {

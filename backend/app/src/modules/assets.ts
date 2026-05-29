@@ -6,6 +6,7 @@ import type { RouteRegistrar, AppContext } from "../context.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import { hasPaidOrder, isFree } from "./orders.js";
+import { BundlesRepository } from "../repositories/bundles.repo.js";
 import type { FastifyInstance } from "fastify";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
@@ -96,7 +97,27 @@ function getFileExtension(filename: string): string {
 export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
   const assetsRepo = new AssetsRepository(ctx.db);
   const listingsRepo = new ListingsRepository(ctx.db);
+  const bundlesRepo = new BundlesRepository(ctx.db);
   const appWithAuth = app as FastifyInstance & { authenticate: any };
+
+  /**
+   * Checks whether a user has access to download a listing's assets.
+   * Access is granted if:
+   *   1. The listing is free.
+   *   2. The user owns the listing.
+   *   3. The user has a paid direct order for the listing.
+   *   4. The user has a paid order for a bundle that contains this listing.
+   */
+  async function canDownloadListing(
+    userId: string,
+    listing: { id: string; price_ron: number | null; user_id: string }
+  ): Promise<boolean> {
+    if (isFree(listing.price_ron)) return true;
+    if (listing.user_id === userId) return true;
+    const directOrder = await hasPaidOrder(ctx, userId, listing.id);
+    if (directOrder) return true;
+    return bundlesRepo.hasBundlePurchaseForChild(userId, listing.id);
+  }
 
   /**
    * POST /listings/:id/assets  (multipart upload)
@@ -208,11 +229,9 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
 
-      // Payment gate: paid listings require a completed order (free listings skip this).
-      if (!isFree(listing.price_ron) && listing.user_id !== userId) {
-        const paid = await hasPaidOrder(ctx, userId, listingId);
-        if (!paid) throw AppError.forbidden();
-      }
+      // Payment gate: paid listings require a completed order or bundle purchase.
+      const allowed = await canDownloadListing(userId, listing);
+      if (!allowed) throw AppError.forbidden();
 
       const asset = await assetsRepo.getPrimaryAsset(listingId);
       if (!asset) throw AppError.notFound();
@@ -257,11 +276,9 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();
 
-      // Payment gate: paid listings require a completed order (free listings skip this).
-      if (!isFree(listing.price_ron) && listing.user_id !== userId) {
-        const paid = await hasPaidOrder(ctx, userId, listingId);
-        if (!paid) throw AppError.forbidden();
-      }
+      // Payment gate: paid listings require a completed order or bundle purchase.
+      const allowed = await canDownloadListing(userId, listing);
+      if (!allowed) throw AppError.forbidden();
 
       const asset = await assetsRepo.getAssetByIdForListing(assetId, listingId);
       if (!asset) throw AppError.notFound();

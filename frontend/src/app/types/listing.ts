@@ -68,4 +68,6 @@ export interface ListingDetail {
   ratingAvg?: number | null
   /** Total review count. */
   ratingCount?: number
+  /** True when this listing is a bundle containing several child listings. */
+  isBundle?: boolean
 }

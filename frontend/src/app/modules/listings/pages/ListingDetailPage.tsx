@@ -20,6 +20,7 @@ import type { ListingAsset } from "@app/types/listing";
 import { BuyButton } from "@app/modules/orders/components/BuyButton";
 import { ordersService } from "@app/modules/orders/services/orders.service";
 import { ReviewsSection } from "@app/modules/reviews/components/ReviewsSection";
+import { BundleContents } from "@app/modules/bundles/components/BundleContents";
 
 interface AssetFileListProps {
   listingId: string;
@@ -310,6 +311,8 @@ export function ListingDetailPage() {
             features={[]}
             digitalSpecs={digitalSpecs}
           />
+
+          {data.isBundle && <BundleContents listingId={data.id} />}
 
           {isDigitalAsset && isPaidListing && !canDownload && (
             <section className="space-y-3">

@@ -550,5 +550,15 @@
       "viewOrders": "Toate comenzile mele",
       "backHome": "Înapoi acasă"
     }
+  },
+  "bundles": {
+    "title": "Conținut pachet",
+    "count_one": "{{count}} anunț inclus",
+    "count_few": "{{count}} anunțuri incluse",
+    "count_other": "{{count}} anunțuri incluse",
+    "free": "Gratuit",
+    "viewListing": "Vezi anunț",
+    "loadError": "Nu am putut încărca conținutul pachetului. Încearcă din nou.",
+    "accessNote": "Achiziționând acest pachet, vei obține acces la descărcarea tuturor anunțurilor incluse."
   }
 }

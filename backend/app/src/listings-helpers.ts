@@ -141,6 +141,8 @@ export interface ListingDetailResponse {
   rating_avg: number | null;
   /** Total number of reviews. */
   rating_count: number;
+  /** True when this listing is a bundle that groups several child listings. */
+  is_bundle: boolean;
 }
 
 export function toListingDetailResponse(
@@ -176,6 +178,7 @@ export function toListingDetailResponse(
     assets,
     rating_avg: ratingAvg,
     rating_count: ratingCount,
+    is_bundle: Boolean(listing.is_bundle),
   };
 }
 

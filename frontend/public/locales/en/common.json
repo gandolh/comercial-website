@@ -372,5 +372,14 @@
       "viewOrders": "All my orders",
       "backHome": "Back home"
     }
+  },
+  "bundles": {
+    "title": "Bundle contents",
+    "count_one": "{{count}} listing included",
+    "count_other": "{{count}} listings included",
+    "free": "Free",
+    "viewListing": "View listing",
+    "loadError": "Could not load bundle contents. Please try again.",
+    "accessNote": "By purchasing this bundle you will gain download access to all included listings."
   }
 }

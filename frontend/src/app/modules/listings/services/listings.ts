@@ -47,6 +47,7 @@ interface ListingDetailApi {
   assets?: ListingAssetApi[];
   rating_avg?: number | null;
   rating_count?: number;
+  is_bundle?: boolean;
 }
 
 export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
@@ -85,6 +86,7 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
     })),
     ratingAvg: detail.rating_avg ?? null,
     ratingCount: detail.rating_count ?? 0,
+    isBundle: detail.is_bundle ?? false,
   };
 }
 
