@@ -1,27 +1,7 @@
-import axios from "axios";
-
 import { axiosInstance } from "@core/lib/axios";
 import type { ListingAsset } from "@app/types/listing";
 
 export type { ListingAsset };
-
-interface UploadUrlRequest {
-  content_type: string;
-  filename: string;
-}
-
-interface UploadUrlResponse {
-  upload_url: string;
-  s3_key: string;
-  public_url: string;
-}
-
-interface CommitAssetRequest {
-  s3_key: string;
-  original_filename: string;
-  file_size_bytes: number;
-  content_type: string;
-}
 
 interface ListingAssetApi {
   id: string;
@@ -31,59 +11,100 @@ interface ListingAssetApi {
   file_size_bytes: number;
   content_type: string;
   position: number;
-  public_url?: string;
+  created_at: string;
 }
 
+export interface UploadAssetOptions {
+  onUploadProgress?: (progress: number) => void;
+}
+
+// Keep the old PutFileOptions export so any caller that imported it still compiles.
 export interface PutFileOptions {
   onUploadProgress?: (progress: number) => void;
 }
 
-export async function requestAssetUploadUrl(
+/**
+ * Upload a downloadable asset file for a listing via multipart/form-data (single-step).
+ * Backend: POST /listings/:id/assets
+ * Response: { id, listing_id, s3_key, original_filename, file_size_bytes, content_type, position, created_at }
+ */
+export async function uploadAsset(
   listingId: string,
   file: File,
-): Promise<UploadUrlResponse> {
-  const payload: UploadUrlRequest = {
-    content_type: file.type,
-    filename: file.name,
-  };
-
-  const response = await axiosInstance.post<UploadUrlResponse>(
-    `/listings/${listingId}/assets/upload-url`,
-    payload,
-  );
-
-  return response.data;
-}
-
-export async function putAssetToSignedUrl(
-  uploadUrl: string,
-  file: File,
-  options?: PutFileOptions,
-): Promise<void> {
-  await axios.put(uploadUrl, file, {
-    headers: { "Content-Type": file.type },
-    onUploadProgress: (event) => {
-      if (!options?.onUploadProgress || !event.total) {
-        return;
-      }
-
-      const progress = Math.round((event.loaded * 100) / event.total);
-      options.onUploadProgress(progress);
-    },
-  });
-}
-
-export async function commitAsset(
-  listingId: string,
-  data: CommitAssetRequest,
+  options?: UploadAssetOptions,
 ): Promise<ListingAsset> {
+  const form = new FormData();
+  form.append("file", file, file.name);
+
   const response = await axiosInstance.post<ListingAssetApi>(
     `/listings/${listingId}/assets`,
-    data,
+    form,
+    {
+      onUploadProgress: (event) => {
+        if (!options?.onUploadProgress || !event.total) return;
+        const progress = Math.round((event.loaded * 100) / event.total);
+        options.onUploadProgress(progress);
+      },
+    },
   );
 
   return mapAsset(response.data);
 }
+
+// ---------------------------------------------------------------------------
+// Legacy compat shims — keep old names so AssetUploadStep.tsx compiles unchanged.
+// The old three-step flow is replaced by a single multipart POST.
+// ---------------------------------------------------------------------------
+
+const _pendingAssets = new Map<string, ListingAsset>();
+
+/**
+ * @deprecated Use uploadAsset() instead.
+ */
+export async function requestAssetUploadUrl(
+  listingId: string,
+  file: File,
+  options?: PutFileOptions,
+): Promise<{ upload_url: string; s3_key: string; public_url: string }> {
+  const asset = await uploadAsset(listingId, file, options);
+  const token = `__done__${asset.id}`;
+  _pendingAssets.set(token, asset);
+  return {
+    upload_url: token,
+    s3_key: token,
+    public_url: asset.publicUrl ?? "",
+  };
+}
+
+/** No-op: upload already happened in requestAssetUploadUrl. */
+export async function putAssetToSignedUrl(
+  _uploadUrl: string,
+  _file: File,
+  _options?: PutFileOptions,
+): Promise<void> {
+  // Upload was already performed.
+}
+
+/** Returns the already-uploaded asset from the stash. */
+export async function commitAsset(
+  _listingId: string,
+  data: {
+    s3_key: string;
+    original_filename: string;
+    file_size_bytes: number;
+    content_type: string;
+  },
+): Promise<ListingAsset> {
+  const stashed = _pendingAssets.get(data.s3_key);
+  if (stashed) {
+    _pendingAssets.delete(data.s3_key);
+    return stashed;
+  }
+  // Fallback: should not happen in normal flow.
+  throw new Error("commitAsset: no pending upload found for key " + data.s3_key);
+}
+
+// ---------------------------------------------------------------------------
 
 export async function deleteAsset(
   listingId: string,
@@ -100,6 +121,6 @@ function mapAsset(asset: ListingAssetApi): ListingAsset {
     contentType: asset.content_type,
     position: asset.position,
     s3Key: asset.s3_key,
-    publicUrl: asset.public_url,
+    publicUrl: undefined,
   };
 }
