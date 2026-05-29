@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
+import type { AxiosError } from "axios";
 import { useReviews, useSubmitReview, useDeleteReview } from "../hooks/useReviews";
 import type { Review } from "../types/index";
 import { Button } from "@core/components/ui/Button/Button";
@@ -153,9 +154,10 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
     try {
       await submitMutation.mutateAsync({ rating, body: body.trim() || null });
       onSuccess?.();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const axiosErr = err as AxiosError<{ error?: string }>;
       const msg: string =
-        err?.response?.data?.error ?? t("reviews.form.submitError");
+        axiosErr?.response?.data?.error ?? t("reviews.form.submitError");
       setError(msg);
     }
   };
