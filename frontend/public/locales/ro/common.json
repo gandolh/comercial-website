@@ -262,6 +262,8 @@
       "emailNotificationsDescription": "Vei fi notificat când primești un mesaj nou sau când cineva descarcă un activ al tău.",
       "saveButton": "Salvează preferințele",
       "savedMessage": "Preferințele au fost salvate."
+    }
+  },
   "auth": {
     "forgotPassword": {
       "title": "Resetează parola",
