@@ -22,6 +22,7 @@ import { dashboardRoutes } from "@app/modules/dashboard/routes";
 import { settingsRoutes } from "@app/modules/settings/routes";
 import { publicProfileRoutes } from "@app/modules/public-profile/routes";
 import { messagingRoutes } from "@app/modules/messaging/routes";
+import { legalRoutes } from "@app/modules/legal/routes";
 
 const mainModuleRoutes: ModuleRoute[] = [
   ...homeRoutes,
@@ -34,6 +35,7 @@ const mainModuleRoutes: ModuleRoute[] = [
   ...favoritesRoutes,
   ...publicProfileRoutes,
   ...messagingRoutes,
+  ...legalRoutes,
 ];
 
 const fallbackRoute: ModuleRoute = {

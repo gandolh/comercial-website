@@ -89,6 +89,8 @@
     "copyright": "© {{year}} PiațăRo. Toate drepturile rezervate.",
     "terms": "Termeni și Condiții",
     "privacy": "Politică de Confidențialitate",
+    "cookies": "Politică Cookies",
+    "about": "Despre",
     "help": "Ajutor",
     "contact": "Contact"
   },
@@ -352,5 +354,35 @@
     "policyLink": "Politica de Confidențialitate",
     "acceptAll": "Acceptă toate",
     "rejectAll": "Respinge toate"
+  },
+  "legal": {
+    "terms": {
+      "title": "Termeni și Condiții",
+      "lastUpdated": "Ultima actualizare"
+    },
+    "privacy": {
+      "title": "Politică de Confidențialitate",
+      "lastUpdated": "Ultima actualizare"
+    },
+    "cookiesPolicy": {
+      "title": "Politică de Cookies",
+      "lastUpdated": "Ultima actualizare"
+    },
+    "about": {
+      "title": "Despre my-olx",
+      "mission": "Misiunea noastră",
+      "cta": "Creează cont gratuit"
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Suntem aici pentru a te ajuta.",
+      "responseTime": "Timp de răspuns"
+    },
+    "help": {
+      "title": "Ajutor & Întrebări Frecvente",
+      "subtitle": "Găsești răspunsuri rapide la cele mai comune întrebări.",
+      "notFound": "Nu ai găsit răspunsul?",
+      "contactUs": "Trimite un email"
+    }
   }
 }
