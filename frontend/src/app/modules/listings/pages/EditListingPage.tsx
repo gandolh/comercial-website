@@ -122,13 +122,11 @@ export function EditListingPage() {
               initialData={{
                 title: listing.title,
                 description: listing.description,
-                isNegotiable: listing.isNegotiable,
               }}
               onNext={(data) =>
                 handleUpdate({
                   title: data.title,
                   description: data.description,
-                  is_negotiable: data.isNegotiable,
                 })
               }
               hideFooter
@@ -154,13 +152,11 @@ export function EditListingPage() {
             </h2>
             <LocationPriceStep
               initialData={{
-                city: listing.city,
                 priceRon: listing.priceRon,
                 isFree: listing.priceRon === 0,
               }}
               onNext={(data) =>
                 handleUpdate({
-                  city: data.city,
                   price_ron: data.isFree ? 0 : data.priceRon,
                 })
               }

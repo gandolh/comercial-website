@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   updateProfile,
   changePassword,
-  getAvatarUploadUrl,
+  uploadAvatar,
   type UpdateProfileRequest,
   type ChangePasswordRequest,
 } from "../services/profile";
@@ -27,25 +27,12 @@ export function useAvatarUpload() {
   return useMutation({
     mutationFn: async ({
       file,
-      contentType,
     }: {
       file: File;
       contentType: string;
     }) => {
-      const { upload_url, s3_key, public_url } = await getAvatarUploadUrl({
-        content_type: contentType,
-        filename: file.name,
-      });
-
-      await fetch(upload_url, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": contentType,
-        },
-      });
-
-      return { s3_key, public_url };
+      const result = await uploadAvatar(file);
+      return { s3_key: result.s3_key, public_url: result.public_url };
     },
   });
 }

@@ -27,7 +27,6 @@ export function DetailsStep({
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      isNegotiable: initialData?.isNegotiable ?? false,
     },
   });
 
@@ -114,19 +113,6 @@ export function DetailsStep({
           )}
         </div>
 
-        <div className="flex items-center gap-3 px-1">
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              {...register("isNegotiable")}
-              className="sr-only peer"
-            />
-            <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-          </label>
-          <span className="text-sm font-medium text-on-surface">
-            Preț negociabil
-          </span>
-        </div>
       </div>
 
       {!hideFooter && (

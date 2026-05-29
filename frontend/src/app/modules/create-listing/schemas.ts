@@ -30,7 +30,6 @@ export const detailsStepSchema = z.object({
     .string()
     .min(10, "Minimum 10 caractere")
     .max(5000, "Maximum 5000 caractere"),
-  isNegotiable: z.boolean(),
 });
 
 export const priceStepSchema = z.object({
@@ -50,9 +49,7 @@ export const reviewStepSchema = z.object({
 });
 
 // Used by the listing EDIT flow (EditListingPage) for price editing.
-// city is kept as optional for backward compatibility with EditListingPage.
 export const locationPriceStepSchema = z.object({
-  city: z.string().optional(),
   priceRon: z
     .number()
     .int("Prețul trebuie să fie un număr întreg")

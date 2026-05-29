@@ -239,8 +239,6 @@ export function MyListingsPage() {
                       <span className="bg-surface-container-high px-2 py-0.5 rounded uppercase">
                         {listing.category}
                       </span>
-                      <span>•</span>
-                      <span>{listing.city}</span>
                     </div>
                     <h3 className="text-lg font-bold text-on-surface truncate">
                       {listing.title}

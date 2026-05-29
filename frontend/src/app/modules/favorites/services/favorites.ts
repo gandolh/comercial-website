@@ -11,7 +11,6 @@ interface ListingsPageApi {
     id: string
     title: string
     price_ron: number | null
-    city: string
     category: string
     cover_url: string | null
     seller_verified: boolean
