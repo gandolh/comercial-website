@@ -21,6 +21,18 @@ export interface ListingRow {
   file_size_bytes: number | null;
   license_type: string;
   download_count: number;
+  reminder_3day_sent_at: string | null;
+  reminder_expiry_sent_at: string | null;
+}
+
+export interface ExpiryReminderRow {
+  listing_id: string;
+  user_id: string;
+  title: string;
+  expires_at: string;
+  owner_email: string;
+  owner_display_name: string | null;
+  reminder_type: "3zile" | "azi";
 }
 
 export interface ListingImageRow {
@@ -543,5 +555,86 @@ export class ListingsRepository {
         .where("id", "=", userId)
         .executeTakeFirst()) as unknown as SellerRow | undefined
     );
+  }
+
+  /**
+   * Returns listings due for expiry reminders.
+   *
+   * A listing is due for the "3zile" reminder when:
+   *   - active = 1
+   *   - expires_at > datetime('now')
+   *   - expires_at <= datetime('now', '+3 days')
+   *   - reminder_3day_sent_at IS NULL
+   *   - the owner has email_notifications = 1
+   *
+   * A listing is due for the "azi" reminder when:
+   *   - active = 1
+   *   - expires_at <= datetime('now', '+1 day')   (expires within 24 h)
+   *   - expires_at > datetime('now')              (not yet expired)
+   *   - reminder_expiry_sent_at IS NULL
+   *   - the owner has email_notifications = 1
+   *
+   * Uses raw SQL to stay SQLite-compatible and avoid complex Kysely unions.
+   */
+  async getDueExpiryReminders(): Promise<ExpiryReminderRow[]> {
+    const querySQL = `
+      SELECT
+        l.id          AS listing_id,
+        l.user_id     AS user_id,
+        l.title       AS title,
+        l.expires_at  AS expires_at,
+        u.email       AS owner_email,
+        u.display_name AS owner_display_name,
+        '3zile'       AS reminder_type
+      FROM listings l
+      INNER JOIN users u ON l.user_id = u.id
+      WHERE l.active = 1
+        AND l.expires_at > datetime('now')
+        AND l.expires_at <= datetime('now', '+3 days')
+        AND l.reminder_3day_sent_at IS NULL
+        AND u.email_notifications = 1
+
+      UNION ALL
+
+      SELECT
+        l.id          AS listing_id,
+        l.user_id     AS user_id,
+        l.title       AS title,
+        l.expires_at  AS expires_at,
+        u.email       AS owner_email,
+        u.display_name AS owner_display_name,
+        'azi'         AS reminder_type
+      FROM listings l
+      INNER JOIN users u ON l.user_id = u.id
+      WHERE l.active = 1
+        AND l.expires_at > datetime('now')
+        AND l.expires_at <= datetime('now', '+1 day')
+        AND l.reminder_expiry_sent_at IS NULL
+        AND u.email_notifications = 1
+    `;
+
+    const result = await this.db.executeQuery(
+      CompiledQuery.raw(querySQL, [])
+    );
+
+    return (result.rows ?? []) as unknown as ExpiryReminderRow[];
+  }
+
+  /** Mark the 3-day reminder as sent for the given listing. */
+  async markReminder3daySent(listingId: string): Promise<void> {
+    await this.db
+      .updateTable("listings")
+      .set({ reminder_3day_sent_at: sql`datetime('now')` })
+      .where("id", "=", listingId)
+      .execute();
+  }
+
+  /** Mark the expiry-day reminder as sent for the given listing. */
+  async markReminderExpirySent(listingId: string): Promise<void> {
+    await this.db
+      .updateTable("listings")
+      .set({ reminder_expiry_sent_at: sql`datetime('now')` })
+      .where("id", "=", listingId)
+      .execute();
   }
 }

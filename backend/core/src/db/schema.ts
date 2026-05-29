@@ -54,6 +54,9 @@ export interface ListingsTable {
   file_size_bytes: number | null;
   license_type: ColumnType<string, string | undefined, string>;
   download_count: ColumnType<number, number | undefined, number>;
+  // Expiry-reminder tracking (added in 20260621010000_expiry_reminders.sql)
+  reminder_3day_sent_at: string | null;
+  reminder_expiry_sent_at: string | null;
 }
 
 export interface ListingAssetsTable {

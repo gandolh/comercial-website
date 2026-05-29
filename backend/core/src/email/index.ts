@@ -188,6 +188,85 @@ export function newMessageEmail(params: {
 }
 
 /**
+ * Email sent to the listing owner to remind them that their listing is about to expire.
+ * `variant`: "3zile" = expires in ~3 days; "azi" = expires today.
+ */
+export function expiryReminderEmail(params: {
+  ownerEmail: string;
+  ownerName: string | null;
+  listingTitle: string;
+  listingId: string;
+  expiresAt: string;
+  variant: "3zile" | "azi";
+  unsubscribeUserId: string;
+}): EmailMessage {
+  const {
+    ownerEmail,
+    ownerName,
+    listingTitle,
+    listingId,
+    expiresAt,
+    variant,
+    unsubscribeUserId,
+  } = params;
+
+  const greeting = ownerName ? `Bună, ${ownerName}!` : "Bună!";
+  const listingLink = `${BASE_URL}/anunt/${listingId}`;
+  const unsubscribeUrl = `${BASE_URL}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
+
+  const expiryDate = new Date(expiresAt).toLocaleDateString("ro-RO", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const urgencyText =
+    variant === "azi"
+      ? "Anunțul tău <strong>expiră astăzi</strong>."
+      : "Anunțul tău <strong>expiră în 3 zile</strong>.";
+
+  const subjectText =
+    variant === "azi"
+      ? `Anunțul „${listingTitle}" expiră astăzi`
+      : `Anunțul „${listingTitle}" expiră în 3 zile`;
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="ro">
+    <head><meta charset="UTF-8" /></head>
+    <body style="font-family:Inter,sans-serif;color:#111827;max-width:600px;margin:0 auto;padding:24px">
+      <h2 style="color:#0056D2;margin-top:0">Anunțul tău expiră curând</h2>
+      <p>${greeting}</p>
+      <p>${urgencyText}</p>
+      <p>Anunțul <em>&ldquo;${listingTitle}&rdquo;</em> va expira pe
+        <strong>${expiryDate}</strong>. Reînnoiește-l pentru a continua să
+        primești descărcări și vizualizări.</p>
+      <a href="${listingLink}"
+        style="display:inline-block;margin-top:8px;padding:10px 20px;
+          background:#0056D2;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">
+        Vezi anunțul
+      </a>
+      ${emailFooter(unsubscribeUrl)}
+    </body>
+    </html>
+  `;
+
+  const urgencyTextPlain =
+    variant === "azi"
+      ? "Anunțul tău expiră astăzi."
+      : "Anunțul tău expiră în 3 zile.";
+
+  const text = `${greeting}\n\n${urgencyTextPlain}\nAnunțul „${listingTitle}" va expira pe ${expiryDate}. Reînnoiește-l pentru a continua să primești descărcări și vizualizări.\n\nVezi anunțul: ${listingLink}\n\nDezabonare: ${unsubscribeUrl}`;
+
+  return {
+    to: ownerEmail,
+    subject: subjectText,
+    html,
+    text,
+  };
+}
+
+/**
  * Email sent to the listing owner when someone downloads their asset for the first time.
  */
 export function firstDownloadEmail(params: {
