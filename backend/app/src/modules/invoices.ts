@@ -304,7 +304,142 @@ function xmlEsc(s: string | null | undefined): string {
     .replace(/"/g, "&quot;");
 }
 
-function buildUblXml(inv: InvoiceResponse): string {
+// ─── e-Factura structural validator (offline, no ANAF SDK) ───────────────────
+//
+// NOTE: This validator checks structural invariants we can verify WITHOUT the
+// ANAF e-Factura service. It does NOT substitute for submission to the ANAF
+// OAuth2 sandbox (https://api.anaf.ro/test/FCTEL/rest/upload). The following
+// paths remain UNVERIFIED until live credentials are available:
+//   - ANAF OAuth token acquisition and upload endpoint
+//   - XSD schema validation (CIUS-RO 1.0.1 full schema)
+//   - ANAF signature requirements
+// To verify: obtain ANAF test credentials, use the ANAF e-Factura OAuth2 test
+// sandbox, and submit a generated XML to confirm acceptance.
+
+export interface UblValidationError {
+  field: string;
+  message: string;
+}
+
+/**
+ * Validate the logical structure of an invoice before generating UBL XML.
+ *
+ * Returns an array of errors; an empty array means the invoice is structurally
+ * valid for RO_CIUS e-Factura generation. Checks performed:
+ *   - Required string fields are non-empty (seller_name, buyer_name, currency)
+ *   - currency must be "RON" (Romanian e-Factura requirement)
+ *   - issue_date matches ISO date format YYYY-MM-DD
+ *   - due_date (if present) matches ISO date format
+ *   - At least one InvoiceLine present
+ *   - Each line has positive qty, non-negative unit_price, valid vat_rate
+ *   - Monetary totals are internally consistent: sum(line extensions) == subtotal,
+ *     sum(vat per line) == vat_amount, subtotal + vat_amount == total (±0.02 rounding)
+ *   - CUI format sanity when present: digits only, optionally prefixed "RO"
+ */
+export function validateUblInvoice(inv: InvoiceResponse): UblValidationError[] {
+  const errors: UblValidationError[] = [];
+
+  // ── Required string fields ─────────────────────────────────────────────────
+  if (!inv.seller_name || inv.seller_name.trim() === "") {
+    errors.push({ field: "seller_name", message: "Denumire furnizor este obligatorie" });
+  }
+  if (!inv.buyer_name || inv.buyer_name.trim() === "") {
+    errors.push({ field: "buyer_name", message: "Denumire client este obligatorie" });
+  }
+  if (!inv.currency || inv.currency.trim() === "") {
+    errors.push({ field: "currency", message: "Codul monedei este obligatoriu" });
+  }
+
+  // ── Currency must be RON for RO_CIUS ───────────────────────────────────────
+  if (inv.currency && inv.currency.trim().toUpperCase() !== "RON") {
+    errors.push({
+      field: "currency",
+      message: `e-Factura RO_CIUS impune moneda RON; primit: ${inv.currency}`,
+    });
+  }
+
+  // ── issue_date must be ISO YYYY-MM-DD ─────────────────────────────────────
+  const isoDateRe = /^\d{4}-\d{2}-\d{2}$/;
+  if (!inv.issue_date || !isoDateRe.test(inv.issue_date)) {
+    errors.push({ field: "issue_date", message: "Data emiterii trebuie să fie în format YYYY-MM-DD" });
+  }
+  if (inv.due_date && !isoDateRe.test(inv.due_date)) {
+    errors.push({ field: "due_date", message: "Data scadenței trebuie să fie în format YYYY-MM-DD" });
+  }
+
+  // ── At least one InvoiceLine ───────────────────────────────────────────────
+  if (!inv.line_items || inv.line_items.length === 0) {
+    errors.push({ field: "line_items", message: "Factura trebuie să conțină cel puțin o linie" });
+    // No point checking per-line or totals if there are no lines
+    return errors;
+  }
+
+  // ── Per-line validation ───────────────────────────────────────────────────
+  const validVatRates = new Set([0, 5, 9, 19]);
+  for (let i = 0; i < inv.line_items.length; i++) {
+    const item = inv.line_items[i]!;
+    if (!item.description || item.description.trim() === "") {
+      errors.push({ field: `line_items[${i}].description`, message: `Linia ${i + 1}: descrierea este obligatorie` });
+    }
+    if (typeof item.qty !== "number" || item.qty <= 0) {
+      errors.push({ field: `line_items[${i}].qty`, message: `Linia ${i + 1}: cantitatea trebuie să fie pozitivă` });
+    }
+    if (typeof item.unit_price !== "number" || item.unit_price < 0) {
+      errors.push({ field: `line_items[${i}].unit_price`, message: `Linia ${i + 1}: prețul unitar nu poate fi negativ` });
+    }
+    if (typeof item.vat_rate !== "number" || !validVatRates.has(item.vat_rate)) {
+      errors.push({ field: `line_items[${i}].vat_rate`, message: `Linia ${i + 1}: cota TVA trebuie să fie 0, 5, 9 sau 19` });
+    }
+  }
+
+  // ── CUI format sanity (digits only, optionally "RO" prefix, 2–10 digits) ──
+  function isValidCui(cui: string): boolean {
+    const normalized = cui.toUpperCase().startsWith("RO") ? cui.slice(2) : cui;
+    return /^\d{2,10}$/.test(normalized);
+  }
+  if (inv.seller_cui && !isValidCui(inv.seller_cui)) {
+    errors.push({ field: "seller_cui", message: `CUI furnizor invalid: ${inv.seller_cui}` });
+  }
+  if (inv.buyer_cui && !isValidCui(inv.buyer_cui)) {
+    errors.push({ field: "buyer_cui", message: `CUI client invalid: ${inv.buyer_cui}` });
+  }
+
+  // ── Monetary totals consistency (allow ±0.02 for floating-point rounding) ─
+  const ROUNDING_TOLERANCE = 0.02;
+  let computedSubtotal = 0;
+  let computedVat = 0;
+  for (const item of inv.line_items) {
+    const lineBase = item.qty * item.unit_price;
+    computedSubtotal += lineBase;
+    computedVat += lineBase * (item.vat_rate / 100);
+  }
+  computedSubtotal = Math.round(computedSubtotal * 100) / 100;
+  computedVat = Math.round(computedVat * 100) / 100;
+  const computedTotal = Math.round((computedSubtotal + computedVat) * 100) / 100;
+
+  if (Math.abs(inv.subtotal - computedSubtotal) > ROUNDING_TOLERANCE) {
+    errors.push({
+      field: "subtotal",
+      message: `Subtotal ${inv.subtotal.toFixed(2)} nu corespunde cu suma liniilor ${computedSubtotal.toFixed(2)}`,
+    });
+  }
+  if (Math.abs(inv.vat_amount - computedVat) > ROUNDING_TOLERANCE) {
+    errors.push({
+      field: "vat_amount",
+      message: `TVA ${inv.vat_amount.toFixed(2)} nu corespunde cu suma TVA per linie ${computedVat.toFixed(2)}`,
+    });
+  }
+  if (Math.abs(inv.total - computedTotal) > ROUNDING_TOLERANCE) {
+    errors.push({
+      field: "total",
+      message: `Total ${inv.total.toFixed(2)} nu corespunde cu subtotal + TVA = ${computedTotal.toFixed(2)}`,
+    });
+  }
+
+  return errors;
+}
+
+export function buildUblXml(inv: InvoiceResponse): string {
   const items = inv.line_items;
 
   const linesXml = items
@@ -702,6 +837,14 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
       if (!row) throw AppError.notFound();
 
       const inv = toInvoiceResponse(row);
+
+      // Fail loudly if the invoice cannot produce structurally valid e-Factura XML
+      const validationErrors = validateUblInvoice(inv);
+      if (validationErrors.length > 0) {
+        const details = validationErrors.map((e) => `${e.field}: ${e.message}`).join("; ");
+        throw AppError.validation(`Factura nu poate fi exportată ca e-Factura: ${details}`);
+      }
+
       const xml = buildUblXml(inv);
       const filename = `efactura-${inv.series}-${inv.number}.xml`;
 
