@@ -9,6 +9,7 @@ import { DetailsStep } from "@app/modules/create-listing/steps/DetailsStep";
 import { LocationPriceStep } from "@app/modules/create-listing/steps/LocationPriceStep";
 import { PhotosStep } from "@app/modules/create-listing/steps/PhotosStep";
 import { RenewButton } from "@app/modules/listings/components/RenewButton";
+import { BundleManagerSection } from "@app/modules/bundles/components/BundleManagerSection";
 import { useAuth } from "@core/lib/auth";
 import { ChevronLeft } from "lucide-react";
 
@@ -164,6 +165,13 @@ export function EditListingPage() {
               submitLabel={t("edit.save")}
             />
           </section>
+
+          <BundleManagerSection
+            listingId={listing.id}
+            isBundle={listing.isBundle ?? false}
+            priceRon={listing.priceRon}
+            onSaved={refetch}
+          />
         </div>
       </div>
     </main>

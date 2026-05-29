@@ -385,6 +385,21 @@
     "free": "Free",
     "viewListing": "View listing",
     "loadError": "Could not load bundle contents. Please try again.",
-    "accessNote": "By purchasing this bundle you will gain download access to all included listings."
+    "accessNote": "By purchasing this bundle you will gain download access to all included listings.",
+    "edit": {
+      "sectionTitle": "Bundle",
+      "toggleLabel": "This listing is a bundle",
+      "toggleHint": "Group several of your own assets into a single discounted bundle.",
+      "childPickerLabel": "Select the assets included in the bundle",
+      "noOtherListings": "You have no other active listings to include.",
+      "sumLabel": "Total individual price",
+      "discountLabel": "Discount vs. individual total",
+      "priceWarning": "The bundle price is greater than or equal to the sum of individual prices. Offer a discount to attract buyers.",
+      "selectedCount_one": "{{count}} asset selected",
+      "selectedCount_other": "{{count}} assets selected",
+      "saved": "Bundle saved.",
+      "saveError": "Could not save the bundle. Please try again.",
+      "saveButton": "Save bundle"
+    }
   }
 }

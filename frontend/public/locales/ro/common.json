@@ -560,6 +560,22 @@
     "free": "Gratuit",
     "viewListing": "Vezi anunț",
     "loadError": "Nu am putut încărca conținutul pachetului. Încearcă din nou.",
-    "accessNote": "Achiziționând acest pachet, vei obține acces la descărcarea tuturor anunțurilor incluse."
+    "accessNote": "Achiziționând acest pachet, vei obține acces la descărcarea tuturor anunțurilor incluse.",
+    "edit": {
+      "sectionTitle": "Pachet (bundle)",
+      "toggleLabel": "Acest anunț este un pachet",
+      "toggleHint": "Grupează mai multe active ale tale într-un singur pachet cu preț redus.",
+      "childPickerLabel": "Selectează activele incluse în pachet",
+      "noOtherListings": "Nu ai alte anunțuri active pe care să le incluzi.",
+      "sumLabel": "Preț individual total",
+      "discountLabel": "Reducere față de suma individuală",
+      "priceWarning": "Prețul pachetului este mai mare sau egal cu suma prețurilor individuale. Oferă un discount pentru a atrage cumpărători.",
+      "selectedCount_one": "{{count}} activ selectat",
+      "selectedCount_few": "{{count}} active selectate",
+      "selectedCount_other": "{{count}} active selectate",
+      "saved": "Pachetul a fost salvat.",
+      "saveError": "Nu am putut salva pachetul. Încearcă din nou.",
+      "saveButton": "Salvează pachetul"
+    }
   }
 }
