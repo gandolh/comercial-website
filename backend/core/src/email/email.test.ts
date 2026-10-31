@@ -115,7 +115,7 @@ describe("EmailService", () => {
       // Mock the sendMail method to avoid actual SMTP calls
       const sendMailSpy = vi
         .spyOn(service["transporter"], "sendMail")
-        .mockResolvedValue({ messageId: "test-id" });
+        .mockResolvedValue({ messageId: "test-id" } as never);
 
       const message: EmailMessage = {
         to: "recipient@example.com",

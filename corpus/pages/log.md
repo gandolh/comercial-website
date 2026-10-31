@@ -35,3 +35,10 @@ Format: `## [YYYY-MM-DD] type | description`
 
 - Summary: Replaced the missing root README with a landing page (title PiațăRo, the name the UI shows; `my-olx` stays the code name) and added `docs/`: `README.md` (index), `getting-started.md`, `architecture.md`, and `images/` with four screenshots, `shots.md`, `demo-previews.html` (generated preview pictures) and `demo-seed.mjs` (fixes the seeded listings' missing images, adds four listings and two reviews through the API).
 - Found while running it, not fixed: `/adauga-anunt` never loads for a new listing (`useDraft` disabled query stays pending in React Query v5); "Anunțurile mele" calls `GET /me/listings`, which the API lacks; `npm run dev` needs `npm run build` first on a fresh clone; nothing reads `backend/.env`; `backend/app/data/` is not gitignored; the migrations insert demo accounts with a known password into every database; no SMTP is wired, so emails only reach the log; paid files sit inside the folder served at `/uploads/`; the safety tip on listing pages is physical-goods copy; CLAUDE.md names React Router and `backend/data`, and `backend/app/CONTRACT.md` is the pre-pivot API.
+
+## [2026-10-31] maintenance | README checked; routing.md added; the corpus-flow layout filed as a todo
+
+- Summary: A README refresh pass with the readme-docs standard. The README and its four images still match the code: the only commits since 2026-10-16 are security updates. Added `corpus/routing.md`, the file the orchestrate skill reads. Moving the whole corpus to corpus-flow's layout would move every page and its links, so it is [a todo](../todo/corpus-flow-layout.md) for the owner instead.
+- Found while running it: `npm run build` in `backend/` failed since the 2026-10-23 security updates, on `core/src/email/email.test.ts` line 118. The newer nodemailer types pick `sendMail`'s callback overload, whose return is `void`, so the mock's `{ messageId }` no longer typechecks. The mock now casts its value; the email tests pass (9 of 9).
+- Checked: `npm install` and `npm run build` in `backend/`, the API on port 8080, and `npm install` and `npm run dev` in `frontend/` on port 5173.
+
