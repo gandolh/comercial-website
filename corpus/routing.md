@@ -5,7 +5,7 @@
 **Review skill:** a general-purpose agent over the diff, plus the tests in `backend/` and `frontend/`
 **PR skill:** propose git commands
 **Issue tracker:** none. The backlog is `corpus/todo/`, one file per feature
-**Code host:** GitHub, gandolh/comercial-website
+**Code host:** GitHub, `<owner>/comercial-website`
 
 This corpus follows its own [SCHEMA.md](SCHEMA.md), older than corpus-flow: the wiki is `pages/`, the catalog is `pages/index.md` and the log is `pages/log.md`. Moving it to corpus-flow's layout is [a todo](todo/corpus-flow-layout.md).
 

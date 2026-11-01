@@ -11,7 +11,7 @@ updated: 2026-10-31
 
 # Move the corpus to corpus-flow's layout
 
-The owner's other repos keep their corpus in the layout of the corpus-flow skill (gandolh/my-personal-skills): `corpus/CLAUDE.md`, a generated `index.md`, `routing.md`, `lint.sh`, `log.md`, `todos/`, `briefs/todo|done|superseded/` and `wiki/` pages with `summary:` and `updated:` frontmatter. This corpus predates it and follows [SCHEMA.md](../SCHEMA.md). On 2026-10-31 only `routing.md` was added, because the rest moves every page.
+The owner's other repos keep their corpus in the layout of the corpus-flow skill (`<owner>/my-personal-skills`): `corpus/CLAUDE.md`, a generated `index.md`, `routing.md`, `lint.sh`, `log.md`, `todos/`, `briefs/todo|done|superseded/` and `wiki/` pages with `summary:` and `updated:` frontmatter. This corpus predates it and follows [SCHEMA.md](../SCHEMA.md). On 2026-10-31 only `routing.md` was added, because the rest moves every page.
 
 ## What the move would change
 
