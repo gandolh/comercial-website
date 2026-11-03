@@ -39,7 +39,8 @@ variables (the command line, your shell, a container) win over it.
 | `JWT_EXPIRY_SECONDS` | Token lifetime | `86400` |
 | `HOST`, `PORT` | Where the API listens | `0.0.0.0`, `8080` |
 | `DATABASE_PATH` | The SQLite file | `data/my-olx.db` under the folder the API runs in, which is `backend/app/` |
-| `UPLOADS_DIR` | Preview images and the files for sale | `data/uploads` under the same folder |
+| `UPLOADS_DIR` | Listing preview images, served publicly at `/uploads/` | `data/uploads` under the same folder |
+| `ASSETS_DIR` | The files for sale, outside the public folder; they go out only through the download routes | `data/assets` under the same folder |
 | `PUBLIC_BASE_URL` | The API's own address, used in image and file URLs | `http://localhost:<PORT>` |
 | `CORS_ALLOWED_ORIGINS` | Comma-separated origins the browser may call from | `http://localhost:5173` |
 | `FRONTEND_BASE_URL` | The web app's address, used in the links inside emails | `http://localhost:5173` |
@@ -63,25 +64,34 @@ Vite serves the app on <http://localhost:5173/>. The app calls the API at
 
 ## The demo data
 
-The migrations insert demo data into every new database:
+A new database has no accounts and no listings. For local work, create the demo
+data with:
+
+```bash
+cd backend
+NODE_ENV=development npm run seed:dev
+```
+
+It refuses to run without `NODE_ENV=development`, applies the migrations first,
+and adds the rows in `backend/seed/dev/` (a rerun changes nothing):
 
 - three accounts at `example.com` addresses, with verified email and phone.
   Their shared password is in a comment at the top of
-  `backend/migrations/20260428010000_seed_data.sql`;
+  `backend/seed/dev/01-demo-accounts-and-listings.sql`;
 - five listings with file and image records.
+
+Until 2026-11-03 these rows were migrations, so a database made before then
+already has them; nothing removes them from it.
 
 The image and file records point at files that are not in the repo, so those
 five listings show broken previews until you replace them. The README's
 screenshots use [images/demo-seed.mjs](images/demo-seed.mjs) to do that; the
 steps are in [images/shots.md](images/shots.md).
 
-These rows are part of the migrations, so a production database would get the
-same accounts and password. Remove them before any deploy.
-
 ## Signing up and email
 
 New accounts must verify their email before they can create listings. No SMTP
-server is wired in (`createEmailService({})` in `backend/app/src/server.ts`),
+server is wired in (`createEmailService({})` in `backend/app/src/create-server.ts`),
 so every email, including the verification link, password resets and expiry
 reminders, is written to the API's log instead of being sent.
 

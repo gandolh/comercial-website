@@ -12,7 +12,8 @@
     "build": "npm run build --workspace @my-olx/core && npm run build --workspace @my-olx/app",
     "test": "vitest run",
     "typecheck": "tsc -b core app",
-    "migrate": "npm run migrate --workspace @my-olx/app"
+    "migrate": "npm run migrate --workspace @my-olx/app",
+    "seed:dev": "npm run build --workspace @my-olx/core && npm run seed:dev --workspace @my-olx/app"
   },
   "devDependencies": {
     "typescript": "5.7.3",

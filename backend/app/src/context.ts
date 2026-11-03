@@ -6,7 +6,10 @@ import type { Config, EmailService, StorageService } from "@my-olx/core";
 export interface AppContext {
   db: Db;
   config: Config;
+  /** Listing images, under the publicly served uploads folder. */
   storage: StorageService;
+  /** Files for sale, outside it (`config.assetsDir`). */
+  assetStorage: StorageService;
   email: EmailService;
 }
 

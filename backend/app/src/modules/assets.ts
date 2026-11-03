@@ -143,7 +143,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const originalFilename = data.filename || "file";
       const contentType = data.mimetype || "application/octet-stream";
       const key = listingAssetKey(listingId, originalFilename);
-      const dest = path.join(ctx.config.uploadsDir, key);
+      const dest = path.join(ctx.config.assetsDir, key);
       await mkdir(path.dirname(dest), { recursive: true });
       await pipeline(data.file, createWriteStream(dest));
 
@@ -189,7 +189,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const asset = await assetsRepo.getAssetById(assetId);
       if (!asset || asset.listing_id !== listingId) throw AppError.notFound();
 
-      await ctx.storage.deleteObject(asset.s3_key);
+      await ctx.assetStorage.deleteObject(asset.s3_key);
       await assetsRepo.deleteAsset(assetId);
 
       return reply.send({});
@@ -248,7 +248,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const newDownloadCount = updatedListing?.download_count ?? 1;
       void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
 
-      const filePath = path.join(ctx.config.uploadsDir, asset.s3_key);
+      const filePath = path.join(ctx.config.assetsDir, asset.s3_key);
       const fileStat = await stat(filePath).catch(() => null);
       if (!fileStat) throw AppError.notFound();
 
@@ -295,7 +295,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
       const newDownloadCount = updatedListing?.download_count ?? 1;
       void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
 
-      const filePath = path.join(ctx.config.uploadsDir, asset.s3_key);
+      const filePath = path.join(ctx.config.assetsDir, asset.s3_key);
       const fileStat = await stat(filePath).catch(() => null);
       if (!fileStat) throw AppError.notFound();
 

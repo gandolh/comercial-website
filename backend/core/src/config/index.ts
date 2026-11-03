@@ -3,6 +3,8 @@ import path from "node:path";
 export interface Config {
   databasePath: string;
   uploadsDir: string;
+  /** Files for sale. Outside `uploadsDir`, which is served publicly: assets go out only through the download routes. */
+  assetsDir: string;
   publicBaseUrl: string;
   jwtSecret: string;
   jwtExpirySeconds: number;
@@ -30,6 +32,7 @@ export function loadConfig(): Config {
   return {
     databasePath: process.env.DATABASE_PATH ?? path.resolve("data/my-olx.db"),
     uploadsDir: process.env.UPLOADS_DIR ?? path.resolve("data/uploads"),
+    assetsDir: process.env.ASSETS_DIR ?? path.resolve("data/assets"),
     publicBaseUrl: process.env.PUBLIC_BASE_URL ?? defaultPublicBaseUrl,
     jwtSecret,
     jwtExpirySeconds: parseIntWithDefault(process.env.JWT_EXPIRY_SECONDS, 86400),

@@ -29,7 +29,7 @@ A paid listing: the file stays locked (Blocat) until the order is paid, and only
 |---|---|
 | <img src="docs/images/categories.webp" width="560" alt="Categorii Populare: a grid of 13 category cards with icons, from Grafică & Ilustrații and Șabloane & Template-uri to Modele 3D & AR and Invitații Digitale"> | <img src="docs/images/phone-browse.webp" width="240" alt="The listings page on a phone: 9 results, a sort menu, and the first card, wedding invitations for 45 RON, with a Verificat badge"> |
 
-The screens show the demo accounts the migrations create and listings with invented content and generated preview pictures. How each image was made: [docs/images/shots.md](docs/images/shots.md).
+The screens show the demo accounts `npm run seed:dev` creates and listings with invented content and generated preview pictures. How each image was made: [docs/images/shots.md](docs/images/shots.md).
 
 ## How it works
 
@@ -60,7 +60,7 @@ cd frontend && npm install
 npm run dev                                     # web app on http://localhost:5173
 ```
 
-Then open <http://localhost:5173/>. The migrations put demo accounts and listings into every new database, so remove them before any deploy. Env vars, the demo data, tests and common problems: [docs/getting-started.md](docs/getting-started.md).
+Then open <http://localhost:5173/>. A new database is empty; `NODE_ENV=development npm run seed:dev` in `backend/` adds demo accounts and listings. Env vars, the demo data, tests and common problems: [docs/getting-started.md](docs/getting-started.md).
 
 ## Project layout
 
@@ -68,7 +68,8 @@ Then open <http://localhost:5173/>. The migrations put demo accounts and listing
 |---|---|
 | `backend/core/` | `@my-olx/core`: database, auth, storage, email, config, the Fastify factory |
 | `backend/app/` | `@my-olx/app`: the marketplace routes and repositories |
-| `backend/migrations/` | SQL migrations, applied at start-up, including the demo data |
+| `backend/migrations/` | SQL migrations, applied at start-up |
+| `backend/seed/dev/` | The demo data for local work (`npm run seed:dev`, development only) |
 | `frontend/` | The React app |
 | `design/` | The Carpathian Clear design system and the HTML mock-ups |
 | `corpus/` | Project wiki: features, market research, business rules, log |

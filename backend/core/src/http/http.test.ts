@@ -10,6 +10,7 @@ async function makeTestConfig(overrides: Partial<Config> = {}): Promise<Config> 
   return {
     databasePath: ":memory:",
     uploadsDir,
+    assetsDir: path.join(uploadsDir, "..", path.basename(uploadsDir) + "-assets"),
     publicBaseUrl: "http://localhost:8080",
     jwtSecret: "test-secret",
     jwtExpirySeconds: 86400,
