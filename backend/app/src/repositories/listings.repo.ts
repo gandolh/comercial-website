@@ -623,6 +623,7 @@ export class ListingsRepository {
       FROM listings l
       INNER JOIN users u ON l.user_id = u.id
       WHERE l.active = 1
+        AND l.is_sample = 0
         AND l.expires_at > datetime('now')
         AND l.expires_at <= datetime('now', '+3 days')
         AND l.reminder_3day_sent_at IS NULL
@@ -641,6 +642,7 @@ export class ListingsRepository {
       FROM listings l
       INNER JOIN users u ON l.user_id = u.id
       WHERE l.active = 1
+        AND l.is_sample = 0
         AND l.expires_at > datetime('now')
         AND l.expires_at <= datetime('now', '+1 day')
         AND l.reminder_expiry_sent_at IS NULL

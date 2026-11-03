@@ -10,7 +10,8 @@
     "start": "node dist/server.js",
     "migrate": "tsx src/migrate.ts",
     "seed:dev": "tsx src/seed-dev.ts",
-    "create-owner": "tsx src/create-owner.ts"
+    "create-owner": "tsx src/create-owner.ts",
+    "seed:samples": "tsx src/seed-samples.ts"
   },
   "dependencies": {
     "@my-olx/core": "0.1.0",

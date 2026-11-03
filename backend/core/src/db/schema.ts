@@ -59,6 +59,8 @@ export interface ListingsTable {
   reminder_expiry_sent_at: string | null;
   // Bundle flag (added in 20260621030000_bundles.sql)
   is_bundle: ColumnType<number, number | undefined, number>;
+  /** A seeded sample listing that never expires (20261103030000_sample_listings.sql). */
+  is_sample: ColumnType<number, number | undefined, number>;
 }
 
 /** Bundle items join table: links a bundle listing to its child listings. */

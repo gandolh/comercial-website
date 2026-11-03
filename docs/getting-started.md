@@ -87,6 +87,21 @@ five listings show broken previews until you replace them. The README's
 screenshots use [images/demo-seed.mjs](images/demo-seed.mjs) to do that; the
 steps are in [images/shots.md](images/shots.md).
 
+## The sample listings
+
+The deployed demo shows nine sample listings, seeded with:
+
+```bash
+cd backend
+npm run seed:samples
+```
+
+It adds three seller profiles that cannot sign in, the nine listings with a
+preview (`backend/seed/samples/previews/`) and a small ZIP that says it is a
+demo file, and two reviews. Samples never expire (`is_sample`, an expiry date at
+the end of time) and get no reminder emails. A rerun changes nothing. It is
+safe in production; the deploy runs it once.
+
 ## Signing in
 
 There is no sign-up: only the owner has an account (the demo decision of
