@@ -80,3 +80,16 @@ Format: `## [YYYY-MM-DD] type | description`
 - The four todos became briefs 04 and 06 or were dropped (live ANAF).
 
 Entries above this one link to the old `pages/` and `todo/` paths and are left as written.
+
+## [2026-11-03] todo | Briefs 02-09 filed for the demo
+
+The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/decisions.md)):
+- [02](briefs/todo/02-fix-the-broken-flows.md): fix the broken flows and the stale docs.
+- [03](briefs/todo/03-security-before-going-public.md): the seeds out of the migrations, and paid files
+  off the public path.
+- [04](briefs/todo/04-remove-stripe.md): remove Stripe.
+- [05](briefs/todo/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
+- [06](briefs/todo/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
+- [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
+- [08](briefs/todo/08-base-path.md): the `/piataro` base path.
+- [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
