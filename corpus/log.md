@@ -89,7 +89,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
   off the public path.
 - [04](briefs/done/04-remove-stripe.md): remove Stripe.
 - [05](briefs/done/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
-- [06](briefs/todo/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
+- [06](briefs/done/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
 - [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
 - [08](briefs/todo/08-base-path.md): the `/piataro` base path.
 - [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
@@ -122,3 +122,10 @@ gone, and `npm run create-owner` makes the one account. Sign in with Ward uses t
 client. The decision changed on the way: Ward's token has no email, so the owner links Ward from
 Settings and Ward finds the user by subject ([decisions](wiki/decisions.md) → *Two ways in*). A real
 Ward round trip waits for the deploy.
+
+## [2026-11-03] done | Brief 06 — the simulated payout ledger at 2.5%
+
+[Brief 06](briefs/done/06-fake-payout-ledger.md), `4a9a4d8`. Paid orders record a 2.5% fee and the
+seller's net, older ones backfilled; payouts settle at once, simulated. The dashboard had never loaded
+(it called `/me/stats`, not `/users/me/stats`); it does now, with a Câștiguri section. A sweep of the
+frontend's API paths against the routes found nothing else in use.
