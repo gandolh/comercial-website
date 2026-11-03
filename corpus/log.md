@@ -91,7 +91,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [05](briefs/done/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
 - [06](briefs/done/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
 - [07](briefs/done/07-sample-listings.md): sample listings that never expire.
-- [08](briefs/todo/08-base-path.md): the `/piataro` base path.
+- [08](briefs/done/08-base-path.md): the `/piataro` base path.
 - [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
 
 ## [2026-11-03] done | Brief 02 — the add-listing flow works again
@@ -135,3 +135,9 @@ frontend's API paths against the routes found nothing else in use.
 [Brief 07](briefs/done/07-sample-listings.md), `5d87199`. `npm run seed:samples` adds nine sample
 listings under three sellers who cannot sign in, with previews and demo ZIPs. They never expire (a
 flag and an expiry at the end of time) and get no reminders. The deploy runs it once.
+
+## [2026-11-03] done | Brief 08 — the app at /piataro, the API at /piataro-api
+
+[Brief 08](briefs/done/08-base-path.md), `f5f23e9`. `PIATARO_BASE` sets the Vite base, the router's
+basepath and the translations' path, and one `apiUrl()` helper replaces the scattered API defaults. A
+build under `/piataro/` behind a local Caddy stand-in served pages, images, sign-in and downloads.

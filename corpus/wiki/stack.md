@@ -101,3 +101,10 @@ npm run lint      # ESLint
 - [overview](overview.md) — project context
 - [carpathian-clear](carpathian-clear.md) — design system tokens
 - [business-rules](business-rules.md) — constraints the stack enforces
+
+## Deployed paths (2026-11-03)
+
+The deploy serves the frontend at `/piataro/` (built with `PIATARO_BASE=/piataro/`) and the API at
+`/piataro-api/`, with the prefix stripped, so the API keeps its bare routes. The frontend reaches the API
+through `apiUrl()` (`frontend/src/core/lib/api-url.ts`); `PUBLIC_BASE_URL` and `FRONTEND_BASE_URL` give the
+API its public addresses for image URLs and redirects.

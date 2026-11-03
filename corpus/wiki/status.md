@@ -1,5 +1,5 @@
 ---
-summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; briefs 01-07 are done and 08-09 are queued, one line each.
+summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; briefs 01-08 are done and 09 is queued, one line each.
 updated: 2026-11-03
 ---
 
@@ -18,7 +18,7 @@ updates 2026-10-23. Not deployed. On 2026-11-03 the owner decided it becomes a d
 - 05 (done): sign-up closed, `npm run create-owner`, Sign in with Ward linked by subject from Settings.
 - 06 (done): the simulated payout ledger at 2.5%, the Câștiguri section; the dashboard loads again.
 - 07 (done): `npm run seed:samples`, nine sample listings that never expire.
-- 08: the frontend at `/piataro`, the API at `/piataro-api`.
+- 08 (done): `PIATARO_BASE`, the frontend at `/piataro/` and the API at `/piataro-api` (`apiUrl()`).
 - 09: the vps-deploy stack (in that repo).
 
 ## Owed by the owner
