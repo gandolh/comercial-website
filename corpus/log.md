@@ -87,7 +87,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [02](briefs/done/02-fix-the-broken-flows.md): fix the broken flows and the stale docs.
 - [03](briefs/done/03-security-before-going-public.md): the seeds out of the migrations, and paid files
   off the public path.
-- [04](briefs/todo/04-remove-stripe.md): remove Stripe.
+- [04](briefs/done/04-remove-stripe.md): remove Stripe.
 - [05](briefs/todo/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
 - [06](briefs/todo/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
 - [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
@@ -108,3 +108,9 @@ the browser. The frontend lint's 9 older errors are unchanged.
 are no longer migrations: `npm run seed:dev` creates them in development only, and a new database is
 empty. Files for sale moved from the public uploads folder to `ASSETS_DIR`, served only through the
 download routes. The server's assembly is `createServer()`, and tests start it with `test-app.ts`.
+
+## [2026-11-03] done | Brief 04 — Stripe removed; payments are simulated
+
+[Brief 04](briefs/done/04-remove-stripe.md), `2b40a95`. The fake provider is the only one, and the
+buyer marks their own order paid. The payment webhook went with Stripe: with the fake provider it
+let anyone mark any order paid. The Buy button says the payment is simulated.

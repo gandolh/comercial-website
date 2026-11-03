@@ -1,6 +1,6 @@
 ---
-summary: How buyers get files: free downloads, orders gating paid ones, the payment providers and download-all.
-updated: 2026-05-29
+summary: How buyers get files: free downloads, orders gating paid ones through the simulated fake payment (Stripe removed 2026-11-03), and download-all.
+updated: 2026-11-03
 ---
 
 # Digital-Asset Commerce (Purchase & Download)
@@ -22,22 +22,20 @@ A listing can carry multiple downloadable files. Each is individually retrievabl
 
 ## Payments & download gate
 
-Storefront model — the platform collects payment. PSP is abstracted behind a `PaymentProvider`
-interface so a real processor drops in later.
+Payments are **simulated** (the demo decision of 2026-11-03, [decisions](decisions.md)): the platform
+"collects" through `FakePaymentProvider`, the only provider. No money moves; the Buy button says so.
+The Stripe provider, its config guard and the payment webhook were removed on 2026-11-03.
 
-- **Default provider:** `FakePaymentProvider`, active whenever `STRIPE_SECRET_KEY` is unset (the
-  current state). It makes the full buy → pay → download flow end-to-end testable with no real PSP.
-- **Stripe:** `StripePaymentProvider` is a thin stub against Stripe's REST API via `fetch` (no `stripe`
-  npm package). Set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` and `selectProvider()` switches at startup.
+- **The flow:** `POST /orders` creates an order and returns the fake checkout URL, the local return page
+  marked paid; the buyer's `POST /orders/:id/mark-paid` marks it paid.
 - **`orders` table:** id, buyer_user_id, listing_id, seller_user_id, amount_ron, currency, status
-  (`pending|paid|failed|cancelled`), provider, provider_ref, created_at, paid_at. Migration
+  (`pending|paid|failed|cancelled`), provider (`fake`), provider_ref, created_at, paid_at. Migration
   `20260620020000_orders.sql`.
 
 Endpoints (in `modules/orders.ts`):
 - `POST /orders` — create order / get checkout URL. Idempotent: returns an existing `paid` order instead of re-charging.
 - `GET /orders`, `GET /orders/:id` — buyer's order history / status.
-- `POST /orders/webhook` — PSP callback, marks order paid. Idempotent (`WHERE status != 'paid'`).
-- `POST /orders/:id/mark-paid` — **test-only**, registered only when the fake provider is active.
+- `POST /orders/:id/mark-paid` — the fake payment; only the order's buyer may call it. Idempotent.
 
 **Download-gate rule** (`modules/assets.ts`, both download endpoints): if the listing is *not* free
 (`price_ron` is a positive number) *and* the requester is not the listing owner, a `paid` order for
@@ -46,24 +44,10 @@ that listing is required, else `403`. Free listings (`price_ron` null or ≤ 0) 
 Frontend: a `Buy`/`Cumpără` button on `ListingDetailPage` for paid listings, plus an orders module
 (`/comenzi`-style history + confirmation page). i18n under `orders.*`.
 
-## Stripe config hardening (added 2026-05-29)
-
-`selectProvider()` now **fails fast**: if exactly one of `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET`
-is set it throws at boot (both-or-neither), and it minimally validates key prefixes (`sk_` / `whsec_`).
-With neither set it cleanly falls back to `FakePaymentProvider` and the server boots. Covered by 24
-vitest cases (selection matrix + `verifyWebhook` rejects malformed payloads). Verified live: a
-partial-config boot throws the expected error.
-
 ## Open questions
 
-- ⚠️ **Real Stripe still unverified** (no keys here); the fake provider remains the only end-to-end-tested
-  path. The live `createCheckout` fetch and the webhook **HMAC-SHA256 signature verification** are
-  untested — the webhook handler still parses the payload WITHOUT verifying the `Stripe-Signature` header
-  (documented stub; must not go to production without it). Verify with `sk_test_…`, a webhook secret, and
-  `stripe listen --forward-to localhost:8080/orders/webhook`.
 - No refund / chargeback flow.
-- Platform fee / payout split to sellers is not modeled — `orders` records the gross only (creator
-  payout flow remains unbuilt).
+- Platform fee and payouts: brief 06 adds a simulated ledger at 2.5%.
 
 ## See also
 
