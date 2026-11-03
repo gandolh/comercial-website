@@ -92,7 +92,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [06](briefs/done/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
 - [07](briefs/done/07-sample-listings.md): sample listings that never expire.
 - [08](briefs/done/08-base-path.md): the `/piataro` base path.
-- [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
+- [09](briefs/done/09-deploy-stack.md): the container and the vps-deploy stack.
 
 ## [2026-11-03] done | Brief 02 — the add-listing flow works again
 
@@ -141,3 +141,11 @@ flag and an expiry at the end of time) and get no reminders. The deploy runs it 
 [Brief 08](briefs/done/08-base-path.md), `f5f23e9`. `PIATARO_BASE` sets the Vite base, the router's
 basepath and the translations' path, and one `apiUrl()` helper replaces the scattered API defaults. A
 build under `/piataro/` behind a local Caddy stand-in served pages, images, sign-in and downloads.
+
+## [2026-11-03] done | Brief 09 — the container and the deploy stack
+
+[Brief 09](briefs/done/09-deploy-stack.md), `fdca5b4` and vps-deploy's `ba089e6`. The API runs from
+`infrastructure/` on loopback 8807, with its data in `/data`. vps-deploy's `piataro` stack builds the
+frontend under `/piataro/`, seeds the samples, and creates the owner's account when it is missing,
+with the password over ssh stdin. Checked with a local container behind the Caddy stand-in and a dry
+run of the stack. Not deployed; the owner's steps are in [status.md](wiki/status.md).

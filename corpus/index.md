@@ -8,13 +8,13 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 
 ## Wiki
 
-- [accounts-and-profiles](wiki/accounts-and-profiles.md) — Password recovery, public seller profiles and the fixed upload flow, as shipped 2026-05-29.
+- [accounts-and-profiles](wiki/accounts-and-profiles.md) — Seller profiles and the upload flow (2026-05-29), and sign-in since 2026-11-03 — owner only (create-owner), no sign-up or email reset, Sign in with Ward linked by subject.
 - [asset](wiki/asset.md) — The Asset entity: a downloadable file on a listing, its columns, file-format and license rules, and how a download is gated.
 - [bundles](wiki/bundles.md) — Event-template bundles: a listing that sells several child listings at one price, and how buying it grants their downloads.
 - [business-rules](wiki/business-rules.md) — The enforced marketplace rules (listing rate limit, expiry, the publish requirement, pricing, the platform fee) and where each is checked.
 - [carpathian-clear](wiki/carpathian-clear.md) — The Carpathian Clear design system: colour roles, type, radii and where the tokens live.
-- [decisions](wiki/decisions.md) — Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire.
-- [digital-asset-commerce](wiki/digital-asset-commerce.md) — How buyers get files: free downloads, orders gating paid ones, the payment providers and download-all.
+- [decisions](wiki/decisions.md) — Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire.
+- [digital-asset-commerce](wiki/digital-asset-commerce.md) — How buyers get files: free downloads, orders gating paid ones through the simulated fake payment (Stripe removed 2026-11-03), and download-all.
 - [digital-pivot-cleanup](wiki/digital-pivot-cleanup.md) — The pivot from the OLX-era physical-goods clone to digital files only: what was removed, and the category overhaul.
 - [expiry-reminders](wiki/expiry-reminders.md) — Expiry-reminder emails three days before and on the day a listing expires, with the opt-out and no duplicates.
 - [gdpr-kits](wiki/gdpr-kits.md) — Market research: Romanian GDPR document kits, the documents the law requires, competitors' prices and the gap for sector packs.
@@ -33,7 +33,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [search](wiki/search.md) — Listing search on SQLite FTS5 with diacritics folding ("sablon" matches "șablon").
 - [social-media-templates](wiki/social-media-templates.md) — Market research: social-media template packs for Romanian SMBs (platform reach, the price gap between packs and agencies, what to sell).
 - [stack](wiki/stack.md) — The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-- [status](wiki/status.md) — Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; brief 01 (corpus layout) is done and briefs 02-09 are queued, one line each.
+- [status](wiki/status.md) — Dated snapshot (2026-11-03) — PiațăRo as a deployed demo; briefs 01-09 are done (one line each), not deployed yet, and the owner's steps to deploy it.
 - [user](wiki/user.md) — The User entity: one account type that both buys and sells, its columns, auth fields, seller profile and email opt-outs.
 
 ## Work

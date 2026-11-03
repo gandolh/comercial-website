@@ -26,3 +26,28 @@ other stacks.
 - vps-deploy's typecheck and `--check` pass, and the Caddyfile has the two routes.
 - The owner's steps (secrets, `npm run setup` for Ward, the deploy, the two commands) are listed in
   `wiki/status.md`.
+
+---
+
+**Outcome (2026-11-03).** Done: `fdca5b4` here, `ba089e6` in vps-deploy. Not deployed.
+- **Image:** `infrastructure/Dockerfile` builds `backend/` on Node 24 Alpine; better-sqlite3 11.7.0
+  compiles there, and argon2 uses its musl prebuild. `/app` keeps backend's layout, so the
+  `../../migrations` and `../../seed/samples` paths resolve. Data sits in `/data`.
+  `infrastructure/docker-compose.yml` publishes `piataro-api` on `127.0.0.1:8807`.
+- **Root manifest:** a root `package.json` that only delegates, because vps-deploy's
+  `SourceRepo` needs one at the checkout's root.
+- **Stack:** vps-deploy's `piataro` builds the client in `frontend/` with `PIATARO_BASE=/piataro/`.
+  The sample seed is a `migrations` entry.
+- **Owner account:** a pre-start step runs `create-owner.js --if-missing`, with the email, name and
+  password on stdin over ssh, so the password is never on the box. `--if-missing` is new, so that a
+  password changed in Settings survives every deploy.
+- **Secrets:** `JWT_SECRET` and the Ward key come from `npm run setup`, and the `OWNER_*` values from
+  its questions.
+- **Checked locally:**
+  - **Container:** the image built, the seed added 9 listings, `create-owner` said `created` and then
+    `kept`, and `/health` answered.
+  - **Through the Caddy stand-in:** a `/piataro/` build showed the page, the 9 listings and their
+    images. The owner signed in, a fake purchase went through, the ZIP downloaded, and a file for
+    sale answered 404 under `/uploads`.
+  - **vps-deploy:** typecheck, `--check` and `synth` (both routes) passed. `piataro all --dry-run`
+    walked the server phase through.
