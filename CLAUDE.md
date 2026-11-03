@@ -19,6 +19,11 @@ that only the owner signs into (`corpus/wiki/decisions.md`).
 Two npm projects with their own lockfiles: `backend/` (Node + TypeScript + Fastify, a workspace of
 `@my-olx/core` and `@my-olx/app`, Kysely over SQLite with `better-sqlite3`, files on disk) and
 `frontend/` (React + Vite + TanStack Router + React Query + Tailwind v4). Exact-pinned dependencies.
+The root `package.json` has no dependencies; its scripts only call into the two (and vps-deploy needs
+one at the checkout's root).
+
+**Deploy:** vps-deploy's `piataro` stack serves the frontend at `/piataro/` and the API's container
+(`infrastructure/`, port 8807, data in a bind-mounted `/data`) at `/piataro-api/`. See `docs/deploy.md`.
 
 ## Commands
 
@@ -47,7 +52,8 @@ npm run build                 # tsc + vite build
 npm run lint                  # ESLint
 ```
 
-The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080`).
+The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in dev and
+`/piataro-api` in a build; `frontend/src/core/lib/api-url.ts`). `PIATARO_BASE` sets the base path.
 
 ## Architecture
 

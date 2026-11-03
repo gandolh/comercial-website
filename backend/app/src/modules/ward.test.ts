@@ -107,4 +107,15 @@ describe("createOwner", () => {
     expect(rows[0]!.email_verified).toBe(1);
     expect(await verifyPassword(rows[0]!.password_hash, "second-password-2")).toBe(true);
   });
+
+  it("leaves an existing owner alone with ifMissing", async () => {
+    const db = new Database(":memory:");
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    runMigrations(db, path.resolve(here, "../../../migrations"));
+    const owner = { email: "owner@test.ro", password: "first-password-1", name: "Owner" };
+    expect(await createOwner(db, owner, { ifMissing: true })).toBe("created");
+    expect(await createOwner(db, { ...owner, password: "second-password-2" }, { ifMissing: true })).toBe("kept");
+    const row = db.prepare("SELECT password_hash FROM users").get() as { password_hash: string };
+    expect(await verifyPassword(row.password_hash, "first-password-1")).toBe(true);
+  });
 });

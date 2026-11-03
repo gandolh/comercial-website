@@ -6,6 +6,8 @@
 # Local data: the SQLite database and uploaded files (default paths, relative to backend/app)
 backend/app/data/
 backend/data/
+# The container's /data in a local `docker compose up` (infrastructure/docker-compose.yml)
+/data/
 
 # Node
 node_modules

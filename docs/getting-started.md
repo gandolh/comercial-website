@@ -75,7 +75,8 @@ cd frontend && PIATARO_BASE=/piataro/ npm run build
 translations load from. On the API side, set `PUBLIC_BASE_URL` to the API's
 public address (`https://<host>/piataro-api`), which image URLs are built from,
 and `FRONTEND_BASE_URL` to the app's (`https://<host>/piataro`), which Ward's
-redirects and email links use.
+redirects and email links use. The container and the deploy itself:
+[deploy.md](deploy.md).
 
 ## The demo data
 
@@ -115,8 +116,8 @@ npm run seed:samples
 It adds three seller profiles that cannot sign in, the nine listings with a
 preview (`backend/seed/samples/previews/`) and a small ZIP that says it is a
 demo file, and two reviews. Samples never expire (`is_sample`, an expiry date at
-the end of time) and get no reminder emails. A rerun changes nothing. It is
-safe in production; the deploy runs it once.
+the end of time) and get no reminder emails. A rerun changes nothing, which is
+why the deploy can run it on every deploy.
 
 ## Signing in
 
@@ -129,7 +130,9 @@ OWNER_EMAIL=you@example.com OWNER_PASSWORD='at least 12 characters' OWNER_NAME='
 ```
 
 It applies the migrations first, marks the email verified, and resets the
-password when run again with a new one. There is no email password reset.
+password when run again with a new one. With `--if-missing` it only creates the
+account and leaves an existing one alone; the deploy runs it that way. There is
+no email password reset.
 
 **Sign in with Ward** turns on when the five `WARD_OIDC_*` settings are set
 (`WARD_OIDC_ISSUER`, `WARD_OIDC_CLIENT_ID`, `WARD_OIDC_CLIENT_KEY`,
@@ -160,16 +163,16 @@ cd backend && npm test && npm run typecheck   # vitest; tsc over core and app
 cd frontend && npm run lint && npm run build  # eslint; tsc + vite build
 ```
 
-On 2026-10-16 the backend's 156 tests passed and the typecheck was clean. The
-frontend built, and `npm run lint` reported 9 errors and 19 warnings that were
-already there.
+On 2026-11-03 the backend's 160 tests passed and the typecheck was clean. The
+frontend built, and `npm run lint` reported 9 errors that predate the demo work
+(the same 9 as on 2026-10-16).
 
 ## Common problems
 
 - **`ERR_MODULE_NOT_FOUND` for `@my-olx/core/dist/index.js`.** Run
   `npm run build` in `backend/` first.
-- **`JWT_SECRET environment variable is required`.** Pass it on the command
-  line; `backend/.env` is not read.
+- **`JWT_SECRET environment variable is required`.** Set it in `backend/.env`
+  (copied from `.env.example`), which the API reads when it exists.
 - **`ENOSPC: System limit for number of file watchers reached`.** Something
   else, often VS Code, holds most of the watchers. Run either dev server with
   `CHOKIDAR_USEPOLLING=1 CHOKIDAR_INTERVAL=300` in front.

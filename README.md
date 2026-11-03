@@ -70,13 +70,14 @@ Then open <http://localhost:5173/>. A new database is empty; `NODE_ENV=developme
 | `backend/migrations/` | SQL migrations, applied at start-up |
 | `backend/seed/dev/` | The demo data for local work (`npm run seed:dev`, development only) |
 | `frontend/` | The React app |
+| `infrastructure/` | The API's container: `Dockerfile` and `docker-compose.yml` ([docs/deploy.md](docs/deploy.md)) |
 | `design/` | The Carpathian Clear design system and the HTML mock-ups |
 | `corpus/` | Project wiki: features, market research, business rules, log |
-| `docs/` | Setup, architecture and the images here |
+| `docs/` | Setup, the deploy, architecture and the images here |
 
 ## Docs
 
-- [docs/](docs/README.md): setup, architecture, and the images used here
+- [docs/](docs/README.md): setup, the deploy, architecture, and the images used here
 - [corpus/](corpus/index.md): the project wiki, with the features, market research and business rules
 - [design/](design/README.md): the Carpathian Clear design system and the mock-ups the UI was built from
 

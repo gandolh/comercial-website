@@ -1,0 +1,11 @@
+{
+  "name": "piataro",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PiațăRo. backend/ and frontend/ are two npm projects with their own lockfiles; these scripts only call into them.",
+  "scripts": {
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "test": "npm --prefix backend test",
+    "lint": "npm --prefix frontend run lint"
+  }
+}

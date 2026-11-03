@@ -1,0 +1,28 @@
+# What the image build never needs. The Dockerfile copies only backend/:
+# its manifests and tsconfig.base.json, core/, app/, migrations/ and
+# seed/samples/.
+#
+# Compiled output and build state are left out so the build always compiles
+# from source: a stale tsconfig.tsbuildinfo would let `tsc -b` skip emitting.
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/coverage
+**/*.test.ts
+
+# Secrets and the local data
+**/.env
+**/.env.*
+data
+backend/app/data
+backend/data
+
+# Not part of the image
+.git
+.claude
+corpus
+docs
+design
+frontend
+seed-data
+backend/seed/dev
