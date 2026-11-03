@@ -1,6 +1,6 @@
 ---
 summary: The Asset entity: a downloadable file on a listing, its columns, file-format and license rules, and how a download is gated.
-updated: 2026-05-28
+updated: 2026-11-03
 ---
 
 # Asset
@@ -13,7 +13,7 @@ A downloadable file attached to a [listing](listing.md). The core product unit â
 |---|---|---|
 | `id` | TEXT PK | hex(randomblob(16)) |
 | `listing_id` | TEXT FK | â†’ [listing](listing.md) |
-| `s3_key` | TEXT | storage key; path under `data/uploads/` |
+| `s3_key` | TEXT | storage key; path under `ASSETS_DIR` (`data/assets/`), never under the public uploads folder (since 2026-11-03) |
 | `original_filename` | TEXT | original uploaded filename |
 | `file_size_bytes` | INTEGER | |
 | `content_type` | TEXT | MIME type |

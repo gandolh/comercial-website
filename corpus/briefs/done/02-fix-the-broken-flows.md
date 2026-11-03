@@ -49,7 +49,7 @@ safety tip, `backend/app/src/modules/` (the new `GET /me/listings`), `backend/co
 - **Checked in the browser** (the API on a scratch database, the demo account): picked a category, filled
   the details, uploaded a file, set 49 RON, ticked the terms and published. The listing showed in
   "Anunțurile mele".
-- **Tests:** backend 161 → 168 (the owner's-listings query, the 401 behind the error handler, the draft
+- **Tests:** backend 156 → 165 (the owner's-listings query, the 401 behind the error handler, the draft
   schema).
 - **Lint:** the frontend lint still reports the 9 errors it reported before this brief, all React-hooks
   rules in files this brief does not touch.

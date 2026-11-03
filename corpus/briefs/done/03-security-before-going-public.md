@@ -27,3 +27,24 @@ download a paid file without an order.
 - A fresh database has no users; `npm run seed:dev` creates the demo data in development only.
 - `curl` on a paid asset's old `/uploads/` URL gets 404; the authorized download still works.
 - Backend build and tests pass.
+
+---
+
+**Outcome (2026-11-03).** Done (`05572b5`).
+- **The seeds:**
+  - The two seed migrations are now empty, with their names kept, so databases that already ran them
+    are unaffected.
+  - Their rows moved to `backend/seed/dev/`, adapted to today's schema: the old listing rows go through a
+    temp table without the dropped `city` and `is_negotiable` columns.
+  - `npm run seed:dev` runs them, applies the migrations first, refuses without `NODE_ENV=development`,
+    and is idempotent.
+  - A freshly migrated database has 0 users.
+- **Paid files:**
+  - Files for sale live in `ASSETS_DIR` (default `data/assets`), which nothing serves statically.
+  - A start-up step moves existing asset files there from the uploads folder. On the dev server it moved
+    brief 02's test upload, and its old `/uploads/` URL went from served to 404.
+  - Images stay public.
+- **Tests:** `createServer()` now builds the app for `server.ts` and for tests (`test-app.ts`).
+  - New tests: paid files 404 under `/uploads/`, the download refuses without a paid order and serves with
+    one, and the move.
+  - Backend tests 165 → 168.

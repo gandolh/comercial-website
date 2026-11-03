@@ -85,7 +85,7 @@ Entries above this one link to the old `pages/` and `todo/` paths and are left a
 
 The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/decisions.md)):
 - [02](briefs/done/02-fix-the-broken-flows.md): fix the broken flows and the stale docs.
-- [03](briefs/todo/03-security-before-going-public.md): the seeds out of the migrations, and paid files
+- [03](briefs/done/03-security-before-going-public.md): the seeds out of the migrations, and paid files
   off the public path.
 - [04](briefs/todo/04-remove-stripe.md): remove Stripe.
 - [05](briefs/todo/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
@@ -101,3 +101,10 @@ stacked: the wizard waited forever on a disabled query, and the API refused the 
 creates. Also fixed: `GET /me/listings`, 401 instead of 500 on a bad token, the digital-goods safety tip,
 `.env` loading, the stale CLAUDE.md, and `CONTRACT.md` is removed. A listing was published end to end in
 the browser. The frontend lint's 9 older errors are unchanged.
+
+## [2026-11-03] done | Brief 03 — no known-password accounts, paid files private
+
+[Brief 03](briefs/done/03-security-before-going-public.md), `05572b5`. The demo accounts and listings
+are no longer migrations: `npm run seed:dev` creates them in development only, and a new database is
+empty. Files for sale moved from the public uploads folder to `ASSETS_DIR`, served only through the
+download routes. The server's assembly is `createServer()`, and tests start it with `test-app.ts`.

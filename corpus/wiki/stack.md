@@ -1,6 +1,6 @@
 ---
 summary: The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-updated: 2026-05-28
+updated: 2026-11-03
 ---
 
 # Tech Stack
@@ -36,7 +36,7 @@ routes/ → handlers/ → services/ → repositories/
 
 **Auth:** JWT + Argon2. `core/auth/`. Token carries `user_id`.
 
-**Storage:** Disk-based (`core/storage/`). Files saved to `UPLOADS_DIR` (default `data/uploads/`). Served by `@fastify/static` at `/uploads/<key>`. Upload via `@fastify/multipart` direct POST — no presigned URLs.
+**Storage:** Disk-based (`core/storage/`). Listing images go to `UPLOADS_DIR` (default `data/uploads/`), served by `@fastify/static` at `/uploads/<key>`. Files for sale go to `ASSETS_DIR` (default `data/assets/`), which is not served: they leave only through the download routes, which check the order (since 2026-11-03). Upload via `@fastify/multipart` direct POST — no presigned URLs.
 
 **Email:** `LogEmailService` (console log) in dev; `SmtpEmailService` for prod — swap via `createEmailService({host: ...})`.
 
@@ -72,7 +72,8 @@ cd frontend && npm run dev  # starts Vite on :5173
 | What | Path |
 |---|---|
 | Database | `backend/data/my-olx.db` |
-| Uploads | `backend/data/uploads/` |
+| Uploads (images) | `backend/app/data/uploads/` |
+| Assets (files for sale) | `backend/app/data/assets/` |
 | Public URL | `http://localhost:8080/uploads/<key>` |
 
 ## Key npm scripts
