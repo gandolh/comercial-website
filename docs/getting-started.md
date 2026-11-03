@@ -87,12 +87,33 @@ five listings show broken previews until you replace them. The README's
 screenshots use [images/demo-seed.mjs](images/demo-seed.mjs) to do that; the
 steps are in [images/shots.md](images/shots.md).
 
-## Signing up and email
+## Signing in
 
-New accounts must verify their email before they can create listings. No SMTP
-server is wired in (`createEmailService({})` in `backend/app/src/create-server.ts`),
-so every email, including the verification link, password resets and expiry
-reminders, is written to the API's log instead of being sent.
+There is no sign-up: only the owner has an account (the demo decision of
+2026-11-03). Create or update it with:
+
+```bash
+cd backend
+OWNER_EMAIL=you@example.com OWNER_PASSWORD='at least 12 characters' OWNER_NAME='Your name' npm run create-owner
+```
+
+It applies the migrations first, marks the email verified, and resets the
+password when run again with a new one. There is no email password reset.
+
+**Sign in with Ward** turns on when the five `WARD_OIDC_*` settings are set
+(`WARD_OIDC_ISSUER`, `WARD_OIDC_CLIENT_ID`, `WARD_OIDC_CLIENT_KEY`,
+`WARD_OIDC_REDIRECT_URI`, and optionally `WARD_OIDC_POST_LOGOUT_REDIRECT_URI`);
+with `WARD_OIDC_ISSUER` unset, only the password login shows. The redirect URI
+is the API's `/auth/ward/callback` as the browser sees it. Sign in with the
+password first and link Ward once from **Setări**; after that "Intră cu Ward"
+works. Ward identifies an account only by its subject, so an unlinked Ward
+account is refused.
+
+## Email
+
+No SMTP server is wired in (`createEmailService({})` in
+`backend/app/src/create-server.ts`), so every email, such as expiry reminders,
+is written to the API's log instead of being sent.
 
 ## Payments
 

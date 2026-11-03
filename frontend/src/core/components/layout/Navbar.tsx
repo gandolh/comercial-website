@@ -131,12 +131,6 @@ export function Navbar() {
               >
                 Conectare
               </Link>
-              <Link
-                to="/inregistrare"
-                className="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg no-underline"
-              >
-                Înregistrare
-              </Link>
             </>
           )}
         </div>

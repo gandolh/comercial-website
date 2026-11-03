@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import type { ModuleRoute } from "@app/routes/types";
 
+// Sign-up and the email password reset are gone: only the owner signs in (corpus decisions.md).
 export const authRoutes: ModuleRoute[] = [
   {
     path: "/autentificare",
@@ -9,11 +10,9 @@ export const authRoutes: ModuleRoute[] = [
     ),
   },
   {
-    path: "/inregistrare",
+    path: "/autentificare/ward",
     component: lazy(() =>
-      import("../pages/RegisterPage").then((m) => ({
-        default: m.RegisterPage,
-      })),
+      import("../pages/WardReturnPage").then((m) => ({ default: m.WardReturnPage })),
     ),
   },
   {
@@ -21,22 +20,6 @@ export const authRoutes: ModuleRoute[] = [
     component: lazy(() =>
       import("../pages/EmailVerifyPage").then((m) => ({
         default: m.EmailVerifyPage,
-      })),
-    ),
-  },
-  {
-    path: "/parola-uitata",
-    component: lazy(() =>
-      import("../pages/ForgotPasswordPage").then((m) => ({
-        default: m.ForgotPasswordPage,
-      })),
-    ),
-  },
-  {
-    path: "/reseteaza-parola",
-    component: lazy(() =>
-      import("../pages/ResetPasswordPage").then((m) => ({
-        default: m.ResetPasswordPage,
       })),
     ),
   },

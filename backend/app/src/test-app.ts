@@ -6,10 +6,11 @@ import path from "node:path";
 import { signToken } from "@my-olx/core";
 import type { Config } from "@my-olx/core";
 import { createServer } from "./create-server.js";
+import type { WardClient } from "../vendor/ward/ward-auth.js";
 
 export const TEST_JWT_SECRET = "test-app-secret";
 
-export async function startTestApp(overrides: Partial<Config> = {}) {
+export async function startTestApp(overrides: Partial<Config> = {}, ward: WardClient | null = null) {
   const root = mkdtempSync(path.join(tmpdir(), "piataro-test-"));
   const config: Config = {
     databasePath: path.join(root, "test.db"),
@@ -24,7 +25,7 @@ export async function startTestApp(overrides: Partial<Config> = {}) {
     frontendBaseUrl: "http://localhost:5173",
     ...overrides,
   };
-  const { app, ctx } = await createServer(config);
+  const { app, ctx } = await createServer(config, { ward });
   await app.ready();
   /** An Authorization header for `userId`. */
   const bearer = (userId: string) => ({ authorization: `Bearer ${signToken(userId, TEST_JWT_SECRET, 3600)}` });

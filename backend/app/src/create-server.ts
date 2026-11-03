@@ -22,6 +22,9 @@ import { registerOrdersRoutes } from "./modules/orders.js";
 import { registerReviewsRoutes } from "./modules/reviews.js";
 import { registerBundlesRoutes } from "./modules/bundles.js";
 import { moveAssetsOutOfUploads } from "./move-assets.js";
+import { registerWardRoutes } from "./modules/ward.js";
+import { wardClientFromEnv } from "./ward-client.js";
+import type { WardClient } from "../vendor/ward/ward-auth.js";
 import { runMigrations } from "@my-olx/core";
 import Database from "better-sqlite3";
 import path from "node:path";
@@ -31,7 +34,14 @@ import { mkdir } from "node:fs/promises";
 import type { FastifyInstance } from "fastify";
 import type { Config } from "@my-olx/core";
 
-export async function createServer(config: Config): Promise<{ app: FastifyInstance; ctx: AppContext }> {
+/**
+ * `ward` overrides the client the `WARD_OIDC_*` settings would make: tests pass a fake, or `null`
+ * for local login only.
+ */
+export async function createServer(
+  config: Config,
+  options: { ward?: WardClient | null } = {},
+): Promise<{ app: FastifyInstance; ctx: AppContext }> {
   // Ensure data directories exist
   await mkdir(path.dirname(config.databasePath), { recursive: true });
   await mkdir(config.uploadsDir, { recursive: true });
@@ -75,6 +85,8 @@ export async function createServer(config: Config): Promise<{ app: FastifyInstan
   registerOrdersRoutes(app, ctx);
   registerReviewsRoutes(app, ctx);
   registerBundlesRoutes(app, ctx);
+  const ward = options.ward === undefined ? await wardClientFromEnv() : (options.ward ?? undefined);
+  registerWardRoutes(app, ctx, ward);
 
   return { app, ctx };
 }

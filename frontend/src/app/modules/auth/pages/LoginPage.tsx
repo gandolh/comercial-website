@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@core/lib/router";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "@core/lib/router";
 import { AuthCardShell } from "../components/AuthCardShell";
 import { Input, Button } from "@core/components/ui";
 import { loginSchema, type LoginInput } from "../schemas";
 import { useLoginMutation } from "../hooks/useLoginMutation";
+import { fetchWardStatus, wardErrorMessage, wardStartUrl } from "../services/ward";
 
 export function LoginPage() {
   const {
@@ -16,6 +18,9 @@ export function LoginPage() {
   });
 
   const loginMutation = useLoginMutation();
+  const [searchParams] = useSearchParams();
+  const wardError = searchParams.get("ward_error");
+  const ward = useQuery({ queryKey: ["ward-status"], queryFn: fetchWardStatus, staleTime: 60_000 });
 
   const onSubmit = (data: LoginInput) => {
     loginMutation.mutate(data);
@@ -24,8 +29,13 @@ export function LoginPage() {
   return (
     <AuthCardShell
       title="Autentifică-te"
-      description="Intră în contul tău pentru a continua"
+      description="PiațăRo este o demonstrație: doar proprietarul are cont."
     >
+      {wardError && (
+        <div className="mb-4 p-3 rounded-lg bg-error-container text-on-error-container text-sm">
+          {wardErrorMessage(wardError)}
+        </div>
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Email"
@@ -55,23 +65,14 @@ export function LoginPage() {
           Autentifică-te
         </Button>
 
-        <div className="text-center space-y-2 mt-4">
-          <Link
-            to="/parola-uitata"
-            className="block text-sm text-primary hover:underline"
+        {ward.data?.enabled && (
+          <a
+            href={wardStartUrl()}
+            className="block w-full text-center px-6 py-3 rounded-full font-semibold border-2 border-outline-variant hover:bg-surface-container-low transition-colors no-underline text-on-surface"
           >
-            Ai uitat parola?
-          </Link>
-          <p className="text-sm text-on-surface-variant">
-            Nu ai cont?{" "}
-            <Link
-              to="/inregistrare"
-              className="text-primary font-medium hover:underline"
-            >
-              Înregistrează-te
-            </Link>
-          </p>
-        </div>
+            Intră cu Ward
+          </a>
+        )}
       </form>
     </AuthCardShell>
   );

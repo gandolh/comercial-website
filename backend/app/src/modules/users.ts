@@ -43,6 +43,8 @@ interface UserSummary {
   social_instagram: string | null;
   social_github: string | null;
   created_at: string;
+  /** Whether "Sign in with Ward" is linked (users.ward_subject set). */
+  ward_linked: boolean;
 }
 
 interface ListingStats {
@@ -117,6 +119,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
           "social_instagram",
           "social_github",
           "created_at",
+          "ward_subject",
         ])
         .where("id", "=", userId)
         .executeTakeFirst();
@@ -140,6 +143,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         social_instagram: (user as any).social_instagram ?? null,
         social_github: (user as any).social_github ?? null,
         created_at: toISOString(user.created_at),
+        ward_linked: user.ward_subject !== null,
       };
 
       return reply.send(response);
@@ -205,6 +209,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
         social_instagram: u.social_instagram ?? null,
         social_github: u.social_github ?? null,
         created_at: toISOString(u.created_at),
+        ward_linked: u.ward_subject != null,
       });
 
       if (Object.keys(updates).length === 0) {
@@ -226,6 +231,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
             "social_instagram",
             "social_github",
             "created_at",
+            "ward_subject",
           ])
           .where("id", "=", userId)
           .executeTakeFirst();

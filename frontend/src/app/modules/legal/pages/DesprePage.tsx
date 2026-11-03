@@ -116,17 +116,17 @@ export function DesprePage() {
             className="text-2xl font-bold text-on-primary-container"
             style={{ fontFamily: "var(--font-headline)" }}
           >
-            Ești creator? Hai alături de noi.
+            PiațăRo este o demonstrație.
           </h2>
           <p className="text-on-primary-container/80">
-            Înregistrează-te gratuit și postează primul tău anunț în câteva
-            minute.
+            Conturile noi nu sunt deschise, iar plățile sunt simulate. Poți
+            răsfoi toate anunțurile.
           </p>
           <Link
-            to="/inregistrare"
+            to="/"
             className="inline-flex items-center justify-center bg-primary text-on-primary px-8 py-3 rounded-full font-bold no-underline hover:opacity-90 transition-opacity"
           >
-            Creează cont gratuit
+            Vezi anunțurile
           </Link>
         </section>
       </div>

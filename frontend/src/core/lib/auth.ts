@@ -9,6 +9,8 @@ export interface User {
   email_verified: boolean;
   phone: string | null;
   phone_verified: boolean;
+  /** Whether "Sign in with Ward" is linked to this account. */
+  ward_linked?: boolean;
 }
 
 interface AuthState {

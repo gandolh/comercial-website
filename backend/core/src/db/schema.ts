@@ -22,6 +22,8 @@ export interface UsersTable {
   phone: string | null;
   phone_verified: ColumnType<number, number | undefined, number>;
   email_verified: ColumnType<number, number | undefined, number>;
+  /** Ward's subject once the user linked "Sign in with Ward" (added in 20261103010000_users_ward_subject.sql). */
+  ward_subject: ColumnType<string | null, string | null | undefined, string | null>;
   /** Whether the user has opted in to transactional email notifications (default: 1 / true). */
   email_notifications: ColumnType<number, number | undefined, number>;
   /** Seller profile fields (added in 20260615010000_user_profile_fields.sql). */

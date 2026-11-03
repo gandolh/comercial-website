@@ -141,66 +141,12 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
   const repo = new UsersAuthRepository(ctx.db);
 
   /**
-   * POST /auth/register
-   * Creates a new user account and sends a verification email.
+   * POST /auth/register — closed. Only the owner signs in (the demo decision of 2026-11-03); their
+   * account is made by `npm run create-owner` at deploy.
    */
-  app.post<{ Body: unknown }>(
-    "/auth/register",
-    async (request, reply) => {
-      try {
-        const body = registerSchema.parse(request.body);
-        const { email, password } = body;
-
-        // Check if email already exists
-        const existingUser = await repo.findByEmail(email);
-        if (existingUser) {
-          throw AppError.conflict("email already exists");
-        }
-
-        // Hash password
-        const passwordHash = await hashPassword(password);
-
-        // Create user
-        const user = await repo.createUser({
-          email,
-          passwordHash,
-        });
-
-        // Create email verification token (expires in 24 hours)
-        const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
-        const token = await repo.createEmailVerificationToken(user.id, expiresAtMs);
-
-        // Send verification email
-        const verificationLink = `${ctx.config.frontendBaseUrl}/verifica-email?token=${token}`;
-        await ctx.email.send({
-          to: user.email,
-          subject: "Verify your email",
-          html: `Click <a href="${verificationLink}">here</a> to verify your email.`,
-          text: `Verify your email: ${verificationLink}`,
-        });
-
-        // Sign JWT token
-        const jwtToken = signToken(
-          user.id,
-          ctx.config.jwtSecret,
-          ctx.config.jwtExpirySeconds
-        );
-
-        // Return response
-        const response: AuthResponse = {
-          token: jwtToken,
-          user: toUserSummary(user),
-        };
-
-        return reply.code(200).send(response);
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        throw error;
-      }
-    }
-  );
+  app.post("/auth/register", async () => {
+    throw AppError.forbidden();
+  });
 
   /**
    * POST /auth/login
@@ -332,78 +278,8 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
     }
   );
 
-  /**
-   * POST /auth/password/forgot
-   * Initiates password reset (always returns 200 to avoid user enumeration).
-   */
-  app.post<{ Body: unknown }>(
-    "/auth/password/forgot",
-    async (request, reply) => {
-      try {
-        const body = passwordForgotSchema.parse(request.body);
-        const { email } = body;
-
-        // Find user (no error if not found — user enumeration prevention)
-        const user = await repo.findByEmail(email);
-        if (user) {
-          // Create password reset token
-          const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
-          const token = await repo.createPasswordResetToken(user.id, expiresAtMs);
-
-          // Send password reset email
-          const resetLink = `${ctx.config.frontendBaseUrl}/reseteaza-parola?token=${token}`;
-          await ctx.email.send({
-            to: user.email,
-            subject: "Reset your password",
-            html: `Click <a href="${resetLink}">here</a> to reset your password.`,
-            text: `Reset your password: ${resetLink}`,
-          });
-        }
-
-        // Always return 200
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        // On any error, still return 200
-        return reply.code(200).send({});
-      }
-    }
-  );
-
-  /**
-   * POST /auth/password/reset
-   * Resets password using a reset token.
-   */
-  app.post<{ Body: unknown }>(
-    "/auth/password/reset",
-    async (request, reply) => {
-      try {
-        const body = passwordResetSchema.parse(request.body);
-        const { token, password } = body;
-
-        // Consume token and get user_id
-        const userId = await repo.consumePasswordResetToken(token);
-        if (!userId) {
-          throw AppError.notFound();
-        }
-
-        // Hash new password
-        const passwordHash = await hashPassword(password);
-
-        // Update user's password
-        await repo.updatePassword(userId, passwordHash);
-
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        throw error;
-      }
-    }
-  );
+  // The password reset (forgot + reset) was removed on 2026-11-03: it works by email, and the demo
+  // sends none. The owner resets their password with `npm run create-owner`.
 
   /**
    * POST /auth/phone/request-code
