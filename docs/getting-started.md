@@ -16,23 +16,22 @@ Run PiațăRo on your own machine: the API in `backend/` and the web app in
 ```bash
 cd backend
 npm install
-npm run build
-JWT_SECRET=$(openssl rand -hex 32) npm run dev
+cp .env.example .env    # then set JWT_SECRET, e.g. to the output of: openssl rand -hex 32
+npm run dev
 ```
 
-`npm run build` is needed once on a fresh clone and again after changing
-`core/`: the app imports `@my-olx/core` from `core/dist/`. `npm run dev` runs
-the app under `tsx watch`, applies any new migrations from
-`backend/migrations/`, and listens on port 8080 on every interface.
+`npm run dev` builds `@my-olx/core` first (the app imports it from
+`core/dist/`), then runs the app under `tsx watch`, applies any new migrations
+from `backend/migrations/`, and listens on port 8080 on every interface. After
+changing `core/`, restart it.
 
-A new `JWT_SECRET` on each start signs everyone out, which is fine locally. Pick
-a fixed value if you want sessions to survive restarts.
+A `JWT_SECRET` that changes signs everyone out; the one in `.env` stays put.
 
 ### Configuration
 
-Nothing in the code reads `backend/.env`. `backend/.env.example` lists the
-values, but they have to reach the process as real environment variables,
-either on the command line as above or exported in your shell.
+The API reads `backend/.env` at start when the file exists; real environment
+variables (the command line, your shell, a container) win over it.
+`backend/.env.example` lists the values.
 
 | Variable | Purpose | Default |
 |---|---|---|
@@ -47,9 +46,8 @@ either on the command line as above or exported in your shell.
 | `LOG_LEVEL` | Fastify log level | `info` |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Turn on Stripe. Set both or neither; a partial or malformed pair stops start-up. Without them a fake provider handles payments | unset |
 
-`backend/app/data/` is not in `.gitignore`, so a local run leaves the database
-and uploads as untracked files in the repo. Point `DATABASE_PATH` and
-`UPLOADS_DIR` somewhere else if that bothers you.
+`backend/app/data/`, where a local run keeps the database and uploads, is
+gitignored.
 
 ## Frontend
 

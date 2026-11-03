@@ -3,6 +3,10 @@
 .superpowers
 .env
 
+# Local data: the SQLite database and uploaded files (default paths, relative to backend/app)
+backend/app/data/
+backend/data/
+
 # Node
 node_modules
 dist

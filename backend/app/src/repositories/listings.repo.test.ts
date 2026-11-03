@@ -120,3 +120,51 @@ describe("ListingsRepository.getTotalDownloadsForUser", () => {
     expect(total).toBe(3);
   });
 });
+
+describe("ListingsRepository.listByOwner", () => {
+  let db: Kysely<DbSchema>;
+  let repo: ListingsRepository;
+  const me = "owner-1";
+  const other = "owner-2";
+  const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const past = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+  beforeEach(async () => {
+    db = createInMemoryDb();
+    repo = new ListingsRepository(db);
+    await db.insertInto("users").values([
+      { id: me, email: "me@test.com", password_hash: "x" },
+      { id: other, email: "other@test.com", password_hash: "x" },
+    ]).execute();
+    await db.insertInto("listings").values([
+      { id: "live", user_id: me, title: "Live", description: "d", category: "software", expires_at: future, active: 1, download_count: 0 },
+      { id: "off", user_id: me, title: "Off", description: "d", category: "audio", expires_at: future, active: 0, download_count: 0 },
+      { id: "old", user_id: me, title: "Old", description: "d", category: "audio", expires_at: past, active: 1, download_count: 0 },
+      { id: "theirs", user_id: other, title: "Theirs", description: "d", category: "audio", expires_at: future, active: 1, download_count: 0 },
+    ]).execute();
+  });
+
+  afterEach(async () => {
+    await db.destroy();
+  });
+
+  const ids = (r: { listings: { id: string }[] }) => r.listings.map((l) => l.id).sort();
+
+  it("lists only the owner's listings, all of them with no filter", async () => {
+    const r = await repo.listByOwner(me, {});
+    expect(ids(r)).toEqual(["live", "off", "old"]);
+    expect(r.total).toBe(3);
+  });
+
+  it("splits them into live, switched off and expired", async () => {
+    expect(ids(await repo.listByOwner(me, { active: true }))).toEqual(["live"]);
+    expect(ids(await repo.listByOwner(me, { active: false }))).toEqual(["off"]);
+    expect(ids(await repo.listByOwner(me, { expired: true }))).toEqual(["old"]);
+  });
+
+  it("pages, with the total of the whole filter", async () => {
+    const r = await repo.listByOwner(me, {}, 2, 2);
+    expect(r.listings).toHaveLength(1);
+    expect(r.total).toBe(3);
+  });
+});

@@ -1,3 +1,4 @@
+import { mapListingsPage, type ListingsPageApi } from '@app/modules/categories/services/listings'
 import { axiosInstance } from '@core/lib/axios'
 import type { AxiosError } from 'axios'
 
@@ -65,8 +66,8 @@ export async function fetchMyListings(params: {
   expired?: boolean;
   page?: number
 }) {
-  const { data } = await axiosInstance.get('/me/listings', { params })
-  return data
+  const { data } = await axiosInstance.get<ListingsPageApi>('/me/listings', { params })
+  return mapListingsPage(data)
 }
 
 export interface RenewListingResult {

@@ -39,13 +39,24 @@ function extractOptionalUserId(authHeader: string | undefined, jwtSecret: string
 /**
  * Validation schemas
  */
-const CreateListingRequestSchema = z.object({
-  title: z.string().min(5).max(200),
-  description: z.string().min(10),
-  price_ron: z.number().int().nullable().optional(),
-  category: z.string().min(1),
-  active: z.boolean().default(true),
-});
+/**
+ * POST /listings body. The create wizard starts with an empty, inactive draft (`active: false`) and
+ * fills it in step by step; publishing (`POST /listings/:id/publish`) checks the title, description
+ * and assets then. A listing created live must be complete now.
+ */
+export const CreateListingRequestSchema = z
+  .object({
+    title: z.string().max(200),
+    description: z.string(),
+    price_ron: z.number().int().nullable().optional(),
+    category: z.string().min(1),
+    active: z.boolean().default(true),
+  })
+  .superRefine((v, ctx) => {
+    if (!v.active) return;
+    if (v.title.length < 5) ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 5, type: "string", inclusive: true, path: ["title"], message: "title must have at least 5 characters" });
+    if (v.description.length < 10) ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 10, type: "string", inclusive: true, path: ["description"], message: "description must have at least 10 characters" });
+  });
 
 const UpdateListingRequestSchema = z.object({
   title: z.string().min(5).max(200).optional(),
@@ -132,6 +143,44 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       page: query.page,
     };
 
+    return reply.send(response);
+  });
+
+  /**
+   * GET /me/listings — the signed-in user's own listings ("Anunțurile mele"), as listing cards
+   * in the same page shape as GET /listings. Query: active, expired, page, per_page.
+   */
+  const MyListingsQuerySchema = z.object({
+    active: z.enum(["true", "false"]).transform((v) => v === "true").optional(),
+    expired: z.enum(["true", "false"]).transform((v) => v === "true").optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    per_page: z.coerce.number().int().min(1).max(50).default(12),
+  });
+  app.get("/me/listings", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const parsed = MyListingsQuerySchema.safeParse(request.query);
+    if (!parsed.success) {
+      throw AppError.validation("Invalid query parameters");
+    }
+    const query = parsed.data;
+    const userId = request.userId!;
+    const { listings, total } = await repo.listByOwner(
+      userId,
+      { ...(query.active !== undefined ? { active: query.active } : {}), ...(query.expired !== undefined ? { expired: query.expired } : {}) },
+      query.page,
+      query.per_page
+    );
+    const seller = await repo.getSeller(userId);
+    const cards: ListingCardResponse[] = [];
+    for (const listing of listings) {
+      const images = await repo.getImages(listing.id);
+      cards.push(toListingCardResponse(listing, images, Boolean(seller?.phone_verified), ctx.config));
+    }
+    const response: ListingsPageResponse = {
+      listings: cards,
+      total_count: total,
+      total_pages: Math.ceil(total / query.per_page),
+      page: query.page,
+    };
     return reply.send(response);
   });
 

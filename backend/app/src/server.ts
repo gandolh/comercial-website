@@ -25,8 +25,14 @@ import { registerBundlesRoutes } from "./modules/bundles.js";
 import { runMigrations } from "@my-olx/core";
 import Database from "better-sqlite3";
 import path from "node:path";
+import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { mkdir } from "node:fs/promises";
+
+// backend/.env, two levels up from app/src (dev) and from app/dist (a build). Optional: a container
+// passes real environment variables and has no file. Read before loadConfig() runs in main().
+const envFile = fileURLToPath(new URL("../../.env", import.meta.url));
+if (existsSync(envFile)) process.loadEnvFile(envFile);
 
 async function main(): Promise<void> {
   const config = loadConfig();

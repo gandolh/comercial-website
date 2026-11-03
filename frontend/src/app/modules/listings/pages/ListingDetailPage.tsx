@@ -377,9 +377,10 @@ export function ListingDetailPage() {
               shield
             </span>
             <p className="text-xs text-on-surface-variant leading-relaxed">
-              <strong>Sfaturi de siguranță:</strong> Evită plata în avans.
-              Întâlnește-te cu vânzătorul într-un loc public și verifică
-              produsul înainte de achiziție.
+              <strong>Sfaturi de siguranță:</strong> Plătește doar prin
+              platformă, nu prin transfer direct către vânzător. Verifică
+              licența și formatul fișierelor înainte de cumpărare și scanează
+              arhivele descărcate cu un antivirus înainte să le deschizi.
             </p>
           </div>
 

@@ -78,7 +78,9 @@ export function CreateListingPage() {
     <CreateListingWizard
       draftId={draftId ?? null}
       draft={draftQuery.data}
-      isDraftLoading={draftQuery.isPending}
+      // A new listing has no draft to load: React Query v5 keeps a disabled query
+      // `pending` forever, so only an existing draft id can be loading.
+      isDraftLoading={!!draftId && draftQuery.isPending}
       draftError={draftQuery.error}
     />
   );

@@ -6,6 +6,7 @@ import type {
   FastifyReply,
 } from "fastify";
 import { hash, verify } from "argon2";
+import { AppError } from "../errors/index.js";
 
 /**
  * Encodes a Buffer as base64url (RFC 4648 §5)
@@ -167,7 +168,7 @@ declare module "fastify" {
  * Fastify preHandler to authenticate requests using Bearer token.
  * Extracts the token from the `Authorization: Bearer <token>` header,
  * verifies it, and sets `request.userId` on success.
- * On failure, throws an error with statusCode 401.
+ * On failure, throws `AppError.unauthorized()` (401).
  *
  * @param request - Fastify request object
  * @param reply - Fastify reply object
@@ -181,9 +182,7 @@ export async function authenticationPreHandler(
   const authHeader = request.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    const err = new Error("Unauthorized");
-    (err as any).statusCode = 401;
-    throw err;
+    throw AppError.unauthorized();
   }
 
   const token = authHeader.slice(7); // Remove "Bearer " prefix
@@ -191,10 +190,9 @@ export async function authenticationPreHandler(
   try {
     const userId = verifyToken(token, secret);
     request.userId = userId;
-  } catch (err) {
-    const error = new Error("Unauthorized");
-    (error as any).statusCode = 401;
-    throw error;
+  } catch {
+    // An AppError, so the error handler answers 401; a plain Error with a statusCode came out as 500.
+    throw AppError.unauthorized();
   }
 }
 

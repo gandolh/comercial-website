@@ -172,6 +172,37 @@ export class ListingsRepository {
       .join(" ");
   }
 
+  /**
+   * A user's own listings for the dashboard ("Anunțurile mele"), newest first. `expired` lists those
+   * past their expiry; `active: true` the live ones (active and not expired); `active: false` the ones
+   * the owner switched off. With no filter, all of them.
+   */
+  async listByOwner(
+    userId: string,
+    filter: { active?: boolean; expired?: boolean },
+    page: number = 1,
+    perPage: number = 12
+  ): Promise<{ listings: ListingRow[]; total: number }> {
+    const perPageClamped = Math.min(Math.max(perPage, 1), 50);
+    const pageNumber = Math.max(page, 1);
+    let query = this.db.selectFrom("listings").where("user_id", "=", userId);
+    if (filter.expired === true) {
+      query = query.where(sql<SqlBool>`expires_at <= datetime('now')`);
+    } else if (filter.active === true) {
+      query = query.where(sql<SqlBool>`active = 1`).where(sql<SqlBool>`expires_at > datetime('now')`);
+    } else if (filter.active === false) {
+      query = query.where(sql<SqlBool>`active = 0`);
+    }
+    const countRow = await query.select(sql<number>`count(*)`.as("count")).executeTakeFirst();
+    const listings = await query
+      .selectAll()
+      .orderBy("created_at", "desc")
+      .limit(perPageClamped)
+      .offset((pageNumber - 1) * perPageClamped)
+      .execute();
+    return { listings: listings as ListingRow[], total: Number(countRow?.count ?? 0) };
+  }
+
   async search(
     q?: string,
     category?: string,

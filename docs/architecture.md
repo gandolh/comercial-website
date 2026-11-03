@@ -65,5 +65,5 @@ files of every listing it groups.
 - Code: [backend/app/src/modules/](../backend/app/src/modules/),
   [backend/core/src/](../backend/core/src/),
   [frontend/src/app/modules/](../frontend/src/app/modules/)
-- `backend/app/CONTRACT.md` describes the API from before the switch to
-  digital files (cities, required images) and no longer matches the code.
+- There is no API contract file: the route modules in `backend/app/src/modules/` are the contract
+  (`backend/app/CONTRACT.md`, the pre-pivot API, was removed on 2026-11-03).
