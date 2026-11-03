@@ -88,7 +88,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [03](briefs/done/03-security-before-going-public.md): the seeds out of the migrations, and paid files
   off the public path.
 - [04](briefs/done/04-remove-stripe.md): remove Stripe.
-- [05](briefs/todo/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
+- [05](briefs/done/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
 - [06](briefs/todo/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
 - [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
 - [08](briefs/todo/08-base-path.md): the `/piataro` base path.
@@ -114,3 +114,11 @@ download routes. The server's assembly is `createServer()`, and tests start it w
 [Brief 04](briefs/done/04-remove-stripe.md), `2b40a95`. The fake provider is the only one, and the
 buyer marks their own order paid. The payment webhook went with Stripe: with the fake provider it
 let anyone mark any order paid. The Buy button says the payment is simulated.
+
+## [2026-11-03] done | Brief 05 — owner-only sign-in, and Ward linked by subject
+
+[Brief 05](briefs/done/05-owner-only-sign-in-and-ward.md), `e058ff3`. Sign-up and the email reset are
+gone, and `npm run create-owner` makes the one account. Sign in with Ward uses the vendored ward-auth
+client. The decision changed on the way: Ward's token has no email, so the owner links Ward from
+Settings and Ward finds the user by subject ([decisions](wiki/decisions.md) → *Two ways in*). A real
+Ward round trip waits for the deploy.

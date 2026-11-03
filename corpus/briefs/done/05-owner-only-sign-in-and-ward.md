@@ -28,3 +28,28 @@ script for the owner's account, the frontend sign-in and register pages and thei
 ## Acceptance
 - No way to create an account from the browser; the owner signs in with the password or with Ward.
 - Backend and frontend build, lint and tests pass.
+
+---
+
+**Outcome (2026-11-03).** Done (`e058ff3`), with one change to the spec.
+- **The change:** Ward's ID token has no email, and the vendored library forbids linking by name or
+  email. So Ward links by subject: the owner links it once from Settings while signed in, and after that
+  "Intră cu Ward" signs in by `users.ward_subject`. An unlinked Ward account is refused.
+  [decisions.md](../../wiki/decisions.md) records the revision.
+- **The flow:**
+  - The routes are `/auth/ward/status`, `/link-ticket` (a single-use ticket, because the start is a
+    plain navigation), `/start` and `/callback`.
+  - The flow secrets live in memory behind an HttpOnly cookie.
+  - The token comes back in the URL fragment, so no server or log sees it.
+- **The rest:**
+  - `POST /auth/register` returns 403, and the register page, its links and the email reset (forgot and
+    reset routes and pages) are removed.
+  - `npm run create-owner` is idempotent and resets the password on a rerun. It refuses a password
+    under 12 characters.
+- **Checked:**
+  - The tests use a fake Ward client through the real app and cover link, sign-in, an unknown subject,
+    a missing flow and a reused ticket; register refused; create-owner. Backend tests: 152.
+  - In the browser, on the scratch database: the login page shows no sign-up, reset or Ward button (Ward
+    not configured), and the owner made by `create-owner` signs in.
+- **Not checked:** a real Ward round trip. It needs the app registered at Ward, which is part of the
+  deploy (brief 09 and the owner's `npm run setup`).

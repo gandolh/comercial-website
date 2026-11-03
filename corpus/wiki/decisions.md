@@ -1,5 +1,5 @@
 ---
-summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire.
+summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire.
 updated: 2026-11-03
 ---
 
@@ -20,10 +20,17 @@ from the owner's domain (malware, pirated files) and fake payments let anyone "b
 shared demo login, for the same upload risk.
 
 ## Two ways in: the app's own login and Ward
-_2026-11-03_ — The owner keeps the email-and-password login (the account is created by a command at
-deploy, the password from vps-deploy's secrets) **and** gets "Sign in with Ward", like the estate's
-other apps. A Ward sign-in links to the local account with the same email. Rejected: Ward only
-(the app stays usable without Ward) and own login only (the estate signs in through Ward).
+_2026-11-03_ — The owner keeps the email-and-password login (the account is created by `npm run
+create-owner` at deploy, the password from vps-deploy's secrets) **and** gets "Sign in with Ward",
+like the estate's other apps. Rejected: Ward only (the app stays usable without Ward) and own login
+only (the estate signs in through Ward).
+
+**Linked by Ward subject, from Settings** (revised the same day, while building brief 05). The grill
+assumed linking by email. Ward's verified ID token carries no email, only a stable subject, and the
+vendored `ward-auth` library's rule is to link by subject only: matching by name or email is account
+takeover on a shared origin. So the owner links Ward once from Settings while signed in with the
+password (`users.ward_subject`); a Ward sign-in finds its user by that subject, and an unlinked Ward
+account is refused. Nothing creates accounts from Ward.
 
 ## Stripe removed
 _2026-11-03_ — The Stripe provider and its webhook (which marked orders paid without checking the

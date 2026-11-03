@@ -1,5 +1,5 @@
 ---
-summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; briefs 01-04 are done and 05-09 are queued, one line each.
+summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; briefs 01-05 are done and 06-09 are queued, one line each.
 updated: 2026-11-03
 ---
 
@@ -15,7 +15,7 @@ updates 2026-10-23. Not deployed. On 2026-11-03 the owner decided it becomes a d
 - 02 (done): the add-listing flow, `GET /me/listings`, 401 on a bad token, the safety tip, `.env`, the docs.
 - 03 (done): no seeded accounts outside `npm run seed:dev`; paid files in `ASSETS_DIR`, off `/uploads/`.
 - 04 (done): Stripe and the payment webhook removed; payments are simulated only.
-- 05: sign-up closed, the owner's account by command, Sign in with Ward.
+- 05 (done): sign-up closed, `npm run create-owner`, Sign in with Ward linked by subject from Settings.
 - 06: the fake payout ledger at 2.5%.
 - 07: sample listings that never expire.
 - 08: the frontend at `/piataro`, the API at `/piataro-api`.
