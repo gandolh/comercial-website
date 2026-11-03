@@ -45,7 +45,6 @@ variables (the command line, your shell, a container) win over it.
 | `CORS_ALLOWED_ORIGINS` | Comma-separated origins the browser may call from | `http://localhost:5173` |
 | `FRONTEND_BASE_URL` | The web app's address, used in the links inside emails | `http://localhost:5173` |
 | `LOG_LEVEL` | Fastify log level | `info` |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Turn on Stripe. Set both or neither; a partial or malformed pair stops start-up. Without them a fake provider handles payments | unset |
 
 `backend/app/data/`, where a local run keeps the database and uploads, is
 gitignored.
@@ -95,11 +94,12 @@ server is wired in (`createEmailService({})` in `backend/app/src/create-server.t
 so every email, including the verification link, password resets and expiry
 reminders, is written to the API's log instead of being sent.
 
-## Payments in development
+## Payments
 
-Without the Stripe keys, a fake provider handles checkout, and
-`POST /orders/:id/mark-paid` lets the buyer mark their own order paid. That
-route exists only while the fake provider is active.
+Payments are simulated, here and in the deployed demo: a fake provider handles
+checkout, and `POST /orders/:id/mark-paid` lets the buyer mark their own order
+paid. No money moves. There is no payment-provider integration (Stripe was
+removed on 2026-11-03).
 
 ## Test, typecheck, lint, build
 

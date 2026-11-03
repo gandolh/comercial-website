@@ -1,16 +1,9 @@
 /**
- * Orders module — handles the buy/pay/download flow for paid listings.
+ * Orders module — the buy/pay/download flow for paid listings.
  *
- * PSP abstraction:
- *   PaymentProvider interface → FakePaymentProvider (default, always active) |
- *                               StripePaymentProvider (thin stub — throws unless
- *                               STRIPE_SECRET_KEY is set, never adds the stripe pkg).
- *
- * Active provider:  FakePaymentProvider (no Stripe keys present in this env).
- * To enable Stripe: set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET env vars;
- *                   swap the import in selectProvider() below.
- *
- * No new npm dependencies added.
+ * Payments are fake (the demo decision of 2026-11-03, corpus decisions.md): `FakePaymentProvider`
+ * returns a local return URL, and the buyer's own `POST /orders/:id/mark-paid` marks the order paid.
+ * No money moves and there is no payment-provider webhook. The Stripe provider was removed then.
  */
 
 import { z } from "zod";
@@ -27,13 +20,6 @@ export interface CheckoutResult {
   providerRef: string;
 }
 
-export interface WebhookEvent {
-  /** The order ID as stored in our DB (extracted from metadata/ref). */
-  orderId: string;
-  /** Whether the payment succeeded. */
-  paid: boolean;
-}
-
 export interface PaymentProvider {
   readonly name: string;
   createCheckout(order: {
@@ -43,10 +29,9 @@ export interface PaymentProvider {
     returnUrl: string;
     cancelUrl: string;
   }): Promise<CheckoutResult>;
-  verifyWebhook(rawBody: string, signature: string): WebhookEvent;
 }
 
-// ─── FakePaymentProvider (default — always active when no Stripe keys) ────────
+// ─── FakePaymentProvider (the only provider) ──────────────────────────────────
 
 export class FakePaymentProvider implements PaymentProvider {
   readonly name = "fake";
@@ -65,175 +50,9 @@ export class FakePaymentProvider implements PaymentProvider {
       providerRef: `fake_ref_${order.orderId}`,
     };
   }
-
-  verifyWebhook(_rawBody: string, _signature: string): WebhookEvent {
-    // FakeProvider: parse a simple JSON body — {order_id, paid: true/false}.
-    try {
-      const parsed = JSON.parse(_rawBody) as { order_id?: string; paid?: boolean };
-      if (!parsed.order_id) throw new Error("missing order_id");
-      return { orderId: parsed.order_id, paid: parsed.paid !== false };
-    } catch {
-      throw AppError.validation("invalid fake webhook payload");
-    }
-  }
 }
 
-// ─── StripePaymentProvider (stub — configure STRIPE_SECRET_KEY to enable) ────
-
-export class StripePaymentProvider implements PaymentProvider {
-  readonly name = "stripe";
-  private readonly secretKey: string;
-  private readonly webhookSecret: string;
-
-  constructor(secretKey: string, webhookSecret: string) {
-    this.secretKey = secretKey;
-    this.webhookSecret = webhookSecret;
-  }
-
-  async createCheckout(_order: {
-    orderId: string;
-    amountRon: number;
-    listingTitle: string;
-    returnUrl: string;
-    cancelUrl: string;
-  }): Promise<CheckoutResult> {
-    // Real Stripe implementation would call Stripe Checkout Sessions API via fetch.
-    // This stub makes the intent clear without requiring the stripe npm package.
-    const params = new URLSearchParams({
-      "payment_method_types[]": "card",
-      "line_items[0][price_data][currency]": "ron",
-      "line_items[0][price_data][unit_amount]": String(Math.round(_order.amountRon * 100)),
-      "line_items[0][price_data][product_data][name]": _order.listingTitle,
-      "line_items[0][quantity]": "1",
-      mode: "payment",
-      success_url: _order.returnUrl + "?order_id=" + _order.orderId + "&status=paid",
-      cancel_url: _order.cancelUrl,
-      "metadata[order_id]": _order.orderId,
-    });
-
-    const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.secretKey}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params.toString(),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Stripe API error: ${text}`);
-    }
-
-    const session = (await res.json()) as { id: string; url: string };
-    return { checkoutUrl: session.url, providerRef: session.id };
-  }
-
-  verifyWebhook(rawBody: string, signature: string): WebhookEvent {
-    // In a real impl, use Stripe's webhook signature verification.
-    // Stub: parse the raw event and extract order_id from metadata.
-    if (!signature) throw AppError.validation("missing Stripe-Signature header");
-    try {
-      const event = JSON.parse(rawBody) as {
-        type?: string;
-        data?: { object?: { metadata?: { order_id?: string }; payment_status?: string } };
-      };
-      const isPaid =
-        event.type === "checkout.session.completed" &&
-        event.data?.object?.payment_status === "paid";
-      const orderId = event.data?.object?.metadata?.order_id ?? "";
-      if (!orderId) throw new Error("missing order_id in metadata");
-      return { orderId, paid: isPaid };
-    } catch (err) {
-      throw AppError.validation("invalid Stripe webhook payload");
-    }
-  }
-}
-
-// ─── Provider selector ────────────────────────────────────────────────────────
-//
-// NOTE — LIVE PATHS UNVERIFIED:
-//   StripePaymentProvider.createCheckout() makes a real HTTPS call to Stripe's
-//   API (https://api.stripe.com/v1/checkout/sessions).  Without real Stripe test
-//   keys, this path is NOT exercised in CI.  To verify:
-//     1. Create a Stripe test-mode account → Dashboard → Developers → API keys.
-//     2. Set STRIPE_SECRET_KEY=sk_test_... and STRIPE_WEBHOOK_SECRET=whsec_...
-//     3. Run `stripe listen --forward-to localhost:8080/orders/webhook` (Stripe CLI).
-//     4. Exercise POST /orders with a paid listing to validate the full round-trip.
-//   StripePaymentProvider.verifyWebhook() currently parses the raw JSON without
-//   verifying the HMAC-SHA256 signature (full Stripe-Signature verification
-//   requires the `stripe` npm package or a hand-rolled HMAC check). This is a
-//   known gap — do NOT use in production without proper HMAC verification.
-
-/**
- * Validate that Stripe environment variables are either both present or both
- * absent.  A partial configuration (only one of the two keys set) indicates a
- * misconfiguration and the server should refuse to start rather than silently
- * operating in an inconsistent state.
- *
- * Also validates key shapes:
- *   - STRIPE_SECRET_KEY must start with "sk_"
- *   - STRIPE_WEBHOOK_SECRET must start with "whsec_"
- *
- * Returns the validated keys when both are present, or null when neither is
- * present (→ use FakePaymentProvider).  Throws on partial / malformed config.
- */
-export function resolveStripeConfig(): { secretKey: string; webhookSecret: string } | null {
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-  const hasKey = Boolean(stripeKey && stripeKey.trim() !== "");
-  const hasWebhook = Boolean(webhookSecret && webhookSecret.trim() !== "");
-
-  if (!hasKey && !hasWebhook) {
-    // Neither set → use fake provider
-    return null;
-  }
-
-  if (hasKey && !hasWebhook) {
-    throw new Error(
-      "[orders] STRIPE_SECRET_KEY is set but STRIPE_WEBHOOK_SECRET is missing. " +
-        "Both must be provided together or neither. Fix your environment configuration."
-    );
-  }
-
-  if (!hasKey && hasWebhook) {
-    throw new Error(
-      "[orders] STRIPE_WEBHOOK_SECRET is set but STRIPE_SECRET_KEY is missing. " +
-        "Both must be provided together or neither. Fix your environment configuration."
-    );
-  }
-
-  // Both present — validate shapes
-  if (!stripeKey!.startsWith("sk_")) {
-    throw new Error(
-      `[orders] STRIPE_SECRET_KEY has unexpected format (expected prefix "sk_"). ` +
-        `Received key starting with "${stripeKey!.slice(0, 4)}". ` +
-        `Use a valid Stripe secret key (sk_test_... or sk_live_...).`
-    );
-  }
-  if (!webhookSecret!.startsWith("whsec_")) {
-    throw new Error(
-      `[orders] STRIPE_WEBHOOK_SECRET has unexpected format (expected prefix "whsec_"). ` +
-        `Received secret starting with "${webhookSecret!.slice(0, 6)}". ` +
-        `Copy the webhook signing secret from the Stripe Dashboard or Stripe CLI.`
-    );
-  }
-
-  return { secretKey: stripeKey!, webhookSecret: webhookSecret! };
-}
-
-export function selectProvider(): PaymentProvider {
-  const stripeConfig = resolveStripeConfig();
-  if (stripeConfig) {
-    console.log("[orders] Stripe credentials validated — using StripePaymentProvider");
-    return new StripePaymentProvider(stripeConfig.secretKey, stripeConfig.webhookSecret);
-  }
-  console.log("[orders] STRIPE_SECRET_KEY not set — using FakePaymentProvider (test mode)");
-  return new FakePaymentProvider();
-}
-
-const psp: PaymentProvider = selectProvider();
+const psp: PaymentProvider = new FakePaymentProvider();
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -448,59 +267,10 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   /**
-   * POST /orders/webhook
-   * PSP webhook endpoint — unauthenticated but signature-verified.
-   * FakeProvider: accepts a JSON body {order_id, paid}.
-   * Stripe: reads Stripe-Signature header and verifies payload.
-   * Idempotent: calling with an already-paid order is a no-op.
-   */
-  app.post(
-    "/orders/webhook",
-    {
-      config: { rawBody: true } as any,
-    },
-    async (request, reply) => {
-      const sig = (request.headers["stripe-signature"] as string | undefined) ?? "";
-      const rawBody =
-        (request as any).rawBody?.toString("utf8") ?? JSON.stringify(request.body);
-
-      let event: WebhookEvent;
-      try {
-        event = psp.verifyWebhook(rawBody, sig);
-      } catch {
-        return reply.status(400).send({ error: "invalid webhook" });
-      }
-
-      if (event.paid) {
-        await ctx.db
-          .updateTable("orders")
-          .set({
-            status: "paid",
-            paid_at: new Date().toISOString(),
-          })
-          .where("id", "=", event.orderId)
-          .where("status", "!=", "paid") // idempotent guard
-          .execute();
-      } else {
-        await ctx.db
-          .updateTable("orders")
-          .set({ status: "failed" })
-          .where("id", "=", event.orderId)
-          .where("status", "=", "pending")
-          .execute();
-      }
-
-      return reply.send({ received: true });
-    }
-  );
-
-  /**
    * POST /orders/:id/mark-paid
-   * DEV/TEST ONLY endpoint — only enabled when FakePaymentProvider is active.
-   * Marks an order as paid without going through a real PSP.
-   * Protected by JWT (must be the buyer) so it's not an open exploit.
+   * The fake payment: the buyer marks their own order paid. Protected by JWT (must be the buyer).
    */
-  if (psp.name === "fake") {
+  {
     app.post(
       "/orders/:id/mark-paid",
       { preHandler: appWithAuth.authenticate },

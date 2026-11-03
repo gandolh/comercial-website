@@ -23,8 +23,8 @@ flowchart LR
     core["@my-olx/core<br/>db, auth, storage, email"]
   end
   db[("SQLite")]
-  disk[("uploads/<br/>previews and files")]
-  psp["Payment provider<br/>fake, or Stripe"]
+  disk[("uploads/ public previews<br/>assets/ private paid files")]
+  psp["Payment provider<br/>fake (simulated)"]
   anaf["ANAF VAT-payer API"]
   web -- "JSON, Bearer token" --> app
   app --> core

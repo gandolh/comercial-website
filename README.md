@@ -6,7 +6,7 @@ A Romanian marketplace for digital files. Creators sell templates, graphics, fon
   <img src="docs/images/hero.webp" width="100%" alt="The PiațăRo listings page, Toate anunțurile with 9 results: filters on the left for licence type, file format, price and date, and a grid of listings with preview images and prices in RON, such as wedding invitations for 45 RON, a GDPR kit for 99 RON and social media templates for 39 RON">
 </p>
 
-**Status:** Prototype, paused since 2026-05-29 and not deployed. Browsing, listing pages, and buying and reviewing through the built-in fake payment provider work locally. In the current build the "Adaugă anunț" page never loads for a new listing and the seller's "Anunțurile mele" page fails to load. Emails only go to the server log, the Stripe path is untested, and sellers can't be paid out yet, so it can't take real money.
+**Status:** Being turned into a deployed demo (2026-11-03): payments are simulated and only the owner signs in. Browsing, listing pages, creating listings, and buying and reviewing through the built-in fake payment provider work locally. Emails only go to the server log. It takes no real money.
 
 ## What it does
 
@@ -33,14 +33,13 @@ The screens show the demo accounts `npm run seed:dev` creates and listings with 
 
 ## How it works
 
-Two separate npm projects. `backend/` is a Fastify API in an npm workspace: `core/` is the engine (SQLite through Kysely with migrations that run at start-up, JWT and Argon2 sign-in, files on disk, email) and `app/` is the marketplace (routes for listings, files, orders, reviews, bundles, invoices and messages). `frontend/` is a React app on Vite with TanStack Router, React Query, Tailwind CSS v4 and react-i18next, in Romanian by default. Payments go through a provider interface: a fake provider in development, and Stripe when its two keys are set.
+Two separate npm projects. `backend/` is a Fastify API in an npm workspace: `core/` is the engine (SQLite through Kysely with migrations that run at start-up, JWT and Argon2 sign-in, files on disk, email) and `app/` is the marketplace (routes for listings, files, orders, reviews, bundles, invoices and messages). `frontend/` is a React app on Vite with TanStack Router, React Query, Tailwind CSS v4 and react-i18next, in Romanian by default. Payments are simulated by a fake provider; no money moves.
 
 ```mermaid
 flowchart LR
   web["frontend/<br/>React + Vite, port 5173"] -- "JSON over HTTP, Bearer token" --> api["backend/app<br/>Fastify, port 8080"]
   api --> db[("SQLite<br/>my-olx.db")]
-  api --> files[("Uploads on disk<br/>previews and paid files")]
-  api -. "when configured" .-> stripe["Stripe"]
+  api --> files[("Files on disk<br/>public previews, private paid files")]
   api -. "CUI lookup" .-> anaf["ANAF"]
 ```
 

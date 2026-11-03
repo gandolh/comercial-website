@@ -79,6 +79,9 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
           ? t("orders.buyButton.loading")
           : t("orders.buyButton.label", { price: priceRon.toLocaleString("ro-RO") })}
       </button>
+      <p className="text-on-surface-variant text-xs text-center px-2">
+        {t("orders.buyButton.simulated")}
+      </p>
       {error && (
         <p className="text-error text-xs text-center px-2">{error}</p>
       )}

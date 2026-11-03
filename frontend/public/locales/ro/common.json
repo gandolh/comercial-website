@@ -517,7 +517,8 @@
       "loading": "Se procesează...",
       "owned": "Achiziționat — poți descărca",
       "error": "Eroare la inițierea plății. Încearcă din nou.",
-      "ariaLabel": "Cumpără acest activ digital pentru {{price}} RON"
+      "ariaLabel": "Cumpără acest activ digital pentru {{price}} RON",
+      "simulated": "Plată simulată: este o demonstrație, nu se percep bani."
     },
     "download": {
       "lockedButton": "Blocat",

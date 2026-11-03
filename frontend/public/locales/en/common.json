@@ -343,7 +343,8 @@
       "loading": "Processing...",
       "owned": "Purchased — ready to download",
       "error": "Error initiating payment. Please try again.",
-      "ariaLabel": "Buy this digital asset for {{price}} RON"
+      "ariaLabel": "Buy this digital asset for {{price}} RON",
+      "simulated": "Simulated payment: this is a demo, no money is charged."
     },
     "download": {
       "lockedButton": "Locked",
