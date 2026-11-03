@@ -1,3 +1,4 @@
+import { apiUrl } from "@core/lib/api-url";
 import { axiosInstance } from "@core/lib/axios";
 
 export interface LineItem {
@@ -86,13 +87,11 @@ export const invoicesService = {
   },
 
   getPdfUrl(id: string): string {
-    const base = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
-    return `${base}/invoices/${id}/pdf`;
+    return apiUrl(`/invoices/${id}/pdf`);
   },
 
   getXmlUrl(id: string): string {
-    const base = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
-    return `${base}/invoices/${id}/xml`;
+    return apiUrl(`/invoices/${id}/xml`);
   },
 
   async downloadPdf(id: string, filename: string): Promise<void> {

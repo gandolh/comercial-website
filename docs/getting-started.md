@@ -57,9 +57,25 @@ npm install
 npm run dev
 ```
 
-Vite serves the app on <http://localhost:5173/>. The app calls the API at
-`VITE_API_URL`, which defaults to `http://localhost:8080`; set it in
-`frontend/.env` (copy `frontend/.env.example`) to point elsewhere.
+Vite serves the app on <http://localhost:5173/>. In dev the app calls the API
+at `http://localhost:8080`; a production build calls `/piataro-api` on its own
+origin. `VITE_API_URL` overrides either (set it in `frontend/.env`, from
+`frontend/.env.example`).
+
+### Building for the deploy
+
+The deploy serves the app at `/piataro/` and the API at `/piataro-api/`, with
+the prefix stripped before the API sees it:
+
+```bash
+cd frontend && PIATARO_BASE=/piataro/ npm run build
+```
+
+`PIATARO_BASE` sets Vite's `base`, the router's base path and where the
+translations load from. On the API side, set `PUBLIC_BASE_URL` to the API's
+public address (`https://<host>/piataro-api`), which image URLs are built from,
+and `FRONTEND_BASE_URL` to the app's (`https://<host>/piataro`), which Ward's
+redirects and email links use.
 
 ## The demo data
 

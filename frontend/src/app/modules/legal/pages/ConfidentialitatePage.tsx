@@ -1,3 +1,4 @@
+import { Link } from "@core/lib/router";
 export function ConfidentialitatePage() {
   return (
     <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
@@ -73,9 +74,9 @@ export function ConfidentialitatePage() {
             (autentificare, sesiune) și cookie-uri opționale de analiză. Poți
             gestiona preferințele tale de cookie-uri prin bannerul afișat la
             prima vizită sau în orice moment prin{" "}
-            <a href="/politica-cookies" className="text-primary hover:underline">
+            <Link to="/politica-cookies" className="text-primary hover:underline">
               Politica de Cookies
-            </a>
+            </Link>
             .
           </p>
         </Section>

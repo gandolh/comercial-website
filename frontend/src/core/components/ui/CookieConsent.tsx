@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@core/components/ui/Button'
+import { Link } from '@core/lib/router'
 
 const STORAGE_KEY = 'cookie_consent'
 type ConsentValue = 'accepted' | 'rejected'
@@ -40,13 +41,12 @@ export function CookieConsent() {
         <div className="flex-1 text-sm text-on-surface-variant">
           <p>
             {t('cookies.bannerText')}{' '}
-            {/* Plain anchor — route /confidentialitate is created in the static-pages wave */}
-            <a
-              href="/confidentialitate"
+            <Link
+              to="/confidentialitate"
               className="text-primary underline underline-offset-2 hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
             >
               {t('cookies.policyLink')}
-            </a>
+            </Link>
             .
           </p>
         </div>

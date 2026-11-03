@@ -1,3 +1,4 @@
+import { apiUrl } from "@core/lib/api-url";
 import { axiosInstance } from "@core/lib/axios";
 import type { ListingCard, ListingDetail } from "@app/types/listing";
 import { mapListingCard } from "@app/modules/categories/services/listings";
@@ -197,6 +198,5 @@ export async function fetchListingAssets(
  * Returns the direct URL so callers can open it in a new tab or use an anchor.
  */
 export function getAssetDownloadUrl(listingId: string, assetId: string): string {
-  const base = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
-  return `${base}/listings/${listingId}/assets/${assetId}/download`;
+  return apiUrl(`/listings/${listingId}/assets/${assetId}/download`);
 }

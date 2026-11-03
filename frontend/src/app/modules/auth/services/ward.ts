@@ -1,4 +1,5 @@
 import { axiosInstance } from "@core/lib/axios";
+import { apiUrl } from "@core/lib/api-url";
 
 /** Whether the API has "Sign in with Ward" configured. */
 export async function fetchWardStatus(): Promise<{ enabled: boolean }> {
@@ -8,8 +9,7 @@ export async function fetchWardStatus(): Promise<{ enabled: boolean }> {
 
 /** The API page that starts a Ward round trip; with a link ticket it links Ward to the signed-in user. */
 export function wardStartUrl(linkTicket?: string): string {
-  const base = (axiosInstance.defaults.baseURL ?? "").replace(/\/$/, "");
-  return `${base}/auth/ward/start${linkTicket ? `?link=${encodeURIComponent(linkTicket)}` : ""}`;
+  return apiUrl(`/auth/ward/start${linkTicket ? `?link=${encodeURIComponent(linkTicket)}` : ""}`);
 }
 
 /** A single-use ticket for linking Ward to the signed-in user (the start page is a plain navigation). */

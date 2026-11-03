@@ -111,6 +111,8 @@ const routeTree = rootRoute.addChildren([
 
 export const router = new Router({
   routeTree,
+  // PIATARO_BASE (Vite's base): "/piataro/" in the deploy, "/" in dev.
+  basepath: import.meta.env.BASE_URL.replace(/\/$/, "") || "/",
 });
 
 export type AppRouter = typeof router;
