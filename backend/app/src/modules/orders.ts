@@ -8,6 +8,7 @@
 
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
+import { splitOrderAmount } from "../payout-fee.js";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import type { FastifyInstance } from "fastify";
 
@@ -292,7 +293,13 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
 
         await ctx.db
           .updateTable("orders")
-          .set({ status: "paid", paid_at: new Date().toISOString() })
+          .set({
+            status: "paid",
+            paid_at: new Date().toISOString(),
+            // The ledger: the fee and the seller's net at the moment of payment.
+            platform_fee_ron: splitOrderAmount(order.amount_ron).feeRon,
+            seller_net_ron: splitOrderAmount(order.amount_ron).netRon,
+          })
           .where("id", "=", id)
           .execute();
 

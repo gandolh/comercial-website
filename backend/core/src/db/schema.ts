@@ -215,6 +215,21 @@ export interface OrdersTable {
   provider_ref: string | null;
   created_at: Generated<string>;
   paid_at: string | null;
+  /** The platform's cut, recorded when the order is paid (20261103020000_payout_ledger.sql). */
+  platform_fee_ron: ColumnType<number | null, number | null | undefined, number | null>;
+  /** What the seller earns from the order: amount − fee. */
+  seller_net_ron: ColumnType<number | null, number | null | undefined, number | null>;
+}
+
+/** Payouts table: the simulated payout ledger (20261103020000_payout_ledger.sql). */
+export interface PayoutsTable {
+  id: Generated<string>;
+  seller_user_id: string;
+  amount_ron: number;
+  /** The client's id for the request: a repeat with the same id is the same payout. */
+  request_id: string;
+  simulated: ColumnType<number, number | undefined, number>;
+  created_at: Generated<string>;
 }
 
 /** Reviews table: verified-purchase-gated buyer ratings (added in 20260621020000_reviews.sql). */
@@ -247,4 +262,5 @@ export interface Database {
   reviews: ReviewsTable;
   bundle_items: BundleItemsTable;
   _migrations: MigrationsTable;
+  payouts: PayoutsTable;
 }

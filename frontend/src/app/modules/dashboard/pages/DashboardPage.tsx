@@ -5,6 +5,7 @@ import { StatCard } from "../components/StatCard";
 import { QuotaCard } from "../components/QuotaCard";
 import { ExpiringSection } from "../components/ExpiringSection";
 import { RecentConversations } from "../components/RecentConversations";
+import { EarningsSection } from "../components/EarningsSection";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useMyListings } from "../hooks/useMyListings";
 import { Link } from "@core/lib/router";
@@ -148,6 +149,9 @@ export function DashboardPage() {
             limit={stats?.listings.weeklyPostLimit || 5}
             resetsAt={stats?.listings.weekResetsAt || new Date().toISOString()}
           />
+
+          {/* Earnings and the simulated payout */}
+          <EarningsSection />
 
           {/* Expiring Section */}
           <ExpiringSection listings={filteredExpiring} />

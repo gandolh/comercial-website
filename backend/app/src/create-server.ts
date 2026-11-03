@@ -23,6 +23,7 @@ import { registerReviewsRoutes } from "./modules/reviews.js";
 import { registerBundlesRoutes } from "./modules/bundles.js";
 import { moveAssetsOutOfUploads } from "./move-assets.js";
 import { registerWardRoutes } from "./modules/ward.js";
+import { registerPayoutsRoutes } from "./modules/payouts.js";
 import { wardClientFromEnv } from "./ward-client.js";
 import type { WardClient } from "../vendor/ward/ward-auth.js";
 import { runMigrations } from "@my-olx/core";
@@ -85,6 +86,7 @@ export async function createServer(
   registerOrdersRoutes(app, ctx);
   registerReviewsRoutes(app, ctx);
   registerBundlesRoutes(app, ctx);
+  registerPayoutsRoutes(app, ctx);
   const ward = options.ward === undefined ? await wardClientFromEnv() : (options.ward ?? undefined);
   registerWardRoutes(app, ctx, ward);
 

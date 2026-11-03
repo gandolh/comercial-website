@@ -41,7 +41,7 @@ interface MyStatsResponseApi {
 }
 
 export async function fetchMyStats(): Promise<MyStatsResponse> {
-  const { data } = await axiosInstance.get<MyStatsResponseApi>('/me/stats')
+  const { data } = await axiosInstance.get<MyStatsResponseApi>('/users/me/stats')
   
   return {
     listings: {
