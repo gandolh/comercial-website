@@ -22,3 +22,18 @@ that apply expiry, the expiry-reminder job, `docs/getting-started.md`.
 - After `seed:samples` on a fresh database the home page and categories show the samples; a sample's
   expiry is never reached (test with a clock set a year ahead); reruns are no-ops.
 - Builds and tests pass.
+
+---
+
+**Outcome (2026-11-03).** Done (`5d87199`).
+- **Never expire:** samples carry `is_sample = 1` and the expiry date 9999-12-31, so no query changed and
+  public pages only ever ask "expired?". The reminder query also filters `is_sample = 0`.
+- **`npm run seed:samples`:** three sellers on `.invalid` addresses with a password hash no password
+  matches; nine listings from the README demo's content; previews rendered from `demo-previews.html`
+  into `backend/seed/samples/previews/` (9 PNGs, about 560 KB); a 64 KB ZIP per listing whose only file
+  says it is a demo; two reviews behind paid simulated orders. Images go to the public uploads folder,
+  ZIPs to `ASSETS_DIR`. It is idempotent.
+- **Tests:** counts, the rerun, files in the right folders, the sellers' sign-in refused, a year on, no
+  reminder. Backend tests: 159.
+- **Checked on the scratch dev API:** the listings page shows the samples with their previews, a sample
+  page names its seller, and the owner bought one (simulated) and downloaded a valid ZIP.

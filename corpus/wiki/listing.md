@@ -1,6 +1,6 @@
 ---
 summary: The Listing entity, the marketplace's unit for sale: columns, status lifecycle, pricing, expiry and the publish rule (at least one asset).
-updated: 2026-05-28
+updated: 2026-11-03
 ---
 
 # Listing
@@ -66,3 +66,9 @@ Full-text search via `LIKE %q%` on `title` and `description` (no tsvector — SQ
 - [search](search.md) — FTS5 search over listing title/description
 - [listing-lifecycle](listing-lifecycle.md) — preview-before-publish, renewal & expiry UI
 - [digital-pivot-cleanup](digital-pivot-cleanup.md) — removal of `city`/`is_negotiable`; 12 new categories
+
+## Sample listings (2026-11-03)
+
+`is_sample = 1` marks a listing seeded by `npm run seed:samples` for the public demo; its `expires_at`
+is 9999-12-31, so it never expires, and the reminder job skips it ([glossary](glossary.md) → *Sample
+listing*).

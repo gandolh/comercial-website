@@ -90,7 +90,7 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [04](briefs/done/04-remove-stripe.md): remove Stripe.
 - [05](briefs/done/05-owner-only-sign-in-and-ward.md): owner-only sign-in, plus Ward.
 - [06](briefs/done/06-fake-payout-ledger.md): the fake payout ledger at 2.5%.
-- [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
+- [07](briefs/done/07-sample-listings.md): sample listings that never expire.
 - [08](briefs/todo/08-base-path.md): the `/piataro` base path.
 - [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
 
@@ -129,3 +129,9 @@ Ward round trip waits for the deploy.
 seller's net, older ones backfilled; payouts settle at once, simulated. The dashboard had never loaded
 (it called `/me/stats`, not `/users/me/stats`); it does now, with a Câștiguri section. A sweep of the
 frontend's API paths against the routes found nothing else in use.
+
+## [2026-11-03] done | Brief 07 — sample listings that never expire
+
+[Brief 07](briefs/done/07-sample-listings.md), `5d87199`. `npm run seed:samples` adds nine sample
+listings under three sellers who cannot sign in, with previews and demo ZIPs. They never expire (a
+flag and an expiry at the end of time) and get no reminders. The deploy runs it once.
