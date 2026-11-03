@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Knowledge Base
 
-The project corpus is at `corpus/`. Read `corpus/pages/index.md` first to navigate all pages.
-- `corpus/SCHEMA.md` — conventions for maintaining the corpus
-- `corpus/pages/` — LLM-maintained wiki (overview, entities, tech, market research)
+The project corpus is at `corpus/`. Read `corpus/index.md` first, and `corpus/CLAUDE.md` for its rules.
+- `corpus/wiki/` — LLM-maintained wiki (overview, decisions, status, entities, features, market research)
+- `corpus/briefs/` — numbered work specs (`todo/`, `done/`, `superseded/`)
 - `corpus/raw/` — immutable source documents (never edit)
 
 ## Project Overview

@@ -54,13 +54,13 @@ files of every listing it groups.
 
 ## Read more
 
-- [corpus/pages/tech/stack.md](../corpus/pages/tech/stack.md): the stack in
+- [corpus/wiki/stack.md](../corpus/wiki/stack.md): the stack in
   detail
-- [corpus/pages/features/](../corpus/pages/features/): one page per feature,
-  including [digital-asset-commerce](../corpus/pages/features/digital-asset-commerce.md),
-  [invoicing](../corpus/pages/features/invoicing.md) and
-  [bundles](../corpus/pages/features/bundles.md)
-- [corpus/pages/product/business-rules.md](../corpus/pages/product/business-rules.md):
+- [corpus/wiki/](../corpus/wiki/): one page per feature,
+  including [digital-asset-commerce](../corpus/wiki/digital-asset-commerce.md),
+  [invoicing](../corpus/wiki/invoicing.md) and
+  [bundles](../corpus/wiki/bundles.md)
+- [corpus/wiki/business-rules.md](../corpus/wiki/business-rules.md):
   the limits and rules the code enforces
 - Code: [backend/app/src/modules/](../backend/app/src/modules/),
   [backend/core/src/](../backend/core/src/),

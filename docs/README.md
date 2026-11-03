@@ -10,7 +10,7 @@ Start with the [main README](../README.md). This folder holds what it links to.
 
 Going deeper:
 
-- Project wiki: [corpus/pages/index.md](../corpus/pages/index.md), with a page per
+- Project wiki: [corpus/index.md](../corpus/index.md), with a page per
   feature, the market research and the business rules
 - Design system and mock-ups: [design/](../design/README.md)
 - Frontend coding standards: [frontend/README.md](../frontend/README.md), below the

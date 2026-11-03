@@ -1,0 +1,72 @@
+---
+summary: How buyers get files: free downloads, orders gating paid ones, the payment providers and download-all.
+updated: 2026-05-29
+---
+
+# Digital-Asset Commerce (Purchase & Download)
+
+How buyers obtain a listing's files: free listings download directly; paid listings require a
+completed order before any file can be downloaded. Originated from todos
+`download-all-assets`, `payment-processing`.
+
+## Per-asset downloads
+
+A listing can carry multiple downloadable files. Each is individually retrievable.
+
+- `GET /listings/:id/assets` — list a listing's assets (name, format, size).
+- `GET /listings/:id/assets/:asset_id/download` — authenticated, streams that specific file with
+  `Content-Disposition: attachment`, increments `download_count`, fires the first-download email hook.
+- `GET /listings/:id/download` — legacy endpoint, still works; downloads the primary asset (position 0).
+- Frontend: `ListingDetailPage` renders an `AssetFileList` (name + size + per-file download button);
+  i18n under the `listing_files.*` namespace.
+
+## Payments & download gate
+
+Storefront model — the platform collects payment. PSP is abstracted behind a `PaymentProvider`
+interface so a real processor drops in later.
+
+- **Default provider:** `FakePaymentProvider`, active whenever `STRIPE_SECRET_KEY` is unset (the
+  current state). It makes the full buy → pay → download flow end-to-end testable with no real PSP.
+- **Stripe:** `StripePaymentProvider` is a thin stub against Stripe's REST API via `fetch` (no `stripe`
+  npm package). Set `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` and `selectProvider()` switches at startup.
+- **`orders` table:** id, buyer_user_id, listing_id, seller_user_id, amount_ron, currency, status
+  (`pending|paid|failed|cancelled`), provider, provider_ref, created_at, paid_at. Migration
+  `20260620020000_orders.sql`.
+
+Endpoints (in `modules/orders.ts`):
+- `POST /orders` — create order / get checkout URL. Idempotent: returns an existing `paid` order instead of re-charging.
+- `GET /orders`, `GET /orders/:id` — buyer's order history / status.
+- `POST /orders/webhook` — PSP callback, marks order paid. Idempotent (`WHERE status != 'paid'`).
+- `POST /orders/:id/mark-paid` — **test-only**, registered only when the fake provider is active.
+
+**Download-gate rule** (`modules/assets.ts`, both download endpoints): if the listing is *not* free
+(`price_ron` is a positive number) *and* the requester is not the listing owner, a `paid` order for
+that listing is required, else `403`. Free listings (`price_ron` null or ≤ 0) and the owner always pass.
+
+Frontend: a `Buy`/`Cumpără` button on `ListingDetailPage` for paid listings, plus an orders module
+(`/comenzi`-style history + confirmation page). i18n under `orders.*`.
+
+## Stripe config hardening (added 2026-05-29)
+
+`selectProvider()` now **fails fast**: if exactly one of `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET`
+is set it throws at boot (both-or-neither), and it minimally validates key prefixes (`sk_` / `whsec_`).
+With neither set it cleanly falls back to `FakePaymentProvider` and the server boots. Covered by 24
+vitest cases (selection matrix + `verifyWebhook` rejects malformed payloads). Verified live: a
+partial-config boot throws the expected error.
+
+## Open questions
+
+- ⚠️ **Real Stripe still unverified** (no keys here); the fake provider remains the only end-to-end-tested
+  path. The live `createCheckout` fetch and the webhook **HMAC-SHA256 signature verification** are
+  untested — the webhook handler still parses the payload WITHOUT verifying the `Stripe-Signature` header
+  (documented stub; must not go to production without it). Verify with `sk_test_…`, a webhook secret, and
+  `stripe listen --forward-to localhost:8080/orders/webhook`.
+- No refund / chargeback flow.
+- Platform fee / payout split to sellers is not modeled — `orders` records the gross only (creator
+  payout flow remains unbuilt).
+
+## See also
+
+- [asset](asset.md) — the downloadable-file entity
+- [listing](listing.md) — pricing (`price_ron`) drives the free-vs-paid gate
+- [invoicing](invoicing.md) — `invoices.order_id` is reserved (nullable, no FK) to link a paid order to its invoice

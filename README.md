@@ -77,7 +77,7 @@ Then open <http://localhost:5173/>. The migrations put demo accounts and listing
 ## Docs
 
 - [docs/](docs/README.md): setup, architecture, and the images used here
-- [corpus/](corpus/pages/index.md): the project wiki, with the features, market research and business rules
+- [corpus/](corpus/index.md): the project wiki, with the features, market research and business rules
 - [design/](design/README.md): the Carpathian Clear design system and the mock-ups the UI was built from
 
 ## License
