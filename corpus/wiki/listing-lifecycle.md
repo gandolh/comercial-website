@@ -1,6 +1,6 @@
 ---
 summary: The listing preview before publishing, and expiry and renewal in the dashboard.
-updated: 2026-05-29
+updated: 2026-11-03
 ---
 
 # Listing Lifecycle UI (Create, Preview, Renew, Expiry)
@@ -38,3 +38,10 @@ Listings expire 30 days after creation (see [business-rules](business-rules.md))
 - [listing](listing.md) — lifecycle, expiry, renew endpoint
 - [notifications](notifications.md) — deferred expiry-reminder emails
 - [business-rules](business-rules.md) — 30-day expiry, 5-listings/week quota
+
+## Drafts (2026-11-03)
+
+The create wizard (`/adauga-anunt`) starts with an empty, inactive draft (`POST /listings` with
+`active: false`) and fills it step by step; only publishing (`POST /listings/:id/publish`) checks the
+title (5-200 characters), the description (10+) and at least one asset. A listing created live must be
+complete at once. "Anunțurile mele" lists the owner's listings with `GET /me/listings`.

@@ -84,7 +84,7 @@ Entries above this one link to the old `pages/` and `todo/` paths and are left a
 ## [2026-11-03] todo | Briefs 02-09 filed for the demo
 
 The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/decisions.md)):
-- [02](briefs/todo/02-fix-the-broken-flows.md): fix the broken flows and the stale docs.
+- [02](briefs/done/02-fix-the-broken-flows.md): fix the broken flows and the stale docs.
 - [03](briefs/todo/03-security-before-going-public.md): the seeds out of the migrations, and paid files
   off the public path.
 - [04](briefs/todo/04-remove-stripe.md): remove Stripe.
@@ -93,3 +93,11 @@ The demo's work as eight briefs, from the 2026-11-03 grill ([decisions](wiki/dec
 - [07](briefs/todo/07-sample-listings.md): sample listings that never expire.
 - [08](briefs/todo/08-base-path.md): the `/piataro` base path.
 - [09](briefs/todo/09-deploy-stack.md): the container and the vps-deploy stack.
+
+## [2026-11-03] done | Brief 02 — the add-listing flow works again
+
+[Brief 02](briefs/done/02-fix-the-broken-flows.md), `6d87ef4`. Creating a listing had two faults
+stacked: the wizard waited forever on a disabled query, and the API refused the empty draft the wizard
+creates. Also fixed: `GET /me/listings`, 401 instead of 500 on a bad token, the digital-goods safety tip,
+`.env` loading, the stale CLAUDE.md, and `CONTRACT.md` is removed. A listing was published end to end in
+the browser. The frontend lint's 9 older errors are unchanged.

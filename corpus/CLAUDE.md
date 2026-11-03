@@ -53,8 +53,8 @@ corpus/
 
 ## Source-of-truth ordering
 
-1. The actual code wins over any wiki claim. This repo's root `CLAUDE.md` and
-   `backend/app/CONTRACT.md` were stale as of 2026-10-16; trust the code.
+1. The actual code wins over any wiki claim. The root `CLAUDE.md` was rewritten against the code on
+   2026-11-03, and the stale `backend/app/CONTRACT.md` removed; the route modules are the contract.
 2. A brief in `done/` wins over `wiki/` if the wiki has not caught up.
 3. `wiki/decisions.md` wins over `wiki/status.md` for choices not formally revisited.
 4. Verify any path or function a page names before acting on it.

@@ -1,5 +1,5 @@
 ---
-summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; brief 01 (corpus layout) is done and briefs 02-09 are queued, one line each.
+summary: Dated snapshot (2026-11-03) — PiațăRo is being turned into a deployed demo; briefs 01-02 are done and 03-09 are queued, one line each.
 updated: 2026-11-03
 ---
 
@@ -12,7 +12,7 @@ updates 2026-10-23. Not deployed. On 2026-11-03 the owner decided it becomes a d
 ## Briefs
 
 - 01 (done): the corpus moved to the corpus-flow layout.
-- 02: fix the flows found broken on 2026-10-16, and the stale docs.
+- 02 (done): the add-listing flow, `GET /me/listings`, 401 on a bad token, the safety tip, `.env`, the docs.
 - 03: close the security gaps before going public (seeded known-password accounts, paid files in `/uploads/`).
 - 04: remove the Stripe path.
 - 05: sign-up closed, the owner's account by command, Sign in with Ward.
