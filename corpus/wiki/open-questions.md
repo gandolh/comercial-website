@@ -1,14 +1,8 @@
 ---
-summary: What is genuinely unresolved for PiațăRo after the 2026-11-03 demo decisions — the real-launch questions parked by them.
-updated: 2026-11-03
+summary: Nothing is open. The real-launch questions the demo decision parked were dropped by the owner on 2026-11-04.
+updated: 2026-11-04
 ---
 
 # Open questions
 
-Parked by the demo decision ([decisions.md](decisions.md)); they come back only with a real launch:
-
-- A payment processor for real money (Stripe was removed; Netopia or TWISPAY were the other candidates).
-- Real payouts: the demo's ledger is simulated (brief 06); a launch needs Stripe Connect or a manual
-  payout process, and the tax side for PFA and SRL sellers.
-- A premium seller tier with a higher listing limit.
-- A product name free of the OLX association in the code (`my-olx`), if the code is ever public-facing.
+Nothing is open.

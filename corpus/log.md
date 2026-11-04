@@ -149,3 +149,9 @@ build under `/piataro/` behind a local Caddy stand-in served pages, images, sign
 frontend under `/piataro/`, seeds the samples, and creates the owner's account when it is missing,
 with the password over ssh stdin. Checked with a local container behind the Caddy stand-in and a dry
 run of the stack. Not deployed; the owner's steps are in [status.md](wiki/status.md).
+
+## [2026-11-04] decision | The real-launch questions are dropped
+
+In an estate-wide grill the owner dropped the questions the demo decision had parked (a payment
+processor, real payouts, a premium seller tier, a name free of "olx"). [open-questions.md](wiki/open-questions.md)
+is empty and the overview no longer points at them.

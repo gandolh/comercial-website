@@ -26,7 +26,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [niche-packs-audio-3d](wiki/niche-packs-audio-3d.md) — Market research: Romanian royalty-free music and 3D models of Romanian architecture as digital products (supply, demand, pricing, opportunity).
 - [niche-packs](wiki/niche-packs.md) — Market research: Romanian embroidery patterns and folklore colouring pages as digital products (evidence, pricing, opportunity), and the summary table for all four niches.
 - [notifications](wiki/notifications.md) — Transactional email on a new message and on a sale, and the opt-out.
-- [open-questions](wiki/open-questions.md) — What is genuinely unresolved for PiațăRo after the 2026-11-03 demo decisions — the real-launch questions parked by them.
+- [open-questions](wiki/open-questions.md) — Nothing is open. The real-launch questions the demo decision parked were dropped by the owner on 2026-11-04.
 - [overview](wiki/overview.md) — What PiațăRo (code name my-olx) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
 - [product-ideas](wiki/product-ideas.md) — A brainstorm of product categories and platform features for a Romania-focused digital marketplace.
 - [reviews-ratings](wiki/reviews-ratings.md) — Verified-purchase reviews: a 1-5 star rating plus text, one per buyer per listing, and the average on the listing page.

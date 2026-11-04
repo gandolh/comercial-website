@@ -1,6 +1,6 @@
 ---
 summary: What PiațăRo (code name my-olx) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
-updated: 2026-05-28
+updated: 2026-11-04
 ---
 
 # my-olx — Project Overview
@@ -46,7 +46,6 @@ No existing platform combines: Romanian language + RON pricing + e-Factura gener
 
 ## Open questions
 
-The real-launch questions the demo decision parked are on [open-questions.md](open-questions.md).
 
 ## See also
 
