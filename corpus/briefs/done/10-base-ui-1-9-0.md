@@ -132,3 +132,10 @@ One commit for the bump, `chore(deps): @base-ui/react 1.9.0`. You record the bas
 - Brief 11 pins the other 32 dependencies of `frontend/package.json` and adds `.npmrc`. Run it after this one, so its lockfile diff holds no Base UI change.
 - The deploy builds the frontend in this checkout's `frontend/` (`docs/deploy.md:48`), so the owner runs `npm install` there after pulling. The lockfile moves, so that is a reminder for the hand-over note.
 - Brief 12 starts from a tree already on 1.9.0, so the `Dialog`, `Switch`, `Toast`, `RadioGroup` and `Accordion` APIs it needs are the 1.9.0 ones.
+
+## Outcome (2026-11-10)
+
+Pinned `@base-ui/react` at exactly 1.9.0 in `frontend/package.json` (commit c4dd42c); only that line changed. The lockfile resolves `@base-ui/react` 1.9.0 and `@base-ui/utils` 0.5.0, one copy each. Baseline and after: `npx tsc -b` clean, lint 28 problems (9 errors, 19 warnings), build green. Largest asset 599,488 bytes before, 604,426 after. The OTPField and `sanitizeValue` grep prints nothing.
+
+Changelog lines per wrapper: not read (GitHub not reachable). Browser behaviour table: not run. Both are left for the owner's smoke test after the deploy. `CityAutocomplete` and `Tooltip` are not mounted, so they are compile-checked only.
+Owner reminder: run `npm install` in `frontend/` after pulling, since the lockfile moved.

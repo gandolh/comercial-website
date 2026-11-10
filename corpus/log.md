@@ -170,3 +170,7 @@ Q23-Q25, Q43, Q52, Q53, Q55 and Q56 are marked decided; the handler passes Fasti
 through; validation before authorisation is accepted and its one visible change (a malformed body
 with no session answers 422, not 401) is named. Added brief 14, a redesign with Hallmark on the
 estate board (Q39).
+
+## [2026-11-10] done | Brief 10 — Base UI 1.9.0
+
+`@base-ui/react` 1.4.1 to 1.9.0, pinned exactly in `frontend/` (c4dd42c). Typecheck, lint (28, unchanged) and build pass; the renamed OTPField and `sanitizeValue` are not used. Not done: release-notes read and the browser check. Needs a deploy; run `npm install` in `frontend/` after pulling.
