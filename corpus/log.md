@@ -155,3 +155,18 @@ run of the stack. Not deployed; the owner's steps are in [status.md](wiki/status
 In an estate-wide grill the owner dropped the questions the demo decision had parked (a payment
 processor, real payouts, a premium seller tier, a name free of "olx"). [open-questions.md](wiki/open-questions.md)
 is empty and the overview no longer points at them.
+
+## [2026-11-10] todo | Briefs 11-13 revised to the grilling's answers; redesign brief 14 added
+
+Revised briefs 11-13 for the owner's answers and technical calls of 2026-11-10. Brief 11:
+`house-style` is vendored (Q6, no change to the Dockerfile), width 120 with its measured cost
+(Q8, Q51), the backend's TypeScript 5.7.3 is bumped to 6.0.3 before `erasableSyntaxOnly` (Q11),
+`!` is an error in source with its 66 sites fixed in step 5 and a warning in tests (Q47),
+components use named exports (Q49). Brief 12: the folder-per-wrapper layout stays (Q59), the
+third-party `sonner` toasts move to Base UI `Toast` behind the same call shape, the two native
+`<select>`s stay native on phones (Q16), the theme control is a `RadioGroup` (Q41, Q57),
+form dialogs set `disablePointerDismissal` (Q58), and the phone menu note records Q40. Brief 13:
+Q23-Q25, Q43, Q52, Q53, Q55 and Q56 are marked decided; the handler passes Fastify's own 4xx
+through; validation before authorisation is accepted and its one visible change (a malformed body
+with no session answers 422, not 401) is named. Added brief 14, a redesign with Hallmark on the
+estate board (Q39).

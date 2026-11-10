@@ -7,14 +7,15 @@
   - brief 03, *A code-structure skill for the Fastify + React apps*: rules 1-11, the `server-skeleton.md` reference, `zod-type-provider.md`, `migrating-a-server.md`, `check-structure.mjs`, and the dependency-cruiser and knip presets;
   - brief 16, *The Fastify servers adopt the code structure*: this repo's row and the method;
   - brief 15, *Enforce the base-ui and code-structure skills in every repo*: `check-structure` runs `--warn-only` until this brief is done.
-- The owner's grilling of 2026-11-10:
+- The owner's grilling of 2026-11-10 and its technical calls:
   - Q1 (how services start: a container starting a file path, so renaming the entry means changing the `Dockerfile`'s `CMD`);
   - Q23 (`features/<name>/`);
   - Q24 (plugin options, explicit registration);
   - Q25 (response schemas everywhere);
   - Q53 (stream and binary routes);
   - Q56 (`AppError` and decorators);
-  - and the new questions in "Owner decisions".
+  - Q43 (the error body, and Fastify's own 4xx), Q52 (validation before authorisation) and Q55 (where schemas live);
+  - and the questions left open in "Decisions".
 
 **Order:** after brief 11. It touches no frontend file, and the two lockfiles are separate, so it may run before or after brief 12, but never at the same time as brief 11.
 
@@ -194,14 +195,16 @@ Command: a script over `app/src/modules/*.ts` and `core/src/http/index.ts`, 2026
 - 18 test files, 160 tests, on vitest 4.1.12, 7 of them calling `inject()`. Baseline: all pass once `core` is built (and, since brief 11, `pretest` builds it).
 - Moved tests need their relative imports updated. No test changes an assertion, apart from the zod 4 messages, which the before and after comparison names.
 - New tests:
-  - a validation failure answers 422 with the first issue's message;
+  - a validation failure answers 422 with the first issue's message, and a malformed body with no session answers 422, not 401 (decision 12);
   - bad JSON answers 400, not 500;
   - an extra field on a store row is stripped from a reply;
   - a reply that fails its response schema is a 500 `internal error` with no detail;
   - the health route;
   - a read of an unset `JWT_SECRET` fails at `loadConfig()` with a clear message.
 
-## Owner decisions (defaults this brief builds)
+## Decisions
+
+Items marked "decided" are final. The rest are defaults this brief builds.
 
 1. **How the plugin library fits the structure.** Default: `backend/core` stays a separate workspace package, now organised as the skill's `plugins/` and `lib/`, and it knows nothing about a listing or an order:
    - **`plugins/`**: `errors`, `auth` and `http`, each a `fastify-plugin` with typed options, exported by name and registered explicitly by `app/src/app.ts`. No autoload, and no decorator except the one `authenticate` preHandler it already adds (Q56: keep, and list it).
@@ -209,16 +212,18 @@ Command: a script over `app/src/modules/*.ts` and `core/src/http/index.ts`, 2026
    - **No environment reading** in `core`. `app/src/config.ts` is the one reader and passes values in.
 
    The alternative is to fold `core` into `app` as `plugins/` and `lib/`, which removes the `core/dist` build step that makes a fresh `npm test` fail and removes the Dockerfile's second workspace. The package boundary earns nothing here, since there is one consumer and none of the eight subpath `exports` is used, but the owner chose the two-package layout when they built it and the corpus calls `core` "domain-agnostic engine". *Question for the owner: keep `core`, or fold it in?*
-2. **Typed plugin options and explicit registration** (Q24). Default: keep `AppContext` (the skill's `FeatureContext`) as each feature plugin's options, typed as `FastifyPluginAsyncZod<AppContext>`, and keep explicit registration by name. No autoload.
-3. **`backend/app/src/features/<name>/`** (Q23). Default: yes, as in the move map.
-4. **A response schema on every JSON route** (Q25). Default: yes, written as transform-free output schemas in each feature's `schemas.ts`. There is no `shared/` package, and the frontend keeps its own types, so the schemas live with the routes. The 9 stream, redirect and upload routes are exempt (Q53).
-5. **The error body.** The skill prescribes one handler and the repo's body shape. Default: keep `{ error: string }` and status 422 for validation. *Question for the grilling (Q43): confirmed here for the estate's second repo.*
-6. **`AppError` and parameter properties** (Q56). `erasableSyntaxOnly` (brief 11) removed the parameter properties from the seven classes. Default: `AppError` stays a class with static constructors, since that is how the handler finds it and 136 call sites use its static constructors. The repository classes (five of them) stay classes with a declared field each. The house prefers factories returning an interface. Converting them is a follow-up, not this brief.
+2. **Typed plugin options and explicit registration** (decided 2026-11-10, technical call, Q24). Keep `AppContext` (the skill's `FeatureContext`) as each feature plugin's options, typed as `FastifyPluginAsyncZod<AppContext>`, and keep explicit registration by name. No autoload, and no decorator as a test seam (tests pass dependencies as plugin options).
+3. **`backend/app/src/features/<name>/`** (decided 2026-11-10, technical call, Q23). As in the move map.
+4. **A response schema on every JSON route** (decided 2026-11-10, technical call, Q25, Q53 and Q55). Written as transform-free output schemas in each feature's `schemas.ts`. There is no `shared/` package and the frontend keeps its own types, so a schema lives in its feature folder (Q55). Pass-through JSON, if any, uses a loose object. The 9 stream, redirect and upload routes are exempt (Q53), each with an entry in `scripts/conventions.json`.
+5. **The error body** (decided 2026-11-10, technical call, Q43). One error handler, keeping the repo's body `{ error: string }` and status 422 for validation. It **passes Fastify's own 4xx through**: today bad JSON answers 500, which the plugin's branch 5 and its test fix on purpose. It never echoes a thrown message to the client.
+6. **`AppError` and parameter properties** (decided 2026-11-10, technical call, Q56). One `AppError` class stays, with its static constructors, since that is how the handler finds it and 136 call sites use them. `erasableSyntaxOnly` (brief 11) removed the parameter properties from the seven classes. The repository classes (five of them) stay classes with a declared field each, and the house prefers factories returning an interface: converting them is a follow-up, not this brief. The one `authenticate` decorator stays, listed in `scripts/conventions.json`, and is not a test seam.
 7. **The test helper's name.** Default: keep `startTestApp` in `testing/test-app.ts`. Renaming to the skill's `buildTestApp` touches the 6 files that import it (`grep -rln startTestApp backend/app/src backend/core/src`) for nothing. Record it in `scripts/conventions.json` if the checker looks for the name.
 8. **`NODE_ENV` in `seed-dev.ts:18`.** It guards a script that makes a known-password account, so it must not be removed. Default: it moves into `config.ts` as `loadDevSeedConfig()`, the one place allowed to read it, and `scripts/conventions.json` records the exception for the checker's `NODE_ENV` rule. The alternative is a required `ALLOW_DEV_SEED=1`, which changes the documented dev workflow.
 9. **Fastify 5.12.8.** Default: not in this brief. The bump goes with the estate's next one.
 10. **Inline SQL in the handlers.** 129 references to `ctx.db` or Kysely sit in `modules/*.ts`, so most handlers hold their queries (rule 7: SQL belongs in `store.ts`). Default: not extracted here; rule 7 and rule 11 report warnings for it, and the count goes in the outcome note as the next brief's input. Only the five existing repository classes move.
 11. **Logging.** Default: JSON as today, no `pino-pretty`. The container reads JSON.
+12. **Validation before authorisation** (decided 2026-11-10, technical call, Q52). Fastify validates before the `authenticate` preHandler runs, and that order is accepted. So a request with a malformed body and no session answers 422, where the hand-parsing handlers answered 401 first. That is one named behaviour change: it goes in the before and after comparison, and a test pins it.
+13. **Test runner and roots** (decided 2026-11-10, technical call, Q27). vitest stays, and tests stay co-located as today. The checkers read this repo's roots from `scripts/conventions.json`: server `backend/app/src` and `backend/core/src`.
 
 ## Files you OWN
 
@@ -243,7 +248,7 @@ Command: a script over `app/src/modules/*.ts` and `core/src/http/index.ts`, 2026
 - `backend/app/vendor/`: the vendored Ward library, generated.
 - `backend/migrations/` and the database schema.
 - The deploy beyond the `Dockerfile` if a path changes. vps-deploy's `piataro` stack runs the image's `CMD`, which does not change.
-- Behaviour: status codes, error messages and every route's JSON, apart from the zod 4 default messages (named in the outcome note), the Fastify 4xx fix (step 3), and fields the comparison shows were leaks.
+- Behaviour: status codes, error messages and every route's JSON, apart from the zod 4 default messages (named in the outcome note), the Fastify 4xx fix (step 3), the 422-before-401 order of decision 12, and fields the comparison shows were leaks.
 
 ## What to do
 

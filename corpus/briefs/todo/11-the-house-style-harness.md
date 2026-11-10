@@ -4,9 +4,9 @@
 
 - In comercial-website: brief 10, so the lockfile diff of this brief holds no Base UI change.
 - In the owner's skills library:
-  - brief 27, *A house style, and a quality harness that enforces it*: the `house-style` package at `v1.0.0`, the `house-style` skill, and the plugin's `Stop` and `PostToolUse` hooks;
+  - brief 27, *A house style, and a quality harness that enforces it*: the `house-style` package at `v1.0.0` (vendored here, decision 1), the `house-style` skill, and the plugin's `Stop` and `PostToolUse` hooks;
   - brief 15, *Enforce the base-ui and code-structure skills in every repo*: how the convention checkers are wired and when they run `--warn-only`.
-- The owner's grilling of 2026-11-10, questions Q5-Q14 and Q47-Q51 of the skills library's open questions.
+- The owner's grilling of 2026-11-10 and its technical calls: Q5-Q14, Q45-Q51. Every question is answered; the decisions below record each.
 
 **Runs before:** 12 and 13. The reformat touches about 190 frontend files and 43 backend files, and those briefs rewrite or move most of them. Formatting first gives one clean reformat commit.
 
@@ -76,7 +76,7 @@ This repo differs from the house lineage in three ways that shape the brief:
 | 130 | 1,635 (10.9%) | 189 | 1,856 (18.1%) | 43 |
 | 150 | 1,720 (11.4%) | 190 | 1,700 (16.6%) | 43 |
 
-The width barely moves the churn here. What dominates is the normalisation: the frontend's single-quote, no-semicolon files, and `trailingComma: "all"` on the backend (function parameters). So the width is nearly free, and 120 sits within 0.5 points of the least churn in the frontend and within 1.2 of the backend's. The estate's Q51 default (120 or 130) holds.
+The width barely moves the churn here. What dominates is the normalisation: the frontend's single-quote, no-semicolon files, and `trailingComma: "all"` on the backend (function parameters). So the width is nearly free, and 120 sits within 0.5 points of the least churn in the frontend and within 1.2 of the backend's. The estate's one width is **120** (Q8 and Q51), and the reformat at 120, 1,586 changed frontend lines and 1,821 backend lines, is the one-off cost, in one commit that blame ignores.
 
 **The six typed rules plus the house shapes**, `typescript-eslint` 8.58.2 on scratch copies, `projectService` for the frontend and `project` for the backend (lint time about 15 s and 11 s, cold):
 
@@ -108,26 +108,28 @@ Brief 27's rule is to bring the owner any rule that finds more than about 20 rea
 
 **The Docker image** (`infrastructure/Dockerfile:34-41`) runs `npm ci` in `node:24-alpine` with only `python3 make g++` added, so there is no `git`. A `github:` dependency in `backend/package.json` would break that stage.
 
-## Owner decisions (defaults this brief builds)
+## Decisions
 
-1. **Where the configs come from** (Q6, brief 27 decision 1). Default: the `house-style` package. For the backend, depend on the tagged GitHub tarball URL, which npm fetches without git. If the owner prefers `github:`, add `git` to the `apk add` lines at `infrastructure/Dockerfile:34` and `:55`. The frontend is not built in Docker, so it can use either. If Q6 goes the other way (configs copied in), the same rules land as local files with a version header.
-2. **Width** (Q8, Q51). Default: the estate's one width. If it isn't settled, 120, and record it.
-3. **The outliers' quotes and semicolons** (Q9). Default: the 48 single-quote frontend files move to double quotes and semicolons in the one reformat commit.
-4. **Markdown stays out of Prettier** (Q45). Default: `.prettierignore` lists `*.md`.
-5. **tsconfig** (Q11). Default: `strict` and the lineage flags in both projects, plus `verbatimModuleSyntax` and `erasableSyntaxOnly` in the backend. `noUncheckedIndexedAccess` joins the frontend with its one fix. `exactOptionalPropertyTypes` is not added.
-6. **Typed lint** (Q12) with `projectService`, unless `project` measures faster.
-7. **The house shapes as errors** (Q13, Q47). Default: `!` is an error in source and a warning in tests. `no-process-env` starts as a **warning** in the backend, because its 21 source findings are brief 13's work, and brief 13 turns it into an error. The two over-20 typed rules in the frontend, and `no-explicit-any` and `no-non-null-assertion` in the backend, are fixed here if step 1 shows they are real, or held as warnings with the count in the outcome note and a follow-up brief.
-8. **`check:fast`** (Q10). Default: typecheck plus ESLint on the changed files, in each project, under about 15 s warm.
-9. **The Claude Code layer** (Q7). Default: the plugin's hooks.
-10. **A root `CLAUDE.md`** (Q46). It exists. Default: it gains the `check` commands and the hard rules from [corpus/CLAUDE.md](../../CLAUDE.md)'s invariants.
-11. **The frontend's missing tests.** Default: not in this brief. `check` runs the backend tests, and the frontend has typecheck and lint only. A Vitest setup for the frontend is a follow-up the owner can ask for (Q60 covers a DOM test environment).
+Items marked "decided" are final. The rest are defaults this brief builds.
+
+1. **Where the configs come from** (decided 2026-11-10, technical call, Q6). `house-style` is **vendored**: a copy under `vendor/house-style/` at the repo root with a version header (`v1.0.0`), refreshed by a `house-style:sync` script in the root `package.json` that finds the `house-style` checkout by name. No git, `github:` or tarball dependency in either project, so the `apk add` lines in the Dockerfile stay as they are: the image has no `git` and now never needs one. Both projects' ESLint configs import from the vendored copy, and `vendor/house-style/` is in `.prettierignore` and ESLint's ignores.
+2. **Width** (decided 2026-11-10, technical call, Q8 and Q51). `printWidth` is **120**, with the measured table kept.
+3. **The outliers' quotes and semicolons** (decided 2026-11-10, technical call, Q9). The 48 single-quote frontend files move to double quotes and semicolons in the one reformat commit.
+4. **Markdown stays out of Prettier** (decided 2026-11-10, technical call, Q45). `.prettierignore` lists `*.md`.
+5. **tsconfig** (decided 2026-11-10, technical call, Q11 and Q50). `strict` (missing from the frontend, 0 errors) and the lineage flags in both projects. The backend's TypeScript 5.7.3 is older than 5.8, so it is **bumped to 6.0.3 first** (step 4), and then `verbatimModuleSyntax` and `erasableSyntaxOnly` apply in the backend (the nine parameter properties become fields). `noUncheckedIndexedAccess` joins the frontend with its one fix, because it costs 1 error; the backend already has it. `exactOptionalPropertyTypes` waits for a count.
+6. **Typed lint** (decided 2026-11-10, technical call, Q12 and Q48). The six rules, through `projectService` unless `project` measures faster, with `switch-exhaustiveness-check` at `considerDefaultExhaustiveForUnions: true`. `no-floating-promises` names `node:test`'s functions in `allowForKnownSafeCalls` in the preset; this repo uses vitest, so it never matters here.
+7. **The house shapes as errors** (decided 2026-11-10, technical call, Q13, Q47 and Q49). `!` is an **error in source and a warning in tests**, so its 66 source sites (8 frontend, 58 backend) are fixed in step 5, not held as warnings. `console` is allowed in scripts and CLIs. A default export is allowed where a framework needs one (config files, route modules); components use named exports, so `App`, `PhoneVerifyModal` and `PublicProfilePage` move to named exports unless `React.lazy` needs the default, which step 1 checks. `no-process-env` starts as a **warning** in the backend, because its 21 source findings are brief 13's work, and brief 13 turns it into an error. For the other rules over 20 (`no-floating-promises` and `no-misused-promises` in the frontend, `no-explicit-any` in the backend), the brief 27 rule stands: fixed here if step 1 shows they are real, or held as warnings with the count in the outcome note and a follow-up brief.
+8. **`check:fast`** (decided 2026-11-10, technical call, Q10). Typecheck plus ESLint on the changed files, in each project, built incrementally. Target about 15 s warm, accepted up to about 30 s where `tsc` alone is slower.
+9. **The Claude Code layer** (decided 2026-11-10, technical call, Q7). The plugin's hooks: `Stop` runs `check:fast`, `PostToolUse` formats the saved file.
+10. **A root `CLAUDE.md`** (decided 2026-11-10, technical call, Q46). It exists and it is short. It gains the `check` commands and the hard rules from [corpus/CLAUDE.md](../../CLAUDE.md)'s invariants, and stays under about 120 lines.
+11. **The frontend's missing tests** (decided 2026-11-10, technical call, Q60). Not in this brief. `check` runs the backend tests, and the frontend has typecheck and lint only. jsdom tests are only for wrappers that hold logic (brief 12 adds a vitest setup for `cn()`), and flows stay in Playwright.
 
 ## Files you OWN
 
 - `package.json` (root): the `lint`, `typecheck`, `test`, `check` and `check:fast` scripts.
 - `frontend/package.json`, `frontend/package-lock.json`, `frontend/tsconfig.app.json`, `frontend/tsconfig.node.json`, `frontend/eslint.config.js`, and the deletion of `frontend/eslint.config.ts` and `frontend/src/App.css`.
 - `backend/package.json`, `backend/package-lock.json`, `backend/tsconfig.base.json`, `backend/core/package.json`, `backend/app/package.json` (the TypeScript pin and the `pretest`), and a new `backend/eslint.config.js`.
-- New: the Prettier config, `.prettierignore`, `.git-blame-ignore-revs`, and `.npmrc` (`save-exact=true`, root plus each project if npm needs it there).
+- New: `vendor/house-style/` (the vendored copy, refreshed by `house-style:sync`), the Prettier config, `.prettierignore`, `.git-blame-ignore-revs`, and `.npmrc` (`save-exact=true`, root plus each project if npm needs it there).
 - The reformat itself: whitespace-only changes to every file Prettier covers.
 - The fixes the new rules ask for:
   - the nine frontend lint errors above;
@@ -135,7 +137,6 @@ Brief 27's rule is to bring the owner any rule that finds more than about 20 rea
   - anything else a typed rule finds, fixed or listed in step 4.
 - New: `.claude/rules/web.md`, `.claude/rules/server.md`, and the edit of the root `CLAUDE.md`.
 - `scripts/conventions.json` (new), if an exception is needed.
-- `infrastructure/Dockerfile`: only the `apk add` lines, and only under decision 1's `github:` branch.
 - Corpus: [wiki/decisions.md](../../wiki/decisions.md) (a new entry), [wiki/status.md](../../wiki/status.md) and [log.md](../../log.md).
 
 ## Files you must NOT touch
@@ -154,10 +155,11 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
    - for each rule over 20, the files and a one-line characterisation (the pattern, for example async `onClick` handlers or Kysely row typing), so the owner can judge it;
    - lint time with `projectService` against `project`, in both projects;
    - `npx knip` from the `house-style` preset, per project. Expect the unused wrappers `Toast`, `Tooltip`, `CityAutocomplete` and `Chip` (no importer outside their folders, `grep -rn "<Chip" frontend/src` finds none), and `@my-olx/core`'s eight `exports` entries (all 43 imports use the root);
-   - `@vitest/eslint-plugin` recommended on the backend tests.
+   - `@vitest/eslint-plugin` recommended on the backend tests;
+   - whether the router loads any page through `React.lazy` (which needs a default export), for decision 7.
 2. **Pins and `.npmrc`.** Add `save-exact=true`. Pin every `frontend/package.json` entry to the version the lockfile resolves, with no version change (`npm ls --depth=0 --json` gives the list, then edit and `npm install`; `git diff frontend/package-lock.json` shows only the root spec lines). Fix the `typescript: "~6.0.2"` tilde the same way. One commit.
 3. **Prettier, and the reformat.**
-   1. Add `prettier` (pinned) to each project, one shared config at the repo root: `printWidth` per decision 2, `trailingComma: "all"`, the rest default.
+   1. Add `prettier` (pinned) to each project, one shared config at the repo root: `printWidth: 120` (decision 2), `trailingComma: "all"`, the rest default.
    2. Add `.prettierignore`: `*.md`, `backend/app/vendor/`, `package-lock.json`, `dist/`, `data/`, `design/`, `frontend/public/`, `seed-data/`.
    3. Add `format` and `format:check` scripts to both projects and the root, and commit this alone.
    4. Run `npm run format` and commit only that, as `style: format with Prettier`. Do it when no other work is uncommitted.
@@ -165,7 +167,7 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
    6. Hand the owner `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
    7. Remove the unwired `eslint-config-prettier` and `eslint-plugin-prettier` from `frontend/package.json`, unless the `house-style` config wants them.
 4. **TypeScript.**
-   - Backend: bump `typescript` to 6.0.3 in `backend/package.json`, which compiled clean in the scratch run. Add `noImplicitOverride`, `noUnusedLocals`, `noFallthroughCasesInSwitch`, `isolatedModules` and `erasableSyntaxOnly` to `backend/tsconfig.base.json`. Remove the 24 unused names. Add `override` at `core/src/errors/index.ts:12`. Replace the nine parameter properties with a declared field assigned in the constructor, keeping the `readonly` and each class's behaviour.
+   - Backend: bump `typescript` to 6.0.3 in `backend/package.json` **before** adding `erasableSyntaxOnly` (5.7.3 predates it), which compiled clean in the scratch run. Add `noImplicitOverride`, `noUnusedLocals`, `noFallthroughCasesInSwitch`, `isolatedModules` and `erasableSyntaxOnly` to `backend/tsconfig.base.json`. Remove the 24 unused names. Add `override` at `core/src/errors/index.ts:12`. Replace the nine parameter properties with a declared field assigned in the constructor, keeping the `readonly` and each class's behaviour.
    - Frontend: add `strict` and `noUncheckedIndexedAccess` to `frontend/tsconfig.app.json`, and fix `ImageGalleryEditor.tsx:63`.
    - `npm run build` in both projects, and the Dockerfile's `npm run build` stage, still pass.
 5. **ESLint.**
@@ -186,7 +188,8 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
      | `react-hooks` recommended on `frontend/src` | on, 6 errors from `set-state-in-effect` | unchanged rule, the six sites fixed |
 
    - Fix the nine frontend errors, behaviour unchanged. The usual remedy for `set-state-in-effect` is to derive the value during render, or to move the setting into the event or subscription that causes it. Where a site cannot be fixed without a behaviour change, record it in `scripts/conventions.json` with the reason, and say so in the outcome note.
-   - The four over-20 rules: fix them if the characterisation in step 1 shows real bugs, which for `no-floating-promises` it may. Otherwise set the rule to `warn`, record the count, and write the follow-up as a brief or a todo.
+   - **The `!` in source** (8 frontend, 58 backend), per decision 7: its own commit per project. Delete a `!` the compiler already types as non-null; narrow a real one with a check or a named error. Behaviour stays. `no-non-null-assertion` is an error in source and a warning in tests at the end.
+   - The three other over-20 rules (`no-floating-promises`, `no-misused-promises`, `no-explicit-any`): fix them if the characterisation in step 1 shows real bugs, which for `no-floating-promises` it may. Otherwise set the rule to `warn`, record the count, and write the follow-up as a brief or a todo.
 6. **The gate.**
    - `backend/package.json` gains `typecheck` (it exists), `lint`, `format:check`, and `pretest` running `npm run build` (the Round 8 fix: a fresh clone's `npm test` fails without a build).
    - `frontend/package.json` gains `typecheck` (`tsc -b`), `format:check`.
@@ -196,7 +199,7 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
      - `test` stays the backend's;
      - `check` runs `typecheck`, `lint`, `format:check`, `check:conventions` and `test`;
      - `check:fast` runs each project's `typecheck` and ESLint on the files changed against `HEAD` plus untracked ones.
-   - `check:conventions` is knip, plus the two convention checkers from the `house-style` package, run `--warn-only` until briefs 12 and 13 are done. dependency-cruiser joins in brief 13.
+   - `check:conventions` is knip, plus the two convention checkers from the vendored `house-style` copy, run `--warn-only` until briefs 12 and 13 are done. `scripts/conventions.json` sets the checkers' roots for this repo: web is `frontend/src`, server is `backend/app/src` and `backend/core/src` (the checkers read roots from the file, not from fixed `web/` and `server/` names). dependency-cruiser joins in brief 13.
    - No shell-only syntax: the owner works on Windows under WSL.
    - Time `check:fast` warm with one changed file, and `check` in full. Record both.
 7. **`.claude/rules/`.** Keep each file under about 40 lines.
@@ -224,7 +227,7 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
 - [ ] `npx prettier --check .` passes at the root. The reformat is one commit, and `git diff -w <hash>^ <hash> -- '*.ts' '*.tsx'` shows only quote, semicolon and comma changes, which `-w` does not hide. The hash is in `.git-blame-ignore-revs`.
 - [ ] `grep -c '"\^' frontend/package.json` prints `0`, and `grep -c '"~' frontend/package.json` prints `0`.
 - [ ] `grep -n strict frontend/tsconfig.app.json` finds the flag. `backend/tsconfig.base.json` has `erasableSyntaxOnly`, and `npm ls typescript` in `backend/` shows 6.0.3 or later.
-- [ ] `cd frontend && npx eslint .` reports 0 errors. Every finding left is in the outcome note with its reason.
+- [ ] `cd frontend && npx eslint .` reports 0 errors, and `no-non-null-assertion` reports 0 in source in both projects (the 8 and the 58 gone) and only warnings in tests. Every finding left is in the outcome note with its reason.
 - [ ] A deliberate `enum`, a `!`, a `console.log` in `backend/app/src/modules/anaf.ts`, a `// TODO` and an `export default` each fail `npm run lint`. Revert them after.
 - [ ] In `backend/`, with `core/dist` and `app/dist` deleted, `npm test` passes (18 files, 160 tests or more).
 - [ ] `frontend/eslint.config.ts` and `frontend/src/App.css` are gone, and `npm run build` in both projects passes.
