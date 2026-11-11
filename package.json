@@ -2,10 +2,29 @@
   "name": "piataro",
   "version": "0.1.0",
   "private": true,
-  "description": "PiațăRo. backend/ and frontend/ are two npm projects with their own lockfiles; these scripts only call into them.",
+  "type": "module",
+  "description": "PiațăRo. backend/ and frontend/ are two npm projects with their own lockfiles; this root holds the house-style tools, and its scripts call into both.",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "test": "npm --prefix backend test",
-    "lint": "npm --prefix frontend run lint"
+    "lint": "npm --prefix frontend run lint",
+    "house-style:sync": "node vendor/house-style/bin/sync.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@vitest/eslint-plugin": "1.6.28",
+    "dependency-cruiser": "18.7.2",
+    "eslint": "10.9.1",
+    "eslint-plugin-better-tailwindcss": "4.10.0",
+    "eslint-plugin-import-x": "4.18.1",
+    "eslint-plugin-n": "18.5.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "knip": "6.44.2",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2"
   }
 }
