@@ -31,7 +31,7 @@ function isWellFormedXml(xml: string): { ok: boolean; reason?: string } {
   const body = xml.replace(/<\?[^>]*\?>/g, "").replace(/<!--[\s\S]*?-->/g, "");
 
   while ((match = tagRe.exec(body)) !== null) {
-    const full = match[0]!;
+    const full = match[0];
     const name = match[1]!;
 
     if (full.endsWith("/>")) {

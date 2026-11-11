@@ -21,6 +21,7 @@ import { AppError, signToken } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
 import type { AppContext } from "../context.js";
 import type { WardClient } from "../../vendor/ward/ward-auth.js";
+import { requireUserId } from "../auth-user.js";
 
 type Flow = Awaited<ReturnType<WardClient["startAuthorization"]>>["flow"];
 
@@ -52,7 +53,7 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
   app.post("/auth/ward/link-ticket", { preHandler: authed.authenticate }, async (request) => {
     if (!client) throw AppError.notFound();
     const ticket = randomBytes(24).toString("base64url");
-    tickets.set(ticket, { userId: request.userId!, expires: Date.now() + TICKET_TTL_MS });
+    tickets.set(ticket, { userId: requireUserId(request), expires: Date.now() + TICKET_TTL_MS });
     return { ticket };
   });
 
@@ -102,9 +103,9 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
       .select(["id"])
       .where("ward_subject", "=", subject)
       .executeTakeFirst();
-    if (linking) {
+    if (entry.userId !== undefined) {
       if (owner && owner.id !== entry.userId) return fail("already_linked");
-      await ctx.db.updateTable("users").set({ ward_subject: subject }).where("id", "=", entry.userId!).execute();
+      await ctx.db.updateTable("users").set({ ward_subject: subject }).where("id", "=", entry.userId).execute();
       return reply.redirect(appUrl("/cont/setari?ward=linked"));
     }
     if (!owner) return fail("not_linked");

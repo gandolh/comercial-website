@@ -15,6 +15,7 @@ import {
 } from "../listings-helpers.js";
 import { AppError } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
+import { requireUserId } from "../auth-user.js";
 
 /**
  * Helper: Extract optional user ID from Authorization header
@@ -119,9 +120,9 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       query.category,
       query.price_min,
       query.price_max,
-      query.date as "24h" | "saptamana" | "oricand" | undefined,
+      query.date,
       query.verified,
-      query.sort as "noi" | "pret_asc" | "pret_desc" | "relevanta" | undefined,
+      query.sort,
       query.page,
       query.per_page,
       query.user_id,
@@ -171,7 +172,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       throw AppError.validation("Invalid query parameters");
     }
     const query = parsed.data;
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { listings, total } = await repo.listByOwner(
       userId,
       {
@@ -200,7 +201,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * POST /listings — Create a new listing (protected)
    */
   app.post("/listings", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     const parsed = CreateListingRequestSchema.safeParse(request.body);
     if (!parsed.success) {
@@ -339,7 +340,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * PATCH /listings/:id — Update listing (protected, owner only)
    */
   app.patch("/listings/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -366,7 +367,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * DELETE /listings/:id — Delete listing (protected, owner only)
    */
   app.delete("/listings/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -386,7 +387,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * Rules: email_verified, ≥1 asset (downloadable file), weekly limit 5, then set active=true
    */
   app.post("/listings/:id/publish", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -435,7 +436,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * POST /listings/:id/renew — Renew listing (protected, owner only, 1/hour rate limit)
    */
   app.post("/listings/:id/renew", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -469,7 +470,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * POST /listings/:id/deactivate — Deactivate listing (protected, owner only)
    */
   app.post("/listings/:id/deactivate", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -488,7 +489,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * POST /listings/:id/activate — Activate listing (protected, owner only, 409 if expired)
    */
   app.post("/listings/:id/activate", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);
@@ -540,7 +541,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * GET /listings/:id/seller-phone — Get seller phone (protected, 403 if viewer is owner, 404 if no phone)
    */
   app.get("/listings/:id/seller-phone", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
 
     const listing = await repo.getById(id);

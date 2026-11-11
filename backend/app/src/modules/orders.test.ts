@@ -65,7 +65,7 @@ describe("the fake purchase", () => {
       },
     });
     expect(created.statusCode).toBeLessThan(300);
-    const orderId = (created.json() as { order: { id: string } }).order?.id ?? (created.json() as { id: string }).id;
+    const orderId = created.json<{ order: { id: string } }>().order?.id ?? created.json<{ id: string }>().id;
     expect(orderId).toBeTruthy();
 
     const bySeller = await t.app.inject({
@@ -85,7 +85,7 @@ describe("the fake purchase", () => {
       url: `/orders/${orderId}/mark-paid`,
       headers: t.bearer("buyer"),
     });
-    expect((again.json() as { message: string }).message).toBe("Already paid");
+    expect(again.json<{ message: string }>().message).toBe("Already paid");
   });
 
   it("has no payment webhook any more", async () => {

@@ -102,7 +102,7 @@ export function verifyToken(token: string, secret: string): string {
     }
     payload = parsed as JWTPayload;
   } catch (err) {
-    throw new Error("Failed to decode token payload");
+    throw new Error("Failed to decode token payload", { cause: err });
   }
 
   // Check expiration

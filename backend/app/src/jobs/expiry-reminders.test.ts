@@ -77,7 +77,7 @@ async function simulateJobRun(
       }
 
       sent.push(row.listing_id);
-    } catch (err) {
+    } catch {
       errors.push(row.listing_id);
     }
   }
@@ -192,8 +192,7 @@ describe("expiry-reminders job", () => {
       expect(errors).toEqual(["listing-fail"]);
       expect(sent).toEqual(["listing-ok"]);
       // mark-sent must NOT be called for the failed listing
-      expect(mark3day).toHaveBeenCalledOnce();
-      expect(mark3day).toHaveBeenCalledWith("listing-ok");
+      expect(mark3day).toHaveBeenCalledExactlyOnceWith("listing-ok");
     });
   });
 

@@ -16,6 +16,7 @@ import type { Database } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
 import type { AppContext } from "../context.js";
 import { PLATFORM_FEE_RATE } from "../payout-fee.js";
+import { requireUserId } from "../auth-user.js";
 
 const PayoutRequestSchema = z.object({ request_id: z.string().min(8).max(100) });
 
@@ -47,7 +48,7 @@ export function registerPayoutsRoutes(app: FastifyInstance, ctx: AppContext): vo
   const authed = app as FastifyInstance & { authenticate: any };
 
   app.get("/me/earnings", { preHandler: authed.authenticate }, async (request) => {
-    const sellerId = request.userId!;
+    const sellerId = requireUserId(request);
     const { net, paidOut } = await balanceOf(ctx.db, sellerId);
     const totals = await ctx.db
       .selectFrom("orders")
@@ -105,7 +106,7 @@ export function registerPayoutsRoutes(app: FastifyInstance, ctx: AppContext): vo
   });
 
   app.post("/me/payouts", { preHandler: authed.authenticate }, async (request, reply) => {
-    const sellerId = request.userId!;
+    const sellerId = requireUserId(request);
     const parsed = PayoutRequestSchema.safeParse(request.body);
     if (!parsed.success) throw AppError.validation("request_id is required");
     const requestId = parsed.data.request_id;

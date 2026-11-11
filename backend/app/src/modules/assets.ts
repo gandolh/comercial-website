@@ -11,6 +11,7 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
+import { requireUserId } from "../auth-user.js";
 
 /**
  * Fire-and-forget: notify the listing owner when their asset reaches 1 download.
@@ -112,7 +113,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
    * Upload and register a downloadable asset file.
    */
   app.post("/listings/:id/assets", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: listingId } = request.params as { id: string };
 
     const listing = await listingsRepo.getById(listingId);
@@ -160,7 +161,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
    * DELETE /listings/:id/assets/:asset_id
    */
   app.delete("/listings/:id/assets/:asset_id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: listingId, asset_id: assetId } = request.params as { id: string; asset_id: string };
 
     const listing = await listingsRepo.getById(listingId);
@@ -202,7 +203,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
    * GET /listings/:id/download  (protected — streams the primary asset file, legacy)
    */
   app.get("/listings/:id/download", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: listingId } = request.params as { id: string };
 
     const listing = await listingsRepo.getById(listingId);
@@ -245,7 +246,7 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
     "/listings/:id/assets/:asset_id/download",
     { preHandler: appWithAuth.authenticate },
     async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const { id: listingId, asset_id: assetId } = request.params as {
         id: string;
         asset_id: string;

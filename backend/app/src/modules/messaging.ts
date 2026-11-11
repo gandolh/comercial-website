@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import { AppError, newMessageEmail } from "@my-olx/core";
+import { requireUserId } from "../auth-user.js";
 
 /**
  * Helper to construct image URL from S3 key.
@@ -88,7 +89,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
     "/listings/:id/conversations",
     { preHandler: (app as any).authenticate },
     async (request, reply) => {
-      const buyerId = request.userId!;
+      const buyerId = requireUserId(request);
       const listingId = request.params.id;
 
       // Validate body
@@ -178,7 +179,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
 
   // GET /conversations — list conversations for the user
   app.get("/conversations", { preHandler: (app as any).authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     const conversations = await ctx.db
       .selectFrom("conversations")
@@ -197,7 +198,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
     "/conversations/:id",
     { preHandler: (app as any).authenticate },
     async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const conversationId = request.params.id;
 
       const conversation = await ctx.db
@@ -226,7 +227,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
     "/conversations/:id/messages",
     { preHandler: (app as any).authenticate },
     async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const conversationId = request.params.id;
 
       // Check participant
@@ -269,7 +270,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
     "/conversations/:id/messages",
     { preHandler: (app as any).authenticate },
     async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const conversationId = request.params.id;
 
       // Validate body
@@ -343,7 +344,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
     "/conversations/:id/read",
     { preHandler: (app as any).authenticate },
     async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const conversationId = request.params.id;
 
       // Check participant
@@ -376,7 +377,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
 
   // GET /me/unread-count — get unread message count for the user
   app.get("/me/unread-count", { preHandler: (app as any).authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     // Count messages in conversations where user is a participant, sender != me, read_at null
     const result = await ctx.db

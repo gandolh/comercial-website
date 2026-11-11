@@ -257,7 +257,8 @@ export async function seedSamples(
       files.push({ file: path.join(dirs.assetsDir, assetKey), data: zip });
     }
 
-    const icons = SAMPLES[0]!;
+    const icons = SAMPLES[0];
+    if (!icons) throw new Error("SAMPLES is empty");
     const { feeRon, netRon } = splitOrderAmount(icons.price);
     const order = db.prepare(`INSERT OR IGNORE INTO orders
       (id, buyer_user_id, listing_id, seller_user_id, amount_ron, status, provider, provider_ref, paid_at, platform_fee_ron, seller_net_ron)

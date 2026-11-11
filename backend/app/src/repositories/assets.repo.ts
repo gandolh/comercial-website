@@ -32,23 +32,19 @@ export class AssetsRepository {
    * Get all assets for a listing, ordered by position
    */
   async getAssetsByListingId(listingId: string): Promise<ListingAssetRow[]> {
-    return (await this.db
+    return await this.db
       .selectFrom("listing_assets")
       .selectAll()
       .where("listing_id", "=", listingId)
       .orderBy("position", "asc")
-      .execute()) as unknown as ListingAssetRow[];
+      .execute();
   }
 
   /**
    * Get a single asset by ID
    */
   async getAssetById(assetId: string): Promise<ListingAssetRow | undefined> {
-    return (await this.db
-      .selectFrom("listing_assets")
-      .selectAll()
-      .where("id", "=", assetId)
-      .executeTakeFirst()) as unknown as ListingAssetRow | undefined;
+    return await this.db.selectFrom("listing_assets").selectAll().where("id", "=", assetId).executeTakeFirst();
   }
 
   /**
@@ -63,7 +59,7 @@ export class AssetsRepository {
     checksumSha256: string | null,
     position: number,
   ): Promise<ListingAssetRow> {
-    return (await this.db
+    return await this.db
       .insertInto("listing_assets")
       .values({
         listing_id: listingId,
@@ -75,7 +71,7 @@ export class AssetsRepository {
         position,
       })
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as ListingAssetRow;
+      .executeTakeFirstOrThrow();
   }
 
   /**
@@ -115,19 +111,19 @@ export class AssetsRepository {
    * Get the primary asset (position 0) for a listing
    */
   async getPrimaryAsset(listingId: string): Promise<ListingAssetRow | undefined> {
-    return (await this.db
+    return await this.db
       .selectFrom("listing_assets")
       .selectAll()
       .where("listing_id", "=", listingId)
       .where("position", "=", 0)
-      .executeTakeFirst()) as unknown as ListingAssetRow | undefined;
+      .executeTakeFirst();
   }
 
   /**
    * Record a download
    */
   async recordDownload(listingId: string, userId: string, assetId: string | null): Promise<DownloadRow> {
-    return (await this.db
+    return await this.db
       .insertInto("downloads")
       .values({
         listing_id: listingId,
@@ -135,7 +131,7 @@ export class AssetsRepository {
         asset_id: assetId,
       })
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as DownloadRow;
+      .executeTakeFirstOrThrow();
   }
 
   /**
@@ -153,11 +149,11 @@ export class AssetsRepository {
    * Get an asset by ID that belongs to a specific listing
    */
   async getAssetByIdForListing(assetId: string, listingId: string): Promise<ListingAssetRow | undefined> {
-    return (await this.db
+    return await this.db
       .selectFrom("listing_assets")
       .selectAll()
       .where("id", "=", assetId)
       .where("listing_id", "=", listingId)
-      .executeTakeFirst()) as unknown as ListingAssetRow | undefined;
+      .executeTakeFirst();
   }
 }

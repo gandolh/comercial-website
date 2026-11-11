@@ -2,6 +2,7 @@ import { z } from "zod";
 import { AppError, verifyPassword, signToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { UsersAuthRepository } from "../repositories/users-auth.repo.js";
+import { requireUserId } from "../auth-user.js";
 
 /**
  * Type-safe UserSummary response object.
@@ -238,7 +239,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       try {
         const body = phoneRequestCodeSchema.parse(request.body);
         const { phone } = body;
-        const userId = request.userId!;
+        const userId = requireUserId(request);
 
         // Store phone verification code (expires in 10 minutes)
         const expiresAtMs = Date.now() + 10 * 60 * 1000;
@@ -246,7 +247,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
 
         // If stub provider, log the code; otherwise send via SMS provider
         // Phone provider is always stub (no SMS service configured)
-        console.log(`[PHONE] Code for ${phone}: 123456`);
+        request.log.info(`[PHONE] Code for ${phone}: 123456`);
 
         return reply.code(200).send({});
       } catch (error) {
@@ -269,7 +270,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       try {
         const body = phoneVerifySchema.parse(request.body);
         const { code } = body;
-        const userId = request.userId!;
+        const userId = requireUserId(request);
 
         // Verify the code
         const result = await repo.verifyPhoneCode(userId, code);

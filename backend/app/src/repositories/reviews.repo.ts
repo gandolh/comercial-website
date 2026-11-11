@@ -41,7 +41,7 @@ export class ReviewsRepository {
       .executeTakeFirst();
 
     if (existing) {
-      return (await this.db
+      return await this.db
         .updateTable("reviews")
         .set({
           rating,
@@ -50,10 +50,10 @@ export class ReviewsRepository {
         })
         .where("id", "=", existing.id)
         .returningAll()
-        .executeTakeFirstOrThrow()) as unknown as ReviewRow;
+        .executeTakeFirstOrThrow();
     }
 
-    return (await this.db
+    return await this.db
       .insertInto("reviews")
       .values({
         listing_id: listingId,
@@ -62,7 +62,7 @@ export class ReviewsRepository {
         body,
       })
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as ReviewRow;
+      .executeTakeFirstOrThrow();
   }
 
   /**
@@ -86,7 +86,7 @@ export class ReviewsRepository {
       .orderBy("reviews.created_at", "desc")
       .execute();
 
-    return rows as unknown as ReviewWithBuyerRow[];
+    return rows;
   }
 
   /**
@@ -109,12 +109,12 @@ export class ReviewsRepository {
    * Get a buyer's existing review for a listing (or undefined if none).
    */
   async getByBuyerAndListing(buyerUserId: string, listingId: string): Promise<ReviewRow | undefined> {
-    return (await this.db
+    return await this.db
       .selectFrom("reviews")
       .selectAll()
       .where("buyer_user_id", "=", buyerUserId)
       .where("listing_id", "=", listingId)
-      .executeTakeFirst()) as unknown as ReviewRow | undefined;
+      .executeTakeFirst();
   }
 
   /**

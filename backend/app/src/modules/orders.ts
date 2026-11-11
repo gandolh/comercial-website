@@ -11,6 +11,7 @@ import { AppError } from "@my-olx/core";
 import { splitOrderAmount } from "../payout-fee.js";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import type { FastifyInstance } from "fastify";
+import { requireUserId } from "../auth-user.js";
 
 // ─── PaymentProvider interface ────────────────────────────────────────────────
 
@@ -109,7 +110,7 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
    * Free listings are rejected — callers should check price_ron first.
    */
   app.post("/orders", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const parsed = CreateOrderSchema.safeParse(request.body);
     if (!parsed.success) throw AppError.validation(parsed.error.message);
 
@@ -187,7 +188,7 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
         returnUrl,
         cancelUrl,
       });
-    } catch (err) {
+    } catch {
       // Mark order failed and rethrow
       await ctx.db.updateTable("orders").set({ status: "failed" }).where("id", "=", orderId).execute();
       throw AppError.internal();
@@ -214,7 +215,7 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
    * List all orders for the authenticated buyer (most recent first).
    */
   app.get("/orders", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const rows = await ctx.db
       .selectFrom("orders")
       .selectAll()
@@ -229,7 +230,7 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
    * Get a single order by ID (must belong to authenticated user).
    */
   app.get("/orders/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
     const order = await ctx.db
       .selectFrom("orders")
@@ -247,7 +248,7 @@ export const registerOrdersRoutes: RouteRegistrar = (app, ctx) => {
    */
   {
     app.post("/orders/:id/mark-paid", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-      const userId = request.userId!;
+      const userId = requireUserId(request);
       const { id } = request.params as { id: string };
 
       const order = await ctx.db

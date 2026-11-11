@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import { mkdir, unlink } from "node:fs/promises";
 import { createWriteStream, existsSync } from "node:fs";
 import path from "node:path";
-import { Readable } from "node:stream";
+import type { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 
 export interface StorageConfig {

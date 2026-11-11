@@ -6,6 +6,7 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
+import { requireUserId } from "../auth-user.js";
 
 interface ImageResponse {
   id: string;
@@ -34,7 +35,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
     { preHandler: app.authenticate },
     async (request, reply) => {
       const listingId = request.params.id;
-      const userId = request.userId!;
+      const userId = requireUserId(request);
 
       const listing = await ctx.db
         .selectFrom("listings")
@@ -100,7 +101,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
     { preHandler: app.authenticate },
     async (request, reply) => {
       const listingId = request.params.id;
-      const userId = request.userId!;
+      const userId = requireUserId(request);
 
       const body = reorderSchema.parse(request.body);
 
@@ -126,16 +127,16 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
           if (!existingIds.has(id)) throw AppError.notFound();
         }
 
-        for (let i = 0; i < body.order.length; i++) {
+        for (const [i, id] of body.order.entries()) {
           await trx
             .updateTable("listing_images")
             .set({ position: -(i + 1) })
-            .where("id", "=", body.order[i]!)
+            .where("id", "=", id)
             .execute();
         }
 
-        for (let i = 0; i < body.order.length; i++) {
-          await trx.updateTable("listing_images").set({ position: i }).where("id", "=", body.order[i]!).execute();
+        for (const [i, id] of body.order.entries()) {
+          await trx.updateTable("listing_images").set({ position: i }).where("id", "=", id).execute();
         }
 
         return trx
@@ -157,7 +158,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
     async (request, reply) => {
       const listingId = request.params.id;
       const imageId = request.params.image_id;
-      const userId = request.userId!;
+      const userId = requireUserId(request);
 
       const listing = await ctx.db
         .selectFrom("listings")

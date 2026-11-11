@@ -41,7 +41,7 @@ describe("the simulated ledger", () => {
       headers: t.bearer("buyer"),
       payload: { listing_id: id },
     });
-    const orderId = (created.json() as { order: { id: string } }).order.id;
+    const orderId = created.json<{ order: { id: string } }>().order.id;
     await t.app.inject({ method: "POST", url: `/orders/${orderId}/mark-paid`, headers: t.bearer("buyer") });
   }
 

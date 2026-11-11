@@ -16,6 +16,7 @@ import type { RouteRegistrar } from "../context.js";
 import type { FastifyInstance } from "fastify";
 import { ReviewsRepository } from "../repositories/reviews.repo.js";
 import { hasPaidOrder } from "./orders.js";
+import { requireUserId } from "../auth-user.js";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@ export const registerReviewsRoutes: RouteRegistrar = (app, ctx) => {
    * Requires a paid order for the listing.
    */
   app.post("/listings/:id/reviews", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: listingId } = request.params as { id: string };
 
     // Verify listing exists
@@ -109,7 +110,7 @@ export const registerReviewsRoutes: RouteRegistrar = (app, ctx) => {
    * Returns 404 if no review exists.
    */
   app.delete("/listings/:id/reviews/mine", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: listingId } = request.params as { id: string };
 
     const existing = await repo.getByBuyerAndListing(userId, listingId);

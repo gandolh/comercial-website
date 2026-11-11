@@ -86,12 +86,11 @@ export class ListingsRepository {
       .returningAll()
       .executeTakeFirstOrThrow();
 
-    return result as unknown as ListingRow;
+    return result;
   }
 
   async getById(id: string): Promise<ListingRow | undefined> {
-    return (await this.db.selectFrom("listings").selectAll().where("id", "=", id).executeTakeFirst()) as unknown as
-      ListingRow | undefined;
+    return await this.db.selectFrom("listings").selectAll().where("id", "=", id).executeTakeFirst();
   }
 
   async update(
@@ -111,12 +110,12 @@ export class ListingsRepository {
     if (fileFormat !== undefined) updates.file_format = fileFormat;
     if (fileSizeBytes !== undefined) updates.file_size_bytes = fileSizeBytes;
 
-    return (await this.db
+    return await this.db
       .updateTable("listings")
       .set(updates)
       .where("id", "=", id)
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as ListingRow;
+      .executeTakeFirstOrThrow();
   }
 
   async delete(id: string): Promise<void> {
@@ -124,21 +123,21 @@ export class ListingsRepository {
   }
 
   async setActive(id: string, active: boolean): Promise<ListingRow> {
-    return (await this.db
+    return await this.db
       .updateTable("listings")
       .set({ active: active ? 1 : 0 })
       .where("id", "=", id)
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as ListingRow;
+      .executeTakeFirstOrThrow();
   }
 
   async setExpiry(id: string, expiresAt: Date): Promise<ListingRow> {
-    return (await this.db
+    return await this.db
       .updateTable("listings")
       .set({ expires_at: expiresAt.toISOString() })
       .where("id", "=", id)
       .returningAll()
-      .executeTakeFirstOrThrow()) as unknown as ListingRow;
+      .executeTakeFirstOrThrow();
   }
 
   async incrementViewCount(id: string): Promise<void> {
@@ -191,7 +190,7 @@ export class ListingsRepository {
       .limit(perPageClamped)
       .offset((pageNumber - 1) * perPageClamped)
       .execute();
-    return { listings: listings as ListingRow[], total: Number(countRow?.count ?? 0) };
+    return { listings, total: Number(countRow?.count ?? 0) };
   }
 
   async search(
@@ -264,14 +263,12 @@ export class ListingsRepository {
       query = query.leftJoin("users", "listings.user_id", "users.id").where(sql<SqlBool>`users.phone_verified = 1`);
     }
 
-    let sortedQuery = query;
-    if (sort === "pret_asc") {
-      sortedQuery = query.orderBy("price_ron", "asc");
-    } else if (sort === "pret_desc") {
-      sortedQuery = query.orderBy("price_ron", "desc");
-    } else {
-      sortedQuery = query.orderBy("created_at", "desc");
-    }
+    const sortedQuery =
+      sort === "pret_asc"
+        ? query.orderBy("price_ron", "asc")
+        : sort === "pret_desc"
+          ? query.orderBy("price_ron", "desc")
+          : query.orderBy("created_at", "desc");
 
     let countQuery: any = this.db.selectFrom("listings").select(sql`count(*)`.as("count"));
 
@@ -304,7 +301,7 @@ export class ListingsRepository {
     }
 
     const countResult = await countQuery.executeTakeFirst();
-    const total = parseInt((countResult as any)?.count ?? "0", 10);
+    const total = parseInt(countResult?.count ?? "0", 10);
 
     const listings = (await sortedQuery.limit(perPageClamped).offset(offset).execute()) as unknown as ListingRow[];
 
@@ -426,7 +423,7 @@ export class ListingsRepository {
   }
 
   async getFeatured(): Promise<ListingRow[]> {
-    return (await this.db
+    return await this.db
       .selectFrom("listings")
       .selectAll()
       .leftJoin("users", "listings.user_id", "users.id")
@@ -436,7 +433,7 @@ export class ListingsRepository {
       .orderBy("listings.created_at", "desc")
       .limit(8)
       .selectAll("listings")
-      .execute()) as unknown as ListingRow[];
+      .execute();
   }
 
   async getByUserId(userId: string, active?: boolean): Promise<ListingRow[]> {
@@ -446,7 +443,7 @@ export class ListingsRepository {
       query = query.where("active", "=", active ? 1 : 0);
     }
 
-    return (await query.execute()) as unknown as ListingRow[];
+    return await query.execute();
   }
 
   async countActiveListings(userId: string): Promise<number> {
@@ -495,7 +492,7 @@ export class ListingsRepository {
       .executeTakeFirst();
 
     if (result) {
-      const d = new Date(result.created_at as unknown as string);
+      const d = new Date(result.created_at);
       d.setDate(d.getDate() + 7);
       return d;
     }
@@ -504,7 +501,7 @@ export class ListingsRepository {
   }
 
   async getRelated(listingId: string, category: string): Promise<ListingRow[]> {
-    return (await this.db
+    return await this.db
       .selectFrom("listings")
       .selectAll()
       .where("category", "=", category)
@@ -513,7 +510,7 @@ export class ListingsRepository {
       .where(sql<SqlBool>`expires_at > datetime('now')`)
       .orderBy("created_at", "desc")
       .limit(4)
-      .execute()) as unknown as ListingRow[];
+      .execute();
   }
 
   async getSuggestTitles(q: string, limit: number = 20): Promise<string[]> {
@@ -529,20 +526,20 @@ export class ListingsRepository {
   }
 
   async getImages(listingId: string): Promise<ListingImageRow[]> {
-    return (await this.db
+    return await this.db
       .selectFrom("listing_images")
       .selectAll()
       .where("listing_id", "=", listingId)
       .orderBy("position", "asc")
-      .execute()) as unknown as ListingImageRow[];
+      .execute();
   }
 
   async getSeller(userId: string): Promise<SellerRow | undefined> {
-    return (await this.db
+    return await this.db
       .selectFrom("users")
       .select(["id", "display_name", "avatar_url", "phone_verified", "created_at"])
       .where("id", "=", userId)
-      .executeTakeFirst()) as unknown as SellerRow | undefined;
+      .executeTakeFirst();
   }
 
   /**

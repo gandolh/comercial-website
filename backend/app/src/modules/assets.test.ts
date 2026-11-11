@@ -39,7 +39,7 @@ async function paidListingWithAsset(t: TestApp) {
       content_type: "application/zip",
       file_size_bytes: 4,
       position: 0,
-    } as never)
+    })
     .execute();
   mkdirSync(path.join(t.config.assetsDir, "listings", "paid", "assets"), { recursive: true });
   writeFileSync(path.join(t.config.assetsDir, key), "paid");
@@ -74,7 +74,7 @@ describe("paid files", () => {
         amount_ron: 49,
         status: "paid",
         provider: "fake",
-      } as never)
+      })
       .execute();
     const served = await t.app.inject({ method: "GET", url: "/listings/paid/download", headers: t.bearer("buyer") });
     expect(served.statusCode).toBe(200);

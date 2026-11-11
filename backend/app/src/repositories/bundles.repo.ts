@@ -47,13 +47,13 @@ export class BundlesRepository {
    * Returns full listing rows so callers can map to card responses.
    */
   async getBundleChildren(bundleListingId: string): Promise<ListingRow[]> {
-    return (await this.db
+    return await this.db
       .selectFrom("bundle_items")
       .innerJoin("listings", "listings.id", "bundle_items.child_listing_id")
       .selectAll("listings")
       .where("bundle_items.bundle_listing_id", "=", bundleListingId)
       .orderBy("bundle_items.position", "asc")
-      .execute()) as unknown as ListingRow[];
+      .execute();
   }
 
   /**

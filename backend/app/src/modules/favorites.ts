@@ -1,4 +1,5 @@
 import type { RouteRegistrar } from "../context.js";
+import { requireUserId } from "../auth-user.js";
 
 interface ListingCardResponse {
   id: string;
@@ -34,7 +35,7 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
   // POST /favorites/:listing_id — add to favorites
   app.post("/favorites/:listing_id", { preHandler: app.authenticate }, async (request, reply) => {
     const { listing_id } = request.params as any;
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     // Insert with ON CONFLICT DO NOTHING
     await ctx.db
@@ -52,7 +53,7 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
   // DELETE /favorites/:listing_id — remove from favorites
   app.delete("/favorites/:listing_id", { preHandler: app.authenticate }, async (request, reply) => {
     const { listing_id } = request.params as any;
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     await ctx.db.deleteFrom("favorites").where("user_id", "=", userId).where("listing_id", "=", listing_id).execute();
 
@@ -61,7 +62,7 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
 
   // GET /me/favorites — list favorited listings as cards
   app.get("/me/favorites", { preHandler: app.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     // Get favorite listing IDs
     const favorites = await ctx.db
@@ -107,7 +108,7 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
       title: l.title,
       price_ron: l.price_ron,
       category: l.category,
-      cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id)!, ctx.config) : null,
+      cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id) ?? "", ctx.config) : null,
       seller_verified: Boolean(sellerMap.get(l.user_id)),
       posted_at: toISOString(l.created_at),
       active: Boolean(l.active),
@@ -119,7 +120,7 @@ export const registerFavoritesRoutes: RouteRegistrar = (app, ctx) => {
 
   // GET /me/favorites/ids — list favorite IDs
   app.get("/me/favorites/ids", { preHandler: app.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     const favorites = await ctx.db
       .selectFrom("favorites")

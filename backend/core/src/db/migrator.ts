@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-import Database from "better-sqlite3";
+import type Database from "better-sqlite3";
 
 /**
  * Minimal SQL migrator for SQLite: runs every `*.sql` file in `migrationsDir`
@@ -35,7 +35,7 @@ export function runMigrations(db: Database.Database, migrationsDir: string): str
       })();
       ran.push(name);
     } catch (err) {
-      throw new Error(`Migration ${name} failed: ${(err as Error).message}`);
+      throw new Error(`Migration ${name} failed: ${(err as Error).message}`, { cause: err });
     }
   }
   return ran;

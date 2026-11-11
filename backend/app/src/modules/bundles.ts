@@ -17,6 +17,7 @@ import { BundlesRepository } from "../repositories/bundles.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import { toListingCardResponse } from "../listings-helpers.js";
 import type { FastifyInstance } from "fastify";
+import { requireUserId } from "../auth-user.js";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 
@@ -41,7 +42,7 @@ export const registerBundlesRoutes: RouteRegistrar = (app, ctx) => {
    * Validates: caller owns the bundle listing; all children exist.
    */
   app.post("/listings/:id/bundle-items", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id: bundleId } = request.params as { id: string };
 
     const parsed = SetBundleItemsSchema.safeParse(request.body);

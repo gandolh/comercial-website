@@ -4,6 +4,7 @@ import { sql } from "kysely";
 import type { SqlBool } from "kysely";
 import type { RouteRegistrar } from "../context.js";
 import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
+import { requireUserId } from "../auth-user.js";
 // Helpers
 function imageUrl(s3Key: string, config: any): string {
   if (!s3Key) return null as any;
@@ -94,7 +95,7 @@ interface ListingCardResponse {
 export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
   // GET /users/me — return current user's summary
   app.get("/users/me", { preHandler: app.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const user = await ctx.db
       .selectFrom("users")
       .select([
@@ -167,7 +168,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       throw AppError.validation((err as any).errors[0]?.message || "invalid request");
     }
 
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const updates: any = {};
 
     if (body.display_name !== undefined) {
@@ -253,7 +254,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
 
   // GET /users/me/stats — return stats
   app.get("/users/me/stats", { preHandler: app.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const now = new Date();
 
     // Listing stats
@@ -356,7 +357,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       throw AppError.validation((err as any).errors[0]?.message || "invalid request");
     }
 
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const user = await ctx.db.selectFrom("users").select(["password_hash"]).where("id", "=", userId).executeTakeFirst();
 
     if (!user) {
@@ -376,7 +377,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
 
   // POST /users/me/avatar — multipart upload
   app.post("/users/me/avatar", { preHandler: app.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
 
     const data = await (request as any).file();
     if (!data) throw AppError.validation("no file provided");
@@ -506,7 +507,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       title: l.title,
       price_ron: l.price_ron,
       category: l.category,
-      cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id)!, ctx.config) : null,
+      cover_url: coverMap.has(l.id) ? imageUrl(coverMap.get(l.id) ?? "", ctx.config) : null,
       seller_verified,
       posted_at: toISOString(l.created_at),
       active: Boolean(l.active),

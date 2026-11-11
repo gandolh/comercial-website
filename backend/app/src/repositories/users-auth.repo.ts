@@ -47,15 +47,11 @@ export class UsersAuthRepository {
   }
 
   async findByEmail(email: string): Promise<UserRow | undefined> {
-    return this.db.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst() as Promise<
-      UserRow | undefined
-    >;
+    return this.db.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst();
   }
 
   async findById(id: string): Promise<UserRow | undefined> {
-    return this.db.selectFrom("users").selectAll().where("id", "=", id).executeTakeFirst() as Promise<
-      UserRow | undefined
-    >;
+    return this.db.selectFrom("users").selectAll().where("id", "=", id).executeTakeFirst();
   }
 
   async createUser(params: CreateUserParams): Promise<UserRow> {
@@ -73,7 +69,7 @@ export class UsersAuthRepository {
       .returningAll()
       .executeTakeFirstOrThrow();
 
-    return user as unknown as UserRow;
+    return user;
   }
 
   async createEmailVerificationToken(userId: string, expiresAtMs: number): Promise<string> {
@@ -196,11 +192,6 @@ export class UsersAuthRepository {
       return this.findById(userId);
     }
 
-    return this.db
-      .updateTable("users")
-      .set(updates)
-      .where("id", "=", userId)
-      .returningAll()
-      .executeTakeFirst() as Promise<UserRow | undefined>;
+    return this.db.updateTable("users").set(updates).where("id", "=", userId).returningAll().executeTakeFirst();
   }
 }

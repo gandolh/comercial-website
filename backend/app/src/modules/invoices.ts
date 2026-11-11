@@ -2,6 +2,7 @@ import { z } from "zod";
 import { AppError } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import type { FastifyInstance } from "fastify";
+import { requireUserId } from "../auth-user.js";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -349,7 +350,8 @@ export function validateUblInvoice(inv: InvoiceResponse): UblValidationError[] {
   // ── Per-line validation ───────────────────────────────────────────────────
   const validVatRates = new Set([0, 5, 9, 19]);
   for (let i = 0; i < inv.line_items.length; i++) {
-    const item = inv.line_items[i]!;
+    const item = inv.line_items[i];
+    if (!item) continue;
     if (!item.description || item.description.trim() === "") {
       errors.push({ field: `line_items[${i}].description`, message: `Linia ${i + 1}: descrierea este obligatorie` });
     }
@@ -608,7 +610,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Return the authenticated user's invoice issuer profile.
    */
   app.get("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const profile = await ctx.db
       .selectFrom("user_invoice_profiles")
       .selectAll()
@@ -622,7 +624,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Upsert the authenticated user's invoice issuer profile.
    */
   app.put("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const parsed = ProfileUpsertSchema.safeParse(request.body);
     if (!parsed.success) throw AppError.validation(parsed.error.message);
 
@@ -679,7 +681,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * List invoices for the authenticated user (most recent first).
    */
   app.get("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const rows = await ctx.db
       .selectFrom("invoices")
       .selectAll()
@@ -694,7 +696,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Create a new invoice record.
    */
   app.post("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const parsed = CreateInvoiceSchema.safeParse(request.body);
     if (!parsed.success) throw AppError.validation(parsed.error.message);
 
@@ -752,7 +754,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Get a single invoice by ID.
    */
   app.get("/invoices/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
     const row = await ctx.db
       .selectFrom("invoices")
@@ -769,7 +771,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Download the invoice as a PDF file.
    */
   app.get("/invoices/:id/pdf", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
     const row = await ctx.db
       .selectFrom("invoices")
@@ -794,7 +796,7 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * Download the invoice as a UBL 2.1 XML (e-Factura RO_CIUS).
    */
   app.get("/invoices/:id/xml", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = request.userId!;
+    const userId = requireUserId(request);
     const { id } = request.params as { id: string };
     const row = await ctx.db
       .selectFrom("invoices")
