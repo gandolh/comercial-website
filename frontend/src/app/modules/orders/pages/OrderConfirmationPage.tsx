@@ -18,15 +18,12 @@ export function OrderConfirmationPage() {
   const orderId = useOrderIdFromUrl();
   const statusFromUrl = useStatusFromUrl();
   const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(Boolean(orderId));
+  const [loadError, setError] = useState<string | null>(null);
+  const error = orderId ? loadError : t("orders.confirmation.noOrderId");
 
   useEffect(() => {
-    if (!orderId) {
-      setLoading(false);
-      setError(t("orders.confirmation.noOrderId"));
-      return;
-    }
+    if (!orderId) return;
 
     let cancelled = false;
 
@@ -56,7 +53,7 @@ export function OrderConfirmationPage() {
       }
     };
 
-    fetchOrder();
+    void fetchOrder();
     return () => {
       cancelled = true;
     };
@@ -121,7 +118,7 @@ export function OrderConfirmationPage() {
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.status")}</span>
           <span className={`font-semibold ${isPaid ? "text-primary" : "text-outline"}`}>
-            {t(`orders.status.${order.status}` as any)}
+            {t(`orders.status.${order.status}`)}
           </span>
         </div>
         {order.paid_at && (

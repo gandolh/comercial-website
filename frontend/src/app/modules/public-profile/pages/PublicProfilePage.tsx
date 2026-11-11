@@ -17,11 +17,11 @@ interface SellerProfile extends PublicUserResponse {
   total_downloads: number;
 }
 
-export default function PublicProfilePage() {
+export function PublicProfilePage() {
   const { id } = useParams<{ id: string }>();
-  const { data: _profileRaw, isLoading: isProfileLoading } = usePublicProfile(id!);
+  const { data: _profileRaw, isLoading: isProfileLoading } = usePublicProfile(id);
   const profile = _profileRaw as SellerProfile | undefined;
-  const { data: listingsPage, isLoading: isListingsLoading } = useUserListings(id!);
+  const { data: listingsPage, isLoading: isListingsLoading } = useUserListings(id);
   const { t } = useTranslation();
 
   if (isProfileLoading) {

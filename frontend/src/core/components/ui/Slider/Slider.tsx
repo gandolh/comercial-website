@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Slider as BaseSlider } from "@base-ui/react/slider";
 
 interface SliderProps {
@@ -25,10 +25,12 @@ export function Slider({
   const [local, setLocal] = useState<[number, number]>(value);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sync when parent resets value externally
-  useEffect(() => {
+  // Sync when parent resets value externally: adjust during render, not in an effect.
+  const [seen, setSeen] = useState(value);
+  if (seen[0] !== value[0] || seen[1] !== value[1]) {
+    setSeen(value);
     setLocal(value);
-  }, [value[0], value[1]]);
+  }
 
   function handleChange(v: [number, number]) {
     setLocal(v);
@@ -54,8 +56,8 @@ export function Slider({
       )}
       <BaseSlider.Root
         value={local}
-        onValueChange={(v) => handleChange(v as [number, number])}
-        onValueCommitted={(v) => handleCommit(v as [number, number])}
+        onValueChange={(v) => handleChange(v)}
+        onValueCommitted={(v) => handleCommit(v)}
         min={min}
         max={max}
         step={step}

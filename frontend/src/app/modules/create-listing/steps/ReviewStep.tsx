@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@core/lib/auth";
-import PhoneVerifyModal from "../../auth/components/PhoneVerifyModal";
+import { PhoneVerifyModal } from "../../auth/components/PhoneVerifyModal";
 import { reviewStepSchema, type ReviewStepInput } from "../schemas";
 import type { ListingDraft } from "../services/drafts";
 import { ListingGallery } from "../../listings/components/ListingGallery";

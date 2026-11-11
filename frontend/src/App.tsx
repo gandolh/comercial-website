@@ -6,11 +6,11 @@ import { router } from "@app/routes";
 import { useAuth } from "@core/lib/auth";
 import { Toaster } from "sonner";
 
-export default function App() {
+export function App() {
   const hydrate = useAuth((state) => state.hydrate);
 
   useEffect(() => {
-    hydrate();
+    void hydrate();
   }, [hydrate]);
 
   return (

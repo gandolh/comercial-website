@@ -27,7 +27,7 @@ export function EditListingPage() {
     refetch,
   } = useQuery({
     queryKey: ["listing", id],
-    queryFn: () => fetchListingDetail(id!),
+    queryFn: () => fetchListingDetail(id),
     enabled: !!id,
   });
 

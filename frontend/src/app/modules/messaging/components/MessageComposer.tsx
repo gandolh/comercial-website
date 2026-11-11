@@ -29,7 +29,7 @@ export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit();
+      void handleSubmit();
     }
   };
 

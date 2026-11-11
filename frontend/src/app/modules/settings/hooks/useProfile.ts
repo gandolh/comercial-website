@@ -12,7 +12,7 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: (data: UpdateProfileRequest) => updateProfile(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      void queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@core/lib/auth";
 import { Button } from "@core/components/ui";
-import PhoneVerifyModal from "../../auth/components/PhoneVerifyModal";
+import { PhoneVerifyModal } from "../../auth/components/PhoneVerifyModal";
 import { ProfileSection } from "../components/ProfileSection";
 import { WardSection } from "../components/WardSection";
 

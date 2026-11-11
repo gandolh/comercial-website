@@ -55,7 +55,7 @@ export function ImageUploader({ existingCount, onUploadFiles }: ImageUploaderPro
           if (remainingSlots === 0 || isUploading) {
             return;
           }
-          handleFiles(event.dataTransfer.files);
+          void handleFiles(event.dataTransfer.files);
         }}
         className="border-2 border-dashed border-outline rounded-2xl p-6 text-center bg-surface-container"
       >

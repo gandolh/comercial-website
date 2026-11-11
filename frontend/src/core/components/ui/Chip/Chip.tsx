@@ -11,7 +11,7 @@ interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Chip({
-  variant = "filter",
+  variant: _variant,
   selected = false,
   onRemove,
   icon,

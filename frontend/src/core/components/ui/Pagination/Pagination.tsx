@@ -32,7 +32,7 @@ export function Pagination({ page, totalPages, onPageChange, className = "" }: P
         ) : (
           <PaginationButton
             key={p}
-            onClick={() => onPageChange(p as number)}
+            onClick={() => onPageChange(p)}
             active={p === page}
             aria-label={`Pagina ${p}`}
             aria-current={p === page ? "page" : undefined}

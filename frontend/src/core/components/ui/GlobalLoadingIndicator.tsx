@@ -10,6 +10,9 @@ export function GlobalLoadingIndicator() {
     const isNavigating = routerState.status === "pending";
 
     if (isNavigating) {
+      // The router's pending status is the external system this effect follows, and the indicator outlives
+      // it by 200 ms in the cleanup, so it cannot be derived during render.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
       setProgress(0);
 

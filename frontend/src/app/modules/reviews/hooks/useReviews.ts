@@ -16,7 +16,7 @@ export function useSubmitReview(listingId: string) {
   return useMutation({
     mutationFn: (payload: SubmitReviewRequest) => reviewsService.submitReview(listingId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews", listingId] });
+      void queryClient.invalidateQueries({ queryKey: ["reviews", listingId] });
     },
   });
 }
@@ -27,7 +27,7 @@ export function useDeleteReview(listingId: string) {
   return useMutation({
     mutationFn: () => reviewsService.deleteReview(listingId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews", listingId] });
+      void queryClient.invalidateQueries({ queryKey: ["reviews", listingId] });
     },
   });
 }

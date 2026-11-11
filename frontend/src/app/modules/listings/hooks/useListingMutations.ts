@@ -12,9 +12,9 @@ export function useListingMutations() {
   const qc = useQueryClient();
 
   const invalidate = (id?: string) => {
-    qc.invalidateQueries({ queryKey: ["me", "listings"] });
+    void qc.invalidateQueries({ queryKey: ["me", "listings"] });
     if (id) {
-      qc.invalidateQueries({ queryKey: ["listing", id] });
+      void qc.invalidateQueries({ queryKey: ["listing", id] });
     }
   };
 

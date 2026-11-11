@@ -1,32 +1,21 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
-import { defineConfig, globalIgnores } from "eslint/config";
+import { houseStyle } from "../vendor/house-style/eslint.config.js";
 
-export default defineConfig([
-  globalIgnores(["dist"]),
+// The house config from the vendored house-style copy, given this project's folders. The compiler is
+// the first gate; the house adds only what it cannot see.
+export default [
+  ...houseStyle({
+    root: import.meta.dirname,
+    web: "src",
+    // i18n.ts initialises i18next as a side effect of being imported and keeps a default export.
+    defaultExports: ["src/core/lib/i18n.ts"],
+  }),
   {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
-    languageOptions: {
-      globals: globals.browser,
-    },
-    rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-      "@typescript-eslint/no-explicit-any": "warn",
-    },
+    // A warning for now (2026-11-11): handlers that return a promise sit on `onClick`, `onSubmit` and
+    // `onRetry` attributes, 49 of them. Each wants a `() => void handler()` wrapper (a form's
+    // `handleSubmit(onSubmit)` too). When the pages are wrapped, this block goes and the rule is an error
+    // again.
+    name: "piataro-web/misused-promises-warns",
+    files: ["src/**"],
+    rules: { "@typescript-eslint/no-misused-promises": "warn" },
   },
-  {
-    files: ["**/routes/**/*.{ts,tsx}"],
-    rules: {
-      "react-refresh/only-export-components": "off",
-    },
-  },
-]);
+];

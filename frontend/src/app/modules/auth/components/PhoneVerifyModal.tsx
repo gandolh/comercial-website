@@ -10,7 +10,7 @@ interface PhoneVerifyModalProps {
   onSuccess?: () => void;
 }
 
-const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpenChange, onSuccess }) => {
+export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpenChange, onSuccess }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState<"phone" | "code">("phone");
   const [phone, setPhone] = useState("");
@@ -56,7 +56,7 @@ const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpenChange,
 
   useEffect(() => {
     if (code.length === 6 && step === "code") {
-      handleVerifyCode({ preventDefault: () => {} } as React.FormEvent);
+      void handleVerifyCode({ preventDefault: () => {} } as React.FormEvent);
     }
   }, [code, step]);
 
@@ -157,5 +157,3 @@ const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpenChange,
     </Modal>
   );
 };
-
-export default PhoneVerifyModal;

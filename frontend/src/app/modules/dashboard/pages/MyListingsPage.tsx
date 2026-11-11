@@ -62,8 +62,9 @@ export function MyListingsPage() {
   const handleAction = async (action: () => Promise<unknown>) => {
     try {
       await action();
-      refetch();
+      void refetch();
     } catch (error) {
+      // eslint-disable-next-line no-console -- a developer diagnostic; the user is told through the UI
       console.error("Action failed:", error);
     }
   };
@@ -276,7 +277,7 @@ export function MyListingsPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => {
           if (deleteTarget) {
-            handleAction(() => remove.mutateAsync(deleteTarget));
+            void handleAction(() => remove.mutateAsync(deleteTarget));
             setDeleteTarget(null);
           }
         }}

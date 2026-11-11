@@ -100,7 +100,7 @@ export function MyOrdersPage() {
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${STATUS_STYLES[order.status] ?? STATUS_STYLES.cancelled}`}
                 >
-                  {t(`orders.status.${order.status}` as any)}
+                  {t(`orders.status.${order.status}`)}
                 </span>
               </div>
 

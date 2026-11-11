@@ -55,7 +55,7 @@ export function useToggleFavorite() {
       toast.error("Nu am putut actualiza favoritele.");
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      void queryClient.invalidateQueries({ queryKey: ["favorites"] });
     },
   });
 }

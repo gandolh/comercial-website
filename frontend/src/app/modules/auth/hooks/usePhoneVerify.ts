@@ -11,7 +11,7 @@ export function usePhoneVerify() {
   const verify = useMutation({
     mutationFn: verifyPhone,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      void queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 

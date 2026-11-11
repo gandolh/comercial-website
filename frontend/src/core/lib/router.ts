@@ -21,15 +21,14 @@ export function useNavigate() {
 
   return useCallback(
     (to: string, options: NavigateOptions = {}) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      navigate({
+      void navigate({
         to: to as never,
         replace: options.replace,
         params: options.params as never,
         search: options.search as never,
         hash: options.hash,
         state: options.state,
-      } as any);
+      } as never);
     },
     [navigate],
   );
@@ -103,12 +102,11 @@ export function useSearchParams(): [
         searchObject[key] = value;
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      router.navigate({
+      void router.navigate({
         to: pathname,
         search: searchObject,
         replace: true,
-      } as any);
+      } as never);
     },
     [currentParams, pathname, router],
   );

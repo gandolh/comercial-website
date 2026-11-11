@@ -18,7 +18,7 @@ export const ConversationPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: conversations } = useConversations();
-  const { data: messages, isLoading } = useConversationMessages(conversationId!);
+  const { data: messages, isLoading } = useConversationMessages(conversationId);
 
   const currentConversation = conversations?.find((c: ConversationSummary) => c.id === conversationId);
 
@@ -34,7 +34,7 @@ export const ConversationPage: React.FC = () => {
 
   useEffect(() => {
     if (conversationId) {
-      messagingService.markAsRead(conversationId);
+      void messagingService.markAsRead(conversationId);
     }
   }, [conversationId, messages?.length]);
 

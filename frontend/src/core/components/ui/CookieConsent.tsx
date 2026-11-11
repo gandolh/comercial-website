@@ -1,29 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@core/components/ui/Button";
 import { Link } from "@core/lib/router";
 
 const STORAGE_KEY = "cookie_consent";
-type ConsentValue = "accepted" | "rejected";
 
 export function CookieConsent() {
   const { t } = useTranslation();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
-      setVisible(true);
-    }
-  }, []);
+  const [visible, setVisible] = useState(() => !localStorage.getItem(STORAGE_KEY));
 
   function handleAccept() {
-    localStorage.setItem(STORAGE_KEY, "accepted" as ConsentValue);
+    localStorage.setItem(STORAGE_KEY, "accepted");
     setVisible(false);
   }
 
   function handleReject() {
-    localStorage.setItem(STORAGE_KEY, "rejected" as ConsentValue);
+    localStorage.setItem(STORAGE_KEY, "rejected");
     setVisible(false);
   }
 

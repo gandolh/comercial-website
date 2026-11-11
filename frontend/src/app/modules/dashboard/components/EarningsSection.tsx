@@ -24,6 +24,7 @@ export function EarningsSection() {
   const e = earnings.data;
   if (!e) return null;
   const feePercent = (e.fee_rate * 100).toLocaleString("ro-RO");
+  const lastPayout = e.payouts[0];
 
   return (
     <section className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant space-y-5">
@@ -71,10 +72,10 @@ export function EarningsSection() {
       <Button onClick={() => payout.mutate()} loading={payout.isPending} disabled={e.balance_ron <= 0}>
         Retrage (simulat)
       </Button>
-      {e.payouts.length > 0 && (
+      {lastPayout && (
         <p className="text-xs text-on-surface-variant">
-          Ultima retragere simulată: {ron(e.payouts[0]!.amount_ron)},{" "}
-          {new Date(e.payouts[0]!.created_at.replace(" ", "T") + "Z").toLocaleDateString("ro-RO")}.
+          Ultima retragere simulată: {ron(lastPayout.amount_ron)},{" "}
+          {new Date(lastPayout.created_at.replace(" ", "T") + "Z").toLocaleDateString("ro-RO")}.
         </p>
       )}
     </section>

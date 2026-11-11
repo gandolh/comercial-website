@@ -23,6 +23,7 @@ export function AvatarUploader() {
         avatar_s3_key: s3_key,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console -- a developer diagnostic; the user is told through the UI
       console.error("Avatar upload failed:", error);
     }
   };

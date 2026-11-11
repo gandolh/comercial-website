@@ -55,9 +55,9 @@ export const RenewButton: React.FC<RenewButtonProps> = ({
       const result = await renewListingDashboard(listingId);
       if (result.success) {
         toast.success(t("renew.success", "Anunț reînnoit pentru 30 de zile"));
-        qc.invalidateQueries({ queryKey: ["me", "listings"] });
-        qc.invalidateQueries({ queryKey: ["me", "stats"] });
-        qc.invalidateQueries({ queryKey: ["listing", listingId] });
+        void qc.invalidateQueries({ queryKey: ["me", "listings"] });
+        void qc.invalidateQueries({ queryKey: ["me", "stats"] });
+        void qc.invalidateQueries({ queryKey: ["listing", listingId] });
       } else {
         setRateLimitSecondsLeft(result.retryAfterSeconds);
         const minutesLeft = Math.ceil(result.retryAfterSeconds / 60);

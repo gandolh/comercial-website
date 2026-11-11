@@ -63,9 +63,9 @@ export function useListingImagesMutations(listingId: string) {
   }
 
   function invalidateListing() {
-    queryClient.invalidateQueries({ queryKey: ["listing", listingId] });
-    queryClient.invalidateQueries({ queryKey: ["listing-related", listingId] });
-    queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    void queryClient.invalidateQueries({ queryKey: ["listing", listingId] });
+    void queryClient.invalidateQueries({ queryKey: ["listing-related", listingId] });
+    void queryClient.invalidateQueries({ queryKey: ["favorites"] });
   }
 
   const isUploading = commitMutation.isPending;

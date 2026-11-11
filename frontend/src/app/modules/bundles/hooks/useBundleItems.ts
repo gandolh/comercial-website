@@ -25,7 +25,7 @@ export function useSetBundleItems(listingId: string) {
   return useMutation({
     mutationFn: (childIds: string[]) => setBundleItems(listingId, childIds),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["bundle-items", listingId] });
+      void queryClient.invalidateQueries({ queryKey: ["bundle-items", listingId] });
     },
   });
 }

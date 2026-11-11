@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "@core/lib/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -14,6 +14,17 @@ import type { DetailsStepInput, PriceStepInput } from "../schemas";
 
 type Step = "category" | "details" | "assets" | "photos" | "price" | "review";
 
+/** The step a draft's completeness puts the wizard on, or null to stay where it is (a draft still loading). */
+function stepFor(draftId: string | null, draft: ListingDraft | undefined): Step | null {
+  if (draftId && draft) {
+    if (!draft.title || !draft.description) return "details";
+    if (draft.assets.length === 0) return "assets";
+    if (draft.priceRon === null) return "price";
+    return "review";
+  }
+  return draftId ? null : "category";
+}
+
 interface CreateListingWizardProps {
   draftId: string | null;
   draft?: ListingDraft;
@@ -24,24 +35,16 @@ interface CreateListingWizardProps {
 export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError }: CreateListingWizardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [step, setStep] = useState<Step>("category");
+  const [step, setStep] = useState<Step>(() => stepFor(draftId, draft) ?? "category");
 
-  // Determine current step based on draft data completeness
-  useEffect(() => {
-    if (draftId && draft) {
-      if (!draft.title || !draft.description) {
-        setStep("details");
-      } else if (draft.assets.length === 0) {
-        setStep("assets");
-      } else if (draft.priceRon === null) {
-        setStep("price");
-      } else {
-        setStep("review");
-      }
-    } else if (!draftId) {
-      setStep("category");
-    }
-  }, [draftId, draft]);
+  // Determine current step based on draft data completeness, whenever the draft changes: adjust during
+  // render, not in an effect.
+  const [seen, setSeen] = useState({ draftId, draft });
+  if (seen.draftId !== draftId || seen.draft !== draft) {
+    setSeen({ draftId, draft });
+    const next = stepFor(draftId, draft);
+    if (next) setStep(next);
+  }
 
   const createMutation = useMutation({
     mutationFn: createDraft,
@@ -55,7 +58,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) => updateDraft(id, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["listing", draftId] });
+      void queryClient.invalidateQueries({ queryKey: ["listing", draftId] });
     },
     onError: () => toast.error("Nu am putut salva modificările."),
   });

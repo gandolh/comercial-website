@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useUpdateProfile } from "../hooks/useProfile";
 import type { UpdateProfileRequest } from "../services/profile";
 import { useAuth } from "@core/lib/auth";
 import { Input, Button, Textarea } from "@core/components/ui";
-import PhoneVerifyModal from "@app/modules/auth/components/PhoneVerifyModal";
+import { PhoneVerifyModal } from "@app/modules/auth/components/PhoneVerifyModal";
 import { useTranslation } from "react-i18next";
 
 /** Extended request type with seller profile fields. */
@@ -30,7 +30,7 @@ interface ExtendedUser {
 
 export function ProfileSection() {
   const { user: _user } = useAuth();
-  const user = _user as (typeof _user & ExtendedUser) | null;
+  const user: (typeof _user & ExtendedUser) | null = _user;
   const { t } = useTranslation();
 
   const [displayName, setDisplayName] = useState(user?.display_name || "");
@@ -44,8 +44,18 @@ export function ProfileSection() {
   const [saveError, setSaveError] = useState(false);
   const updateProfileMutation = useUpdateProfile();
 
-  // Keep form in sync if user object updates (e.g. after hydration)
-  useEffect(() => {
+  // Keep form in sync if user object updates (e.g. after hydration): adjust during render, not in an effect.
+  const userFields = [
+    user?.display_name,
+    user?.bio,
+    user?.website,
+    user?.social_twitter,
+    user?.social_instagram,
+    user?.social_github,
+  ];
+  const [seenFields, setSeenFields] = useState(userFields);
+  if (userFields.some((field, i) => field !== seenFields[i])) {
+    setSeenFields(userFields);
     if (user) {
       setDisplayName(user.display_name || "");
       setBio(user.bio || "");
@@ -54,7 +64,7 @@ export function ProfileSection() {
       setSocialInstagram(user.social_instagram || "");
       setSocialGithub(user.social_github || "");
     }
-  }, [user?.display_name, user?.bio, user?.website, user?.social_twitter, user?.social_instagram, user?.social_github]);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +79,7 @@ export function ProfileSection() {
         social_instagram: socialInstagram.trim() || null,
         social_github: socialGithub.trim() || null,
       };
-      await updateProfileMutation.mutateAsync(payload as UpdateProfileRequest);
+      await updateProfileMutation.mutateAsync(payload);
       setSaveSuccess(true);
     } catch {
       setSaveError(true);

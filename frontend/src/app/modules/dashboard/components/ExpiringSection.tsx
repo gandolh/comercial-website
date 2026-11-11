@@ -18,8 +18,8 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
   if (listings.length === 0) return null;
 
   const handleRenewSuccess = () => {
-    qc.invalidateQueries({ queryKey: ["me", "stats"] });
-    qc.invalidateQueries({ queryKey: ["me", "listings"] });
+    void qc.invalidateQueries({ queryKey: ["me", "stats"] });
+    void qc.invalidateQueries({ queryKey: ["me", "listings"] });
   };
 
   return (

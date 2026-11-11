@@ -68,6 +68,7 @@ function AssetFileList({ listingId, assets, isPaidListing = false, canDownload =
       document.body.removeChild(link);
       URL.revokeObjectURL(objectUrl);
     } catch (err) {
+      // eslint-disable-next-line no-console -- a developer diagnostic; the user is told through the UI
       console.error("Asset download failed:", err);
     } finally {
       setDownloadingId(null);
@@ -176,10 +177,11 @@ export function ListingDetailPage() {
     };
   }, [user, id]);
 
+  const expiresAt = data?.expiresAt;
   const isExpired = useMemo(() => {
-    if (!data?.expiresAt) return false;
-    return new Date(data.expiresAt) < new Date();
-  }, [data?.expiresAt]);
+    if (!expiresAt) return false;
+    return new Date(expiresAt) < new Date();
+  }, [expiresAt]);
 
   const isDigitalAsset = useMemo(() => {
     return !!data?.fileFormat;
@@ -310,7 +312,7 @@ export function ListingDetailPage() {
                 <p className="text-sm text-on-surface-variant">{t("orders.download.paywall.body")}</p>
                 <BuyButton
                   listingId={data.id}
-                  priceRon={data.priceRon!}
+                  priceRon={data.priceRon ?? 0}
                   hasPaidOrder={hasPaidOrder}
                   onAlreadyPaid={() => setHasPaidOrder(true)}
                 />

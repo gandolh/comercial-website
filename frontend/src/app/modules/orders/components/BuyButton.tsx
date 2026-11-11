@@ -53,8 +53,10 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
       if (result.checkout_url) {
         window.location.href = result.checkout_url;
       }
-    } catch (err: any) {
-      const msg: string = err?.response?.data?.message ?? err?.response?.data?.error ?? t("orders.buyButton.error");
+    } catch (err) {
+      const data = (err as { response?: { data?: { message?: string; error?: string } } } | null | undefined)?.response
+        ?.data;
+      const msg: string = data?.message ?? data?.error ?? t("orders.buyButton.error");
       setError(msg);
     } finally {
       setLoading(false);

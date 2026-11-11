@@ -77,7 +77,7 @@ export function AssetUploadStep({
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    handleUploadFiles(files);
+    void handleUploadFiles(files);
     // Reset input
     e.target.value = "";
   };
@@ -91,7 +91,7 @@ export function AssetUploadStep({
     e.preventDefault();
     e.stopPropagation();
     const files = Array.from(e.dataTransfer.files);
-    handleUploadFiles(files);
+    void handleUploadFiles(files);
   };
 
   const hasAssets = assets.length > 0;

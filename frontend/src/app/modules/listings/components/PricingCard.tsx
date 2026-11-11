@@ -52,6 +52,7 @@ export function PricingCard({
       link.click();
       document.body.removeChild(link);
     } catch (error) {
+      // eslint-disable-next-line no-console -- a developer diagnostic; the user is told through the UI
       console.error("Download failed:", error);
     } finally {
       setIsDownloading(false);
