@@ -11,6 +11,8 @@
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "test": "npm --prefix backend test",
     "lint": "npm --prefix frontend run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "house-style:sync": "node vendor/house-style/bin/sync.mjs"
   },
   "devDependencies": {

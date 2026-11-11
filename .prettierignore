@@ -1,0 +1,23 @@
+# Markdown stays out of Prettier (decided 2026-11-10).
+*.md
+
+# Generated or vendored copies: the house-style copy and the Ward library's.
+vendor/house-style/
+backend/app/vendor/
+
+# Lockfiles, build output, local data, designs and seed data.
+package-lock.json
+dist/
+coverage/
+/data/
+backend/app/data/
+backend/data/
+design/
+frontend/public/
+seed-data/
+
+# Deploy config, not source: Prettier rewrites its quoting.
+infrastructure/
+
+# A capture page for the README images, not source.
+docs/images/demo-previews.html
