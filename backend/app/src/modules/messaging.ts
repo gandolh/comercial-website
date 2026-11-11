@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import { AppError, newMessageEmail } from "@my-olx/core";
 

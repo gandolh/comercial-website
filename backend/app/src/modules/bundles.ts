@@ -12,7 +12,7 @@
 
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
-import type { RouteRegistrar, AppContext } from "../context.js";
+import type { RouteRegistrar } from "../context.js";
 import { BundlesRepository } from "../repositories/bundles.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import { toListingCardResponse } from "../listings-helpers.js";

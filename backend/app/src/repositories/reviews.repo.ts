@@ -21,7 +21,11 @@ export interface ReviewAggregate {
 }
 
 export class ReviewsRepository {
-  constructor(private db: Db) {}
+  private db: Db;
+
+  constructor(db: Db) {
+    this.db = db;
+  }
 
   /**
    * Create a new review or update an existing one (upsert by listing + buyer).

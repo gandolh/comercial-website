@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { randomBytes } from "node:crypto";
-import { AppError, hashPassword, verifyPassword, signToken } from "@my-olx/core";
+import { AppError, verifyPassword, signToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { UsersAuthRepository } from "../repositories/users-auth.repo.js";
 
@@ -59,17 +58,6 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^(\+40|0)7\d{8}$/;
 
 /**
- * Schema for POST /auth/register
- */
-const registerSchema = z.object({
-  email: z
-    .string()
-    .min(1, "email is required")
-    .refine((v) => emailRegex.test(v), "invalid email format"),
-  password: z.string().min(8, "password must be at least 8 characters"),
-});
-
-/**
  * Schema for POST /auth/login
  */
 const loginSchema = z.object({
@@ -92,24 +80,6 @@ const emailResendSchema = z.object({
     .string()
     .min(1, "email is required")
     .refine((v) => emailRegex.test(v), "invalid email format"),
-});
-
-/**
- * Schema for POST /auth/password/forgot
- */
-const passwordForgotSchema = z.object({
-  email: z
-    .string()
-    .min(1, "email is required")
-    .refine((v) => emailRegex.test(v), "invalid email format"),
-});
-
-/**
- * Schema for POST /auth/password/reset
- */
-const passwordResetSchema = z.object({
-  token: z.string().min(1, "token is required"),
-  password: z.string().min(8, "password must be at least 8 characters"),
 });
 
 /**

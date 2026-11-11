@@ -1,5 +1,4 @@
-import { createHmac, randomBytes } from "node:crypto";
-import { createHash } from "node:crypto";
+import { createHmac } from "node:crypto";
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { hash, verify } from "argon2";
 import { AppError } from "../errors/index.js";

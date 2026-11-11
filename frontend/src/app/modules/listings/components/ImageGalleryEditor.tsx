@@ -57,6 +57,9 @@ export function ImageGalleryEditor({ listingId, images, onImagesChange }: ImageG
 
     const reordered = [...sortedImages];
     const [moved] = reordered.splice(fromIndex, 1);
+    if (!moved) {
+      return;
+    }
     reordered.splice(toIndex, 0, moved);
 
     const normalized = reordered.map((image, index) => ({ ...image, position: index }));

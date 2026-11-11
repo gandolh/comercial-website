@@ -5,16 +5,12 @@ import { ListingsRepository } from "../repositories/listings.repo.js";
 import { AssetsRepository } from "../repositories/assets.repo.js";
 import { ReviewsRepository } from "../repositories/reviews.repo.js";
 import {
-  categoryLabel,
-  imageUrl,
   toListingCardResponse,
   toListingResponse,
   toListingDetailResponse,
   toSellerSummary,
   type ListingCardResponse,
   type ListingsPageResponse,
-  type ListingDetailResponse,
-  type SellerSummary,
   type AssetResponse,
 } from "../listings-helpers.js";
 import { AppError } from "@my-olx/core";
@@ -117,7 +113,6 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     const query = parsed.data;
-    const optionalUserId = extractOptionalUserId(request.headers.authorization, ctx.config.jwtSecret);
 
     const { listings, total } = await repo.search(
       query.q,

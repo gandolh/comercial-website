@@ -55,7 +55,11 @@ export interface SellerRow {
 }
 
 export class ListingsRepository {
-  constructor(private db: Db) {}
+  private db: Db;
+
+  constructor(db: Db) {
+    this.db = db;
+  }
 
   async create(
     userId: string,

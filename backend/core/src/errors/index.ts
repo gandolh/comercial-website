@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { ZodError } from "zod";
 
 /**
@@ -6,12 +6,15 @@ import { ZodError } from "zod";
  * Each instance carries statusCode and publicMessage for HTTP responses.
  */
 export class AppError extends Error {
-  constructor(
-    public readonly statusCode: number,
-    public readonly publicMessage: string,
-    public readonly cause?: unknown,
-  ) {
+  readonly statusCode: number;
+  readonly publicMessage: string;
+  override readonly cause?: unknown;
+
+  constructor(statusCode: number, publicMessage: string, cause?: unknown) {
     super(publicMessage);
+    this.statusCode = statusCode;
+    this.publicMessage = publicMessage;
+    this.cause = cause;
     Object.setPrototypeOf(this, AppError.prototype);
   }
 

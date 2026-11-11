@@ -207,7 +207,7 @@ describe("ReviewsRepository", () => {
 
     it("updates (not duplicates) on second submission from the same buyer", async () => {
       await repo.upsert(listingId, buyerId, 4, "Good");
-      const updated = await repo.upsert(listingId, buyerId, 2, "Changed my mind");
+      await repo.upsert(listingId, buyerId, 2, "Changed my mind");
 
       // Count reviews in DB — must be exactly 1.
       const allReviews = await repo.listByListing(listingId);

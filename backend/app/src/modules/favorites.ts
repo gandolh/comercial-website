@@ -1,5 +1,4 @@
 import type { RouteRegistrar } from "../context.js";
-import { AppError } from "@my-olx/core";
 
 interface ListingCardResponse {
   id: string;

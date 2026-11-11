@@ -1,4 +1,4 @@
-import { sql, type SqlBool } from "kysely";
+import { sql } from "kysely";
 import type { Db } from "@my-olx/core";
 
 export interface ListingAssetRow {
@@ -22,7 +22,11 @@ export interface DownloadRow {
 }
 
 export class AssetsRepository {
-  constructor(private db: Db) {}
+  private db: Db;
+
+  constructor(db: Db) {
+    this.db = db;
+  }
 
   /**
    * Get all assets for a listing, ordered by position

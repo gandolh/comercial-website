@@ -15,10 +15,6 @@ function imageUrl(s3Key: string, config: any): string {
   return `${base}/uploads/${key}`;
 }
 
-function getFileExtension(filename: string): string {
-  return filename.split(".").pop()?.toLowerCase() || "bin";
-}
-
 function toDate(val: any): Date {
   return val instanceof Date ? val : new Date(val);
 }

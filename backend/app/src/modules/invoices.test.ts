@@ -147,7 +147,7 @@ describe("validateUblInvoice", () => {
   });
 
   it("rejects malformed due_date", () => {
-    const errors = validateUblInvoice(makeValidInvoice({ due_date: "2026-13-99" }));
+    validateUblInvoice(makeValidInvoice({ due_date: "2026-13-99" }));
     // Pattern check only — the regex ensures format, not calendar validity
     // A date like 2026-13-99 still matches \d{4}-\d{2}-\d{2}, so no error expected here.
     // Let's test a truly malformed one instead:

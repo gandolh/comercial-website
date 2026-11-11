@@ -1,5 +1,4 @@
 import "@fastify/multipart";
-import { z } from "zod";
 import { sql } from "kysely";
 import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
 import type { RouteRegistrar, AppContext } from "../context.js";
@@ -62,11 +61,6 @@ interface AssetResponse {
   content_type: string;
   position: number;
   created_at: string;
-}
-
-interface DownloadResponse {
-  download_url: string;
-  filename: string;
 }
 
 function toAssetResponse(asset: any): AssetResponse {

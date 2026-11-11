@@ -1,4 +1,7 @@
 {
+  // The house flags, written out here and not extended from the vendored house-style copy: the Docker
+  // build stage copies only backend/, so a base one folder up would not exist there. `npm run
+  // house-style:sync -- --check` does not see them, so when the house base changes, change this file by hand.
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
@@ -10,6 +13,11 @@
     "composite": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

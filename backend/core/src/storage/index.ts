@@ -11,7 +11,11 @@ export interface StorageConfig {
 }
 
 export class StorageService {
-  constructor(private cfg: StorageConfig) {}
+  private cfg: StorageConfig;
+
+  constructor(cfg: StorageConfig) {
+    this.cfg = cfg;
+  }
 
   /** Ensure the uploads directory tree exists for a given key. */
   private async ensureDir(key: string): Promise<void> {

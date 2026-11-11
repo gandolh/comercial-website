@@ -8,7 +8,11 @@ export interface BundleItemRow {
 }
 
 export class BundlesRepository {
-  constructor(private db: Db) {}
+  private db: Db;
+
+  constructor(db: Db) {
+    this.db = db;
+  }
 
   /**
    * Replace all child items for a bundle listing (upsert via delete+insert).

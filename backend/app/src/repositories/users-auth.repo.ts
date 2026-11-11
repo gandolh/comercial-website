@@ -40,7 +40,11 @@ function nowIso(): string {
 }
 
 export class UsersAuthRepository {
-  constructor(private db: Db) {}
+  private db: Db;
+
+  constructor(db: Db) {
+    this.db = db;
+  }
 
   async findByEmail(email: string): Promise<UserRow | undefined> {
     return this.db.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst() as Promise<
