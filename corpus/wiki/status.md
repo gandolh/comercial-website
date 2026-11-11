@@ -1,9 +1,9 @@
 ---
-summary: Dated snapshot (2026-11-03) — PiațăRo as a deployed demo; briefs 01-09 are done (one line each), not deployed yet, and the owner's steps to deploy it.
-updated: 2026-11-03
+summary: Dated snapshot (2026-11-11) — PiațăRo as a deployed demo; briefs 01-11 are done (one line each), briefs 10 and 11 wait for a deploy, and the owner's steps.
+updated: 2026-11-11
 ---
 
-# Status — 2026-11-03
+# Status — 2026-11-11
 
 Built in April-May 2026 and paused since 2026-05-29; README and docs added 2026-10-16; security
 updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
@@ -20,11 +20,14 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 07 (done): `npm run seed:samples`, nine sample listings that never expire.
 - 08 (done): `PIATARO_BASE`, the frontend at `/piataro/` and the API at `/piataro-api` (`apiUrl()`).
 - 09 (done): the API's container (`infrastructure/`) and vps-deploy's `piataro` stack.
+- 10 (done): Base UI 1.9.0, pinned exactly in `frontend/`.
+- 11 (done, ready for deploy): the house style and its harness: vendored `vendor/house-style/` 1.1.0, Prettier at 120, `npm run check` and `check:fast`, ESLint with typed rules in both projects, TypeScript 6.0.3 in the backend, `.claude/rules/`. Warnings held for later: `no-explicit-any`, `n/no-process-env`, `no-console`, `no-misused-promises` ([todos/house-style-warnings.md](../todos/house-style-warnings.md)).
 
 ## Owed by the owner
 
 1. Push this repo and vps-deploy.
-2. `npm install` in this checkout's `frontend/` (the deploy builds it there).
+2. `npm install` in this checkout's `frontend/` (the deploy builds it there; brief 11 changed its pins and dropped its ESLint packages).
+   Once per clone: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 3. In vps-deploy, `npm run setup -- --stack piataro`. It makes `JWT_SECRET` and the Ward client key in
    `secrets/piataro.env`, registers the piataro app at Ward, and asks for `OWNER_EMAIL`, `OWNER_NAME`
    and `OWNER_PASSWORD` (at least 12 characters).

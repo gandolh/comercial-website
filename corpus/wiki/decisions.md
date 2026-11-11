@@ -1,6 +1,6 @@
 ---
-summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire.
-updated: 2026-11-03
+summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire, the house style and its checks (vendored, width 120).
+updated: 2026-11-11
 ---
 
 # Decisions
@@ -52,3 +52,20 @@ _2026-11-03_ — The first deploy seeds sample listings under seller profiles th
 samples are marked so the 30-day expiry skips them, and the owner's own listings expire normally.
 Rejected: renewing samples on each deploy (a quiet month empties the site) and no seed (the public
 would see an empty site).
+
+## The house style, formatted and checked
+_2026-11-11_ — The estate's `house-style` configs are **vendored** at `vendor/house-style/` (version 1.1.0),
+refreshed by `npm run house-style:sync`. The tool pins (ESLint, Prettier, TypeScript, knip,
+dependency-cruiser and the plugins) sit in the root `package.json`, because the vendored ESLint config
+resolves its plugins from where it sits; the root has no workspaces, and `backend/` and `frontend/` keep
+their own lockfiles and their own `eslint.config.js`, `knip.config.js` and `check:fast`. Prettier is one
+config at the root, at width 120 with trailing commas, Markdown out. The 48 single-quote frontend files
+moved to double quotes and semicolons in the one reformat commit, which `.git-blame-ignore-revs` hides.
+The backend's TypeScript went from 5.7.3 to 6.0.3 so `erasableSyntaxOnly` applies, and the frontend gained
+`strict` and `noUncheckedIndexedAccess`. `backend/tsconfig.base.json` writes the house flags out instead
+of extending the vendored base, because the Docker build copies only `backend/`. `npm run check` is
+typecheck, lint, format check, conventions (knip, dependency-cruiser and the two checkers) and the backend
+tests. Rejected: a `github:` or tarball dependency on the library (the image has no `git`), npm
+workspaces across the two projects (the Dockerfile and the deploy build them apart), and fixing every
+finding at once (a dated warning in each ESLint config holds `no-explicit-any`, `n/no-process-env`,
+`no-console` and `no-misused-promises` until a brief of their own).

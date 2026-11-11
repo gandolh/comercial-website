@@ -174,3 +174,26 @@ estate board (Q39).
 ## [2026-11-10] done | Brief 10 — Base UI 1.9.0
 
 `@base-ui/react` 1.4.1 to 1.9.0, pinned exactly in `frontend/` (c4dd42c). Typecheck, lint (28, unchanged) and build pass; the renamed OTPField and `sanitizeValue` are not used. Not done: release-notes read and the browser check. Needs a deploy; run `npm install` in `frontend/` after pulling.
+
+## [2026-11-11] done | Brief 11 — the house style and the quality harness
+
+Adopted `house-style` 1.1.0 (vendored at the root, pins in the root `package.json`). Re-measured on the real
+tree: Prettier at 120 changed 238 files (3,494 lines added, 5,012 removed); the backend's `noUnusedLocals`
+24, `noImplicitOverride` 1 and parameter properties 9 matched, as did the frontend's one
+`noUncheckedIndexedAccess` error. Typed lint before the fixes, frontend / backend: `no-floating-promises`
+30 / 0, `no-misused-promises` 49 / 0, `await-thenable` 0 / 0, `switch-exhaustiveness-check` 0 / 0,
+`no-unnecessary-type-assertion` 11 / 37 (30 in source), `no-non-null-assertion` 8 / 78 (58 in source),
+`no-explicit-any` 5 / 65, `no-console` 4 / 10 (outside the CLIs), `no-default-export` 4 / 0,
+`n/no-process-env` n/a / 21 in source. The three rules over 20, characterised: `no-floating-promises` is
+`invalidateQueries` and event wrappers called without `void` (fixed with `void`, no bug found);
+`no-misused-promises` is async handlers on `onClick`, `onSubmit` and `onRetry` (held as a warning);
+`no-explicit-any` in the backend is untyped rows and bodies in the route modules, 25 of them in
+`users.ts` (held as a warning). No `React.lazy` page needs a default export once the lazy line maps the name.
+Lint time, `projectService`, cold: 9.7 s backend, 14.9 s frontend. After: 0 errors in both projects;
+warnings: backend `no-explicit-any` 63 in source and 1 in tests, `no-non-null-assertion` 19 in tests,
+`n/no-process-env` 11, `no-console` 6; frontend `no-misused-promises` 49, `exhaustive-deps` 4,
+`incompatible-library` 4. knip is clean after dated exceptions for 12 unused frontend files and two
+dependencies. dependency-cruiser: 0 violations. `check-base-ui` 2 errors and 1 warning, and
+`check-structure` 116 errors and 5 warnings, both `--warn-only`. `check:fast` takes about 20 s for both
+projects with one file changed, and `check` about a minute. Outcome note in
+[brief 11](briefs/done/11-the-house-style-harness.md).

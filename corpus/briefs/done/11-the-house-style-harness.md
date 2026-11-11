@@ -239,3 +239,55 @@ One commit per step, with `npm run typecheck`, `npm test`, `npm run lint` and `n
 - Brief 12 adds `better-tailwindcss` to the frontend config and drops `check-base-ui`'s `--warn-only`. Brief 13 adds dependency-cruiser, drops `check-structure`'s `--warn-only`, and turns `n/no-process-env` into an error.
 - The deploy builds the frontend in this checkout (`docs/deploy.md:48`), so the owner reruns `npm install` in `frontend/` after the pins change. Say so in the hand-over note.
 - Brief 12 deletes or moves several wrappers that this brief reformats. That is expected: the reformat comes first, so those diffs stay readable.
+
+## Outcome (2026-11-11)
+
+Built with house-style 1.1.0 on `main`, local commits, nothing pushed: vendor and pins `1f33e35`, frontend pins `be14bca`, Prettier config `16a912e`, the reformat `0553f6a`, blame ignore `cd1583f`, backend TypeScript 6.0.3 `124241d`, tsconfig flags and parameter properties `6f35f43`, backend lint `9a97534`, frontend lint `e77c4e2`, root lint `a599da5`, the gate `8c9c679`, `CLAUDE.md` and rules `2154bfd`, then this closeout.
+
+**Layout.** As ro-housing: the root `package.json` holds `vendor/house-style/`, the twelve exact tool pins, `check`, `check:fast`, `check:conventions`, `format` and `house-style:sync`; `backend/` and `frontend/` keep their lockfiles, each with its own `eslint.config.js`, `knip.config.js`, `lint`, `knip` and `check:fast`; the root has its own `eslint.config.js` for `scripts/` and `docs/images`. `.npmrc` (`save-exact=true`) is in all three.
+
+**The reformat.** 238 files, 3,494 lines added, 5,012 removed. Bundle compare (esbuild minify, 300 files: TS, TSX, JS, MJS, CSS through the `css` loader, JSON parsed): 296 identical, 4 differ. Three are JSX text Prettier splits with `{" "}` (`EarningsSection.tsx`, `TermeniPage.tsx`, `SettingsPage.tsx`: a trailing space before an element moved into the text), the same rendered text. One is `index.css`: `rgba(0,0,0,0.06)` became `rgba(0, 0, 0, 0.06)`, same value. `infrastructure/` and `docs/images/demo-previews.html` are in `.prettierignore` (Prettier rewrote a healthcheck's quoting, and the page is a capture helper).
+
+**Rule counts, before then after** (frontend / backend):
+
+| Rule | Before | After |
+|---|---|---|
+| `no-floating-promises` | 30 / 0 | 0 / 0 (`void` added) |
+| `no-misused-promises` | 49 / 0 | 49 warnings / 0 |
+| `await-thenable`, `switch-exhaustiveness-check` | 0 / 0 | 0 / 0 |
+| `no-unnecessary-type-assertion` | 11 / 37 | 0 / 0 |
+| `no-non-null-assertion`, source | 8 / 58 | 0 / 0 |
+| `no-non-null-assertion`, tests | 0 / 20 | 0 / 19 warnings |
+| `no-explicit-any` | 5 / 65 | 0 / 63 + 1 test, warnings |
+| `no-console` outside CLIs | 4 / 10 | 0 (4 reasoned disables) / 6 warnings |
+| `import-x/no-default-export` | 4 / 0 | 0 / 0 (`i18n.ts` allowed) |
+| `n/no-process-env` | n/a / 21 | n/a / 11 warnings (the config module is the reader) |
+| `react-hooks/set-state-in-effect` + `preserve-manual-memoization` | 7 / n/a | 0 (1 reasoned disable) |
+| `exhaustive-deps`, `incompatible-library` | 8, 4 / n/a | 4, 4 warnings |
+| other (`consistent-type-imports`, unused vars, `preserve-caught-error`, `no-useless-assignment`, `prefer-called-exactly-once-with`) | 3 / 9 | 0 / 0 |
+
+**Held as warnings** (dated blocks in the ESLint configs, follow-up in [todos/house-style-warnings.md](../../todos/house-style-warnings.md)): frontend `no-misused-promises` 49, backend `no-explicit-any` 63 + 1, `n/no-process-env` 11, `no-console` 6 (three files that run outside a request and have no logger). The three rules over 20 characterised: floating promises were `invalidateQueries` and handler calls without `void` and are fixed; misused promises are async handlers on attributes; the backend `any` is untyped rows and bodies.
+
+**The `!`** are fixed: 51 backend `request.userId!` became `requireUserId(request)` (`backend/app/src/auth-user.ts`, answers 401 where it would have run with an undefined id); the others narrow with a guard or a default. Frontend `id!` and the asserts the compiler already knew were deleted. One commit per project, not a separate commit for the `!`: they share the lint commit.
+
+**The nine frontend errors.** `Dropdown.tsx`'s `react-refresh` error is gone because the house config has no `react-refresh`. `Chip.tsx` takes `variant: _variant`. The six `set-state-in-effect` sites: `CookieConsent` initialises from `localStorage`; `Slider`, `CreateListingWizard` and `ProfileSection` adjust state during render when their inputs change; `OrderConfirmationPage` derives the no-order-id error; `GlobalLoadingIndicator` keeps its effect with a reasoned `eslint-disable-next-line`, because the 200 ms exit animation outlives the router status. `ListingDetailPage`'s `useMemo` reads `expiresAt` into a local first. No behaviour is meant to change; no screenshots were taken at 1280 or 390 px, so that check is the owner's.
+
+**Checkers.** `check-base-ui --warn-only`: 2 errors, 1 warning (rule 5 `frontend/src/index.css`, rule 11 `alert()` in `PasswordSection.tsx:29`, rule 9 `Dropdown.tsx:37`). `check-structure --warn-only`: 116 errors, 5 warnings (rule 2 ×2, rule 3 ×22, rule 6 ×92, rule 11 ×5). dependency-cruiser: 0 violations over 315 modules with `frontend/tsconfig.app.json` for the aliases; no rule lowered. knip: clean after dated exceptions for 12 unused frontend files, `@tanstack/router-devtools`, `pino` and `@fastify/multipart`; unused exports are warnings (3 + 4 backend, 58 + 19 frontend).
+
+**Timings** (warm): `check:fast` with one file changed, 18 to 21 s for both projects (about 10 s each, over the 15 s per project target only in total); `npm run check`, 56 to 68 s.
+
+**Checks run:** `npm run check` (exit 0, 160 backend tests in 18 files), `npx prettier --check .` (0), `npm run house-style:sync -- --check` (0), `npm run build` in both projects, the backend `npm test` with `core/dist` and `app/dist` deleted (160 pass), a scratch copy of what the Dockerfile copies (`npm ci --ignore-scripts`, `npm run build`: exit 0), `bash corpus/lint.sh` (ok). Deliberate violations, each making `npm run lint` exit 1 and reverted: `enum` (both projects), `!` (both), `console.log` in `backend/app/src/modules/anaf.ts` and in the frontend, `// TODO` and `// FIXME`, `export default` (both).
+
+**Checks skipped:** the live-session hook check waits for the plugin update; no `docker build` (local Docker fails on I/O); no browser screenshots; a per-project `format:check` (Prettier reads `.prettierignore` from the folder it runs in, so formatting is checked once, from the root).
+
+**Deviations:**
+
+- The copy and the tool pins are at the root, not per project, because the vendored ESLint config resolves its plugins from where it sits (the skill's two-project rule). The frontend's own ESLint and Prettier packages are gone from `frontend/package.json`.
+- `backend/tsconfig.base.json` holds the house flags itself instead of extending the vendored base (`backend/tsconfig.base.json:2`): the Dockerfile copies only `backend/`.
+- `core` and `app` write their `tsBuildInfoFile` into `dist/` (`backend/core/tsconfig.json`, `backend/app/tsconfig.json`), so a deleted `dist/` forces a rebuild and `pretest` (`npm run build`) works on a tree that has built before. The file now ships in the image's `dist/`.
+- `format` and `format:check` are root scripts only.
+- The 24-name `noUnusedLocals` list included dead code, deleted: three auth schemas, `DownloadResponse`, `getFileExtension` and others; `validateUblInvoice` and `repo.upsert` kept as bare calls.
+- The backend `console` globs add `create-server.ts` (it logs before the logger exists) and `core/src/email/index.ts` (the log-only email service prints by design).
+- `CLAUDE.md` is 130 lines, over the "about 120" target.
+
+**Owner steps:** `git config blame.ignoreRevsFile .git-blame-ignore-revs`; `npm install` in `frontend/` after pulling (the pins changed and the ESLint packages left); `node cli.ts piataro deploy` from the vps-deploy checkout.

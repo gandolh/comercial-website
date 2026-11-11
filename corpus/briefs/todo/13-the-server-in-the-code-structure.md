@@ -277,6 +277,7 @@ Follow `migrating-a-server.md`. One commit per step. After each, `npm run check`
    Keep `idParamsSchema` a plain `{ id: string }` if a test expects a non-numeric id to answer 404, as the current handlers do.
 6. **After.** Save the same JSON again and diff it against step 1's. A field that disappeared is a leak (keep it dropped, list it) or a missing schema field (add it). Diff the validation messages too. Put the summary in the `log.md` entry.
 7. **Strict.** Drop `check-structure`'s `--warn-only`. dependency-cruiser joins `check:conventions`.
+   _2026-11-11:_ dependency-cruiser already landed with brief 11 and runs in `check:conventions` over `backend/app/src`, `backend/core/src` and `frontend/src`, from the house preset, with no rule lowered and no violation. Keep it; this step adds only the cross-feature check the acceptance names. `n/no-process-env` is a warning in `backend/eslint.config.js` (the `piataro-backend/process-env-warns` block, 11 sites outside the env reader, `core/src/config/index.ts`): delete that block here.
 8. **Corpus.**
    - [wiki/decisions.md](../../wiki/decisions.md): an entry adopting the structure and the plugin-library layout, with what was rejected (autoload, TypeBox, the layer split) and why.
    - Update the pages listed under Files you OWN, `.claude/rules/server.md`, [wiki/status.md](../../wiki/status.md) and [log.md](../../log.md).
