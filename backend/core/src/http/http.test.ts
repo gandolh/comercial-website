@@ -35,9 +35,11 @@ describe("buildApp", () => {
   });
 
   it("should have CORS configured", async () => {
-    const app = await buildApp(await makeTestConfig({
-      corsAllowedOrigins: "http://localhost:5173,https://example.com",
-    }));
+    const app = await buildApp(
+      await makeTestConfig({
+        corsAllowedOrigins: "http://localhost:5173,https://example.com",
+      }),
+    );
 
     const response = await app.inject({
       method: "GET",

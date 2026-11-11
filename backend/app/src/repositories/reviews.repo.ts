@@ -28,12 +28,7 @@ export class ReviewsRepository {
    * SQLite does not support ON CONFLICT DO UPDATE with RETURNING in all Kysely
    * dialects, so we use a check + insert/update pattern.
    */
-  async upsert(
-    listingId: string,
-    buyerUserId: string,
-    rating: number,
-    body: string | null
-  ): Promise<ReviewRow> {
+  async upsert(listingId: string, buyerUserId: string, rating: number, body: string | null): Promise<ReviewRow> {
     const existing = await this.db
       .selectFrom("reviews")
       .selectAll()
@@ -96,10 +91,7 @@ export class ReviewsRepository {
   async getAggregate(listingId: string): Promise<ReviewAggregate> {
     const result = await this.db
       .selectFrom("reviews")
-      .select([
-        sql<number | null>`AVG(rating)`.as("rating_avg"),
-        sql<number>`COUNT(*)`.as("rating_count"),
-      ])
+      .select([sql<number | null>`AVG(rating)`.as("rating_avg"), sql<number>`COUNT(*)`.as("rating_count")])
       .where("listing_id", "=", listingId)
       .executeTakeFirst();
 
@@ -112,10 +104,7 @@ export class ReviewsRepository {
   /**
    * Get a buyer's existing review for a listing (or undefined if none).
    */
-  async getByBuyerAndListing(
-    buyerUserId: string,
-    listingId: string
-  ): Promise<ReviewRow | undefined> {
+  async getByBuyerAndListing(buyerUserId: string, listingId: string): Promise<ReviewRow | undefined> {
     return (await this.db
       .selectFrom("reviews")
       .selectAll()
@@ -127,10 +116,7 @@ export class ReviewsRepository {
   /**
    * Delete a buyer's review for a listing.
    */
-  async deleteByBuyerAndListing(
-    buyerUserId: string,
-    listingId: string
-  ): Promise<void> {
+  async deleteByBuyerAndListing(buyerUserId: string, listingId: string): Promise<void> {
     await this.db
       .deleteFrom("reviews")
       .where("buyer_user_id", "=", buyerUserId)

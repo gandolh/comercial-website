@@ -85,10 +85,7 @@ const CreateInvoiceSchema = z.object({
 // ─── PDF generator (no external deps — hand-rolled minimal PDF) ───────────────
 
 function escPdf(text: string): string {
-  return text
-    .replace(/\\/g, "\\\\")
-    .replace(/\(/g, "\\(")
-    .replace(/\)/g, "\\)");
+  return text.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
 function latin2ToWinAnsi(text: string): string {
@@ -114,12 +111,7 @@ function formatMoney(n: number): string {
   return n.toFixed(2);
 }
 
-function pdfText(
-  x: number,
-  y: number,
-  text: string,
-  size = 10
-): string {
+function pdfText(x: number, y: number, text: string, size = 10): string {
   return `BT /F1 ${size} Tf ${x} ${y} Td (${escPdf(latin2ToWinAnsi(text))}) Tj ET\n`;
 }
 
@@ -198,17 +190,12 @@ function buildPdf(inv: InvoiceResponse): Buffer {
   currentY -= lineH;
 
   // Separator line placeholder (we embed as text dashes)
-  lines.push(
-    pdfText(c1, currentY, "------------------------------------------------------------------------", 8)
-  );
+  lines.push(pdfText(c1, currentY, "------------------------------------------------------------------------", 8));
   currentY -= lineH;
 
   for (const item of items) {
     const value = item.qty * item.unit_price;
-    const desc =
-      item.description.length > 35
-        ? item.description.slice(0, 33) + ".."
-        : item.description;
+    const desc = item.description.length > 35 ? item.description.slice(0, 33) + ".." : item.description;
     lines.push(pdfText(c1, currentY, desc, 10));
     lines.push(pdfText(c2, currentY, String(item.qty), 10));
     lines.push(pdfText(c3, currentY, formatMoney(item.unit_price), 10));
@@ -218,9 +205,7 @@ function buildPdf(inv: InvoiceResponse): Buffer {
   }
 
   currentY -= lineH;
-  lines.push(
-    pdfText(c1, currentY, "------------------------------------------------------------------------", 8)
-  );
+  lines.push(pdfText(c1, currentY, "------------------------------------------------------------------------", 8));
   currentY -= lineH;
 
   lines.push(pdfText(c4, currentY, "Subtotal:", 10));
@@ -249,18 +234,14 @@ function buildPdf(inv: InvoiceResponse): Buffer {
 
   // Obj 3: Page
   objs.push(
-    "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]\n   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n"
+    "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]\n   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n",
   );
 
   // Obj 4: Content stream
-  objs.push(
-    `4 0 obj\n<< /Length ${streamLen} >>\nstream\n${streamContent}endstream\nendobj\n`
-  );
+  objs.push(`4 0 obj\n<< /Length ${streamLen} >>\nstream\n${streamContent}endstream\nendobj\n`);
 
   // Obj 5: Font (standard Helvetica — no embedding needed)
-  objs.push(
-    "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\nendobj\n"
-  );
+  objs.push("5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\nendobj\n");
 
   const header = "%PDF-1.4\n";
   const parts: Buffer[] = [Buffer.from(header, "binary")];
@@ -275,17 +256,12 @@ function buildPdf(inv: InvoiceResponse): Buffer {
   }
 
   const xrefOffset = offset;
-  const xrefLines: string[] = [
-    "xref\n",
-    `0 ${objs.length + 1}\n`,
-    "0000000000 65535 f \n",
-  ];
+  const xrefLines: string[] = ["xref\n", `0 ${objs.length + 1}\n`, "0000000000 65535 f \n"];
   for (const off of offsets) {
     xrefLines.push(`${String(off).padStart(10, "0")} 00000 n \n`);
   }
 
-  const trailer =
-    `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF\n`;
+  const trailer = `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF\n`;
 
   parts.push(Buffer.from(xrefLines.join(""), "binary"));
   parts.push(Buffer.from(trailer, "binary"));
@@ -297,11 +273,7 @@ function buildPdf(inv: InvoiceResponse): Buffer {
 
 function xmlEsc(s: string | null | undefined): string {
   if (!s) return "";
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 // ─── e-Factura structural validator (offline, no ANAF SDK) ───────────────────
@@ -385,10 +357,16 @@ export function validateUblInvoice(inv: InvoiceResponse): UblValidationError[] {
       errors.push({ field: `line_items[${i}].qty`, message: `Linia ${i + 1}: cantitatea trebuie să fie pozitivă` });
     }
     if (typeof item.unit_price !== "number" || item.unit_price < 0) {
-      errors.push({ field: `line_items[${i}].unit_price`, message: `Linia ${i + 1}: prețul unitar nu poate fi negativ` });
+      errors.push({
+        field: `line_items[${i}].unit_price`,
+        message: `Linia ${i + 1}: prețul unitar nu poate fi negativ`,
+      });
     }
     if (typeof item.vat_rate !== "number" || !validVatRates.has(item.vat_rate)) {
-      errors.push({ field: `line_items[${i}].vat_rate`, message: `Linia ${i + 1}: cota TVA trebuie să fie 0, 5, 9 sau 19` });
+      errors.push({
+        field: `line_items[${i}].vat_rate`,
+        message: `Linia ${i + 1}: cota TVA trebuie să fie 0, 5, 9 sau 19`,
+      });
     }
   }
 
@@ -445,7 +423,7 @@ export function buildUblXml(inv: InvoiceResponse): string {
   const linesXml = items
     .map((item, idx) => {
       const lineExtAmount = (item.qty * item.unit_price).toFixed(2);
-      const vatAmount = (item.qty * item.unit_price * item.vat_rate / 100).toFixed(2);
+      const vatAmount = ((item.qty * item.unit_price * item.vat_rate) / 100).toFixed(2);
       return `
   <cac:InvoiceLine>
     <cbc:ID>${idx + 1}</cbc:ID>
@@ -493,42 +471,66 @@ export function buildUblXml(inv: InvoiceResponse): string {
   <cac:AccountingSupplierParty>
     <cac:Party>
       <cac:PartyName><cbc:Name>${xmlEsc(inv.seller_name)}</cbc:Name></cac:PartyName>
-      ${inv.seller_cui ? `<cac:PartyTaxScheme>
+      ${
+        inv.seller_cui
+          ? `<cac:PartyTaxScheme>
         <cbc:CompanyID>${xmlEsc(inv.seller_cui)}</cbc:CompanyID>
         <cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme>
-      </cac:PartyTaxScheme>` : ""}
-      ${inv.seller_reg_com ? `<cac:PartyLegalEntity>
+      </cac:PartyTaxScheme>`
+          : ""
+      }
+      ${
+        inv.seller_reg_com
+          ? `<cac:PartyLegalEntity>
         <cbc:RegistrationName>${xmlEsc(inv.seller_name)}</cbc:RegistrationName>
         <cbc:CompanyID>${xmlEsc(inv.seller_reg_com)}</cbc:CompanyID>
-      </cac:PartyLegalEntity>` : ""}
-      ${inv.seller_address ? `<cac:PostalAddress>
+      </cac:PartyLegalEntity>`
+          : ""
+      }
+      ${
+        inv.seller_address
+          ? `<cac:PostalAddress>
         <cbc:StreetName>${xmlEsc(inv.seller_address)}</cbc:StreetName>
         <cac:Country><cbc:IdentificationCode>RO</cbc:IdentificationCode></cac:Country>
-      </cac:PostalAddress>` : ""}
+      </cac:PostalAddress>`
+          : ""
+      }
     </cac:Party>
   </cac:AccountingSupplierParty>
 
   <cac:AccountingCustomerParty>
     <cac:Party>
       <cac:PartyName><cbc:Name>${xmlEsc(inv.buyer_name)}</cbc:Name></cac:PartyName>
-      ${inv.buyer_cui ? `<cac:PartyTaxScheme>
+      ${
+        inv.buyer_cui
+          ? `<cac:PartyTaxScheme>
         <cbc:CompanyID>${xmlEsc(inv.buyer_cui)}</cbc:CompanyID>
         <cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme>
-      </cac:PartyTaxScheme>` : ""}
-      ${inv.buyer_address ? `<cac:PostalAddress>
+      </cac:PartyTaxScheme>`
+          : ""
+      }
+      ${
+        inv.buyer_address
+          ? `<cac:PostalAddress>
         <cbc:StreetName>${xmlEsc(inv.buyer_address)}</cbc:StreetName>
         <cac:Country><cbc:IdentificationCode>RO</cbc:IdentificationCode></cac:Country>
-      </cac:PostalAddress>` : ""}
+      </cac:PostalAddress>`
+          : ""
+      }
     </cac:Party>
   </cac:AccountingCustomerParty>
 
-  ${inv.seller_iban ? `<cac:PaymentMeans>
+  ${
+    inv.seller_iban
+      ? `<cac:PaymentMeans>
     <cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
     <cac:PayeeFinancialAccount>
       <cbc:ID>${xmlEsc(inv.seller_iban)}</cbc:ID>
       ${inv.seller_bank ? `<cbc:Name>${xmlEsc(inv.seller_bank)}</cbc:Name>` : ""}
     </cac:PayeeFinancialAccount>
-  </cac:PaymentMeans>` : ""}
+  </cac:PaymentMeans>`
+      : ""
+  }
 
   <cac:TaxTotal>
     <cbc:TaxAmount currencyID="${inv.currency}">${inv.vat_amount.toFixed(2)}</cbc:TaxAmount>
@@ -605,255 +607,217 @@ export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
    * GET /invoices/profile
    * Return the authenticated user's invoice issuer profile.
    */
-  app.get(
-    "/invoices/profile",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const profile = await ctx.db
-        .selectFrom("user_invoice_profiles")
-        .selectAll()
-        .where("user_id", "=", userId)
-        .executeTakeFirst();
-      return reply.send(profile ?? null);
-    }
-  );
+  app.get("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const profile = await ctx.db
+      .selectFrom("user_invoice_profiles")
+      .selectAll()
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    return reply.send(profile ?? null);
+  });
 
   /**
    * PUT /invoices/profile
    * Upsert the authenticated user's invoice issuer profile.
    */
-  app.put(
-    "/invoices/profile",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const parsed = ProfileUpsertSchema.safeParse(request.body);
-      if (!parsed.success) throw AppError.validation(parsed.error.message);
+  app.put("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const parsed = ProfileUpsertSchema.safeParse(request.body);
+    if (!parsed.success) throw AppError.validation(parsed.error.message);
 
-      const data = parsed.data;
-      const existing = await ctx.db
-        .selectFrom("user_invoice_profiles")
-        .select("user_id")
+    const data = parsed.data;
+    const existing = await ctx.db
+      .selectFrom("user_invoice_profiles")
+      .select("user_id")
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+
+    if (existing) {
+      await ctx.db
+        .updateTable("user_invoice_profiles")
+        .set({
+          company_name: data.company_name ?? null,
+          cui: data.cui ?? null,
+          reg_com: data.reg_com ?? null,
+          address: data.address ?? null,
+          iban: data.iban ?? null,
+          bank_name: data.bank_name ?? null,
+          email: data.email ?? null,
+          phone: data.phone ?? null,
+          updated_at: new Date().toISOString(),
+        })
         .where("user_id", "=", userId)
-        .executeTakeFirst();
-
-      if (existing) {
-        await ctx.db
-          .updateTable("user_invoice_profiles")
-          .set({
-            company_name: data.company_name ?? null,
-            cui: data.cui ?? null,
-            reg_com: data.reg_com ?? null,
-            address: data.address ?? null,
-            iban: data.iban ?? null,
-            bank_name: data.bank_name ?? null,
-            email: data.email ?? null,
-            phone: data.phone ?? null,
-            updated_at: new Date().toISOString(),
-          })
-          .where("user_id", "=", userId)
-          .execute();
-      } else {
-        await ctx.db
-          .insertInto("user_invoice_profiles")
-          .values({
-            user_id: userId,
-            company_name: data.company_name ?? null,
-            cui: data.cui ?? null,
-            reg_com: data.reg_com ?? null,
-            address: data.address ?? null,
-            iban: data.iban ?? null,
-            bank_name: data.bank_name ?? null,
-            email: data.email ?? null,
-            phone: data.phone ?? null,
-          })
-          .execute();
-      }
-
-      const profile = await ctx.db
-        .selectFrom("user_invoice_profiles")
-        .selectAll()
-        .where("user_id", "=", userId)
-        .executeTakeFirst();
-      return reply.send(profile);
+        .execute();
+    } else {
+      await ctx.db
+        .insertInto("user_invoice_profiles")
+        .values({
+          user_id: userId,
+          company_name: data.company_name ?? null,
+          cui: data.cui ?? null,
+          reg_com: data.reg_com ?? null,
+          address: data.address ?? null,
+          iban: data.iban ?? null,
+          bank_name: data.bank_name ?? null,
+          email: data.email ?? null,
+          phone: data.phone ?? null,
+        })
+        .execute();
     }
-  );
+
+    const profile = await ctx.db
+      .selectFrom("user_invoice_profiles")
+      .selectAll()
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    return reply.send(profile);
+  });
 
   /**
    * GET /invoices
    * List invoices for the authenticated user (most recent first).
    */
-  app.get(
-    "/invoices",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const rows = await ctx.db
-        .selectFrom("invoices")
-        .selectAll()
-        .where("user_id", "=", userId)
-        .orderBy("created_at", "desc")
-        .execute();
-      return reply.send(rows.map(toInvoiceResponse));
-    }
-  );
+  app.get("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const rows = await ctx.db
+      .selectFrom("invoices")
+      .selectAll()
+      .where("user_id", "=", userId)
+      .orderBy("created_at", "desc")
+      .execute();
+    return reply.send(rows.map(toInvoiceResponse));
+  });
 
   /**
    * POST /invoices
    * Create a new invoice record.
    */
-  app.post(
-    "/invoices",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const parsed = CreateInvoiceSchema.safeParse(request.body);
-      if (!parsed.success) throw AppError.validation(parsed.error.message);
+  app.post("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const parsed = CreateInvoiceSchema.safeParse(request.body);
+    if (!parsed.success) throw AppError.validation(parsed.error.message);
 
-      const body = parsed.data;
+    const body = parsed.data;
 
-      // Auto-increment number per user+series
-      const maxRow = await ctx.db
-        .selectFrom("invoices")
-        .select(ctx.db.fn.max("number").as("max_number"))
-        .where("user_id", "=", userId)
-        .where("series", "=", body.series)
-        .executeTakeFirst();
+    // Auto-increment number per user+series
+    const maxRow = await ctx.db
+      .selectFrom("invoices")
+      .select(ctx.db.fn.max("number").as("max_number"))
+      .where("user_id", "=", userId)
+      .where("series", "=", body.series)
+      .executeTakeFirst();
 
-      const nextNumber = ((maxRow?.max_number as number | null) ?? 0) + 1;
+    const nextNumber = ((maxRow?.max_number as number | null) ?? 0) + 1;
 
-      const { subtotal, vat_amount, total } = calculateTotals(body.line_items);
+    const { subtotal, vat_amount, total } = calculateTotals(body.line_items);
 
-      const insertResult = await ctx.db
-        .insertInto("invoices")
-        .values({
-          user_id: userId,
-          series: body.series,
-          number: nextNumber,
-          issue_date: body.issue_date,
-          due_date: body.due_date ?? null,
-          seller_name: body.seller_name,
-          seller_cui: body.seller_cui ?? null,
-          seller_reg_com: body.seller_reg_com ?? null,
-          seller_address: body.seller_address ?? null,
-          seller_iban: body.seller_iban ?? null,
-          seller_bank: body.seller_bank ?? null,
-          seller_email: body.seller_email ?? null,
-          buyer_name: body.buyer_name,
-          buyer_cui: body.buyer_cui ?? null,
-          buyer_address: body.buyer_address ?? null,
-          line_items: JSON.stringify(body.line_items),
-          currency: body.currency,
-          subtotal,
-          vat_amount,
-          total,
-          order_id: null,
-        })
-        .returning("id")
-        .executeTakeFirst();
+    const insertResult = await ctx.db
+      .insertInto("invoices")
+      .values({
+        user_id: userId,
+        series: body.series,
+        number: nextNumber,
+        issue_date: body.issue_date,
+        due_date: body.due_date ?? null,
+        seller_name: body.seller_name,
+        seller_cui: body.seller_cui ?? null,
+        seller_reg_com: body.seller_reg_com ?? null,
+        seller_address: body.seller_address ?? null,
+        seller_iban: body.seller_iban ?? null,
+        seller_bank: body.seller_bank ?? null,
+        seller_email: body.seller_email ?? null,
+        buyer_name: body.buyer_name,
+        buyer_cui: body.buyer_cui ?? null,
+        buyer_address: body.buyer_address ?? null,
+        line_items: JSON.stringify(body.line_items),
+        currency: body.currency,
+        subtotal,
+        vat_amount,
+        total,
+        order_id: null,
+      })
+      .returning("id")
+      .executeTakeFirst();
 
-      if (!insertResult?.id) throw AppError.internal();
+    if (!insertResult?.id) throw AppError.internal();
 
-      const row = await ctx.db
-        .selectFrom("invoices")
-        .selectAll()
-        .where("id", "=", insertResult.id)
-        .executeTakeFirst();
+    const row = await ctx.db.selectFrom("invoices").selectAll().where("id", "=", insertResult.id).executeTakeFirst();
 
-      return reply.status(201).send(toInvoiceResponse(row));
-    }
-  );
+    return reply.status(201).send(toInvoiceResponse(row));
+  });
 
   /**
    * GET /invoices/:id
    * Get a single invoice by ID.
    */
-  app.get(
-    "/invoices/:id",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id } = request.params as { id: string };
-      const row = await ctx.db
-        .selectFrom("invoices")
-        .selectAll()
-        .where("id", "=", id)
-        .where("user_id", "=", userId)
-        .executeTakeFirst();
-      if (!row) throw AppError.notFound();
-      return reply.send(toInvoiceResponse(row));
-    }
-  );
+  app.get("/invoices/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id } = request.params as { id: string };
+    const row = await ctx.db
+      .selectFrom("invoices")
+      .selectAll()
+      .where("id", "=", id)
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    if (!row) throw AppError.notFound();
+    return reply.send(toInvoiceResponse(row));
+  });
 
   /**
    * GET /invoices/:id/pdf
    * Download the invoice as a PDF file.
    */
-  app.get(
-    "/invoices/:id/pdf",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id } = request.params as { id: string };
-      const row = await ctx.db
-        .selectFrom("invoices")
-        .selectAll()
-        .where("id", "=", id)
-        .where("user_id", "=", userId)
-        .executeTakeFirst();
-      if (!row) throw AppError.notFound();
+  app.get("/invoices/:id/pdf", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id } = request.params as { id: string };
+    const row = await ctx.db
+      .selectFrom("invoices")
+      .selectAll()
+      .where("id", "=", id)
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    if (!row) throw AppError.notFound();
 
-      const inv = toInvoiceResponse(row);
-      const pdfBuffer = buildPdf(inv);
-      const filename = `factura-${inv.series}-${inv.number}.pdf`;
+    const inv = toInvoiceResponse(row);
+    const pdfBuffer = buildPdf(inv);
+    const filename = `factura-${inv.series}-${inv.number}.pdf`;
 
-      reply.header("Content-Type", "application/pdf");
-      reply.header(
-        "Content-Disposition",
-        `attachment; filename="${filename}"`
-      );
-      reply.header("Content-Length", pdfBuffer.length);
-      return reply.send(pdfBuffer);
-    }
-  );
+    reply.header("Content-Type", "application/pdf");
+    reply.header("Content-Disposition", `attachment; filename="${filename}"`);
+    reply.header("Content-Length", pdfBuffer.length);
+    return reply.send(pdfBuffer);
+  });
 
   /**
    * GET /invoices/:id/xml
    * Download the invoice as a UBL 2.1 XML (e-Factura RO_CIUS).
    */
-  app.get(
-    "/invoices/:id/xml",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id } = request.params as { id: string };
-      const row = await ctx.db
-        .selectFrom("invoices")
-        .selectAll()
-        .where("id", "=", id)
-        .where("user_id", "=", userId)
-        .executeTakeFirst();
-      if (!row) throw AppError.notFound();
+  app.get("/invoices/:id/xml", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id } = request.params as { id: string };
+    const row = await ctx.db
+      .selectFrom("invoices")
+      .selectAll()
+      .where("id", "=", id)
+      .where("user_id", "=", userId)
+      .executeTakeFirst();
+    if (!row) throw AppError.notFound();
 
-      const inv = toInvoiceResponse(row);
+    const inv = toInvoiceResponse(row);
 
-      // Fail loudly if the invoice cannot produce structurally valid e-Factura XML
-      const validationErrors = validateUblInvoice(inv);
-      if (validationErrors.length > 0) {
-        const details = validationErrors.map((e) => `${e.field}: ${e.message}`).join("; ");
-        throw AppError.validation(`Factura nu poate fi exportată ca e-Factura: ${details}`);
-      }
-
-      const xml = buildUblXml(inv);
-      const filename = `efactura-${inv.series}-${inv.number}.xml`;
-
-      reply.header("Content-Type", "application/xml; charset=utf-8");
-      reply.header(
-        "Content-Disposition",
-        `attachment; filename="${filename}"`
-      );
-      return reply.send(xml);
+    // Fail loudly if the invoice cannot produce structurally valid e-Factura XML
+    const validationErrors = validateUblInvoice(inv);
+    if (validationErrors.length > 0) {
+      const details = validationErrors.map((e) => `${e.field}: ${e.message}`).join("; ");
+      throw AppError.validation(`Factura nu poate fi exportată ca e-Factura: ${details}`);
     }
-  );
+
+    const xml = buildUblXml(inv);
+    const filename = `efactura-${inv.series}-${inv.number}.xml`;
+
+    reply.header("Content-Type", "application/xml; charset=utf-8");
+    reply.header("Content-Disposition", `attachment; filename="${filename}"`);
+    return reply.send(xml);
+  });
 };

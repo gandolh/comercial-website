@@ -61,15 +61,8 @@ function isZodError(error: unknown): error is ZodError<unknown> {
 /**
  * Check if an error is a Fastify validation error.
  */
-function isFastifyValidationError(
-  error: unknown,
-): error is Error & { validation?: unknown } {
-  return (
-    error instanceof Error &&
-    typeof error === "object" &&
-    "validation" in error &&
-    error.validation !== undefined
-  );
+function isFastifyValidationError(error: unknown): error is Error & { validation?: unknown } {
+  return error instanceof Error && typeof error === "object" && "validation" in error && error.validation !== undefined;
 }
 
 /**
@@ -86,8 +79,7 @@ export function registerErrorHandler(app: FastifyInstance): void {
 
     // Fastify validation error
     if (isFastifyValidationError(error)) {
-      const message =
-        error.message || "validation failed";
+      const message = error.message || "validation failed";
       return reply.code(422).send({
         error: message,
       });
@@ -95,8 +87,7 @@ export function registerErrorHandler(app: FastifyInstance): void {
 
     // Zod validation error
     if (isZodError(error)) {
-      const message =
-        (error as ZodError).errors[0]?.message || "validation failed";
+      const message = (error as ZodError).errors[0]?.message || "validation failed";
       return reply.code(422).send({
         error: message,
       });

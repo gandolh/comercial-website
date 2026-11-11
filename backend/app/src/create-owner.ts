@@ -28,12 +28,16 @@ export async function createOwner(
   if (existing && opts.ifMissing) return "kept";
   const passwordHash = await hashPassword(owner.password);
   if (existing) {
-    db.prepare("UPDATE users SET password_hash = ?, display_name = ?, email_verified = 1, updated_at = datetime('now') WHERE id = ?")
-      .run(passwordHash, owner.name, existing.id);
+    db.prepare(
+      "UPDATE users SET password_hash = ?, display_name = ?, email_verified = 1, updated_at = datetime('now') WHERE id = ?",
+    ).run(passwordHash, owner.name, existing.id);
     return "updated";
   }
-  db.prepare("INSERT INTO users (email, password_hash, display_name, email_verified) VALUES (?, ?, ?, 1)")
-    .run(email, passwordHash, owner.name);
+  db.prepare("INSERT INTO users (email, password_hash, display_name, email_verified) VALUES (?, ?, ?, 1)").run(
+    email,
+    passwordHash,
+    owner.name,
+  );
   return "created";
 }
 

@@ -1,24 +1,24 @@
 interface Feature {
-  icon: string
-  label: string
-  value: string
+  icon: string;
+  label: string;
+  value: string;
 }
 
 interface ListingDescriptionProps {
-  id: string
-  description: string
-  features: Feature[]
-  digitalSpecs?: Feature[]
+  id: string;
+  description: string;
+  features: Feature[];
+  digitalSpecs?: Feature[];
 }
 
 export function ListingDescription({ id, description, features, digitalSpecs = [] }: ListingDescriptionProps) {
-  const paragraphs = description.split('\n\n').filter(Boolean)
-  const allSpecs = [...features, ...digitalSpecs]
+  const paragraphs = description.split("\n\n").filter(Boolean);
+  const allSpecs = [...features, ...digitalSpecs];
 
   return (
     <section className="space-y-8">
       <div className="flex items-center justify-between border-b border-surface-container-high pb-4">
-        <h2 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-headline)' }}>
+        <h2 className="text-2xl font-bold" style={{ fontFamily: "var(--font-headline)" }}>
           Descriere
         </h2>
         <span className="text-xs font-bold tracking-widest text-outline uppercase">ID: {id}</span>
@@ -48,5 +48,5 @@ export function ListingDescription({ id, description, features, digitalSpecs = [
         ))}
       </div>
     </section>
-  )
+  );
 }

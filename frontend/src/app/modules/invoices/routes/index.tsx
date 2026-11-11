@@ -7,7 +7,7 @@ export const invoicesRoutes: ModuleRoute[] = [
     component: lazy(() =>
       import("../pages/InvoicesPage").then((m) => ({
         default: m.InvoicesPage,
-      }))
+      })),
     ),
   },
 ];

@@ -41,9 +41,7 @@ export function EditListingPage() {
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-primary text-5xl">
-          progress_activity
-        </span>
+        <span className="material-symbols-outlined animate-spin text-primary text-5xl">progress_activity</span>
       </div>
     );
   }
@@ -52,10 +50,7 @@ export function EditListingPage() {
     return (
       <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
         <h2 className="text-2xl font-bold">Anunțul nu a fost găsit.</h2>
-        <button
-          onClick={() => navigate("/")}
-          className="text-primary font-bold hover:underline"
-        >
+        <button onClick={() => navigate("/")} className="text-primary font-bold hover:underline">
           Înapoi la prima pagină
         </button>
       </div>
@@ -107,18 +102,14 @@ export function EditListingPage() {
                   : "border-primary text-primary hover:bg-primary-container"
               }`}
             >
-              {listing.active
-                ? t("listing.actions.deactivate")
-                : t("listing.actions.activate")}
+              {listing.active ? t("listing.actions.deactivate") : t("listing.actions.activate")}
             </button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-8">
           <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">
-              {t("edit.sections.details")}
-            </h2>
+            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.details")}</h2>
             <DetailsStep
               initialData={{
                 title: listing.title,
@@ -136,21 +127,12 @@ export function EditListingPage() {
           </section>
 
           <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">
-              {t("edit.sections.photos")}
-            </h2>
-            <PhotosStep
-              listingId={listing.id}
-              images={listing.images}
-              onImagesChange={refetch}
-              hideFooter
-            />
+            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.photos")}</h2>
+            <PhotosStep listingId={listing.id} images={listing.images} onImagesChange={refetch} hideFooter />
           </section>
 
           <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">
-              {t("edit.sections.locationPrice")}
-            </h2>
+            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.locationPrice")}</h2>
             <LocationPriceStep
               initialData={{
                 priceRon: listing.priceRon,

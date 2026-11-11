@@ -51,7 +51,7 @@ async function simulateJobRun(
   due: ExpiryReminderRow[],
   emailService: EmailService,
   markReminder3daySent: (id: string) => Promise<void>,
-  markReminderExpirySent: (id: string) => Promise<void>
+  markReminderExpirySent: (id: string) => Promise<void>,
 ): Promise<{ sent: string[]; errors: string[] }> {
   const sent: string[] = [];
   const errors: string[] = [];

@@ -22,24 +22,42 @@ describe("the simulated ledger", () => {
 
   async function sell(price: number) {
     const id = `l${price}`;
-    await t.ctx.db.insertInto("listings").values({
-      id, user_id: "seller", title: `Pachet ${price}`, description: "Un pachet de test plătit",
-      price_ron: price, category: "grafica", expires_at: new Date(Date.now() + 86400_000).toISOString(), active: 1,
-    }).execute();
-    const created = await t.app.inject({ method: "POST", url: "/orders", headers: t.bearer("buyer"), payload: { listing_id: id } });
+    await t.ctx.db
+      .insertInto("listings")
+      .values({
+        id,
+        user_id: "seller",
+        title: `Pachet ${price}`,
+        description: "Un pachet de test plătit",
+        price_ron: price,
+        category: "grafica",
+        expires_at: new Date(Date.now() + 86400_000).toISOString(),
+        active: 1,
+      })
+      .execute();
+    const created = await t.app.inject({
+      method: "POST",
+      url: "/orders",
+      headers: t.bearer("buyer"),
+      payload: { listing_id: id },
+    });
     const orderId = (created.json() as { order: { id: string } }).order.id;
     await t.app.inject({ method: "POST", url: `/orders/${orderId}/mark-paid`, headers: t.bearer("buyer") });
   }
 
   async function setup() {
     t = await startTestApp();
-    await t.ctx.db.insertInto("users").values([
-      { id: "seller", email: "seller@test.ro", password_hash: "x", email_verified: 1 },
-      { id: "buyer", email: "buyer@test.ro", password_hash: "x", email_verified: 1 },
-    ]).execute();
+    await t.ctx.db
+      .insertInto("users")
+      .values([
+        { id: "seller", email: "seller@test.ro", password_hash: "x", email_verified: 1 },
+        { id: "buyer", email: "buyer@test.ro", password_hash: "x", email_verified: 1 },
+      ])
+      .execute();
   }
 
-  const earnings = async () => (await t.app.inject({ method: "GET", url: "/me/earnings", headers: t.bearer("seller") })).json();
+  const earnings = async () =>
+    (await t.app.inject({ method: "GET", url: "/me/earnings", headers: t.bearer("seller") })).json();
 
   it("records the fee on each paid order and sums the seller's balance", async () => {
     await setup();
@@ -58,13 +76,28 @@ describe("the simulated ledger", () => {
   it("pays out the whole balance once per request id, simulated, and refuses an empty balance", async () => {
     await setup();
     await sell(100);
-    const first = await t.app.inject({ method: "POST", url: "/me/payouts", headers: t.bearer("seller"), payload: { request_id: "req-00000001" } });
+    const first = await t.app.inject({
+      method: "POST",
+      url: "/me/payouts",
+      headers: t.bearer("seller"),
+      payload: { request_id: "req-00000001" },
+    });
     expect(first.statusCode).toBe(201);
     expect(first.json().payout).toMatchObject({ amount_ron: 97.5, simulated: true });
-    const repeat = await t.app.inject({ method: "POST", url: "/me/payouts", headers: t.bearer("seller"), payload: { request_id: "req-00000001" } });
+    const repeat = await t.app.inject({
+      method: "POST",
+      url: "/me/payouts",
+      headers: t.bearer("seller"),
+      payload: { request_id: "req-00000001" },
+    });
     expect(repeat.statusCode).toBe(200);
     expect(repeat.json().payout.id).toBe(first.json().payout.id);
-    const empty = await t.app.inject({ method: "POST", url: "/me/payouts", headers: t.bearer("seller"), payload: { request_id: "req-00000002" } });
+    const empty = await t.app.inject({
+      method: "POST",
+      url: "/me/payouts",
+      headers: t.bearer("seller"),
+      payload: { request_id: "req-00000002" },
+    });
     expect(empty.statusCode).toBe(422);
     const e = await earnings();
     expect(e.balance_ron).toBe(0);
@@ -88,11 +121,17 @@ describe("the ledger migration", () => {
     const db = new Database(":memory:");
     runMigrations(db, before);
     db.prepare("INSERT INTO users (id, email, password_hash) VALUES ('s', 's@t.ro', 'x'), ('b', 'b@t.ro', 'x')").run();
-    db.prepare("INSERT INTO listings (id, user_id, title, description, category, expires_at) VALUES ('l', 's', 'T', 'Descriere', 'grafica', '2999-01-01')").run();
-    db.prepare("INSERT INTO orders (buyer_user_id, listing_id, seller_user_id, amount_ron, status) VALUES ('b', 'l', 's', 49, 'paid'), ('b', 'l', 's', 30, 'pending')").run();
+    db.prepare(
+      "INSERT INTO listings (id, user_id, title, description, category, expires_at) VALUES ('l', 's', 'T', 'Descriere', 'grafica', '2999-01-01')",
+    ).run();
+    db.prepare(
+      "INSERT INTO orders (buyer_user_id, listing_id, seller_user_id, amount_ron, status) VALUES ('b', 'l', 's', 49, 'paid'), ('b', 'l', 's', 30, 'pending')",
+    ).run();
     copyFileSync(path.join(all, ledger), path.join(before, ledger));
     runMigrations(db, before);
-    const rows = db.prepare("SELECT status, platform_fee_ron, seller_net_ron FROM orders ORDER BY amount_ron DESC").all();
+    const rows = db
+      .prepare("SELECT status, platform_fee_ron, seller_net_ron FROM orders ORDER BY amount_ron DESC")
+      .all();
     expect(rows).toEqual([
       { status: "paid", platform_fee_ron: 1.23, seller_net_ron: 47.77 },
       { status: "pending", platform_fee_ron: null, seller_net_ron: null },

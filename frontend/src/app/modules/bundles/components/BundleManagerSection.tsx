@@ -30,12 +30,7 @@ interface BundleManagerSectionProps {
  *  - `localSelectedIds` is `null` until the user interacts; while null we fall back
  *    to the server-fetched children IDs. This avoids init-from-async-data effects.
  */
-export function BundleManagerSection({
-  listingId,
-  isBundle,
-  priceRon,
-  onSaved,
-}: BundleManagerSectionProps) {
+export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }: BundleManagerSectionProps) {
   const { t } = useTranslation();
 
   const [localIsBundle, setLocalIsBundle] = useState(isBundle);
@@ -43,10 +38,7 @@ export function BundleManagerSection({
   const [localSelectedIds, setLocalSelectedIds] = useState<string[] | null>(null);
 
   // ---- existing children (pre-populate when bundle is on) ----
-  const { data: existingChildren, isLoading: childrenLoading } = useBundleItems(
-    listingId,
-    localIsBundle
-  );
+  const { data: existingChildren, isLoading: childrenLoading } = useBundleItems(listingId, localIsBundle);
 
   // Effective selection: user-driven list OR server data, whichever is available.
   const effectiveSelectedIds: string[] = useMemo(() => {
@@ -92,13 +84,9 @@ export function BundleManagerSection({
   // ---- price comparison helper ----
   const selectedListings = candidateListings.filter((l) => selectedSet.has(l.id));
   const allFreeOrNone =
-    selectedListings.length === 0 ||
-    selectedListings.every((l) => l.priceRon == null || l.priceRon === 0);
+    selectedListings.length === 0 || selectedListings.every((l) => l.priceRon == null || l.priceRon === 0);
 
-  const sumPrices = selectedListings.reduce(
-    (acc, l) => acc + (l.priceRon ?? 0),
-    0
-  );
+  const sumPrices = selectedListings.reduce((acc, l) => acc + (l.priceRon ?? 0), 0);
 
   const discountPct =
     !allFreeOrNone && priceRon != null && priceRon > 0 && sumPrices > 0
@@ -106,24 +94,17 @@ export function BundleManagerSection({
       : null;
 
   const showPriceHelper = localIsBundle && !allFreeOrNone && selectedListings.length > 0;
-  const bundlePriceAbove =
-    showPriceHelper && priceRon != null && priceRon >= sumPrices;
+  const bundlePriceAbove = showPriceHelper && priceRon != null && priceRon >= sumPrices;
 
   return (
     <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-      <h2 className="text-xl font-bold border-b pb-4">
-        {t("bundles.edit.sectionTitle")}
-      </h2>
+      <h2 className="text-xl font-bold border-b pb-4">{t("bundles.edit.sectionTitle")}</h2>
 
       {/* Toggle */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-semibold text-on-surface">
-            {t("bundles.edit.toggleLabel")}
-          </p>
-          <p className="text-sm text-on-surface-variant mt-0.5">
-            {t("bundles.edit.toggleHint")}
-          </p>
+          <p className="font-semibold text-on-surface">{t("bundles.edit.toggleLabel")}</p>
+          <p className="text-sm text-on-surface-variant mt-0.5">{t("bundles.edit.toggleHint")}</p>
         </div>
         <button
           type="button"
@@ -156,40 +137,29 @@ export function BundleManagerSection({
       {/* Child picker — only shown when bundle is enabled */}
       {localIsBundle && (
         <div className="space-y-4">
-          <p className="text-sm font-medium text-on-surface">
-            {t("bundles.edit.childPickerLabel")}
-          </p>
+          <p className="text-sm font-medium text-on-surface">{t("bundles.edit.childPickerLabel")}</p>
 
           {pickListLoading || childrenLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-14 bg-surface-container-low animate-pulse rounded-xl"
-                />
+                <div key={i} className="h-14 bg-surface-container-low animate-pulse rounded-xl" />
               ))}
             </div>
           ) : candidateListings.length === 0 ? (
-            <p className="text-sm text-outline italic">
-              {t("bundles.edit.noOtherListings")}
-            </p>
+            <p className="text-sm text-outline italic">{t("bundles.edit.noOtherListings")}</p>
           ) : (
             <ul className="divide-y divide-outline-variant rounded-xl border border-outline-variant overflow-hidden max-h-80 overflow-y-auto">
               {candidateListings.map((listing) => {
                 const checked = selectedSet.has(listing.id);
                 const priceLabel =
-                  listing.priceRon != null
-                    ? `${listing.priceRon.toLocaleString("ro-RO")} RON`
-                    : t("bundles.free");
+                  listing.priceRon != null ? `${listing.priceRon.toLocaleString("ro-RO")} RON` : t("bundles.free");
 
                 return (
                   <li key={listing.id}>
                     <label
                       className={[
                         "flex items-center gap-4 px-4 py-3 cursor-pointer transition-colors select-none",
-                        checked
-                          ? "bg-primary-container/30"
-                          : "bg-surface-container-lowest hover:bg-surface-container",
+                        checked ? "bg-primary-container/30" : "bg-surface-container-lowest hover:bg-surface-container",
                       ].join(" ")}
                     >
                       <input
@@ -207,22 +177,14 @@ export function BundleManagerSection({
                         />
                       ) : (
                         <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0">
-                          <span className="material-symbols-outlined text-outline text-[18px]">
-                            draft
-                          </span>
+                          <span className="material-symbols-outlined text-outline text-[18px]">draft</span>
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-on-surface truncate">
-                          {listing.title}
-                        </p>
-                        <p className="text-xs text-outline mt-0.5 capitalize">
-                          {listing.category}
-                        </p>
+                        <p className="text-sm font-semibold text-on-surface truncate">{listing.title}</p>
+                        <p className="text-xs text-outline mt-0.5 capitalize">{listing.category}</p>
                       </div>
-                      <span className="text-sm font-bold text-primary whitespace-nowrap">
-                        {priceLabel}
-                      </span>
+                      <span className="text-sm font-bold text-primary whitespace-nowrap">{priceLabel}</span>
                     </label>
                   </li>
                 );
@@ -241,34 +203,22 @@ export function BundleManagerSection({
               ].join(" ")}
             >
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="text-on-surface-variant">
-                  {t("bundles.edit.sumLabel")}
-                </span>
-                <span className="font-bold text-on-surface">
-                  {sumPrices.toLocaleString("ro-RO")} RON
-                </span>
+                <span className="text-on-surface-variant">{t("bundles.edit.sumLabel")}</span>
+                <span className="font-bold text-on-surface">{sumPrices.toLocaleString("ro-RO")} RON</span>
               </div>
               {discountPct !== null && discountPct > 0 && (
                 <div className="flex items-center justify-between flex-wrap gap-2">
-                  <span className="text-on-surface-variant">
-                    {t("bundles.edit.discountLabel")}
-                  </span>
-                  <span className="font-bold text-tertiary">
-                    -{discountPct}%
-                  </span>
+                  <span className="text-on-surface-variant">{t("bundles.edit.discountLabel")}</span>
+                  <span className="font-bold text-tertiary">-{discountPct}%</span>
                 </div>
               )}
               {bundlePriceAbove && (
-                <p className="text-xs text-error font-medium pt-1">
-                  {t("bundles.edit.priceWarning")}
-                </p>
+                <p className="text-xs text-error font-medium pt-1">{t("bundles.edit.priceWarning")}</p>
               )}
             </div>
           )}
 
-          <p className="text-xs text-outline">
-            {t("bundles.edit.selectedCount", { count: selectedSet.size })}
-          </p>
+          <p className="text-xs text-outline">{t("bundles.edit.selectedCount", { count: selectedSet.size })}</p>
         </div>
       )}
 
@@ -281,10 +231,7 @@ export function BundleManagerSection({
           className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-semibold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none"
         >
           {setItems.isPending && (
-            <span
-              className="material-symbols-outlined animate-spin text-xl"
-              aria-hidden="true"
-            >
+            <span className="material-symbols-outlined animate-spin text-xl" aria-hidden="true">
               progress_activity
             </span>
           )}

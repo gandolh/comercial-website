@@ -31,8 +31,7 @@ export function PricingCard({
   const { t } = useTranslation();
   const { user } = useAuth();
   const isOwner = user?.id === sellerId;
-  const formattedPrice =
-    priceRon != null ? `${priceRon.toLocaleString("ro-RO")} RON` : "Gratuit";
+  const formattedPrice = priceRon != null ? `${priceRon.toLocaleString("ro-RO")} RON` : "Gratuit";
 
   const navigate = useNavigate();
   const [isDownloading, setIsDownloading] = useState(false);
@@ -95,7 +94,10 @@ export function PricingCard({
             </button>
             <button
               onClick={() => {
-                if (!user) { navigate("/autentificare"); return; }
+                if (!user) {
+                  navigate("/autentificare");
+                  return;
+                }
                 setIsContactModalOpen(true);
               }}
               className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all"
@@ -108,7 +110,10 @@ export function PricingCard({
           <>
             <button
               onClick={() => {
-                if (!user) { navigate("/autentificare"); return; }
+                if (!user) {
+                  navigate("/autentificare");
+                  return;
+                }
                 setIsContactModalOpen(true);
               }}
               className="w-full bg-primary text-on-primary py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all"
@@ -130,16 +135,12 @@ export function PricingCard({
       <div className="flex items-center justify-between pt-4 border-t border-surface-container-high">
         {isDigitalAsset && (
           <div className="flex items-center gap-2 text-outline text-sm">
-            <span className="material-symbols-outlined text-[18px]">
-              download
-            </span>
+            <span className="material-symbols-outlined text-[18px]">download</span>
             {t("listing.specs.downloads", { count: downloadCount })}
           </div>
         )}
         <div className="flex items-center gap-2 text-outline text-sm ml-auto">
-          <span className="material-symbols-outlined text-[18px]">
-            visibility
-          </span>
+          <span className="material-symbols-outlined text-[18px]">visibility</span>
           {viewCount} vizualizări
         </div>
       </div>

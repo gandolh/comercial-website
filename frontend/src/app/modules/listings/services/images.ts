@@ -22,25 +22,17 @@ export interface PutFileOptions {
  * Backend: POST /listings/:id/images
  * Response: { id, listing_id, url, position }
  */
-export async function uploadImage(
-  listingId: string,
-  file: File,
-  options?: UploadImageOptions,
-): Promise<ListingImage> {
+export async function uploadImage(listingId: string, file: File, options?: UploadImageOptions): Promise<ListingImage> {
   const form = new FormData();
   form.append("file", file, file.name);
 
-  const response = await axiosInstance.post<ListingImageApi>(
-    `/listings/${listingId}/images`,
-    form,
-    {
-      onUploadProgress: (event) => {
-        if (!options?.onUploadProgress || !event.total) return;
-        const progress = Math.round((event.loaded * 100) / event.total);
-        options.onUploadProgress(progress);
-      },
+  const response = await axiosInstance.post<ListingImageApi>(`/listings/${listingId}/images`, form, {
+    onUploadProgress: (event) => {
+      if (!options?.onUploadProgress || !event.total) return;
+      const progress = Math.round((event.loaded * 100) / event.total);
+      options.onUploadProgress(progress);
     },
-  );
+  });
 
   return mapImage(response.data);
 }
@@ -75,11 +67,7 @@ export async function requestUploadUrl(
 }
 
 /** No-op: upload already happened in requestUploadUrl. */
-export async function putImageToSignedUrl(
-  _uploadUrl: string,
-  _file: File,
-  _options?: PutFileOptions,
-): Promise<void> {
+export async function putImageToSignedUrl(_uploadUrl: string, _file: File, _options?: PutFileOptions): Promise<void> {
   // Upload was already performed.  Nothing to do.
 }
 

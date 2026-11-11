@@ -85,7 +85,8 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
     if (flowId) flows.delete(flowId);
     reply.header("set-cookie", `${FLOW_COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`);
     const linking = entry?.userId !== undefined;
-    const fail = (code: string) => reply.redirect(appUrl(`${linking ? "/cont/setari" : "/autentificare"}?ward_error=${encodeURIComponent(code)}`));
+    const fail = (code: string) =>
+      reply.redirect(appUrl(`${linking ? "/cont/setari" : "/autentificare"}?ward_error=${encodeURIComponent(code)}`));
     if (!entry || entry.expires < Date.now()) return fail("expired");
 
     let subject: string;
@@ -96,7 +97,11 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
       return fail((err as { code?: string }).code ?? "ward_unavailable");
     }
 
-    const owner = await ctx.db.selectFrom("users").select(["id"]).where("ward_subject", "=", subject).executeTakeFirst();
+    const owner = await ctx.db
+      .selectFrom("users")
+      .select(["id"])
+      .where("ward_subject", "=", subject)
+      .executeTakeFirst();
     if (linking) {
       if (owner && owner.id !== entry.userId) return fail("already_linked");
       await ctx.db.updateTable("users").set({ ward_subject: subject }).where("id", "=", entry.userId!).execute();

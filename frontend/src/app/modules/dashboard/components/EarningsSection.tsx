@@ -41,9 +41,18 @@ export function EarningsSection() {
       </div>
 
       <dl className="grid grid-cols-3 gap-4 text-sm">
-        <div><dt className="text-on-surface-variant">Vânzări</dt><dd className="font-semibold">{ron(e.gross_ron)}</dd></div>
-        <div><dt className="text-on-surface-variant">Comision</dt><dd className="font-semibold">{ron(e.fees_ron)}</dd></div>
-        <div><dt className="text-on-surface-variant">Retras</dt><dd className="font-semibold">{ron(e.paid_out_ron)}</dd></div>
+        <div>
+          <dt className="text-on-surface-variant">Vânzări</dt>
+          <dd className="font-semibold">{ron(e.gross_ron)}</dd>
+        </div>
+        <div>
+          <dt className="text-on-surface-variant">Comision</dt>
+          <dd className="font-semibold">{ron(e.fees_ron)}</dd>
+        </div>
+        <div>
+          <dt className="text-on-surface-variant">Retras</dt>
+          <dd className="font-semibold">{ron(e.paid_out_ron)}</dd>
+        </div>
       </dl>
 
       {e.sales.length > 0 && (
@@ -64,7 +73,8 @@ export function EarningsSection() {
       </Button>
       {e.payouts.length > 0 && (
         <p className="text-xs text-on-surface-variant">
-          Ultima retragere simulată: {ron(e.payouts[0]!.amount_ron)}, {new Date(e.payouts[0]!.created_at.replace(" ", "T") + "Z").toLocaleDateString("ro-RO")}.
+          Ultima retragere simulată: {ron(e.payouts[0]!.amount_ron)},{" "}
+          {new Date(e.payouts[0]!.created_at.replace(" ", "T") + "Z").toLocaleDateString("ro-RO")}.
         </p>
       )}
     </section>

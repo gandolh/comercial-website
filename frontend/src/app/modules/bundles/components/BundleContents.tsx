@@ -9,19 +9,12 @@ interface BundleChildRowProps {
 
 function BundleChildRow({ child }: BundleChildRowProps) {
   const { t } = useTranslation();
-  const formattedPrice =
-    child.price_ron != null
-      ? `${child.price_ron.toLocaleString("ro-RO")} RON`
-      : t("bundles.free");
+  const formattedPrice = child.price_ron != null ? `${child.price_ron.toLocaleString("ro-RO")} RON` : t("bundles.free");
 
   return (
     <li className="flex items-center gap-4 px-5 py-4 bg-surface-container-lowest hover:bg-surface-container transition-colors">
       {child.cover_url ? (
-        <img
-          src={child.cover_url}
-          alt={child.title}
-          className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-        />
+        <img src={child.cover_url} alt={child.title} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
       ) : (
         <div className="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0">
           <span className="material-symbols-outlined text-outline text-[20px]">draft</span>
@@ -59,10 +52,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   if (isLoading) {
     return (
       <section className="space-y-4">
-        <h2
-          className="text-lg font-bold text-on-surface"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
           {t("bundles.title")}
         </h2>
         <div className="rounded-xl border border-surface-container-high overflow-hidden divide-y divide-surface-container-high">
@@ -77,10 +67,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   if (isError || !children) {
     return (
       <section className="space-y-4">
-        <h2
-          className="text-lg font-bold text-on-surface"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
           {t("bundles.title")}
         </h2>
         <p className="text-sm text-outline">{t("bundles.loadError")}</p>
@@ -95,15 +82,10 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2
-          className="text-lg font-bold text-on-surface"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
           {t("bundles.title")}
         </h2>
-        <span className="text-sm text-outline">
-          {t("bundles.count", { count: children.length })}
-        </span>
+        <span className="text-sm text-outline">{t("bundles.count", { count: children.length })}</span>
       </div>
       <ul className="divide-y divide-surface-container-high rounded-xl border border-surface-container-high overflow-hidden">
         {children.map((child) => (

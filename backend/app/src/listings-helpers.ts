@@ -45,7 +45,7 @@ export function toListingCardResponse(
   listing: ListingRow,
   images: ListingImageRow[],
   sellerVerified: boolean,
-  config: Config
+  config: Config,
 ): ListingCardResponse {
   const coverImage = images.find((img) => img.position === 0);
   return {
@@ -101,7 +101,7 @@ export function toSellerSummary(
   seller: SellerRow,
   activeListingsCount: number,
   config: Config,
-  totalDownloads: number = 0
+  totalDownloads: number = 0,
 ): SellerSummary {
   return {
     id: seller.id,
@@ -155,7 +155,7 @@ export function toListingDetailResponse(
   config: Config,
   assets: AssetResponse[] = [],
   ratingAvg: number | null = null,
-  ratingCount: number = 0
+  ratingCount: number = 0,
 ): ListingDetailResponse {
   return {
     id: listing.id,

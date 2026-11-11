@@ -12,14 +12,7 @@ interface PhotosStepProps {
   hideFooter?: boolean;
 }
 
-export function PhotosStep({
-  listingId,
-  images,
-  onImagesChange,
-  onNext,
-  onBack,
-  hideFooter = false,
-}: PhotosStepProps) {
+export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, hideFooter = false }: PhotosStepProps) {
   const { uploadFiles, isUploading } = useListingImagesMutations(listingId);
   const hasImages = images.length > 0;
 
@@ -31,48 +24,32 @@ export function PhotosStep({
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           Imagini de previzualizare
         </h2>
-        <p className="text-on-surface-variant">
-          Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).
-        </p>
+        <p className="text-on-surface-variant">Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).</p>
       </div>
 
       <div className="space-y-6">
-        <ImageUploader
-          existingCount={images.length}
-          onUploadFiles={handleUpload}
-        />
+        <ImageUploader existingCount={images.length} onUploadFiles={handleUpload} />
 
         {hasImages && (
           <div className="space-y-4">
             <div className="flex justify-between items-center px-1">
-              <h3 className="font-bold text-sm">
-                Fotografiile tale ({images.length}/10)
-              </h3>
+              <h3 className="font-bold text-sm">Fotografiile tale ({images.length}/10)</h3>
               {images.length < 3 && (
                 <span className="text-xs bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-medium">
                   Recomandăm minim 3 poze
                 </span>
               )}
             </div>
-            <ImageGalleryEditor
-              listingId={listingId}
-              images={images}
-              onImagesChange={onImagesChange}
-            />
+            <ImageGalleryEditor listingId={listingId} images={images} onImagesChange={onImagesChange} />
           </div>
         )}
 
         {!hasImages && !isUploading && (
           <div className="bg-surface-container-low border-2 border-dashed border-outline-variant rounded-3xl p-12 text-center space-y-4">
-            <span className="material-symbols-outlined text-outline text-5xl">
-              add_a_photo
-            </span>
+            <span className="material-symbols-outlined text-outline text-5xl">add_a_photo</span>
             <p className="text-on-surface-variant text-sm max-w-xs mx-auto">
               Adaugă imagini opționale pentru a face anunțul mai atractiv.
             </p>

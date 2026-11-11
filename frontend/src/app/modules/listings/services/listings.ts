@@ -39,7 +39,7 @@ interface ListingDetailApi {
   expires_at: string;
   active: boolean;
   seller: ListingSellerApi;
-  license_type?: 'personal' | 'commercial' | 'extended';
+  license_type?: "personal" | "commercial" | "extended";
   file_format?: string;
   file_size_bytes?: number;
   download_count?: number;
@@ -74,7 +74,7 @@ export function mapListingDetail(detail: ListingDetailApi): ListingDetail {
     fileFormat: detail.file_format,
     fileSizeBytes: detail.file_size_bytes,
     downloadCount: detail.download_count,
-    assets: (detail.assets ?? []).map(asset => ({
+    assets: (detail.assets ?? []).map((asset) => ({
       id: asset.id,
       originalFilename: asset.original_filename,
       fileSizeBytes: asset.file_size_bytes,
@@ -95,35 +95,23 @@ export interface UpdateListingRequest {
   active?: boolean;
 }
 
-export async function updateListing(
-  id: string,
-  patch: UpdateListingRequest,
-): Promise<ListingDetail> {
-  const response = await axiosInstance.patch<ListingDetailApi>(
-    `/listings/${id}`,
-    patch,
-  );
+export async function updateListing(id: string, patch: UpdateListingRequest): Promise<ListingDetail> {
+  const response = await axiosInstance.patch<ListingDetailApi>(`/listings/${id}`, patch);
   return mapListingDetail(response.data);
 }
 
 export async function renewListing(id: string): Promise<ListingDetail> {
-  const response = await axiosInstance.post<ListingDetailApi>(
-    `/listings/${id}/renew`,
-  );
+  const response = await axiosInstance.post<ListingDetailApi>(`/listings/${id}/renew`);
   return mapListingDetail(response.data);
 }
 
 export async function deactivateListing(id: string): Promise<ListingDetail> {
-  const response = await axiosInstance.post<ListingDetailApi>(
-    `/listings/${id}/deactivate`,
-  );
+  const response = await axiosInstance.post<ListingDetailApi>(`/listings/${id}/deactivate`);
   return mapListingDetail(response.data);
 }
 
 export async function activateListing(id: string): Promise<ListingDetail> {
-  const response = await axiosInstance.post<ListingDetailApi>(
-    `/listings/${id}/activate`,
-  );
+  const response = await axiosInstance.post<ListingDetailApi>(`/listings/${id}/activate`);
   return mapListingDetail(response.data);
 }
 
@@ -155,9 +143,7 @@ export async function fetchRelatedListings(id: string): Promise<ListingCard[]> {
 }
 
 export async function fetchSellerPhone(listingId: string): Promise<string> {
-  const response = await axiosInstance.get<{ phone: string }>(
-    `/listings/${listingId}/seller-phone`,
-  );
+  const response = await axiosInstance.get<{ phone: string }>(`/listings/${listingId}/seller-phone`);
   return response.data.phone;
 }
 
@@ -166,12 +152,8 @@ export interface DownloadAssetResponse {
   filename: string;
 }
 
-export async function downloadAsset(
-  listingId: string,
-): Promise<DownloadAssetResponse> {
-  const response = await axiosInstance.get<DownloadAssetResponse>(
-    `/listings/${listingId}/download`,
-  );
+export async function downloadAsset(listingId: string): Promise<DownloadAssetResponse> {
+  const response = await axiosInstance.get<DownloadAssetResponse>(`/listings/${listingId}/download`);
   return response.data;
 }
 
@@ -183,12 +165,8 @@ export interface ListingAssetMeta {
   position: number;
 }
 
-export async function fetchListingAssets(
-  listingId: string,
-): Promise<ListingAssetMeta[]> {
-  const response = await axiosInstance.get<ListingAssetMeta[]>(
-    `/listings/${listingId}/assets`,
-  );
+export async function fetchListingAssets(listingId: string): Promise<ListingAssetMeta[]> {
+  const response = await axiosInstance.get<ListingAssetMeta[]>(`/listings/${listingId}/assets`);
   return response.data;
 }
 

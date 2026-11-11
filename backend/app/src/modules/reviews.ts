@@ -59,37 +59,29 @@ export const registerReviewsRoutes: RouteRegistrar = (app, ctx) => {
    * Create or update the authenticated buyer's review for a listing.
    * Requires a paid order for the listing.
    */
-  app.post(
-    "/listings/:id/reviews",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id: listingId } = request.params as { id: string };
+  app.post("/listings/:id/reviews", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id: listingId } = request.params as { id: string };
 
-      // Verify listing exists
-      const listing = await ctx.db
-        .selectFrom("listings")
-        .select("id")
-        .where("id", "=", listingId)
-        .executeTakeFirst();
-      if (!listing) throw AppError.notFound();
+    // Verify listing exists
+    const listing = await ctx.db.selectFrom("listings").select("id").where("id", "=", listingId).executeTakeFirst();
+    if (!listing) throw AppError.notFound();
 
-      // Gate: buyer must have a paid order
-      const purchased = await hasPaidOrder(ctx, userId, listingId);
-      if (!purchased) {
-        throw AppError.forbidden();
-      }
-
-      const parsed = SubmitReviewSchema.safeParse(request.body);
-      if (!parsed.success) throw AppError.validation(parsed.error.message);
-
-      const { rating, body } = parsed.data;
-
-      const review = await repo.upsert(listingId, userId, rating, body ?? null);
-
-      return reply.status(201).send(toReviewResponse(review));
+    // Gate: buyer must have a paid order
+    const purchased = await hasPaidOrder(ctx, userId, listingId);
+    if (!purchased) {
+      throw AppError.forbidden();
     }
-  );
+
+    const parsed = SubmitReviewSchema.safeParse(request.body);
+    if (!parsed.success) throw AppError.validation(parsed.error.message);
+
+    const { rating, body } = parsed.data;
+
+    const review = await repo.upsert(listingId, userId, rating, body ?? null);
+
+    return reply.status(201).send(toReviewResponse(review));
+  });
 
   /**
    * GET /listings/:id/reviews
@@ -99,17 +91,10 @@ export const registerReviewsRoutes: RouteRegistrar = (app, ctx) => {
     const { id: listingId } = request.params as { id: string };
 
     // Verify listing exists
-    const listing = await ctx.db
-      .selectFrom("listings")
-      .select("id")
-      .where("id", "=", listingId)
-      .executeTakeFirst();
+    const listing = await ctx.db.selectFrom("listings").select("id").where("id", "=", listingId).executeTakeFirst();
     if (!listing) throw AppError.notFound();
 
-    const [reviews, aggregate] = await Promise.all([
-      repo.listByListing(listingId),
-      repo.getAggregate(listingId),
-    ]);
+    const [reviews, aggregate] = await Promise.all([repo.listByListing(listingId), repo.getAggregate(listingId)]);
 
     return reply.send({
       reviews: reviews.map(toReviewResponse),
@@ -123,19 +108,15 @@ export const registerReviewsRoutes: RouteRegistrar = (app, ctx) => {
    * Remove the authenticated caller's review for a listing.
    * Returns 404 if no review exists.
    */
-  app.delete(
-    "/listings/:id/reviews/mine",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id: listingId } = request.params as { id: string };
+  app.delete("/listings/:id/reviews/mine", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id: listingId } = request.params as { id: string };
 
-      const existing = await repo.getByBuyerAndListing(userId, listingId);
-      if (!existing) throw AppError.notFound();
+    const existing = await repo.getByBuyerAndListing(userId, listingId);
+    if (!existing) throw AppError.notFound();
 
-      await repo.deleteByBuyerAndListing(userId, listingId);
+    await repo.deleteByBuyerAndListing(userId, listingId);
 
-      return reply.status(204).send();
-    }
-  );
+    return reply.status(204).send();
+  });
 };

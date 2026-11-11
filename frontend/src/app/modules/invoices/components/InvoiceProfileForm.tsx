@@ -94,22 +94,10 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
           <label className="block text-sm font-medium text-on-surface-variant mb-1">
             {t("invoices.profile.cui", "CUI / CIF")}
           </label>
-          <Input
-            id="profile-cui"
-            {...register("cui")}
-            placeholder="RO12345678"
-          />
-          {errors.cui && (
-            <p className="text-error text-sm mt-1">{errors.cui.message}</p>
-          )}
+          <Input id="profile-cui" {...register("cui")} placeholder="RO12345678" />
+          {errors.cui && <p className="text-error text-sm mt-1">{errors.cui.message}</p>}
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={autofillFromCui}
-          disabled={cuiLoading}
-        >
+        <Button type="button" variant="ghost" size="sm" onClick={autofillFromCui} disabled={cuiLoading}>
           {cuiLoading
             ? t("invoices.profile.loading", "Se încarcă...")
             : t("invoices.profile.autofill", "Auto-completare ANAF")}
@@ -122,9 +110,7 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
           {t("invoices.profile.companyName", "Denumire firmă / Nume")}
         </label>
         <Input {...register("company_name")} placeholder="S.C. Exemplu S.R.L." />
-        {errors.company_name && (
-          <p className="text-error text-sm mt-1">{errors.company_name.message}</p>
-        )}
+        {errors.company_name && <p className="text-error text-sm mt-1">{errors.company_name.message}</p>}
       </div>
 
       <div>
@@ -161,9 +147,7 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
             {t("invoices.profile.email", "Email facturare")}
           </label>
           <Input {...register("email")} type="email" placeholder="facturare@firma.ro" />
-          {errors.email && (
-            <p className="text-error text-sm mt-1">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-error text-sm mt-1">{errors.email.message}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-on-surface-variant mb-1">
@@ -182,14 +166,10 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
       </div>
 
       {upsert.isSuccess && (
-        <p className="text-tertiary text-sm">
-          {t("invoices.profile.saved", "Profilul a fost salvat.")}
-        </p>
+        <p className="text-tertiary text-sm">{t("invoices.profile.saved", "Profilul a fost salvat.")}</p>
       )}
       {upsert.isError && (
-        <p className="text-error text-sm">
-          {t("invoices.profile.saveError", "Eroare la salvare. Încearcă din nou.")}
-        </p>
+        <p className="text-error text-sm">{t("invoices.profile.saveError", "Eroare la salvare. Încearcă din nou.")}</p>
       )}
     </form>
   );

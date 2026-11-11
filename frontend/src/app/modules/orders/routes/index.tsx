@@ -7,7 +7,7 @@ export const ordersRoutes: ModuleRoute[] = [
     component: lazy(() =>
       import("../pages/MyOrdersPage").then((m) => ({
         default: m.MyOrdersPage,
-      }))
+      })),
     ),
   },
   {
@@ -15,7 +15,7 @@ export const ordersRoutes: ModuleRoute[] = [
     component: lazy(() =>
       import("../pages/OrderConfirmationPage").then((m) => ({
         default: m.OrderConfirmationPage,
-      }))
+      })),
     ),
   },
 ];

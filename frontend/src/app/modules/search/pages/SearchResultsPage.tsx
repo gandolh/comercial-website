@@ -28,25 +28,12 @@ export function SearchResultsPage() {
   const q = searchParams.get("q") || "";
   const filters = parseFilters(searchParams);
 
-  const { data, isFetching, isError, refetch } = useCategoryListings(
-    undefined,
-    filters,
-    q,
-  );
+  const { data, isFetching, isError, refetch } = useCategoryListings(undefined, filters, q);
 
-  function setFilter(
-    key: keyof FilterState,
-    value: FilterState[keyof FilterState],
-  ) {
+  function setFilter(key: keyof FilterState, value: FilterState[keyof FilterState]) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (
-        value === null ||
-        value === false ||
-        value === "" ||
-        value === "oricand" ||
-        value === "noi"
-      ) {
+      if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
         next.delete(key);
       } else {
         next.set(key, String(value === true ? "1" : value));
@@ -70,25 +57,16 @@ export function SearchResultsPage() {
 
   return (
     <main className="mt-24 flex-grow max-w-screen-2xl mx-auto w-full px-8 pb-16 flex gap-8">
-      <FilterSidebar
-        filters={filters}
-        onChange={setFilter}
-        onReset={resetFilters}
-      />
+      <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
 
       <section className="flex-grow min-w-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1
-              className="text-2xl font-black text-on-surface"
-              style={{ fontFamily: "var(--font-headline)" }}
-            >
+            <h1 className="text-2xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
               {q ? `Rezultate pentru "${q}"` : "Toate anunțurile"}
             </h1>
             <p className="text-on-surface-variant text-sm">
-              {isFetching
-                ? "Se încarcă..."
-                : `${data?.totalCount || 0} anunțuri găsite`}
+              {isFetching ? "Se încarcă..." : `${data?.totalCount || 0} anunțuri găsite`}
             </p>
           </div>
           <SortBar
@@ -100,10 +78,7 @@ export function SearchResultsPage() {
         </div>
 
         {isError ? (
-          <ErrorCard
-            message="Nu am putut încărca anunțurile."
-            onRetry={() => refetch()}
-          />
+          <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => refetch()} />
         ) : (
           <>
             <ListingGrid

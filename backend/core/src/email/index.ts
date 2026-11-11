@@ -72,8 +72,8 @@ export class LogEmailService implements EmailService {
           text: msg.text,
         },
         null,
-        2
-      )
+        2,
+      ),
     );
   }
 }
@@ -90,9 +90,7 @@ export interface EmailServiceConfig {
  * Factory function to create the appropriate email service.
  * Returns LogEmailService if host is empty/undefined, else SmtpEmailService.
  */
-export function createEmailService(
-  config: EmailServiceConfig
-): EmailService {
+export function createEmailService(config: EmailServiceConfig): EmailService {
   if (!config.host) {
     return new LogEmailService();
   }
@@ -135,21 +133,12 @@ export function newMessageEmail(params: {
   listingTitle: string;
   unsubscribeUserId: string;
 }): EmailMessage {
-  const {
-    recipientEmail,
-    recipientName,
-    senderName,
-    messagePreview,
-    conversationId,
-    listingTitle,
-    unsubscribeUserId,
-  } = params;
+  const { recipientEmail, recipientName, senderName, messagePreview, conversationId, listingTitle, unsubscribeUserId } =
+    params;
 
   const greeting = recipientName ? `Bună, ${recipientName}!` : "Bună!";
   const from = senderName ?? "Cineva";
-  const preview = messagePreview.length > 200
-    ? messagePreview.substring(0, 200) + "…"
-    : messagePreview;
+  const preview = messagePreview.length > 200 ? messagePreview.substring(0, 200) + "…" : messagePreview;
 
   const conversationLink = `${BASE_URL}/mesaje/${conversationId}`;
   const unsubscribeUrl = `${BASE_URL}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
@@ -200,15 +189,7 @@ export function expiryReminderEmail(params: {
   variant: "3zile" | "azi";
   unsubscribeUserId: string;
 }): EmailMessage {
-  const {
-    ownerEmail,
-    ownerName,
-    listingTitle,
-    listingId,
-    expiresAt,
-    variant,
-    unsubscribeUserId,
-  } = params;
+  const { ownerEmail, ownerName, listingTitle, listingId, expiresAt, variant, unsubscribeUserId } = params;
 
   const greeting = ownerName ? `Bună, ${ownerName}!` : "Bună!";
   const listingLink = `${BASE_URL}/anunt/${listingId}`;
@@ -226,9 +207,7 @@ export function expiryReminderEmail(params: {
       : "Anunțul tău <strong>expiră în 3 zile</strong>.";
 
   const subjectText =
-    variant === "azi"
-      ? `Anunțul „${listingTitle}" expiră astăzi`
-      : `Anunțul „${listingTitle}" expiră în 3 zile`;
+    variant === "azi" ? `Anunțul „${listingTitle}" expiră astăzi` : `Anunțul „${listingTitle}" expiră în 3 zile`;
 
   const html = `
     <!DOCTYPE html>
@@ -251,10 +230,7 @@ export function expiryReminderEmail(params: {
     </html>
   `;
 
-  const urgencyTextPlain =
-    variant === "azi"
-      ? "Anunțul tău expiră astăzi."
-      : "Anunțul tău expiră în 3 zile.";
+  const urgencyTextPlain = variant === "azi" ? "Anunțul tău expiră astăzi." : "Anunțul tău expiră în 3 zile.";
 
   const text = `${greeting}\n\n${urgencyTextPlain}\nAnunțul „${listingTitle}" va expira pe ${expiryDate}. Reînnoiește-l pentru a continua să primești descărcări și vizualizări.\n\nVezi anunțul: ${listingLink}\n\nDezabonare: ${unsubscribeUrl}`;
 
@@ -277,14 +253,7 @@ export function firstDownloadEmail(params: {
   downloadCount: number;
   unsubscribeUserId: string;
 }): EmailMessage {
-  const {
-    ownerEmail,
-    ownerName,
-    listingTitle,
-    listingId,
-    downloadCount,
-    unsubscribeUserId,
-  } = params;
+  const { ownerEmail, ownerName, listingTitle, listingId, downloadCount, unsubscribeUserId } = params;
 
   const greeting = ownerName ? `Bună, ${ownerName}!` : "Bună!";
   const listingLink = `${BASE_URL}/anunt/${listingId}`;

@@ -1,43 +1,27 @@
-import { forwardRef, type SelectHTMLAttributes } from 'react'
+import { forwardRef, type SelectHTMLAttributes } from "react";
 
 interface SelectOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string
-  error?: string
-  hint?: string
-  options: SelectOption[]
-  placeholder?: string
-  fullWidth?: boolean
+  label?: string;
+  error?: string;
+  hint?: string;
+  options: SelectOption[];
+  placeholder?: string;
+  fullWidth?: boolean;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    {
-      label,
-      error,
-      hint,
-      options,
-      placeholder,
-      fullWidth = false,
-      className = '',
-      id,
-      ...props
-    },
-    ref,
-  ) => {
-    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
+  ({ label, error, hint, options, placeholder, fullWidth = false, className = "", id, ...props }, ref) => {
+    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
 
     return (
-      <div className={fullWidth ? 'w-full' : ''}>
+      <div className={fullWidth ? "w-full" : ""}>
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block text-sm font-medium text-on-surface-variant mb-1.5"
-          >
+          <label htmlFor={inputId} className="block text-sm font-medium text-on-surface-variant mb-1.5">
             {label}
           </label>
         )}
@@ -47,16 +31,16 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={inputId}
             {...props}
             className={[
-              'w-full appearance-none rounded-xl bg-surface-container-high text-on-surface',
-              'px-4 py-3 pr-10 leading-relaxed',
-              'outline-none transition-all duration-200 cursor-pointer',
-              'focus:bg-surface-container-lowest focus:shadow-[0_0_0_1px_rgba(0,86,210,0.3)]',
-              'disabled:opacity-50 disabled:cursor-not-allowed',
-              error ? 'shadow-[0_0_0_1px_rgba(186,26,26,0.4)]' : '',
+              "w-full appearance-none rounded-xl bg-surface-container-high text-on-surface",
+              "px-4 py-3 pr-10 leading-relaxed",
+              "outline-none transition-all duration-200 cursor-pointer",
+              "focus:bg-surface-container-lowest focus:shadow-[0_0_0_1px_rgba(0,86,210,0.3)]",
+              "disabled:opacity-50 disabled:cursor-not-allowed",
+              error ? "shadow-[0_0_0_1px_rgba(186,26,26,0.4)]" : "",
               className,
             ]
               .filter(Boolean)
-              .join(' ')}
+              .join(" ")}
           >
             {placeholder && (
               <option value="" disabled>
@@ -79,8 +63,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {error && <p className="mt-1.5 text-sm text-error">{error}</p>}
         {hint && !error && <p className="mt-1.5 text-sm text-on-surface-variant">{hint}</p>}
       </div>
-    )
+    );
   },
-)
+);
 
-Select.displayName = 'Select'
+Select.displayName = "Select";

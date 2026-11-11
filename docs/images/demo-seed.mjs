@@ -116,14 +116,67 @@ for (const [id, token, preview] of seeded) {
 }
 
 const added = [
-  [jane, "invite", "invitatii-nunta.zip", 2_400_000, { title: "Invitații digitale de nuntă — 6 modele editabile", description: "Șase modele de invitații pentru nuntă, editabile în orice program de prezentări. Text, culori și fonturi ușor de schimbat, export pentru telefon și pentru tipar.", price_ron: 45, category: "invitatii" }],
-  [jane, "gdpr", "kit-gdpr.zip", 1_100_000, { title: "Kit GDPR pentru magazine online", description: "Politică de confidențialitate, politică de cookie-uri, formular de retragere și registru de prelucrări, redactate în română și ușor de adaptat la un magazin mic.", price_ron: 99, category: "documente" }],
-  [jane, "social", "postari-cafenea.zip", 6_300_000, { title: "30 de șabloane de postări pentru cafenele", description: "Treizeci de șabloane pătrate și verticale pentru rețele sociale: oferte, program, produse noi și rețete. Fișiere editabile, cu instrucțiuni în română.", price_ron: 39, category: "sabloane" }],
-  [demo, "code", "starter-api.zip", 850_000, { title: "Starter API REST în Node.js cu autentificare JWT", description: "Proiect de pornire pentru un API REST în Node.js și TypeScript: autentificare JWT, bază de date SQLite, teste și documentație. Gata de extins.", price_ron: 79, category: "cod-sursa" }],
+  [
+    jane,
+    "invite",
+    "invitatii-nunta.zip",
+    2_400_000,
+    {
+      title: "Invitații digitale de nuntă — 6 modele editabile",
+      description:
+        "Șase modele de invitații pentru nuntă, editabile în orice program de prezentări. Text, culori și fonturi ușor de schimbat, export pentru telefon și pentru tipar.",
+      price_ron: 45,
+      category: "invitatii",
+    },
+  ],
+  [
+    jane,
+    "gdpr",
+    "kit-gdpr.zip",
+    1_100_000,
+    {
+      title: "Kit GDPR pentru magazine online",
+      description:
+        "Politică de confidențialitate, politică de cookie-uri, formular de retragere și registru de prelucrări, redactate în română și ușor de adaptat la un magazin mic.",
+      price_ron: 99,
+      category: "documente",
+    },
+  ],
+  [
+    jane,
+    "social",
+    "postari-cafenea.zip",
+    6_300_000,
+    {
+      title: "30 de șabloane de postări pentru cafenele",
+      description:
+        "Treizeci de șabloane pătrate și verticale pentru rețele sociale: oferte, program, produse noi și rețete. Fișiere editabile, cu instrucțiuni în română.",
+      price_ron: 39,
+      category: "sabloane",
+    },
+  ],
+  [
+    demo,
+    "code",
+    "starter-api.zip",
+    850_000,
+    {
+      title: "Starter API REST în Node.js cu autentificare JWT",
+      description:
+        "Proiect de pornire pentru un API REST în Node.js și TypeScript: autentificare JWT, bază de date SQLite, teste și documentație. Gata de extins.",
+      price_ron: 79,
+      category: "cod-sursa",
+    },
+  ],
 ];
 for (const [token, preview, filename, size, fields] of added) {
   const listing = await call(token, "POST", "/listings", { ...fields, active: false });
-  await call(token, "POST", `/listings/${listing.id}/assets`, file(zip("CITESTE.txt", size), "application/zip", filename));
+  await call(
+    token,
+    "POST",
+    `/listings/${listing.id}/assets`,
+    file(zip("CITESTE.txt", size), "application/zip", filename),
+  );
   await uploadPreview(token, listing.id, preview);
   await call(token, "POST", `/listings/${listing.id}/publish`);
 }

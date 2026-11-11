@@ -1,8 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  invoicesService,
-  type CreateInvoiceInput,
-} from "../services/invoices.service";
+import { invoicesService, type CreateInvoiceInput } from "../services/invoices.service";
 
 export const INVOICES_KEY = ["invoices"];
 

@@ -19,9 +19,7 @@ export function runMigrations(db: Database.Database, migrationsDir: string): str
     .filter((f) => f.endsWith(".sql"))
     .sort();
 
-  const applied = new Set(
-    (db.prepare("SELECT name FROM _migrations").all() as { name: string }[]).map((r) => r.name)
-  );
+  const applied = new Set((db.prepare("SELECT name FROM _migrations").all() as { name: string }[]).map((r) => r.name));
 
   const ran: string[] = [];
   for (const name of entries) {

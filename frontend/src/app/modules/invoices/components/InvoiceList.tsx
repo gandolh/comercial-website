@@ -19,10 +19,7 @@ export function InvoiceList({ invoices }: Props) {
     const key = `pdf-${inv.id}`;
     setDownloading(key);
     try {
-      await invoicesService.downloadPdf(
-        inv.id,
-        `factura-${inv.series}-${inv.number}.pdf`
-      );
+      await invoicesService.downloadPdf(inv.id, `factura-${inv.series}-${inv.number}.pdf`);
     } finally {
       setDownloading(null);
     }
@@ -32,10 +29,7 @@ export function InvoiceList({ invoices }: Props) {
     const key = `xml-${inv.id}`;
     setDownloading(key);
     try {
-      await invoicesService.downloadXml(
-        inv.id,
-        `efactura-${inv.series}-${inv.number}.xml`
-      );
+      await invoicesService.downloadXml(inv.id, `efactura-${inv.series}-${inv.number}.xml`);
     } finally {
       setDownloading(null);
     }
@@ -61,9 +55,7 @@ export function InvoiceList({ invoices }: Props) {
               <span className="font-bold text-on-surface text-sm">
                 {inv.series}-{inv.number}
               </span>
-              <span className="text-xs text-on-surface-variant">
-                {formatDate(inv.issue_date)}
-              </span>
+              <span className="text-xs text-on-surface-variant">{formatDate(inv.issue_date)}</span>
               {inv.due_date && (
                 <span className="text-xs text-on-surface-variant">
                   {t("invoices.list.due", "Scadență:")} {formatDate(inv.due_date)}
@@ -86,9 +78,7 @@ export function InvoiceList({ invoices }: Props) {
               disabled={downloading === `pdf-${inv.id}`}
               iconLeft="picture_as_pdf"
             >
-              {downloading === `pdf-${inv.id}`
-                ? t("invoices.list.downloading", "...")
-                : "PDF"}
+              {downloading === `pdf-${inv.id}` ? t("invoices.list.downloading", "...") : "PDF"}
             </Button>
             <Button
               type="button"
@@ -98,9 +88,7 @@ export function InvoiceList({ invoices }: Props) {
               disabled={downloading === `xml-${inv.id}`}
               iconLeft="code"
             >
-              {downloading === `xml-${inv.id}`
-                ? t("invoices.list.downloading", "...")
-                : "XML"}
+              {downloading === `xml-${inv.id}` ? t("invoices.list.downloading", "...") : "XML"}
             </Button>
           </div>
         </div>

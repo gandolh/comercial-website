@@ -91,15 +91,10 @@ export function AjutorPage() {
     <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
       <div className="max-w-3xl mx-auto space-y-12">
         <header className="space-y-3">
-          <h1
-            className="text-4xl font-black text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             Ajutor & Întrebări Frecvente
           </h1>
-          <p className="text-on-surface-variant text-lg">
-            Găsești răspunsuri rapide la cele mai comune întrebări.
-          </p>
+          <p className="text-on-surface-variant text-lg">Găsești răspunsuri rapide la cele mai comune întrebări.</p>
         </header>
 
         <div className="space-y-10">
@@ -116,34 +111,25 @@ export function AjutorPage() {
                   const key = `${group.category}-${item.q}`;
                   const isOpen = openItem === key;
                   return (
-                    <div
-                      key={key}
-                      className="bg-surface-container rounded-xl overflow-hidden"
-                    >
+                    <div key={key} className="bg-surface-container rounded-xl overflow-hidden">
                       <button
                         className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-surface-container-high transition-colors"
                         onClick={() => setOpenItem(isOpen ? null : key)}
                         aria-expanded={isOpen}
                       >
-                        <span className="font-medium text-on-surface">
-                          {item.q}
-                        </span>
+                        <span className="font-medium text-on-surface">{item.q}</span>
                         <span
                           className="material-symbols-outlined text-on-surface-variant shrink-0 transition-transform"
                           style={{
                             fontSize: "20px",
-                            transform: isOpen
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
+                            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                           }}
                         >
                           expand_more
                         </span>
                       </button>
                       {isOpen && (
-                        <div className="px-4 pb-4 text-on-surface-variant text-sm leading-relaxed">
-                          {item.a}
-                        </div>
+                        <div className="px-4 pb-4 text-on-surface-variant text-sm leading-relaxed">{item.a}</div>
                       )}
                     </div>
                   );
@@ -154,16 +140,10 @@ export function AjutorPage() {
         </div>
 
         <section className="bg-secondary-container rounded-2xl p-8 text-center space-y-3">
-          <span
-            className="material-symbols-outlined text-on-secondary-container block"
-            style={{ fontSize: "36px" }}
-          >
+          <span className="material-symbols-outlined text-on-secondary-container block" style={{ fontSize: "36px" }}>
             chat
           </span>
-          <h2
-            className="text-xl font-bold text-on-secondary-container"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h2 className="text-xl font-bold text-on-secondary-container" style={{ fontFamily: "var(--font-headline)" }}>
             Nu ai găsit răspunsul?
           </h2>
           <p className="text-on-secondary-container/80 text-sm">

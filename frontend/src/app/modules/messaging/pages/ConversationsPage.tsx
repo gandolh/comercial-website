@@ -14,9 +14,7 @@ export const ConversationsPage: React.FC = () => {
   const { data: conversations, isLoading } = useConversations();
 
   const pathname = routerState.location.pathname;
-  const conversationId = pathname.startsWith("/mesaje/")
-    ? pathname.replace("/mesaje/", "")
-    : undefined;
+  const conversationId = pathname.startsWith("/mesaje/") ? pathname.replace("/mesaje/", "") : undefined;
 
   return (
     <div className="pt-24 h-screen flex flex-col">
@@ -28,9 +26,7 @@ export const ConversationsPage: React.FC = () => {
           }`}
         >
           <div className="p-4 border-b border-surface-container-low">
-            <h1 className="text-xl font-bold font-[Manrope] text-on-surface">
-              {t("common:messaging.messages")}
-            </h1>
+            <h1 className="text-xl font-bold font-[Manrope] text-on-surface">{t("common:messaging.messages")}</h1>
           </div>
           <div className="flex-1 overflow-y-auto">
             {isLoading ? (
@@ -60,11 +56,7 @@ export const ConversationsPage: React.FC = () => {
             !conversationId ? "hidden md:flex" : "flex"
           }`}
         >
-          {conversationId ? (
-            <Outlet />
-          ) : (
-            <EmptyInbox />
-          )}
+          {conversationId ? <Outlet /> : <EmptyInbox />}
         </main>
       </div>
     </div>

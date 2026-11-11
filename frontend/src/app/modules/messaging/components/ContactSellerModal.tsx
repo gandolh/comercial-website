@@ -11,12 +11,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const ContactSellerModal: React.FC<Props> = ({
-  listingId,
-  sellerName,
-  isOpen,
-  onClose,
-}) => {
+export const ContactSellerModal: React.FC<Props> = ({ listingId, sellerName, isOpen, onClose }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
@@ -30,10 +25,7 @@ export const ContactSellerModal: React.FC<Props> = ({
     setIsSending(true);
     setError(null);
     try {
-      const { conversation } = await messagingService.startConversation(
-        listingId,
-        message,
-      );
+      const { conversation } = await messagingService.startConversation(listingId, message);
       onClose();
       navigate(`/mesaje/${conversation.id}`);
     } catch (err: unknown) {
@@ -65,19 +57,10 @@ export const ContactSellerModal: React.FC<Props> = ({
         {error && <p className="text-error text-sm">{error}</p>}
 
         <div className="flex gap-3 justify-end">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={onClose}
-            disabled={isSending}
-          >
+          <Button type="button" variant="ghost" onClick={onClose} disabled={isSending}>
             {t("common:actions.cancel")}
           </Button>
-          <Button
-            type="submit"
-            disabled={!message.trim()}
-            loading={isSending}
-          >
+          <Button type="submit" disabled={!message.trim()} loading={isSending}>
             {t("common:actions.send")}
           </Button>
         </div>

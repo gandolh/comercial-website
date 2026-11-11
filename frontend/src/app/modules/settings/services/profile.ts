@@ -41,24 +41,17 @@ export async function changePassword(data: ChangePasswordRequest): Promise<void>
  * Backend: POST /users/me/avatar
  * Response: { public_url, s3_key }
  */
-export async function uploadAvatar(
-  file: File,
-  options?: UploadAvatarOptions,
-): Promise<AvatarUploadResponse> {
+export async function uploadAvatar(file: File, options?: UploadAvatarOptions): Promise<AvatarUploadResponse> {
   const form = new FormData();
   form.append("file", file, file.name);
 
-  const res = await axiosInstance.post<AvatarUploadResponse>(
-    "/users/me/avatar",
-    form,
-    {
-      onUploadProgress: (event) => {
-        if (!options?.onUploadProgress || !event.total) return;
-        const progress = Math.round((event.loaded * 100) / event.total);
-        options.onUploadProgress(progress);
-      },
+  const res = await axiosInstance.post<AvatarUploadResponse>("/users/me/avatar", form, {
+    onUploadProgress: (event) => {
+      if (!options?.onUploadProgress || !event.total) return;
+      const progress = Math.round((event.loaded * 100) / event.total);
+      options.onUploadProgress(progress);
     },
-  );
+  });
 
   return res.data;
 }

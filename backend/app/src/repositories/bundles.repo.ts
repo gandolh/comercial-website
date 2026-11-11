@@ -18,17 +18,10 @@ export class BundlesRepository {
    */
   async setBundleItems(bundleListingId: string, childIds: string[]): Promise<void> {
     // Mark parent as bundle
-    await this.db
-      .updateTable("listings")
-      .set({ is_bundle: 1 })
-      .where("id", "=", bundleListingId)
-      .execute();
+    await this.db.updateTable("listings").set({ is_bundle: 1 }).where("id", "=", bundleListingId).execute();
 
     // Remove existing children
-    await this.db
-      .deleteFrom("bundle_items")
-      .where("bundle_listing_id", "=", bundleListingId)
-      .execute();
+    await this.db.deleteFrom("bundle_items").where("bundle_listing_id", "=", bundleListingId).execute();
 
     if (childIds.length === 0) return;
 
@@ -40,7 +33,7 @@ export class BundlesRepository {
           bundle_listing_id: bundleListingId,
           child_listing_id: childId,
           position: idx,
-        }))
+        })),
       )
       .execute();
   }
@@ -50,25 +43,20 @@ export class BundlesRepository {
    * Returns full listing rows so callers can map to card responses.
    */
   async getBundleChildren(bundleListingId: string): Promise<ListingRow[]> {
-    return (
-      (await this.db
-        .selectFrom("bundle_items")
-        .innerJoin("listings", "listings.id", "bundle_items.child_listing_id")
-        .selectAll("listings")
-        .where("bundle_items.bundle_listing_id", "=", bundleListingId)
-        .orderBy("bundle_items.position", "asc")
-        .execute()) as unknown as ListingRow[]
-    );
+    return (await this.db
+      .selectFrom("bundle_items")
+      .innerJoin("listings", "listings.id", "bundle_items.child_listing_id")
+      .selectAll("listings")
+      .where("bundle_items.bundle_listing_id", "=", bundleListingId)
+      .orderBy("bundle_items.position", "asc")
+      .execute()) as unknown as ListingRow[];
   }
 
   /**
    * Check whether a user has purchased a bundle that contains a given child listing.
    * Used to extend download access: a bundle buyer gains access to all children.
    */
-  async hasBundlePurchaseForChild(
-    userId: string,
-    childListingId: string
-  ): Promise<boolean> {
+  async hasBundlePurchaseForChild(userId: string, childListingId: string): Promise<boolean> {
     const row = await this.db
       .selectFrom("bundle_items")
       .innerJoin("orders", "orders.listing_id", "bundle_items.bundle_listing_id")

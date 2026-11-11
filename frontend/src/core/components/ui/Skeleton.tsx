@@ -1,14 +1,9 @@
 interface SkeletonProps {
-  className?: string
+  className?: string;
 }
 
-export function Skeleton({ className = '' }: SkeletonProps) {
-  return (
-    <div
-      className={`animate-pulse bg-surface-container-high rounded-xl ${className}`}
-      aria-hidden="true"
-    />
-  )
+export function Skeleton({ className = "" }: SkeletonProps) {
+  return <div className={`animate-pulse bg-surface-container-high rounded-xl ${className}`} aria-hidden="true" />;
 }
 
 export function CardSkeleton() {
@@ -21,5 +16,5 @@ export function CardSkeleton() {
         <Skeleton className="h-4 w-1/2" />
       </div>
     </div>
-  )
+  );
 }

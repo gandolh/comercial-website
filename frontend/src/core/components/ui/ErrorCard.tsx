@@ -1,15 +1,15 @@
 interface ErrorCardProps {
-  message?: string
-  onRetry?: () => void
+  message?: string;
+  onRetry?: () => void;
 }
 
 export function ErrorCard({ message, onRetry }: ErrorCardProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-      <span className="material-symbols-outlined text-error" style={{ fontSize: '48px' }}>
+      <span className="material-symbols-outlined text-error" style={{ fontSize: "48px" }}>
         error
       </span>
-      <p className="text-on-surface font-medium">{message ?? 'A apărut o eroare. Încearcă din nou.'}</p>
+      <p className="text-on-surface font-medium">{message ?? "A apărut o eroare. Încearcă din nou."}</p>
       {onRetry && (
         <button
           onClick={onRetry}
@@ -19,5 +19,5 @@ export function ErrorCard({ message, onRetry }: ErrorCardProps) {
         </button>
       )}
     </div>
-  )
+  );
 }

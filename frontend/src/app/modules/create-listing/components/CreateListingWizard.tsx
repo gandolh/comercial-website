@@ -21,12 +21,7 @@ interface CreateListingWizardProps {
   draftError: Error | null;
 }
 
-export function CreateListingWizard({
-  draftId,
-  draft,
-  isDraftLoading,
-  draftError,
-}: CreateListingWizardProps) {
+export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError }: CreateListingWizardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [step, setStep] = useState<Step>("category");
@@ -58,13 +53,7 @@ export function CreateListingWizard({
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({
-      id,
-      payload,
-    }: {
-      id: string;
-      payload: Record<string, unknown>;
-    }) => updateDraft(id, payload),
+    mutationFn: ({ id, payload }: { id: string; payload: Record<string, unknown> }) => updateDraft(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["listing", draftId] });
     },
@@ -133,9 +122,7 @@ export function CreateListingWizard({
   if (isDraftLoading) {
     return (
       <div className="max-w-2xl mx-auto py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-primary text-5xl">
-          progress_activity
-        </span>
+        <span className="material-symbols-outlined animate-spin text-primary text-5xl">progress_activity</span>
       </div>
     );
   }
@@ -144,10 +131,7 @@ export function CreateListingWizard({
     return (
       <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
         <h2 className="text-2xl font-bold">Ups! Ceva n-a mers bine.</h2>
-        <button
-          onClick={() => navigate("/adauga-anunt")}
-          className="text-primary font-bold hover:underline"
-        >
+        <button onClick={() => navigate("/adauga-anunt")} className="text-primary font-bold hover:underline">
           Începe de la capăt
         </button>
       </div>
@@ -167,14 +151,7 @@ export function CreateListingWizard({
             { id: "price", label: "Preț" },
             { id: "review", label: "Final" },
           ].map((s, idx) => {
-            const steps = [
-              "category",
-              "details",
-              "assets",
-              "photos",
-              "price",
-              "review",
-            ];
+            const steps = ["category", "details", "assets", "photos", "price", "review"];
             const currentIdx = steps.indexOf(step);
             const isCompleted = idx < currentIdx;
             const isActive = s.id === step;
@@ -190,24 +167,12 @@ export function CreateListingWizard({
                         : "bg-surface-container-high text-outline"
                   }`}
                 >
-                  {isCompleted ? (
-                    <span className="material-symbols-outlined text-sm">
-                      check
-                    </span>
-                  ) : (
-                    idx + 1
-                  )}
+                  {isCompleted ? <span className="material-symbols-outlined text-sm">check</span> : idx + 1}
                 </div>
-                <span
-                  className={`text-sm font-bold ${
-                    isActive ? "text-on-surface" : "text-on-surface-variant"
-                  }`}
-                >
+                <span className={`text-sm font-bold ${isActive ? "text-on-surface" : "text-on-surface-variant"}`}>
                   {s.label}
                 </span>
-                {idx < 5 && (
-                  <div className="w-4 md:w-8 h-[2px] bg-surface-container-highest ml-2" />
-                )}
+                {idx < 5 && <div className="w-4 md:w-8 h-[2px] bg-surface-container-highest ml-2" />}
               </div>
             );
           })}
@@ -215,12 +180,7 @@ export function CreateListingWizard({
 
         {/* Step Content */}
         <div className="max-w-2xl mx-auto">
-          {step === "category" && (
-            <CategoryStep
-              selectedCategory={draft?.category}
-              onSelect={handleCategorySelect}
-            />
-          )}
+          {step === "category" && <CategoryStep selectedCategory={draft?.category} onSelect={handleCategorySelect} />}
           {step === "details" && (
             <DetailsStep
               initialData={{

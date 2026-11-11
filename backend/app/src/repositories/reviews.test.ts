@@ -93,7 +93,10 @@ function createTestDb(): Kysely<AppDatabase> {
 
 // ─── Seed helpers ─────────────────────────────────────────────────────────────
 
-async function seedUser(db: Kysely<AppDatabase>, overrides: { id?: string; display_name?: string } = {}): Promise<string> {
+async function seedUser(
+  db: Kysely<AppDatabase>,
+  overrides: { id?: string; display_name?: string } = {},
+): Promise<string> {
   const id = overrides.id ?? `user-${Math.random().toString(36).slice(2)}`;
   await db
     .insertInto("users")
@@ -127,7 +130,7 @@ async function seedPaidOrder(
   db: Kysely<AppDatabase>,
   buyerId: string,
   listingId: string,
-  sellerId: string
+  sellerId: string,
 ): Promise<void> {
   await db
     .insertInto("orders")

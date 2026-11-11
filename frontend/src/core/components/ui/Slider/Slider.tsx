@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
-import { Slider as BaseSlider } from '@base-ui/react/slider'
+import { useEffect, useRef, useState } from "react";
+import { Slider as BaseSlider } from "@base-ui/react/slider";
 
 interface SliderProps {
-  label?: string
-  min?: number
-  max?: number
-  step?: number
-  value: [number, number]
-  onChange: (value: [number, number]) => void
-  formatValue?: (value: number) => string
-  debounceMs?: number
+  label?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  value: [number, number];
+  onChange: (value: [number, number]) => void;
+  formatValue?: (value: number) => string;
+  debounceMs?: number;
 }
 
 export function Slider({
@@ -22,24 +22,24 @@ export function Slider({
   formatValue = (v) => String(v),
   debounceMs = 300,
 }: SliderProps) {
-  const [local, setLocal] = useState<[number, number]>(value)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [local, setLocal] = useState<[number, number]>(value);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync when parent resets value externally
   useEffect(() => {
-    setLocal(value)
-  }, [value[0], value[1]])
+    setLocal(value);
+  }, [value[0], value[1]]);
 
   function handleChange(v: [number, number]) {
-    setLocal(v)
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(() => onChange(v), debounceMs)
+    setLocal(v);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => onChange(v), debounceMs);
   }
 
   function handleCommit(v: [number, number]) {
-    if (timerRef.current) clearTimeout(timerRef.current)
-    setLocal(v)
-    onChange(v)
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setLocal(v);
+    onChange(v);
   }
 
   return (
@@ -76,5 +76,5 @@ export function Slider({
         </BaseSlider.Control>
       </BaseSlider.Root>
     </div>
-  )
+  );
 }

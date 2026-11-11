@@ -40,47 +40,39 @@ export const registerBundlesRoutes: RouteRegistrar = (app, ctx) => {
    * Marks the parent listing as is_bundle=1.
    * Validates: caller owns the bundle listing; all children exist.
    */
-  app.post(
-    "/listings/:id/bundle-items",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id: bundleId } = request.params as { id: string };
+  app.post("/listings/:id/bundle-items", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id: bundleId } = request.params as { id: string };
 
-      const parsed = SetBundleItemsSchema.safeParse(request.body);
-      if (!parsed.success) throw AppError.validation(parsed.error.message);
+    const parsed = SetBundleItemsSchema.safeParse(request.body);
+    if (!parsed.success) throw AppError.validation(parsed.error.message);
 
-      const { child_listing_ids: childIds } = parsed.data;
+    const { child_listing_ids: childIds } = parsed.data;
 
-      // Verify the bundle listing exists and belongs to the caller.
-      const bundle = await listingsRepo.getById(bundleId);
-      if (!bundle) throw AppError.notFound();
-      if (bundle.user_id !== userId) throw AppError.forbidden();
+    // Verify the bundle listing exists and belongs to the caller.
+    const bundle = await listingsRepo.getById(bundleId);
+    if (!bundle) throw AppError.notFound();
+    if (bundle.user_id !== userId) throw AppError.forbidden();
 
-      // Prevent a listing from being a child of itself.
-      if (childIds.includes(bundleId)) {
-        throw AppError.validation("Un pachet nu poate conține propriul anunț");
-      }
-
-      // Verify all child listings exist.
-      const childRows = await Promise.all(
-        childIds.map((id) => listingsRepo.getById(id))
-      );
-      const missingIdx = childRows.findIndex((r) => !r);
-      if (missingIdx !== -1) {
-        throw AppError.validation(
-          `Anunțul copil cu ID-ul '${childIds[missingIdx]}' nu a fost găsit`
-        );
-      }
-
-      await bundlesRepo.setBundleItems(bundleId, childIds);
-
-      return reply.status(200).send({
-        bundle_listing_id: bundleId,
-        child_listing_ids: childIds,
-      });
+    // Prevent a listing from being a child of itself.
+    if (childIds.includes(bundleId)) {
+      throw AppError.validation("Un pachet nu poate conține propriul anunț");
     }
-  );
+
+    // Verify all child listings exist.
+    const childRows = await Promise.all(childIds.map((id) => listingsRepo.getById(id)));
+    const missingIdx = childRows.findIndex((r) => !r);
+    if (missingIdx !== -1) {
+      throw AppError.validation(`Anunțul copil cu ID-ul '${childIds[missingIdx]}' nu a fost găsit`);
+    }
+
+    await bundlesRepo.setBundleItems(bundleId, childIds);
+
+    return reply.status(200).send({
+      bundle_listing_id: bundleId,
+      child_listing_ids: childIds,
+    });
+  });
 
   /**
    * GET /listings/:id/bundle-items
@@ -102,7 +94,7 @@ export const registerBundlesRoutes: RouteRegistrar = (app, ctx) => {
         const seller = await listingsRepo.getSeller(child.user_id);
         const sellerVerified = Boolean(seller?.phone_verified);
         return toListingCardResponse(child, images, sellerVerified, ctx.config);
-      })
+      }),
     );
 
     return reply.send(cards);

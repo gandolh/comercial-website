@@ -29,17 +29,10 @@ export function AvatarUploader() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div
-        className="relative group cursor-pointer"
-        onClick={() => fileInputRef.current?.click()}
-      >
+      <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
         <div className="w-32 h-32 rounded-full overflow-hidden bg-surface-container-high border-2 border-outline-variant flex items-center justify-center">
           {user?.avatar_url ? (
-            <img
-              src={user.avatar_url}
-              alt={user.display_name || "User"}
-              className="w-full h-full object-cover"
-            />
+            <img src={user.avatar_url} alt={user.display_name || "User"} className="w-full h-full object-cover" />
           ) : (
             <div className="text-4xl font-bold text-on-surface-variant">
               {user?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
@@ -62,9 +55,7 @@ export function AvatarUploader() {
         accept="image/jpeg,image/png,image/webp"
         onChange={handleFileChange}
       />
-      <p className="text-sm text-on-surface-variant">
-        Apasă pe imagine pentru a schimba avatarul
-      </p>
+      <p className="text-sm text-on-surface-variant">Apasă pe imagine pentru a schimba avatarul</p>
     </div>
   );
 }

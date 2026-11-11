@@ -1,1 +1,1 @@
-export { PriceInput } from './PriceInput'
+export { PriceInput } from "./PriceInput";

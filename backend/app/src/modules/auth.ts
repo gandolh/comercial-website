@@ -1,11 +1,6 @@
 import { z } from "zod";
 import { randomBytes } from "node:crypto";
-import {
-  AppError,
-  hashPassword,
-  verifyPassword,
-  signToken,
-} from "@my-olx/core";
+import { AppError, hashPassword, verifyPassword, signToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { UsersAuthRepository } from "../repositories/users-auth.repo.js";
 
@@ -152,131 +147,112 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
    * POST /auth/login
    * Authenticates a user with email and password.
    */
-  app.post<{ Body: unknown }>(
-    "/auth/login",
-    async (request, reply) => {
-      try {
-        const body = loginSchema.parse(request.body);
-        const { email, password } = body;
+  app.post<{ Body: unknown }>("/auth/login", async (request, reply) => {
+    try {
+      const body = loginSchema.parse(request.body);
+      const { email, password } = body;
 
-        // Find user by email
-        const user = await repo.findByEmail(email);
-        if (!user) {
-          throw AppError.unauthorized();
-        }
-
-        // Verify password
-        const passwordMatch = await verifyPassword(user.password_hash, password);
-        if (!passwordMatch) {
-          throw AppError.unauthorized();
-        }
-
-        // Sign JWT token
-        const jwtToken = signToken(
-          user.id,
-          ctx.config.jwtSecret,
-          ctx.config.jwtExpirySeconds
-        );
-
-        // Return response
-        const response: AuthResponse = {
-          token: jwtToken,
-          user: toUserSummary(user),
-        };
-
-        return reply.code(200).send(response);
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        throw error;
+      // Find user by email
+      const user = await repo.findByEmail(email);
+      if (!user) {
+        throw AppError.unauthorized();
       }
+
+      // Verify password
+      const passwordMatch = await verifyPassword(user.password_hash, password);
+      if (!passwordMatch) {
+        throw AppError.unauthorized();
+      }
+
+      // Sign JWT token
+      const jwtToken = signToken(user.id, ctx.config.jwtSecret, ctx.config.jwtExpirySeconds);
+
+      // Return response
+      const response: AuthResponse = {
+        token: jwtToken,
+        user: toUserSummary(user),
+      };
+
+      return reply.code(200).send(response);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw AppError.validation(error.errors[0]?.message || "validation failed");
+      }
+      throw error;
     }
-  );
+  });
 
   /**
    * POST /auth/logout
    * Stateless logout (just returns 200).
    */
-  app.post<{ Body: unknown }>(
-    "/auth/logout",
-    async (_request, reply) => {
-      return reply.code(200).send({});
-    }
-  );
+  app.post<{ Body: unknown }>("/auth/logout", async (_request, reply) => {
+    return reply.code(200).send({});
+  });
 
   /**
    * POST /auth/email/verify
    * Verifies an email using a token.
    */
-  app.post<{ Body: unknown }>(
-    "/auth/email/verify",
-    async (request, reply) => {
-      try {
-        const body = emailVerifySchema.parse(request.body);
-        const { token } = body;
+  app.post<{ Body: unknown }>("/auth/email/verify", async (request, reply) => {
+    try {
+      const body = emailVerifySchema.parse(request.body);
+      const { token } = body;
 
-        // Consume token and get user_id
-        const userId = await repo.consumeEmailVerificationToken(token);
-        if (!userId) {
-          throw AppError.notFound();
-        }
-
-        // Mark user's email as verified
-        await repo.markEmailVerified(userId);
-
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        throw error;
+      // Consume token and get user_id
+      const userId = await repo.consumeEmailVerificationToken(token);
+      if (!userId) {
+        throw AppError.notFound();
       }
+
+      // Mark user's email as verified
+      await repo.markEmailVerified(userId);
+
+      return reply.code(200).send({});
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw AppError.validation(error.errors[0]?.message || "validation failed");
+      }
+      throw error;
     }
-  );
+  });
 
   /**
    * POST /auth/email/resend
    * Resends the verification email (always returns 200 to avoid user enumeration).
    */
-  app.post<{ Body: unknown }>(
-    "/auth/email/resend",
-    async (request, reply) => {
-      try {
-        const body = emailResendSchema.parse(request.body);
-        const { email } = body;
+  app.post<{ Body: unknown }>("/auth/email/resend", async (request, reply) => {
+    try {
+      const body = emailResendSchema.parse(request.body);
+      const { email } = body;
 
-        // Find user (no error if not found — user enumeration prevention)
-        const user = await repo.findByEmail(email);
-        if (user && !user.email_verified) {
-          // Create new verification token
-          const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
-          const token = await repo.createEmailVerificationToken(
-            user.id,
-            expiresAtMs
-          );
+      // Find user (no error if not found — user enumeration prevention)
+      const user = await repo.findByEmail(email);
+      if (user && !user.email_verified) {
+        // Create new verification token
+        const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
+        const token = await repo.createEmailVerificationToken(user.id, expiresAtMs);
 
-          // Send email
-          const verificationLink = `${ctx.config.frontendBaseUrl}/verifica-email?token=${token}`;
-          await ctx.email.send({
-            to: user.email,
-            subject: "Verify your email",
-            html: `Click <a href="${verificationLink}">here</a> to verify your email.`,
-            text: `Verify your email: ${verificationLink}`,
-          });
-        }
-
-        // Always return 200
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
-        }
-        // On any error, still return 200
-        return reply.code(200).send({});
+        // Send email
+        const verificationLink = `${ctx.config.frontendBaseUrl}/verifica-email?token=${token}`;
+        await ctx.email.send({
+          to: user.email,
+          subject: "Verify your email",
+          html: `Click <a href="${verificationLink}">here</a> to verify your email.`,
+          text: `Verify your email: ${verificationLink}`,
+        });
       }
+
+      // Always return 200
+      return reply.code(200).send({});
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw AppError.validation(error.errors[0]?.message || "validation failed");
+      }
+      // On any error, still return 200
+      return reply.code(200).send({});
     }
-  );
+  });
 
   // The password reset (forgot + reset) was removed on 2026-11-03: it works by email, and the demo
   // sends none. The owner resets their password with `npm run create-owner`.
@@ -309,7 +285,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
         }
         throw error;
       }
-    }
+    },
   );
 
   /**
@@ -341,6 +317,6 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
         }
         throw error;
       }
-    }
+    },
   );
 };

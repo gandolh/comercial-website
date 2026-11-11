@@ -23,23 +23,12 @@ export const categoryStepSchema = z.object({
 });
 
 export const detailsStepSchema = z.object({
-  title: z
-    .string()
-    .min(5, "Minimum 5 caractere")
-    .max(200, "Maximum 200 caractere"),
-  description: z
-    .string()
-    .min(10, "Minimum 10 caractere")
-    .max(5000, "Maximum 5000 caractere"),
+  title: z.string().min(5, "Minimum 5 caractere").max(200, "Maximum 200 caractere"),
+  description: z.string().min(10, "Minimum 10 caractere").max(5000, "Maximum 5000 caractere"),
 });
 
 export const priceStepSchema = z.object({
-  priceRon: z
-    .number()
-    .int("Prețul trebuie să fie un număr întreg")
-    .positive("Preț invalid")
-    .nullable()
-    .optional(),
+  priceRon: z.number().int("Prețul trebuie să fie un număr întreg").positive("Preț invalid").nullable().optional(),
   isFree: z.boolean(),
 });
 
@@ -51,12 +40,7 @@ export const reviewStepSchema = z.object({
 
 // Used by the listing EDIT flow (EditListingPage) for price editing.
 export const locationPriceStepSchema = z.object({
-  priceRon: z
-    .number()
-    .int("Prețul trebuie să fie un număr întreg")
-    .positive("Preț invalid")
-    .nullable()
-    .optional(),
+  priceRon: z.number().int("Prețul trebuie să fie un număr întreg").positive("Preț invalid").nullable().optional(),
   isFree: z.boolean(),
 });
 

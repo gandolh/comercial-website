@@ -25,11 +25,7 @@ export const ordersService = {
    * Create an order for a paid listing. Returns the checkout URL to redirect to.
    * If already_paid is true, no redirect is needed.
    */
-  async createOrder(
-    listingId: string,
-    returnUrl?: string,
-    cancelUrl?: string,
-  ): Promise<CreateOrderResponse> {
+  async createOrder(listingId: string, returnUrl?: string, cancelUrl?: string): Promise<CreateOrderResponse> {
     const res = await axiosInstance.post<CreateOrderResponse>("/orders", {
       listing_id: listingId,
       return_url: returnUrl,
@@ -59,9 +55,7 @@ export const ordersService = {
    * This is available in test mode so the full buy→pay→download flow is testable.
    */
   async markPaid(orderId: string): Promise<{ message: string; order: Order }> {
-    const res = await axiosInstance.post<{ message: string; order: Order }>(
-      `/orders/${orderId}/mark-paid`,
-    );
+    const res = await axiosInstance.post<{ message: string; order: Order }>(`/orders/${orderId}/mark-paid`);
     return res.data;
   },
 };

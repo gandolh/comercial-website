@@ -5,10 +5,7 @@ import { LICENSE_OPTIONS, FORMAT_OPTIONS } from "../types";
 
 interface FilterSidebarProps {
   filters: FilterState;
-  onChange: (
-    key: keyof FilterState,
-    value: FilterState[keyof FilterState],
-  ) => void;
+  onChange: (key: keyof FilterState, value: FilterState[keyof FilterState]) => void;
   onReset: () => void;
 }
 
@@ -21,20 +18,11 @@ const DATE_OPTIONS = [
 ] as const;
 
 function formatRON(v: number) {
-  return v >= PRICE_MAX
-    ? `${PRICE_MAX.toLocaleString("ro-RO")}+ RON`
-    : `${v.toLocaleString("ro-RO")} RON`;
+  return v >= PRICE_MAX ? `${PRICE_MAX.toLocaleString("ro-RO")}+ RON` : `${v.toLocaleString("ro-RO")} RON`;
 }
 
-export function FilterSidebar({
-  filters,
-  onChange,
-  onReset,
-}: FilterSidebarProps) {
-  const priceRange: [number, number] = [
-    filters.pret_min ?? 0,
-    filters.pret_max ?? PRICE_MAX,
-  ];
+export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps) {
+  const priceRange: [number, number] = [filters.pret_min ?? 0, filters.pret_max ?? PRICE_MAX];
 
   function handlePriceChange([min, max]: [number, number]) {
     onChange("pret_min", min === 0 ? null : min);
@@ -46,15 +34,10 @@ export function FilterSidebar({
       <div className="sticky top-28 space-y-8">
         {/* Tip Licență */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">
-            Tip Licență
-          </h3>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Tip Licență</h3>
           <div className="space-y-2">
             {LICENSE_OPTIONS.map(({ value, label }) => (
-              <label
-                key={value}
-                className="flex items-center gap-3 cursor-pointer group"
-              >
+              <label key={value} className="flex items-center gap-3 cursor-pointer group">
                 <input
                   type="radio"
                   name="licenta"
@@ -72,15 +55,10 @@ export function FilterSidebar({
 
         {/* Format Fișier */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">
-            Format Fișier
-          </h3>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Format Fișier</h3>
           <div className="space-y-2">
             {FORMAT_OPTIONS.map(({ value, label }) => (
-              <label
-                key={value}
-                className="flex items-center gap-3 cursor-pointer group"
-              >
+              <label key={value} className="flex items-center gap-3 cursor-pointer group">
                 <input
                   type="radio"
                   name="format"
@@ -109,15 +87,10 @@ export function FilterSidebar({
 
         {/* Data publicării */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">
-            Data Publicării
-          </h3>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Data Publicării</h3>
           <div className="space-y-2">
             {DATE_OPTIONS.map(({ value, label }) => (
-              <label
-                key={value}
-                className="flex items-center gap-3 cursor-pointer group"
-              >
+              <label key={value} className="flex items-center gap-3 cursor-pointer group">
                 <input
                   type="radio"
                   name="data"
@@ -136,9 +109,7 @@ export function FilterSidebar({
         {/* Autor verificat */}
         <div className="pt-6 border-t border-surface-container-high">
           <label className="flex items-center justify-between cursor-pointer">
-            <span className="text-sm font-bold text-on-surface">
-              Autor Verificat
-            </span>
+            <span className="text-sm font-bold text-on-surface">Autor Verificat</span>
             <div className="relative inline-flex items-center">
               <input
                 type="checkbox"

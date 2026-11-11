@@ -29,10 +29,7 @@ export function PasswordSection() {
       alert("Parola a fost schimbată cu succes!");
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      setError(
-        error.response?.data?.message ||
-          "A apărut o eroare la schimbarea parolei",
-      );
+      setError(error.response?.data?.message || "A apărut o eroare la schimbarea parolei");
     }
   };
 
@@ -74,10 +71,7 @@ export function PasswordSection() {
         {error && <p className="text-error text-sm">{error}</p>}
 
         <div className="pt-2">
-          <Button
-            type="submit"
-            loading={changePasswordMutation.isPending}
-          >
+          <Button type="submit" loading={changePasswordMutation.isPending}>
             Schimbă parola
           </Button>
         </div>

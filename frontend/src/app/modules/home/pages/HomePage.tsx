@@ -44,14 +44,9 @@ export function HomePage() {
         <div className="max-w-screen-xl mx-auto text-center space-y-12">
           <div className="space-y-4">
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-on-surface">
-              {t("home.heroTitle")}{" "}
-              <span className="text-primary">
-                {t("home.heroTitleHighlight")}
-              </span>
+              {t("home.heroTitle")} <span className="text-primary">{t("home.heroTitleHighlight")}</span>
             </h1>
-            <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">
-              {t("home.heroSubtitle")}
-            </p>
+            <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">{t("home.heroSubtitle")}</p>
           </div>
 
           <form
@@ -84,9 +79,7 @@ export function HomePage() {
       {/* Categories */}
       <section className="px-8 py-20 max-w-screen-2xl mx-auto">
         <div className="flex justify-between items-end mb-12">
-          <h2 className="text-3xl font-bold tracking-tight">
-            {t("home.popularCategories")}
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight">{t("home.popularCategories")}</h2>
           <button
             onClick={() => navigate("/categorii")}
             className="text-primary font-bold hover:underline bg-transparent border-none cursor-pointer"
@@ -103,16 +96,11 @@ export function HomePage() {
               className="bg-surface-container-lowest p-8 rounded-xl flex flex-col items-center justify-center text-center gap-4 hover:shadow-xl transition-all group cursor-pointer"
             >
               <div className="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: "28px" }}
-                >
+                <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>
                   {icon}
                 </span>
               </div>
-              <span className="font-bold text-on-surface text-sm leading-tight">
-                {label}
-              </span>
+              <span className="font-bold text-on-surface text-sm leading-tight">{label}</span>
             </button>
           ))}
 
@@ -121,16 +109,11 @@ export function HomePage() {
             className="bg-surface-container-low p-8 rounded-xl flex flex-col items-center justify-center text-center gap-4 border-2 border-dashed border-outline-variant group cursor-pointer hover:border-primary transition-colors"
           >
             <div className="w-16 h-16 bg-surface-container-lowest rounded-full flex items-center justify-center text-outline group-hover:text-primary transition-colors">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: "28px" }}
-              >
+              <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>
                 grid_view
               </span>
             </div>
-            <span className="font-bold text-on-surface text-sm">
-              {t("home.viewAllCategories")}
-            </span>
+            <span className="font-bold text-on-surface text-sm">{t("home.viewAllCategories")}</span>
           </button>
         </div>
       </section>
@@ -140,12 +123,8 @@ export function HomePage() {
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-2">
-                {t("home.featuredListings")}
-              </h2>
-              <p className="text-on-surface-variant">
-                {t("home.featuredSubtitle")}
-              </p>
+              <h2 className="text-3xl font-bold tracking-tight mb-2">{t("home.featuredListings")}</h2>
+              <p className="text-on-surface-variant">{t("home.featuredSubtitle")}</p>
             </div>
           </div>
 
@@ -157,12 +136,8 @@ export function HomePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredListings.isFetching
-                ? Array.from({ length: 4 }).map((_, index) => (
-                    <CardSkeleton key={index} />
-                  ))
-                : featuredListings.data?.map((listing) => (
-                    <ListingCard key={listing.id} listing={listing} />
-                  ))}
+                ? Array.from({ length: 4 }).map((_, index) => <CardSkeleton key={index} />)
+                : featuredListings.data?.map((listing) => <ListingCard key={listing.id} listing={listing} />)}
             </div>
           )}
 
@@ -183,18 +158,13 @@ export function HomePage() {
           <div
             className="absolute inset-0 opacity-10 pointer-events-none"
             style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
               backgroundSize: "40px 40px",
             }}
           />
           <div className="relative z-10 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-black text-on-primary">
-              {t("home.ctaTitle")}
-            </h2>
-            <p className="text-on-primary-container text-lg max-w-xl mx-auto">
-              {t("home.ctaSubtitle")}
-            </p>
+            <h2 className="text-4xl md:text-5xl font-black text-on-primary">{t("home.ctaTitle")}</h2>
+            <p className="text-on-primary-container text-lg max-w-xl mx-auto">{t("home.ctaSubtitle")}</p>
           </div>
           <div className="relative z-10 flex flex-col md:flex-row gap-4 justify-center items-center">
             <button

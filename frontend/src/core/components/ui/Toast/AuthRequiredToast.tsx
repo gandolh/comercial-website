@@ -9,9 +9,7 @@ export function AuthRequiredToast({
   loginLabel = "Autentifică-te",
   next,
 }: AuthRequiredToastProps) {
-  const loginHref = next
-    ? `/autentificare?next=${encodeURIComponent(next)}`
-    : "/autentificare";
+  const loginHref = next ? `/autentificare?next=${encodeURIComponent(next)}` : "/autentificare";
 
   return (
     <div

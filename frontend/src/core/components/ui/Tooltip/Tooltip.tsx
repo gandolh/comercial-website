@@ -1,14 +1,14 @@
-import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip'
-import type { ReactNode } from 'react'
+import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
+import type { ReactNode } from "react";
 
 interface TooltipProps {
-  content: ReactNode
-  children: ReactNode
-  side?: 'top' | 'bottom' | 'left' | 'right'
-  delay?: number
+  content: ReactNode;
+  children: ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
+  delay?: number;
 }
 
-export function Tooltip({ content, children, side = 'top', delay = 300 }: TooltipProps) {
+export function Tooltip({ content, children, side = "top", delay = 300 }: TooltipProps) {
   return (
     <BaseTooltip.Provider delay={delay}>
       <BaseTooltip.Root>
@@ -24,5 +24,5 @@ export function Tooltip({ content, children, side = 'top', delay = 300 }: Toolti
         </BaseTooltip.Portal>
       </BaseTooltip.Root>
     </BaseTooltip.Provider>
-  )
+  );
 }

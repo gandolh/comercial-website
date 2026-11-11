@@ -10,11 +10,7 @@ interface Props {
   onClick: () => void;
 }
 
-export const ConversationListItem: React.FC<Props> = ({
-  conversation,
-  isActive,
-  onClick,
-}) => {
+export const ConversationListItem: React.FC<Props> = ({ conversation, isActive, onClick }) => {
   const { t } = useTranslation();
 
   return (
@@ -48,8 +44,7 @@ export const ConversationListItem: React.FC<Props> = ({
       <div className="ml-4 flex-1 min-w-0">
         <div className="flex justify-between items-baseline">
           <h3 className="text-sm font-semibold text-on-surface truncate">
-            {conversation.counterparty.display_name ||
-              t("common:messaging.unknown_user")}
+            {conversation.counterparty.display_name || t("common:messaging.unknown_user")}
           </h3>
           <span className="text-xs text-on-surface-variant flex-shrink-0">
             {formatDistanceToNow(new Date(conversation.last_message_at), {
@@ -58,9 +53,7 @@ export const ConversationListItem: React.FC<Props> = ({
             })}
           </span>
         </div>
-        <p className="text-xs text-on-surface-variant truncate mt-0.5">
-          {conversation.listing.title}
-        </p>
+        <p className="text-xs text-on-surface-variant truncate mt-0.5">{conversation.listing.title}</p>
         <p
           className={`text-sm truncate mt-1 ${conversation.unread_count > 0 ? "font-bold text-on-surface" : "text-on-surface-variant"}`}
         >

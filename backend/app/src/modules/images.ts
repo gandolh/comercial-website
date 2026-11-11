@@ -20,7 +20,7 @@ const reorderSchema = z.object({
 
 function toImageResponse(
   row: { id: string; listing_id: string; s3_key: string; position: number },
-  publicBaseUrl: string
+  publicBaseUrl: string,
 ): ImageResponse {
   const base = publicBaseUrl.replace(/\/$/, "");
   const url = row.s3_key.startsWith("http") ? row.s3_key : `${base}/uploads/${row.s3_key}`;
@@ -91,7 +91,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
         .executeTakeFirstOrThrow();
 
       return reply.code(200).send(toImageResponse(image, ctx.config.publicBaseUrl));
-    }
+    },
   );
 
   // PATCH /listings/:id/images/reorder
@@ -135,11 +135,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
         }
 
         for (let i = 0; i < body.order.length; i++) {
-          await trx
-            .updateTable("listing_images")
-            .set({ position: i })
-            .where("id", "=", body.order[i]!)
-            .execute();
+          await trx.updateTable("listing_images").set({ position: i }).where("id", "=", body.order[i]!).execute();
         }
 
         return trx
@@ -151,7 +147,7 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
       });
 
       return reply.code(200).send(images.map((img) => toImageResponse(img, ctx.config.publicBaseUrl)));
-    }
+    },
   );
 
   // DELETE /listings/:id/images/:image_id
@@ -183,12 +179,9 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
 
       await ctx.storage.deleteObject(image.s3_key);
 
-      await ctx.db
-        .deleteFrom("listing_images")
-        .where("id", "=", imageId)
-        .execute();
+      await ctx.db.deleteFrom("listing_images").where("id", "=", imageId).execute();
 
       return reply.code(200).send({});
-    }
+    },
   );
 };

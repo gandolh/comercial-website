@@ -54,10 +54,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
         window.location.href = result.checkout_url;
       }
     } catch (err: any) {
-      const msg: string =
-        err?.response?.data?.message ??
-        err?.response?.data?.error ??
-        t("orders.buyButton.error");
+      const msg: string = err?.response?.data?.message ?? err?.response?.data?.error ?? t("orders.buyButton.error");
       setError(msg);
     } finally {
       setLoading(false);
@@ -72,19 +69,13 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
         className="w-full flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full font-bold text-base hover:opacity-90 active:scale-95 transition-all disabled:opacity-60"
         aria-label={t("orders.buyButton.ariaLabel", { price: priceRon })}
       >
-        <span className="material-symbols-outlined text-[20px]">
-          {loading ? "hourglass_empty" : "shopping_cart"}
-        </span>
+        <span className="material-symbols-outlined text-[20px]">{loading ? "hourglass_empty" : "shopping_cart"}</span>
         {loading
           ? t("orders.buyButton.loading")
           : t("orders.buyButton.label", { price: priceRon.toLocaleString("ro-RO") })}
       </button>
-      <p className="text-on-surface-variant text-xs text-center px-2">
-        {t("orders.buyButton.simulated")}
-      </p>
-      {error && (
-        <p className="text-error text-xs text-center px-2">{error}</p>
-      )}
+      <p className="text-on-surface-variant text-xs text-center px-2">{t("orders.buyButton.simulated")}</p>
+      {error && <p className="text-error text-xs text-center px-2">{error}</p>}
     </div>
   );
 }

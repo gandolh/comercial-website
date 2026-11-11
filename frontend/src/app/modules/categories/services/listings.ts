@@ -54,10 +54,8 @@ export async function searchListings(params: {
   if (params.q) search.q = params.q;
   if (params.filters.licenta) search.license_type = params.filters.licenta;
   if (params.filters.format) search.file_format = params.filters.format;
-  if (params.filters.pret_min != null)
-    search.price_min = params.filters.pret_min;
-  if (params.filters.pret_max != null)
-    search.price_max = params.filters.pret_max;
+  if (params.filters.pret_min != null) search.price_min = params.filters.pret_min;
+  if (params.filters.pret_max != null) search.price_max = params.filters.pret_max;
   if (params.filters.data !== "oricand") search.date = params.filters.data;
   if (params.filters.verificat) search.verified = true;
   if (params.filters.sortare !== "noi") search.sort = params.filters.sortare;
@@ -71,7 +69,6 @@ export async function searchListings(params: {
 }
 
 export async function getFeaturedListings(): Promise<ListingCard[]> {
-  const response =
-    await axiosInstance.get<ListingCardApi[]>("/listings/featured");
+  const response = await axiosInstance.get<ListingCardApi[]>("/listings/featured");
   return response.data.map(mapListingCard);
 }

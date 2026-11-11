@@ -31,26 +31,12 @@ export function CategoryPage() {
   const isKnownSlug = Boolean(CATEGORY_LABELS[slug]);
   const filters = parseFilters(searchParams);
 
-  const { data, isFetching, isError, refetch } = useCategoryListings(
-    slug,
-    filters,
-    undefined,
-    isKnownSlug,
-  );
+  const { data, isFetching, isError, refetch } = useCategoryListings(slug, filters, undefined, isKnownSlug);
 
-  function setFilter(
-    key: keyof FilterState,
-    value: FilterState[keyof FilterState],
-  ) {
+  function setFilter(key: keyof FilterState, value: FilterState[keyof FilterState]) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (
-        value === null ||
-        value === false ||
-        value === "" ||
-        value === "oricand" ||
-        value === "noi"
-      ) {
+      if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
         next.delete(key);
       } else {
         next.set(key, String(value === true ? "1" : value));
@@ -78,19 +64,11 @@ export function CategoryPage() {
 
   return (
     <main className="mt-24 flex-grow max-w-screen-2xl mx-auto w-full px-8 pb-16 flex gap-8">
-      <FilterSidebar
-        filters={filters}
-        onChange={setFilter}
-        onReset={resetFilters}
-      />
+      <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
 
       <section className="flex-grow min-w-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <CategoryHeader
-            slug={slug}
-            totalCount={data?.totalCount}
-            isLoading={isFetching}
-          />
+          <CategoryHeader slug={slug} totalCount={data?.totalCount} isLoading={isFetching} />
           <SortBar
             sortare={filters.sortare}
             viewMode={viewMode}
@@ -100,10 +78,7 @@ export function CategoryPage() {
         </div>
 
         {isError ? (
-          <ErrorCard
-            message="Nu am putut încărca anunțurile."
-            onRetry={() => refetch()}
-          />
+          <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => refetch()} />
         ) : (
           <>
             <ListingGrid

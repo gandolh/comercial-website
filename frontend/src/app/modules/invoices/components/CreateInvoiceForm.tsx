@@ -94,24 +94,16 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
   });
 
   const lineItems = watch("line_items");
-  const subtotal = lineItems.reduce(
-    (acc, item) => acc + (Number(item.qty) || 0) * (Number(item.unit_price) || 0),
-    0
-  );
+  const subtotal = lineItems.reduce((acc, item) => acc + (Number(item.qty) || 0) * (Number(item.unit_price) || 0), 0);
   const vatAmount = lineItems.reduce(
     (acc, item) =>
-      acc +
-      (Number(item.qty) || 0) *
-        (Number(item.unit_price) || 0) *
-        ((Number(item.vat_rate) || 0) / 100),
-    0
+      acc + (Number(item.qty) || 0) * (Number(item.unit_price) || 0) * ((Number(item.vat_rate) || 0) / 100),
+    0,
   );
   const total = subtotal + vatAmount;
 
   async function autofillBuyerFromCui() {
-    const cui = (
-      document.getElementById("buyer-cui") as HTMLInputElement
-    )?.value?.trim();
+    const cui = (document.getElementById("buyer-cui") as HTMLInputElement)?.value?.trim();
     if (!cui) return;
     setCuiLoading(true);
     setCuiError(null);
@@ -121,9 +113,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       if (data.denumire) setValue("buyer_name", data.denumire);
       if (data.adresa) setValue("buyer_address", data.adresa);
     } catch {
-      setCuiError(
-        t("invoices.create.cuiNotFound", "CUI-ul nu a fost găsit în ANAF.")
-      );
+      setCuiError(t("invoices.create.cuiNotFound", "CUI-ul nu a fost găsit în ANAF."));
     } finally {
       setCuiLoading(false);
     }
@@ -169,9 +159,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
             {t("invoices.create.issueDate", "Data emiterii")}
           </label>
           <Input {...register("issue_date")} type="date" />
-          {errors.issue_date && (
-            <p className="text-error text-sm mt-1">{errors.issue_date.message}</p>
-          )}
+          {errors.issue_date && <p className="text-error text-sm mt-1">{errors.issue_date.message}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-on-surface-variant mb-1">
@@ -183,18 +171,14 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
 
       {/* Seller section */}
       <section className="bg-surface-container-low rounded-xl p-4 border border-outline-variant space-y-3">
-        <h3 className="text-base font-bold text-on-surface">
-          {t("invoices.create.sellerSection", "Furnizor")}
-        </h3>
+        <h3 className="text-base font-bold text-on-surface">{t("invoices.create.sellerSection", "Furnizor")}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-on-surface-variant mb-1">
               {t("invoices.create.sellerName", "Denumire furnizor")}
             </label>
             <Input {...register("seller_name")} placeholder="S.C. Firma Mea S.R.L." />
-            {errors.seller_name && (
-              <p className="text-error text-sm mt-1">{errors.seller_name.message}</p>
-            )}
+            {errors.seller_name && <p className="text-error text-sm mt-1">{errors.seller_name.message}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-on-surface-variant mb-1">
@@ -231,27 +215,15 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
 
       {/* Buyer section */}
       <section className="bg-surface-container-low rounded-xl p-4 border border-outline-variant space-y-3">
-        <h3 className="text-base font-bold text-on-surface">
-          {t("invoices.create.buyerSection", "Client")}
-        </h3>
+        <h3 className="text-base font-bold text-on-surface">{t("invoices.create.buyerSection", "Client")}</h3>
         <div className="flex gap-2 items-end">
           <div className="flex-1">
             <label className="block text-sm font-medium text-on-surface-variant mb-1">
               {t("invoices.create.buyerCui", "CUI / CNP client")}
             </label>
-            <Input
-              id="buyer-cui"
-              {...register("buyer_cui")}
-              placeholder="RO87654321"
-            />
+            <Input id="buyer-cui" {...register("buyer_cui")} placeholder="RO87654321" />
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={autofillBuyerFromCui}
-            disabled={cuiLoading}
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={autofillBuyerFromCui} disabled={cuiLoading}>
             {cuiLoading
               ? t("invoices.create.loading", "Se încarcă...")
               : t("invoices.create.autofill", "Auto-completare ANAF")}
@@ -264,9 +236,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
             {t("invoices.create.buyerName", "Denumire client")}
           </label>
           <Input {...register("buyer_name")} placeholder="S.C. Client S.R.L." />
-          {errors.buyer_name && (
-            <p className="text-error text-sm mt-1">{errors.buyer_name.message}</p>
-          )}
+          {errors.buyer_name && <p className="text-error text-sm mt-1">{errors.buyer_name.message}</p>}
         </div>
         <div>
           <label className="block text-sm font-medium text-on-surface-variant mb-1">
@@ -278,12 +248,8 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
 
       {/* Line items */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-on-surface">
-          {t("invoices.create.lineItems", "Produse / Servicii")}
-        </h3>
-        {errors.line_items?.root && (
-          <p className="text-error text-sm">{errors.line_items.root.message}</p>
-        )}
+        <h3 className="text-base font-bold text-on-surface">{t("invoices.create.lineItems", "Produse / Servicii")}</h3>
+        {errors.line_items?.root && <p className="text-error text-sm">{errors.line_items.root.message}</p>}
         <div className="space-y-2">
           {fields.map((field, idx) => (
             <div
@@ -294,14 +260,9 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                 <label className="block text-xs font-medium text-on-surface-variant mb-1">
                   {t("invoices.create.description", "Descriere")}
                 </label>
-                <Input
-                  {...register(`line_items.${idx}.description`)}
-                  placeholder="Serviciu / Produs"
-                />
+                <Input {...register(`line_items.${idx}.description`)} placeholder="Serviciu / Produs" />
                 {errors.line_items?.[idx]?.description && (
-                  <p className="text-error text-xs mt-0.5">
-                    {errors.line_items[idx]?.description?.message}
-                  </p>
+                  <p className="text-error text-xs mt-0.5">{errors.line_items[idx]?.description?.message}</p>
                 )}
               </div>
               <div className="col-span-4 sm:col-span-2">
@@ -332,10 +293,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                 <label className="block text-xs font-medium text-on-surface-variant mb-1">
                   {t("invoices.create.vatRate", "TVA")}
                 </label>
-                <Select
-                  {...register(`line_items.${idx}.vat_rate`, { valueAsNumber: true })}
-                  options={VAT_OPTIONS}
-                />
+                <Select {...register(`line_items.${idx}.vat_rate`, { valueAsNumber: true })} options={VAT_OPTIONS} />
               </div>
               <div className="col-span-1 flex items-end pb-1">
                 <button
@@ -344,7 +302,9 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                   className="text-error hover:opacity-70 p-1"
                   aria-label={t("invoices.create.removeLine", "Șterge linie")}
                 >
-                  <span className="material-symbols-outlined text-base" aria-hidden="true">delete</span>
+                  <span className="material-symbols-outlined text-base" aria-hidden="true">
+                    delete
+                  </span>
                 </button>
               </div>
             </div>
@@ -354,9 +314,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() =>
-            append({ description: "", qty: 1, unit_price: 0, vat_rate: 19 })
-          }
+          onClick={() => append({ description: "", qty: 1, unit_price: 0, vat_rate: 19 })}
         >
           {t("invoices.create.addLine", "+ Adaugă linie")}
         </Button>

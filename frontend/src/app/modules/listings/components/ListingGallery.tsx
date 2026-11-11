@@ -28,22 +28,13 @@ export function ListingGallery({ images, title, fileFormat }: ListingGalleryProp
     <section className="relative group">
       <div className="aspect-[4/3] w-full bg-surface-container overflow-hidden rounded-xl">
         {activeImage ? (
-          <img
-            src={activeImage}
-            alt={title}
-            className="w-full h-full object-cover transition-opacity duration-300"
-          />
+          <img src={activeImage} alt={title} className="w-full h-full object-cover transition-opacity duration-300" />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center text-outline gap-4">
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "72px" }}
-            >
+            <span className="material-symbols-outlined" style={{ fontSize: "72px" }}>
               {getFileIcon(fileFormat)}
             </span>
-            <span className="text-sm font-medium">
-              {fileFormat ? fileFormat.toUpperCase() : "ASSET DIGITAL"}
-            </span>
+            <span className="text-sm font-medium">{fileFormat ? fileFormat.toUpperCase() : "ASSET DIGITAL"}</span>
           </div>
         )}
       </div>
@@ -59,11 +50,7 @@ export function ListingGallery({ images, title, fileFormat }: ListingGalleryProp
               }`}
               aria-label={`Imagine ${i + 1}`}
             >
-              <img
-                src={image.url}
-                alt={`${title} — imagine ${i + 1}`}
-                className="w-full h-full object-cover"
-              />
+              <img src={image.url} alt={`${title} — imagine ${i + 1}`} className="w-full h-full object-cover" />
             </button>
           ))}
         </div>
@@ -74,9 +61,7 @@ export function ListingGallery({ images, title, fileFormat }: ListingGalleryProp
           className="bg-surface-bright/90 backdrop-blur-md p-3 rounded-full shadow-lg hover:bg-white transition-colors"
           aria-label="Distribuie anunțul"
         >
-          <span className="material-symbols-outlined text-on-surface-variant">
-            share
-          </span>
+          <span className="material-symbols-outlined text-on-surface-variant">share</span>
         </button>
       </div>
     </section>

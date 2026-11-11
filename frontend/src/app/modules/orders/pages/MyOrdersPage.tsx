@@ -62,11 +62,7 @@ export function MyOrdersPage() {
         </div>
       )}
 
-      {error && (
-        <div className="bg-error-container text-on-error-container px-4 py-3 rounded-xl">
-          {error}
-        </div>
-      )}
+      {error && <div className="bg-error-container text-on-error-container px-4 py-3 rounded-xl">{error}</div>}
 
       {!loading && !error && orders.length === 0 && (
         <div className="flex flex-col items-center py-16 space-y-4 text-center">
@@ -84,10 +80,7 @@ export function MyOrdersPage() {
       {!loading && !error && orders.length > 0 && (
         <ul className="space-y-4">
           {orders.map((order) => (
-            <li
-              key={order.id}
-              className="bg-surface-container rounded-2xl p-5 space-y-3"
-            >
+            <li key={order.id} className="bg-surface-container rounded-2xl p-5 space-y-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1 flex-1 min-w-0">
                   <Link

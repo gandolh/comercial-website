@@ -25,12 +25,7 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function ReviewStep({
-  draft,
-  onPublish,
-  onBack,
-  isPublishing,
-}: ReviewStepProps) {
+export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewStepProps) {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
@@ -43,15 +38,11 @@ export function ReviewStep({
     resolver: zodResolver(reviewStepSchema),
   });
 
-  const totalSizeBytes = draft.assets.reduce(
-    (sum, a) => sum + a.fileSizeBytes,
-    0,
-  );
+  const totalSizeBytes = draft.assets.reduce((sum, a) => sum + a.fileSizeBytes, 0);
   const fileCount = draft.assets.length;
 
   const categoryLabel =
-    draft.categoryLabel ||
-    (draft.category ? t(`categories.${draft.category}`, draft.category) : "—");
+    draft.categoryLabel || (draft.category ? t(`categories.${draft.category}`, draft.category) : "—");
 
   const licenseLabel = draft.licenseType
     ? t(`createListing.preview.license_${draft.licenseType}`, draft.licenseType)
@@ -66,22 +57,15 @@ export function ReviewStep({
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Page heading */}
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           {t("createListing.preview.heading")}
         </h2>
-        <p className="text-on-surface-variant">
-          {t("createListing.preview.subheading")}
-        </p>
+        <p className="text-on-surface-variant">{t("createListing.preview.subheading")}</p>
       </div>
 
       {/* Preview mode banner */}
       <div className="flex items-center gap-3 bg-secondary-container/40 border border-secondary/20 rounded-2xl px-5 py-3">
-        <span className="material-symbols-outlined text-secondary text-xl">
-          visibility
-        </span>
+        <span className="material-symbols-outlined text-secondary text-xl">visibility</span>
         <span className="text-sm font-semibold text-on-secondary-container">
           {t("createListing.preview.previewBanner")}
         </span>
@@ -93,9 +77,7 @@ export function ReviewStep({
           <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wide">
             {t("createListing.preview.summaryCategory")}
           </p>
-          <p className="font-bold text-sm text-on-surface truncate">
-            {categoryLabel}
-          </p>
+          <p className="font-bold text-sm text-on-surface truncate">{categoryLabel}</p>
         </div>
 
         <div className="bg-surface-container rounded-xl p-4 space-y-1">
@@ -109,9 +91,7 @@ export function ReviewStep({
           <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wide">
             {t("createListing.preview.summaryLicense")}
           </p>
-          <p className="font-bold text-sm text-on-surface">
-            {licenseLabel ?? "—"}
-          </p>
+          <p className="font-bold text-sm text-on-surface">{licenseLabel ?? "—"}</p>
         </div>
 
         <div className="bg-surface-container rounded-xl p-4 space-y-1">
@@ -136,12 +116,8 @@ export function ReviewStep({
             <ShieldCheck className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1 text-center md:text-left space-y-1">
-            <h4 className="font-bold text-on-surface">
-              {t("createListing.preview.verifySellerTitle")}
-            </h4>
-            <p className="text-sm text-on-surface-variant">
-              {t("createListing.preview.verifySellerBody")}
-            </p>
+            <h4 className="font-bold text-on-surface">{t("createListing.preview.verifySellerTitle")}</h4>
+            <p className="text-sm text-on-surface-variant">{t("createListing.preview.verifySellerBody")}</p>
           </div>
           <button
             type="button"
@@ -157,9 +133,7 @@ export function ReviewStep({
       <div className="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant shadow-sm">
         {/* Preview label overlay at top of card */}
         <div className="bg-secondary/10 border-b border-secondary/20 px-6 py-2 flex items-center gap-2">
-          <span className="material-symbols-outlined text-secondary text-base">
-            preview
-          </span>
+          <span className="material-symbols-outlined text-secondary text-base">preview</span>
           <span className="text-xs font-bold text-secondary uppercase tracking-widest">
             {t("createListing.preview.cardLabel")}
           </span>
@@ -179,37 +153,21 @@ export function ReviewStep({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-              <ListingGallery
-                images={draft.images}
-                title={draft.title}
-                fileFormat={draft.fileFormat}
-              />
-              <ListingDescription
-                id={draft.id}
-                description={draft.description}
-                features={[]}
-              />
+              <ListingGallery images={draft.images} title={draft.title} fileFormat={draft.fileFormat} />
+              <ListingDescription id={draft.id} description={draft.description} features={[]} />
               {draft.assets && draft.assets.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="font-bold text-lg">
-                    {t("createListing.preview.downloadFilesHeading")}
-                  </h3>
+                  <h3 className="font-bold text-lg">{t("createListing.preview.downloadFilesHeading")}</h3>
                   <div className="space-y-3">
                     {draft.assets.map((asset) => (
                       <div
                         key={asset.id}
                         className="bg-surface-container border border-outline-variant rounded-xl p-4 flex items-center gap-4"
                       >
-                        <span className="material-symbols-outlined text-primary shrink-0">
-                          file_present
-                        </span>
+                        <span className="material-symbols-outlined text-primary shrink-0">file_present</span>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm truncate">
-                            {asset.originalFilename}
-                          </p>
-                          <p className="text-xs text-on-surface-variant">
-                            {formatFileSize(asset.fileSizeBytes)}
-                          </p>
+                          <p className="font-medium text-sm truncate">{asset.originalFilename}</p>
+                          <p className="text-xs text-on-surface-variant">{formatFileSize(asset.fileSizeBytes)}</p>
                         </div>
                       </div>
                     ))}
@@ -245,11 +203,7 @@ export function ReviewStep({
               {t("createListing.preview.termsConfirm")}
             </span>
           </label>
-          {errors.acceptsTerms && (
-            <p className="text-error text-xs px-8">
-              {errors.acceptsTerms.message}
-            </p>
-          )}
+          {errors.acceptsTerms && <p className="text-error text-xs px-8">{errors.acceptsTerms.message}</p>}
         </div>
 
         <div className="flex gap-4">
@@ -268,9 +222,7 @@ export function ReviewStep({
           >
             {isPublishing ? (
               <>
-                <span className="material-symbols-outlined animate-spin">
-                  progress_activity
-                </span>
+                <span className="material-symbols-outlined animate-spin">progress_activity</span>
                 {t("createListing.preview.publishing")}
               </>
             ) : (
@@ -280,10 +232,7 @@ export function ReviewStep({
         </div>
       </form>
 
-      <PhoneVerifyModal
-        open={isPhoneModalOpen}
-        onOpenChange={setIsPhoneModalOpen}
-      />
+      <PhoneVerifyModal open={isPhoneModalOpen} onOpenChange={setIsPhoneModalOpen} />
     </div>
   );
 }

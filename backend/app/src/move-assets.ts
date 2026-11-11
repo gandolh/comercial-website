@@ -9,7 +9,11 @@ import type Database from "better-sqlite3";
  * paid file from `/uploads/` without an order. Runs at start; a file already moved is skipped.
  * Returns how many files moved.
  */
-export async function moveAssetsOutOfUploads(db: Database.Database, uploadsDir: string, assetsDir: string): Promise<number> {
+export async function moveAssetsOutOfUploads(
+  db: Database.Database,
+  uploadsDir: string,
+  assetsDir: string,
+): Promise<number> {
   const rows = db.prepare("SELECT s3_key FROM listing_assets").all() as { s3_key: string }[];
   let moved = 0;
   for (const { s3_key } of rows) {

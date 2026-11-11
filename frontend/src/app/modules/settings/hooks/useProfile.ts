@@ -25,12 +25,7 @@ export function useChangePassword() {
 
 export function useAvatarUpload() {
   return useMutation({
-    mutationFn: async ({
-      file,
-    }: {
-      file: File;
-      contentType: string;
-    }) => {
+    mutationFn: async ({ file }: { file: File; contentType: string }) => {
       const result = await uploadAvatar(file);
       return { s3_key: result.s3_key, public_url: result.public_url };
     },

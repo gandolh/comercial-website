@@ -46,21 +46,128 @@ interface Sample {
 }
 
 const SAMPLES: readonly Sample[] = [
-  { id: "sample-icons", seller: "sample-seller-studio", preview: "icons", file: "iconite-svg.zip", title: "Pachet 500 Iconițe SVG", description: "Colecție de 500 de pictograme vectoriale SVG, optimizate pentru web și aplicații. Format editabil, scalabil fără pierderi.", category: "grafica", price: 49, license: "commercial" },
-  { id: "sample-dashboard", seller: "sample-seller-studio", preview: "dashboard", file: "dashboard-react.zip", title: "Șablon Dashboard React + Tailwind", description: "Temă completă de panou de administrare în React 19 și Tailwind CSS v4. Cod sursă inclus, componente reutilizabile.", category: "sabloane", price: 129, license: "extended" },
-  { id: "sample-loops", seller: "sample-seller-studio", preview: "loops", file: "loopuri-lofi.zip", title: "Pachet 30 Loop-uri Audio Lo-Fi", description: "Treizeci de bucle audio lo-fi fără drepturi de autor, format WAV de înaltă calitate. Perfecte pentru video și podcasturi.", category: "audio", price: 59, license: "commercial" },
-  { id: "sample-invite", seller: "sample-seller-ioana", preview: "invite", file: "invitatii-nunta.zip", title: "Invitații digitale de nuntă — 6 modele editabile", description: "Șase modele de invitații pentru nuntă, editabile în orice program de prezentări. Text, culori și fonturi ușor de schimbat, export pentru telefon și pentru tipar.", category: "invitatii", price: 45, license: "personal" },
-  { id: "sample-gdpr", seller: "sample-seller-ioana", preview: "gdpr", file: "kit-gdpr.zip", title: "Kit GDPR pentru magazine online", description: "Politică de confidențialitate, politică de cookie-uri, formular de retragere și registru de prelucrări, redactate în română și ușor de adaptat la un magazin mic.", category: "documente", price: 99, license: "commercial" },
-  { id: "sample-social", seller: "sample-seller-ioana", preview: "social", file: "postari-cafenea.zip", title: "30 de șabloane de postări pentru cafenele", description: "Treizeci de șabloane pătrate și verticale pentru rețele sociale: oferte, program, produse noi și rețete. Fișiere editabile, cu instrucțiuni în română.", category: "sabloane", price: 39, license: "commercial" },
-  { id: "sample-ebook", seller: "sample-seller-andrei", preview: "ebook", file: "ghid-marketing.zip", title: "Ebook: Ghid Complet de Marketing Digital", description: "Ghid de 220 de pagini despre marketing digital, SEO și social media, cu exemple practice în limba română.", category: "ebook", price: 35, license: "personal" },
-  { id: "sample-fonts", seller: "sample-seller-andrei", preview: "fonts", file: "fonturi-display.zip", title: "Set 12 Fonturi Display", description: "Doisprezece fonturi display moderne în format OTF și TTF, ideale pentru titluri și branding. Licență comercială inclusă.", category: "fonturi", price: 59, license: "commercial" },
-  { id: "sample-code", seller: "sample-seller-andrei", preview: "code", file: "starter-api.zip", title: "Starter API REST în Node.js cu autentificare JWT", description: "Proiect de pornire pentru un API REST în Node.js și TypeScript: autentificare JWT, bază de date SQLite, teste și documentație. Gata de extins.", category: "cod-sursa", price: 79, license: "commercial" },
+  {
+    id: "sample-icons",
+    seller: "sample-seller-studio",
+    preview: "icons",
+    file: "iconite-svg.zip",
+    title: "Pachet 500 Iconițe SVG",
+    description:
+      "Colecție de 500 de pictograme vectoriale SVG, optimizate pentru web și aplicații. Format editabil, scalabil fără pierderi.",
+    category: "grafica",
+    price: 49,
+    license: "commercial",
+  },
+  {
+    id: "sample-dashboard",
+    seller: "sample-seller-studio",
+    preview: "dashboard",
+    file: "dashboard-react.zip",
+    title: "Șablon Dashboard React + Tailwind",
+    description:
+      "Temă completă de panou de administrare în React 19 și Tailwind CSS v4. Cod sursă inclus, componente reutilizabile.",
+    category: "sabloane",
+    price: 129,
+    license: "extended",
+  },
+  {
+    id: "sample-loops",
+    seller: "sample-seller-studio",
+    preview: "loops",
+    file: "loopuri-lofi.zip",
+    title: "Pachet 30 Loop-uri Audio Lo-Fi",
+    description:
+      "Treizeci de bucle audio lo-fi fără drepturi de autor, format WAV de înaltă calitate. Perfecte pentru video și podcasturi.",
+    category: "audio",
+    price: 59,
+    license: "commercial",
+  },
+  {
+    id: "sample-invite",
+    seller: "sample-seller-ioana",
+    preview: "invite",
+    file: "invitatii-nunta.zip",
+    title: "Invitații digitale de nuntă — 6 modele editabile",
+    description:
+      "Șase modele de invitații pentru nuntă, editabile în orice program de prezentări. Text, culori și fonturi ușor de schimbat, export pentru telefon și pentru tipar.",
+    category: "invitatii",
+    price: 45,
+    license: "personal",
+  },
+  {
+    id: "sample-gdpr",
+    seller: "sample-seller-ioana",
+    preview: "gdpr",
+    file: "kit-gdpr.zip",
+    title: "Kit GDPR pentru magazine online",
+    description:
+      "Politică de confidențialitate, politică de cookie-uri, formular de retragere și registru de prelucrări, redactate în română și ușor de adaptat la un magazin mic.",
+    category: "documente",
+    price: 99,
+    license: "commercial",
+  },
+  {
+    id: "sample-social",
+    seller: "sample-seller-ioana",
+    preview: "social",
+    file: "postari-cafenea.zip",
+    title: "30 de șabloane de postări pentru cafenele",
+    description:
+      "Treizeci de șabloane pătrate și verticale pentru rețele sociale: oferte, program, produse noi și rețete. Fișiere editabile, cu instrucțiuni în română.",
+    category: "sabloane",
+    price: 39,
+    license: "commercial",
+  },
+  {
+    id: "sample-ebook",
+    seller: "sample-seller-andrei",
+    preview: "ebook",
+    file: "ghid-marketing.zip",
+    title: "Ebook: Ghid Complet de Marketing Digital",
+    description:
+      "Ghid de 220 de pagini despre marketing digital, SEO și social media, cu exemple practice în limba română.",
+    category: "ebook",
+    price: 35,
+    license: "personal",
+  },
+  {
+    id: "sample-fonts",
+    seller: "sample-seller-andrei",
+    preview: "fonts",
+    file: "fonturi-display.zip",
+    title: "Set 12 Fonturi Display",
+    description:
+      "Doisprezece fonturi display moderne în format OTF și TTF, ideale pentru titluri și branding. Licență comercială inclusă.",
+    category: "fonturi",
+    price: 59,
+    license: "commercial",
+  },
+  {
+    id: "sample-code",
+    seller: "sample-seller-andrei",
+    preview: "code",
+    file: "starter-api.zip",
+    title: "Starter API REST în Node.js cu autentificare JWT",
+    description:
+      "Proiect de pornire pentru un API REST în Node.js și TypeScript: autentificare JWT, bază de date SQLite, teste și documentație. Gata de extins.",
+    category: "cod-sursa",
+    price: 79,
+    license: "commercial",
+  },
 ];
 
 /** Two sample sellers buy the icon pack (simulated) and review it. */
 const REVIEWS = [
-  { buyer: "sample-seller-ioana", rating: 5, body: "Exact ce aveam nevoie pentru un site de prezentare. Iconițele arată bine și la dimensiuni mici." },
-  { buyer: "sample-seller-andrei", rating: 4, body: "Set bogat și consecvent. Aș fi vrut și câteva variante pline, dar merită prețul." },
+  {
+    buyer: "sample-seller-ioana",
+    rating: 5,
+    body: "Exact ce aveam nevoie pentru un site de prezentare. Iconițele arată bine și la dimensiuni mici.",
+  },
+  {
+    buyer: "sample-seller-andrei",
+    rating: 4,
+    body: "Set bogat și consecvent. Aș fi vrut și câteva variante pline, dar merită prețul.",
+  },
 ] as const;
 
 /** A ZIP holding one stored text file that says it is a demo file (about 64 KB). */
@@ -120,7 +227,9 @@ export async function seedSamples(
     const listing = db.prepare(`INSERT OR IGNORE INTO listings
       (id, user_id, title, description, price_ron, category, expires_at, active, is_sample, file_format, file_size_bytes, license_type)
       VALUES (?, ?, ?, ?, ?, ?, ?, 1, 1, 'zip', ?, ?)`);
-    const image = db.prepare("INSERT OR IGNORE INTO listing_images (id, listing_id, s3_key, position) VALUES (?, ?, ?, 0)");
+    const image = db.prepare(
+      "INSERT OR IGNORE INTO listing_images (id, listing_id, s3_key, position) VALUES (?, ?, ?, 0)",
+    );
     const asset = db.prepare(`INSERT OR IGNORE INTO listing_assets
       (id, listing_id, s3_key, original_filename, file_size_bytes, content_type, position) VALUES (?, ?, ?, ?, ?, 'application/zip', 0)`);
     let count = 0;
@@ -128,10 +237,23 @@ export async function seedSamples(
       const zip = sampleZip(s.title);
       const imageKey = `samples/${s.preview}.png`;
       const assetKey = `samples/${s.id}/${s.file}`;
-      count += listing.run(s.id, s.seller, s.title, s.description, s.price, s.category, SAMPLE_EXPIRES_AT, zip.length, s.license).changes;
+      count += listing.run(
+        s.id,
+        s.seller,
+        s.title,
+        s.description,
+        s.price,
+        s.category,
+        SAMPLE_EXPIRES_AT,
+        zip.length,
+        s.license,
+      ).changes;
       image.run(`${s.id}-image`, s.id, imageKey);
       asset.run(`${s.id}-asset`, s.id, assetKey, s.file, zip.length);
-      files.push({ file: path.join(dirs.uploadsDir, imageKey), data: readFileSync(path.join(previewsDir, `${s.preview}.png`)) });
+      files.push({
+        file: path.join(dirs.uploadsDir, imageKey),
+        data: readFileSync(path.join(previewsDir, `${s.preview}.png`)),
+      });
       files.push({ file: path.join(dirs.assetsDir, assetKey), data: zip });
     }
 
@@ -140,7 +262,9 @@ export async function seedSamples(
     const order = db.prepare(`INSERT OR IGNORE INTO orders
       (id, buyer_user_id, listing_id, seller_user_id, amount_ron, status, provider, provider_ref, paid_at, platform_fee_ron, seller_net_ron)
       VALUES (?, ?, ?, ?, ?, 'paid', 'fake', 'sample', datetime('now'), ?, ?)`);
-    const review = db.prepare("INSERT OR IGNORE INTO reviews (id, listing_id, buyer_user_id, rating, body) VALUES (?, ?, ?, ?, ?)");
+    const review = db.prepare(
+      "INSERT OR IGNORE INTO reviews (id, listing_id, buyer_user_id, rating, body) VALUES (?, ?, ?, ?, ?)",
+    );
     for (const r of REVIEWS) {
       order.run(`sample-order-${r.buyer}`, r.buyer, icons.id, icons.seller, icons.price, feeRon, netRon);
       review.run(`sample-review-${r.buyer}`, icons.id, r.buyer, r.rating, r.body);

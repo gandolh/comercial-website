@@ -2,29 +2,17 @@ import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ListingImage } from "@app/types/listing";
 
-import {
-  commitImage,
-  deleteImage,
-  putImageToSignedUrl,
-  reorderImages,
-  requestUploadUrl,
-} from "../services/images";
+import { commitImage, deleteImage, putImageToSignedUrl, reorderImages, requestUploadUrl } from "../services/images";
 
 const MAX_CONCURRENT_UPLOADS = 3;
 
 export function useListingImagesMutations(listingId: string) {
   const queryClient = useQueryClient();
-  const [progressByFile, setProgressByFile] = useState<Record<string, number>>(
-    {},
-  );
+  const [progressByFile, setProgressByFile] = useState<Record<string, number>>({});
 
   const commitMutation = useMutation({
-    mutationFn: (payload: {
-      s3_key: string;
-      width?: number;
-      height?: number;
-      bytes?: number;
-    }) => commitImage(listingId, payload),
+    mutationFn: (payload: { s3_key: string; width?: number; height?: number; bytes?: number }) =>
+      commitImage(listingId, payload),
     onSuccess: invalidateListing,
   });
 

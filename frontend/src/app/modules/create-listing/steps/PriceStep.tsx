@@ -10,13 +10,7 @@ interface PriceStepProps {
   submitLabel?: string;
 }
 
-export function PriceStep({
-  initialData,
-  onNext,
-  onBack,
-  hideFooter = false,
-  submitLabel,
-}: PriceStepProps) {
+export function PriceStep({ initialData, onNext, onBack, hideFooter = false, submitLabel }: PriceStepProps) {
   const {
     register,
     handleSubmit,
@@ -39,20 +33,12 @@ export function PriceStep({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onNext)}
-      className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500"
-    >
+    <form onSubmit={handleSubmit(onNext)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           Stabilește prețul
         </h2>
-        <p className="text-on-surface-variant">
-          Cât costă produsul tău?
-        </p>
+        <p className="text-on-surface-variant">Cât costă produsul tău?</p>
       </div>
 
       <div className="space-y-6">
@@ -70,34 +56,20 @@ export function PriceStep({
                 defaultValue={initialData?.priceRon ?? ""}
                 onChange={handlePriceChange}
                 className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all ${
-                  errors.priceRon
-                    ? "border-error"
-                    : "border-transparent focus:border-primary"
+                  errors.priceRon ? "border-error" : "border-transparent focus:border-primary"
                 } ${isFree ? "opacity-50 grayscale" : ""}`}
               />
-              <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-outline">
-                RON
-              </span>
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-outline">RON</span>
             </div>
-            {errors.priceRon && (
-              <p className="text-error text-xs px-1">
-                {errors.priceRon.message}
-              </p>
-            )}
+            {errors.priceRon && <p className="text-error text-xs px-1">{errors.priceRon.message}</p>}
           </div>
 
           <div className="flex items-center gap-3 px-1">
             <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                {...register("isFree")}
-                className="sr-only peer"
-              />
+              <input type="checkbox" {...register("isFree")} className="sr-only peer" />
               <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
             </label>
-            <span className="text-sm font-medium text-on-surface">
-              Gratuit
-            </span>
+            <span className="text-sm font-medium text-on-surface">Gratuit</span>
           </div>
         </div>
       </div>

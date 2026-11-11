@@ -17,10 +17,7 @@ export function ImageGalleryEditor({ listingId, images, onImagesChange }: ImageG
   const [localImages, setLocalImages] = useState<ListingImage[]>(images);
   const mutations = useListingImagesMutations(listingId);
 
-  const sortedImages = useMemo(
-    () => [...localImages].sort((a, b) => a.position - b.position),
-    [localImages],
-  );
+  const sortedImages = useMemo(() => [...localImages].sort((a, b) => a.position - b.position), [localImages]);
 
   async function handleUpload(files: File[]) {
     try {

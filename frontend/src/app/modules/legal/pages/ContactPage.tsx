@@ -3,10 +3,7 @@ export function ContactPage() {
     <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
       <div className="max-w-3xl mx-auto space-y-12">
         <header className="space-y-3">
-          <h1
-            className="text-4xl font-black text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             Contact
           </h1>
           <p className="text-on-surface-variant text-lg">
@@ -46,10 +43,7 @@ export function ContactPage() {
         </div>
 
         <section className="bg-surface-container rounded-2xl p-8 space-y-4">
-          <h2
-            className="text-xl font-bold text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             Date de identificare
           </h2>
           <dl className="space-y-2 text-on-surface-variant text-sm leading-relaxed">
@@ -71,23 +65,18 @@ export function ContactPage() {
             </div>
           </dl>
           <p className="text-on-surface-variant text-sm mt-4">
-            Informații obligatorii conform ANSPDCP și legislației privind
-            comerțul electronic (Legea nr. 365/2002).
+            Informații obligatorii conform ANSPDCP și legislației privind comerțul electronic (Legea nr. 365/2002).
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2
-            className="text-xl font-bold text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             Timp de răspuns
           </h2>
           <p className="text-on-surface-variant leading-relaxed">
             Ne străduim să răspundem la toate solicitările în termen de{" "}
-            <strong className="text-on-surface">2 zile lucrătoare</strong>.
-            Solicitările GDPR sunt procesate în termenul legal de 30 de zile.
-            Program suport: Luni–Vineri, 09:00–18:00 (EET).
+            <strong className="text-on-surface">2 zile lucrătoare</strong>. Solicitările GDPR sunt procesate în termenul
+            legal de 30 de zile. Program suport: Luni–Vineri, 09:00–18:00 (EET).
           </p>
         </section>
       </div>
@@ -110,20 +99,14 @@ function ContactCard({
 }) {
   return (
     <div className="bg-surface-container rounded-2xl p-6 space-y-3 hover:shadow-md transition-shadow">
-      <span
-        className="material-symbols-outlined text-primary block"
-        style={{ fontSize: "28px" }}
-      >
+      <span className="material-symbols-outlined text-primary block" style={{ fontSize: "28px" }}>
         {icon}
       </span>
       <div>
         <h3 className="font-bold text-on-surface">{title}</h3>
         <p className="text-on-surface-variant text-sm mt-1">{description}</p>
       </div>
-      <a
-        href={href}
-        className="text-primary text-sm font-medium hover:underline break-all"
-      >
+      <a href={href} className="text-primary text-sm font-medium hover:underline break-all">
         {contact}
       </a>
     </div>

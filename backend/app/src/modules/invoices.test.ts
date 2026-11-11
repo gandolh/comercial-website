@@ -77,9 +77,7 @@ function makeValidInvoice(overrides: Partial<InvoiceResponse> = {}): InvoiceResp
     buyer_name: "SC Cumpărător SRL",
     buyer_cui: "RO87654321",
     buyer_address: "Str. Client nr. 2, Cluj-Napoca",
-    line_items: [
-      { description: "Licență software", qty: 1, unit_price: 100.0, vat_rate: 19 },
-    ],
+    line_items: [{ description: "Licență software", qty: 1, unit_price: 100.0, vat_rate: 19 }],
     currency: "RON",
     subtotal: 100.0,
     vat_amount: 19.0,
@@ -313,9 +311,7 @@ describe("buildUblXml", () => {
     const inv = makeValidInvoice({
       seller_name: "Societatea Văncă & Frații SRL",
       buyer_name: "Cumpărătorul <Bun>",
-      line_items: [
-        { description: "Șabloane grafice & fonturi", qty: 1, unit_price: 100, vat_rate: 19 },
-      ],
+      line_items: [{ description: "Șabloane grafice & fonturi", qty: 1, unit_price: 100, vat_rate: 19 }],
       subtotal: 100,
       vat_amount: 19,
       total: 119,
@@ -328,9 +324,9 @@ describe("buildUblXml", () => {
     expect(xml).toContain("Șabloane grafice");
 
     // Dangerous XML chars must be escaped
-    expect(xml).toContain("&amp;");      // & escaped
-    expect(xml).toContain("&lt;");       // < escaped
-    expect(xml).toContain("&gt;");       // > escaped
+    expect(xml).toContain("&amp;"); // & escaped
+    expect(xml).toContain("&lt;"); // < escaped
+    expect(xml).toContain("&gt;"); // > escaped
 
     // Raw unescaped angle brackets from user data must NOT appear inside element content
     // (only the structural angle brackets of the tags themselves are OK)

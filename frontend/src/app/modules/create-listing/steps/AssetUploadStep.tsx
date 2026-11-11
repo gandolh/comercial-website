@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  requestAssetUploadUrl,
-  putAssetToSignedUrl,
-  commitAsset,
-  deleteAsset,
-} from "../services/assets";
+import { requestAssetUploadUrl, putAssetToSignedUrl, commitAsset, deleteAsset } from "../services/assets";
 import type { ListingAsset } from "../services/assets";
 
 interface AssetUploadStepProps {
@@ -44,10 +39,7 @@ export function AssetUploadStep({
     try {
       for (const file of files) {
         // Request upload URL
-        const { upload_url, s3_key } = await requestAssetUploadUrl(
-          listingId,
-          file,
-        );
+        const { upload_url, s3_key } = await requestAssetUploadUrl(listingId, file);
 
         // Upload file to S3
         await putAssetToSignedUrl(upload_url, file);
@@ -63,10 +55,7 @@ export function AssetUploadStep({
 
       onAssetsChange();
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Eroare la încărcarea fișierelor";
+      const message = error instanceof Error ? error.message : "Eroare la încărcarea fișierelor";
       setUploadError(message);
     } finally {
       setIsUploading(false);
@@ -79,10 +68,7 @@ export function AssetUploadStep({
       await deleteAsset(listingId, assetId);
       onAssetsChange();
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Eroare la ștergerea fișierului";
+      const message = error instanceof Error ? error.message : "Eroare la ștergerea fișierului";
       setUploadError(message);
     } finally {
       setIsUploading(false);
@@ -113,22 +99,16 @@ export function AssetUploadStep({
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           Adaugă fișierele de descărcare
         </h2>
         <p className="text-on-surface-variant">
-          Aceasta este cea mai importantă parte - anunțurile cu fișiere clare
-          primesc mai multe descărcări.
+          Aceasta este cea mai importantă parte - anunțurile cu fișiere clare primesc mai multe descărcări.
         </p>
       </div>
 
       {uploadError && (
-        <div className="bg-error/10 border border-error/20 rounded-2xl p-4 text-error text-sm">
-          {uploadError}
-        </div>
+        <div className="bg-error/10 border border-error/20 rounded-2xl p-4 text-error text-sm">{uploadError}</div>
       )}
 
       <div className="space-y-6">
@@ -142,12 +122,8 @@ export function AssetUploadStep({
             <span className="material-symbols-outlined text-outline group-hover:text-primary text-5xl mb-4 block transition-colors">
               cloud_upload
             </span>
-            <p className="text-on-surface font-semibold mb-1">
-              Trage fișierele aici
-            </p>
-            <p className="text-on-surface-variant text-sm max-w-xs mx-auto">
-              sau selectează din calculator
-            </p>
+            <p className="text-on-surface font-semibold mb-1">Trage fișierele aici</p>
+            <p className="text-on-surface-variant text-sm max-w-xs mx-auto">sau selectează din calculator</p>
             <input
               id="file-input"
               type="file"
@@ -164,9 +140,7 @@ export function AssetUploadStep({
         {hasAssets && (
           <div className="space-y-4">
             <div className="flex justify-between items-center px-1">
-              <h3 className="font-bold text-sm">
-                Fișierele tale ({assets.length})
-              </h3>
+              <h3 className="font-bold text-sm">Fișierele tale ({assets.length})</h3>
             </div>
             <div className="space-y-3">
               {assets.map((asset) => (
@@ -175,16 +149,10 @@ export function AssetUploadStep({
                   className="bg-surface-container-low border border-outline-variant rounded-2xl p-4 flex items-center justify-between group hover:bg-surface-container-high transition-colors"
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
-                    <span className="material-symbols-outlined text-primary shrink-0">
-                      file_present
-                    </span>
+                    <span className="material-symbols-outlined text-primary shrink-0">file_present</span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">
-                        {asset.originalFilename}
-                      </p>
-                      <p className="text-xs text-on-surface-variant">
-                        {formatFileSize(asset.fileSizeBytes)}
-                      </p>
+                      <p className="font-medium text-sm truncate">{asset.originalFilename}</p>
+                      <p className="text-xs text-on-surface-variant">{formatFileSize(asset.fileSizeBytes)}</p>
                     </div>
                   </div>
                   <button
@@ -193,9 +161,7 @@ export function AssetUploadStep({
                     disabled={isUploading}
                     className="p-2 hover:bg-error/10 text-error rounded-full transition-colors disabled:opacity-50 shrink-0"
                   >
-                    <span className="material-symbols-outlined text-sm">
-                      delete
-                    </span>
+                    <span className="material-symbols-outlined text-sm">delete</span>
                   </button>
                 </div>
               ))}
@@ -205,9 +171,7 @@ export function AssetUploadStep({
 
         {!hasAssets && !isUploading && (
           <div className="bg-surface-container-low border-2 border-dashed border-outline-variant rounded-3xl p-12 text-center space-y-4">
-            <span className="material-symbols-outlined text-outline text-5xl">
-              download_for_offline
-            </span>
+            <span className="material-symbols-outlined text-outline text-5xl">download_for_offline</span>
             <p className="text-on-surface-variant text-sm max-w-xs mx-auto">
               Încarcă cel puțin un fișier pentru a putea publica anunțul.
             </p>
@@ -216,12 +180,8 @@ export function AssetUploadStep({
 
         {isUploading && (
           <div className="bg-surface-container-low border-2 border-dashed border-primary rounded-3xl p-12 text-center space-y-4">
-            <span className="material-symbols-outlined text-primary text-5xl animate-spin">
-              progress_activity
-            </span>
-            <p className="text-on-surface-variant text-sm">
-              Se încarcă fișierele...
-            </p>
+            <span className="material-symbols-outlined text-primary text-5xl animate-spin">progress_activity</span>
+            <p className="text-on-surface-variant text-sm">Se încarcă fișierele...</p>
           </div>
         )}
       </div>

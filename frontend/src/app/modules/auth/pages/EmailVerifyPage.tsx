@@ -20,9 +20,7 @@ export function EmailVerifyPage() {
     return (
       <AuthCardShell title="Link invalid">
         <div className="text-center">
-          <p className="text-on-surface-variant mb-4">
-            Link-ul de verificare este invalid sau lipsește.
-          </p>
+          <p className="text-on-surface-variant mb-4">Link-ul de verificare este invalid sau lipsește.</p>
           <Link
             to="/"
             className="inline-block px-6 py-2 bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors"
@@ -38,19 +36,8 @@ export function EmailVerifyPage() {
     return (
       <AuthCardShell title="Verificare email">
         <div className="text-center py-8">
-          <svg
-            className="animate-spin h-12 w-12 mx-auto mb-4 text-primary"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-              fill="none"
-            />
+          <svg className="animate-spin h-12 w-12 mx-auto mb-4 text-primary" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path
               className="opacity-75"
               fill="currentColor"
@@ -67,15 +54,10 @@ export function EmailVerifyPage() {
     return (
       <AuthCardShell title="Eroare verificare">
         <div className="text-center">
-          <span
-            className="material-symbols-outlined text-error mb-4"
-            style={{ fontSize: "48px" }}
-          >
+          <span className="material-symbols-outlined text-error mb-4" style={{ fontSize: "48px" }}>
             error
           </span>
-          <p className="text-on-surface mb-2 font-medium">
-            Link-ul de verificare a expirat sau a fost deja folosit.
-          </p>
+          <p className="text-on-surface mb-2 font-medium">Link-ul de verificare a expirat sau a fost deja folosit.</p>
           <p className="text-on-surface-variant text-sm mb-6">
             Te rugăm să soliciți un nou email de verificare din contul tău.
           </p>
@@ -94,18 +76,12 @@ export function EmailVerifyPage() {
     return (
       <AuthCardShell title="Email verificat!">
         <div className="text-center">
-          <span
-            className="material-symbols-outlined text-tertiary mb-4"
-            style={{ fontSize: "48px" }}
-          >
+          <span className="material-symbols-outlined text-tertiary mb-4" style={{ fontSize: "48px" }}>
             check_circle
           </span>
-          <p className="text-on-surface mb-2 font-medium">
-            Emailul tău a fost verificat cu succes!
-          </p>
+          <p className="text-on-surface mb-2 font-medium">Emailul tău a fost verificat cu succes!</p>
           <p className="text-on-surface-variant text-sm mb-6">
-            Acum poți posta anunțuri și folosi toate funcționalitățile
-            platformei.
+            Acum poți posta anunțuri și folosi toate funcționalitățile platformei.
           </p>
           <button
             onClick={() => navigate("/")}

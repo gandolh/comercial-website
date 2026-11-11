@@ -20,13 +20,10 @@ export function useToggleFavorite() {
     },
     onMutate: async ({ id, on }) => {
       await queryClient.cancelQueries({ queryKey: ["favorites", "ids"] });
-      const previousIds =
-        queryClient.getQueryData<string[]>(["favorites", "ids"]) ?? [];
+      const previousIds = queryClient.getQueryData<string[]>(["favorites", "ids"]) ?? [];
       queryClient.setQueryData<string[]>(
         ["favorites", "ids"],
-        on
-          ? Array.from(new Set([...previousIds, id]))
-          : previousIds.filter((value) => value !== id),
+        on ? Array.from(new Set([...previousIds, id])) : previousIds.filter((value) => value !== id),
       );
 
       const favoritePages = queryClient.getQueriesData({

@@ -29,19 +29,12 @@ export function ListingCard({ listing }: ListingCardProps) {
           />
         ) : (
           <div className="w-full h-full bg-surface-container flex items-center justify-center text-outline">
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "48px" }}
-            >
+            <span className="material-symbols-outlined" style={{ fontSize: "48px" }}>
               image
             </span>
           </div>
         )}
-        <FavoriteToggle
-          listingId={listing.id}
-          className="absolute top-4 right-4"
-          size="sm"
-        />
+        <FavoriteToggle listingId={listing.id} className="absolute top-4 right-4" size="sm" />
         {listing.sellerVerified && (
           <span className="absolute bottom-4 left-4 bg-tertiary-container text-on-tertiary text-xs font-bold px-3 py-1 rounded-full">
             {t("listing.verified")}
@@ -57,19 +50,14 @@ export function ListingCard({ listing }: ListingCardProps) {
       <div className="p-6 space-y-4">
         <div className="flex flex-col">
           <span className="text-2xl font-black text-primary">
-            {listing.priceRon != null
-              ? `${listing.priceRon.toLocaleString("ro-RO")} RON`
-              : "Gratuit"}
+            {listing.priceRon != null ? `${listing.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
           </span>
           <h3 className="text-lg font-bold leading-tight text-on-surface group-hover:text-primary transition-colors">
             {listing.title}
           </h3>
         </div>
         <div className="flex items-center gap-2 text-sm text-on-surface-variant font-medium tracking-wide">
-          <span
-            className="material-symbols-outlined"
-            style={{ fontSize: "18px" }}
-          >
+          <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
             schedule
           </span>
           <span>{postedAt}</span>
@@ -83,8 +71,7 @@ function formatRelativeTime(value: string): string {
   const diffMs = Date.now() - new Date(value).getTime();
   const diffHours = Math.floor(diffMs / 3_600_000);
   if (diffHours < 1) return "Acum câteva minute";
-  if (diffHours < 24)
-    return `Acum ${diffHours} ${diffHours === 1 ? "oră" : "ore"}`;
+  if (diffHours < 24) return `Acum ${diffHours} ${diffHours === 1 ? "oră" : "ore"}`;
   const diffDays = Math.floor(diffHours / 24);
   if (diffDays === 1) return "Ieri";
   return `Acum ${diffDays} zile`;

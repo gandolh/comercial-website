@@ -5,12 +5,7 @@ interface SubmitButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-export function SubmitButton({
-  isLoading,
-  children,
-  disabled,
-  ...props
-}: SubmitButtonProps) {
+export function SubmitButton({ isLoading, children, disabled, ...props }: SubmitButtonProps) {
   return (
     <button
       type="submit"
@@ -29,15 +24,7 @@ export function SubmitButton({
       {isLoading ? (
         <span className="flex items-center justify-center gap-2">
           <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-              fill="none"
-            />
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path
               className="opacity-75"
               fill="currentColor"

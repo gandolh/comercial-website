@@ -1,10 +1,6 @@
 import { createHmac, randomBytes } from "node:crypto";
 import { createHash } from "node:crypto";
-import type {
-  FastifyInstance,
-  FastifyRequest,
-  FastifyReply,
-} from "fastify";
+import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { hash, verify } from "argon2";
 import { AppError } from "../errors/index.js";
 
@@ -177,7 +173,7 @@ declare module "fastify" {
 export async function authenticationPreHandler(
   request: FastifyRequest,
   reply: FastifyReply,
-  secret: string
+  secret: string,
 ): Promise<void> {
   const authHeader = request.headers.authorization;
 

@@ -6,9 +6,7 @@ import type { BundleChildCard } from "../types/bundle";
  * Public endpoint — no auth required.
  */
 export async function fetchBundleItems(bundleListingId: string): Promise<BundleChildCard[]> {
-  const res = await axiosInstance.get<BundleChildCard[]>(
-    `/listings/${bundleListingId}/bundle-items`
-  );
+  const res = await axiosInstance.get<BundleChildCard[]>(`/listings/${bundleListingId}/bundle-items`);
   return res.data;
 }
 
@@ -18,7 +16,7 @@ export async function fetchBundleItems(bundleListingId: string): Promise<BundleC
  */
 export async function setBundleItems(
   bundleListingId: string,
-  childListingIds: string[]
+  childListingIds: string[],
 ): Promise<{ bundle_listing_id: string; child_listing_ids: string[] }> {
   const res = await axiosInstance.post<{
     bundle_listing_id: string;

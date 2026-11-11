@@ -91,11 +91,16 @@ function AssetFileList({ listingId, assets, isPaidListing = false, canDownload =
           const isDownloading = downloadingId === asset.id;
           const downloadBlocked = isPaidListing && !canDownload;
           return (
-            <li key={asset.id} className="flex items-center gap-4 px-5 py-4 bg-surface-container-lowest hover:bg-surface-container transition-colors">
+            <li
+              key={asset.id}
+              className="flex items-center gap-4 px-5 py-4 bg-surface-container-lowest hover:bg-surface-container transition-colors"
+            >
               <span className="material-symbols-outlined text-primary text-[24px]">draft</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-on-surface truncate">{asset.originalFilename}</p>
-                <p className="text-xs text-outline mt-0.5">{formatBytes(asset.fileSizeBytes)} · {asset.contentType}</p>
+                <p className="text-xs text-outline mt-0.5">
+                  {formatBytes(asset.fileSizeBytes)} · {asset.contentType}
+                </p>
               </div>
               {downloadBlocked ? (
                 <span className="flex items-center gap-1 text-outline text-sm px-4 py-2 rounded-full border border-outline-variant whitespace-nowrap">
@@ -155,15 +160,20 @@ export function ListingDetailPage() {
   useEffect(() => {
     if (!user || !id) return;
     let cancelled = false;
-    ordersService.listOrders().then((orders) => {
-      if (!cancelled) {
-        const paid = orders.some(
-          (o) => o.listing_id === id && o.status === "paid"
-        );
-        setHasPaidOrder(paid);
-      }
-    }).catch(() => {/* silent — not logged in or network error */});
-    return () => { cancelled = true; };
+    ordersService
+      .listOrders()
+      .then((orders) => {
+        if (!cancelled) {
+          const paid = orders.some((o) => o.listing_id === id && o.status === "paid");
+          setHasPaidOrder(paid);
+        }
+      })
+      .catch(() => {
+        /* silent — not logged in or network error */
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [user, id]);
 
   const isExpired = useMemo(() => {
@@ -225,14 +235,8 @@ export function ListingDetailPage() {
   if (isError || !data) {
     return (
       <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto flex flex-col items-center justify-center min-h-[50vh] space-y-6">
-        <ErrorCard
-          message="Anunțul nu a fost găsit sau a fost dezactivat."
-          onRetry={() => refetch()}
-        />
-        <Link
-          to="/"
-          className="text-primary font-bold hover:underline flex items-center gap-2"
-        >
+        <ErrorCard message="Anunțul nu a fost găsit sau a fost dezactivat." onRetry={() => refetch()} />
+        <Link to="/" className="text-primary font-bold hover:underline flex items-center gap-2">
           <span className="material-symbols-outlined">arrow_back</span>
           Înapoi la pagina principală
         </Link>
@@ -240,10 +244,7 @@ export function ListingDetailPage() {
     );
   }
 
-  const formattedPrice =
-    data.priceRon != null
-      ? `${data.priceRon.toLocaleString("ro-RO")} RON`
-      : "Gratuit";
+  const formattedPrice = data.priceRon != null ? `${data.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit";
 
   return (
     <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto">
@@ -272,18 +273,11 @@ export function ListingDetailPage() {
         <Link to="/" className="hover:text-primary transition-colors">
           Acasă
         </Link>
-        <span className="material-symbols-outlined text-[14px]">
-          chevron_right
-        </span>
-        <Link
-          to={`/categorii/${data.category}`}
-          className="hover:text-primary transition-colors"
-        >
+        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+        <Link to={`/categorii/${data.category}`} className="hover:text-primary transition-colors">
           {data.categoryLabel}
         </Link>
-        <span className="material-symbols-outlined text-[14px]">
-          chevron_right
-        </span>
+        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
         <span className="text-on-surface normal-case">{data.title}</span>
       </nav>
 
@@ -300,17 +294,10 @@ export function ListingDetailPage() {
             >
               {data.title}
             </h1>
-            <div className="text-4xl font-black text-primary mb-6">
-              {formattedPrice}
-            </div>
+            <div className="text-4xl font-black text-primary mb-6">{formattedPrice}</div>
           </div>
 
-          <ListingDescription
-            id={data.id}
-            description={data.description}
-            features={[]}
-            digitalSpecs={digitalSpecs}
-          />
+          <ListingDescription id={data.id} description={data.description} features={[]} digitalSpecs={digitalSpecs} />
 
           {data.isBundle && <BundleContents listingId={data.id} />}
 
@@ -320,9 +307,7 @@ export function ListingDetailPage() {
                 <h2 className="text-lg font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
                   {t("orders.download.paywall.title")}
                 </h2>
-                <p className="text-sm text-on-surface-variant">
-                  {t("orders.download.paywall.body")}
-                </p>
+                <p className="text-sm text-on-surface-variant">{t("orders.download.paywall.body")}</p>
                 <BuyButton
                   listingId={data.id}
                   priceRon={data.priceRon!}
@@ -373,23 +358,18 @@ export function ListingDetailPage() {
 
           {/* Safety tip */}
           <div className="flex items-start gap-4 px-4">
-            <span className="material-symbols-outlined text-error mt-1">
-              shield
-            </span>
+            <span className="material-symbols-outlined text-error mt-1">shield</span>
             <p className="text-xs text-on-surface-variant leading-relaxed">
-              <strong>Sfaturi de siguranță:</strong> Plătește doar prin
-              platformă, nu prin transfer direct către vânzător. Verifică
-              licența și formatul fișierelor înainte de cumpărare și scanează
-              arhivele descărcate cu un antivirus înainte să le deschizi.
+              <strong>Sfaturi de siguranță:</strong> Plătește doar prin platformă, nu prin transfer direct către
+              vânzător. Verifică licența și formatul fișierelor înainte de cumpărare și scanează arhivele descărcate cu
+              un antivirus înainte să le deschizi.
             </p>
           </div>
 
           {/* Report button */}
           <div className="flex justify-center pt-4">
             <button className="flex items-center gap-2 text-outline hover:text-error transition-colors text-sm font-medium">
-              <span className="material-symbols-outlined text-[18px]">
-                report
-              </span>
+              <span className="material-symbols-outlined text-[18px]">report</span>
               Raportează Anunțul
             </button>
           </div>

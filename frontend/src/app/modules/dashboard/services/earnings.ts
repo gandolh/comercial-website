@@ -8,7 +8,15 @@ export interface Earnings {
   net_ron: number;
   paid_out_ron: number;
   sales_count: number;
-  sales: { order_id: string; listing_id: string; title: string; amount_ron: number; fee_ron: number; net_ron: number; paid_at: string | null }[];
+  sales: {
+    order_id: string;
+    listing_id: string;
+    title: string;
+    amount_ron: number;
+    fee_ron: number;
+    net_ron: number;
+    paid_at: string | null;
+  }[];
   payouts: { id: string; amount_ron: number; created_at: string; simulated: boolean }[];
 }
 

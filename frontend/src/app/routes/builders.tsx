@@ -1,11 +1,6 @@
 import { createElement } from "react";
 import type { RouteComponent, ModuleRoute } from "@app/routes/types";
-import {
-  Router,
-  createRoute,
-  createRootRoute,
-  type AnyRoute,
-} from "@tanstack/react-router";
+import { Router, createRoute, createRootRoute, type AnyRoute } from "@tanstack/react-router";
 
 function resolveComponent(component: RouteComponent | undefined) {
   if (!component) return undefined;
@@ -19,19 +14,12 @@ function normalizePath(path: string, index?: boolean): string {
 
   const trimmed = path.replace(/^\/+/u, "");
 
-  const segments = trimmed
-    .split("/")
-    .map((segment) =>
-      segment.startsWith(":") ? `$${segment.slice(1)}` : segment,
-    );
+  const segments = trimmed.split("/").map((segment) => (segment.startsWith(":") ? `$${segment.slice(1)}` : segment));
 
   return segments.join("/") || "/";
 }
 
-function buildRoute(
-  parent: AnyRoute,
-  { component, children, index, path, ...rest }: ModuleRoute,
-): AnyRoute {
+function buildRoute(parent: AnyRoute, { component, children, index, path, ...rest }: ModuleRoute): AnyRoute {
   const route = createRoute({
     ...rest,
     getParentRoute: () => parent,

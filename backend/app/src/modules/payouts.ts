@@ -111,7 +111,11 @@ export function registerPayoutsRoutes(app: FastifyInstance, ctx: AppContext): vo
     const requestId = parsed.data.request_id;
 
     const result = await ctx.db.transaction().execute(async (trx) => {
-      const existing = await trx.selectFrom("payouts").selectAll().where("request_id", "=", requestId).executeTakeFirst();
+      const existing = await trx
+        .selectFrom("payouts")
+        .selectAll()
+        .where("request_id", "=", requestId)
+        .executeTakeFirst();
       if (existing) {
         if (existing.seller_user_id !== sellerId) throw AppError.conflict("request_id already used");
         return { payout: existing, created: false };

@@ -63,7 +63,7 @@ export class ListingsRepository {
     description: string,
     priceRon: number | null,
     category: string,
-    active: boolean
+    active: boolean,
   ): Promise<ListingRow> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30);
@@ -86,13 +86,8 @@ export class ListingsRepository {
   }
 
   async getById(id: string): Promise<ListingRow | undefined> {
-    return (
-      (await this.db
-        .selectFrom("listings")
-        .selectAll()
-        .where("id", "=", id)
-        .executeTakeFirst()) as unknown as ListingRow | undefined
-    );
+    return (await this.db.selectFrom("listings").selectAll().where("id", "=", id).executeTakeFirst()) as unknown as
+      ListingRow | undefined;
   }
 
   async update(
@@ -102,7 +97,7 @@ export class ListingsRepository {
     priceRon?: number | null,
     category?: string,
     fileFormat?: string,
-    fileSizeBytes?: number
+    fileSizeBytes?: number,
   ): Promise<ListingRow> {
     const updates: any = {};
     if (title !== undefined) updates.title = title;
@@ -112,14 +107,12 @@ export class ListingsRepository {
     if (fileFormat !== undefined) updates.file_format = fileFormat;
     if (fileSizeBytes !== undefined) updates.file_size_bytes = fileSizeBytes;
 
-    return (
-      (await this.db
-        .updateTable("listings")
-        .set(updates)
-        .where("id", "=", id)
-        .returningAll()
-        .executeTakeFirstOrThrow()) as unknown as ListingRow
-    );
+    return (await this.db
+      .updateTable("listings")
+      .set(updates)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow()) as unknown as ListingRow;
   }
 
   async delete(id: string): Promise<void> {
@@ -127,25 +120,21 @@ export class ListingsRepository {
   }
 
   async setActive(id: string, active: boolean): Promise<ListingRow> {
-    return (
-      (await this.db
-        .updateTable("listings")
-        .set({ active: active ? 1 : 0 })
-        .where("id", "=", id)
-        .returningAll()
-        .executeTakeFirstOrThrow()) as unknown as ListingRow
-    );
+    return (await this.db
+      .updateTable("listings")
+      .set({ active: active ? 1 : 0 })
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow()) as unknown as ListingRow;
   }
 
   async setExpiry(id: string, expiresAt: Date): Promise<ListingRow> {
-    return (
-      (await this.db
-        .updateTable("listings")
-        .set({ expires_at: expiresAt.toISOString() })
-        .where("id", "=", id)
-        .returningAll()
-        .executeTakeFirstOrThrow()) as unknown as ListingRow
-    );
+    return (await this.db
+      .updateTable("listings")
+      .set({ expires_at: expiresAt.toISOString() })
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow()) as unknown as ListingRow;
   }
 
   async incrementViewCount(id: string): Promise<void> {
@@ -167,9 +156,7 @@ export class ListingsRepository {
     const tokens = sanitized.split(/\s+/).filter(Boolean);
     if (tokens.length === 0) return '""';
     // Wrap each token in double quotes; append '*' to last for prefix matching
-    return tokens
-      .map((t, i) => (i === tokens.length - 1 ? `"${t}"*` : `"${t}"`))
-      .join(" ");
+    return tokens.map((t, i) => (i === tokens.length - 1 ? `"${t}"*` : `"${t}"`)).join(" ");
   }
 
   /**
@@ -181,7 +168,7 @@ export class ListingsRepository {
     userId: string,
     filter: { active?: boolean; expired?: boolean },
     page: number = 1,
-    perPage: number = 12
+    perPage: number = 12,
   ): Promise<{ listings: ListingRow[]; total: number }> {
     const perPageClamped = Math.min(Math.max(perPage, 1), 50);
     const pageNumber = Math.max(page, 1);
@@ -214,7 +201,7 @@ export class ListingsRepository {
     page: number = 1,
     perPage: number = 12,
     userId?: string,
-    active?: boolean
+    active?: boolean,
   ): Promise<{ listings: ListingRow[]; total: number }> {
     const perPageClamped = Math.min(Math.max(perPage, 1), 50);
     const pageNumber = Math.max(page, 1);
@@ -234,7 +221,7 @@ export class ListingsRepository {
         perPageClamped,
         offset,
         userId,
-        active
+        active,
       );
     }
 
@@ -247,9 +234,7 @@ export class ListingsRepository {
         query = query.where(sql<SqlBool>`active = ${active ? 1 : 0}`);
       }
     } else {
-      query = query
-        .where(sql<SqlBool>`active = 1`)
-        .where(sql<SqlBool>`expires_at > datetime('now')`);
+      query = query.where(sql<SqlBool>`active = 1`).where(sql<SqlBool>`expires_at > datetime('now')`);
     }
 
     if (category) {
@@ -272,9 +257,7 @@ export class ListingsRepository {
     }
 
     if (verified) {
-      query = query
-        .leftJoin("users", "listings.user_id", "users.id")
-        .where(sql<SqlBool>`users.phone_verified = 1`);
+      query = query.leftJoin("users", "listings.user_id", "users.id").where(sql<SqlBool>`users.phone_verified = 1`);
     }
 
     let sortedQuery = query;
@@ -286,9 +269,7 @@ export class ListingsRepository {
       sortedQuery = query.orderBy("created_at", "desc");
     }
 
-    let countQuery: any = this.db
-      .selectFrom("listings")
-      .select(sql`count(*)`.as("count"));
+    let countQuery: any = this.db.selectFrom("listings").select(sql`count(*)`.as("count"));
 
     if (userId) {
       countQuery = countQuery.where("user_id", "=", userId);
@@ -296,9 +277,7 @@ export class ListingsRepository {
         countQuery = countQuery.where(sql<SqlBool>`active = ${active ? 1 : 0}`);
       }
     } else {
-      countQuery = countQuery
-        .where(sql<SqlBool>`active = 1`)
-        .where(sql<SqlBool>`expires_at > datetime('now')`);
+      countQuery = countQuery.where(sql<SqlBool>`active = 1`).where(sql<SqlBool>`expires_at > datetime('now')`);
     }
     if (category) countQuery = countQuery.where("category", "=", category);
     if (priceMin !== undefined) {
@@ -323,10 +302,7 @@ export class ListingsRepository {
     const countResult = await countQuery.executeTakeFirst();
     const total = parseInt((countResult as any)?.count ?? "0", 10);
 
-    const listings = (await sortedQuery
-      .limit(perPageClamped)
-      .offset(offset)
-      .execute()) as unknown as ListingRow[];
+    const listings = (await sortedQuery.limit(perPageClamped).offset(offset).execute()) as unknown as ListingRow[];
 
     return { listings, total };
   }
@@ -357,7 +333,7 @@ export class ListingsRepository {
     limit: number,
     offset: number,
     userId: string | undefined,
-    active: boolean | undefined
+    active: boolean | undefined,
   ): Promise<{ listings: ListingRow[]; total: number }> {
     const ftsMatch = this.buildFtsQuery(q);
 
@@ -400,14 +376,9 @@ export class ListingsRepository {
     }
 
     // Optional JOIN for verified-seller filter
-    const verifiedJoin = verified
-      ? "INNER JOIN users u ON l.user_id = u.id AND u.phone_verified = 1"
-      : "";
+    const verifiedJoin = verified ? "INNER JOIN users u ON l.user_id = u.id AND u.phone_verified = 1" : "";
 
-    const andExtra =
-      extraConditions.length > 0
-        ? " AND " + extraConditions.join(" AND ")
-        : "";
+    const andExtra = extraConditions.length > 0 ? " AND " + extraConditions.join(" AND ") : "";
 
     let orderBy: string;
     if (sort === "pret_asc") {
@@ -440,12 +411,8 @@ export class ListingsRepository {
     `;
 
     const [dataResult, countResult] = await Promise.all([
-      this.db.executeQuery(
-        CompiledQuery.raw(dataSQL, [ftsMatch, ...extraParams, limit, offset])
-      ),
-      this.db.executeQuery(
-        CompiledQuery.raw(countSQL, [ftsMatch, ...extraParams])
-      ),
+      this.db.executeQuery(CompiledQuery.raw(dataSQL, [ftsMatch, ...extraParams, limit, offset])),
+      this.db.executeQuery(CompiledQuery.raw(countSQL, [ftsMatch, ...extraParams])),
     ]);
 
     const listings = (dataResult.rows ?? []) as ListingRow[];
@@ -455,26 +422,21 @@ export class ListingsRepository {
   }
 
   async getFeatured(): Promise<ListingRow[]> {
-    return (
-      (await this.db
-        .selectFrom("listings")
-        .selectAll()
-        .leftJoin("users", "listings.user_id", "users.id")
-        .where(sql<SqlBool>`listings.active = 1`)
-        .where(sql<SqlBool>`listings.expires_at > datetime('now')`)
-        .orderBy("users.phone_verified", "desc")
-        .orderBy("listings.created_at", "desc")
-        .limit(8)
-        .selectAll("listings")
-        .execute()) as unknown as ListingRow[]
-    );
+    return (await this.db
+      .selectFrom("listings")
+      .selectAll()
+      .leftJoin("users", "listings.user_id", "users.id")
+      .where(sql<SqlBool>`listings.active = 1`)
+      .where(sql<SqlBool>`listings.expires_at > datetime('now')`)
+      .orderBy("users.phone_verified", "desc")
+      .orderBy("listings.created_at", "desc")
+      .limit(8)
+      .selectAll("listings")
+      .execute()) as unknown as ListingRow[];
   }
 
   async getByUserId(userId: string, active?: boolean): Promise<ListingRow[]> {
-    let query = this.db
-      .selectFrom("listings")
-      .selectAll()
-      .where("user_id", "=", userId);
+    let query = this.db.selectFrom("listings").selectAll().where("user_id", "=", userId);
 
     if (active !== undefined) {
       query = query.where("active", "=", active ? 1 : 0);
@@ -538,18 +500,16 @@ export class ListingsRepository {
   }
 
   async getRelated(listingId: string, category: string): Promise<ListingRow[]> {
-    return (
-      (await this.db
-        .selectFrom("listings")
-        .selectAll()
-        .where("category", "=", category)
-        .where("id", "!=", listingId)
-        .where(sql<SqlBool>`active = 1`)
-        .where(sql<SqlBool>`expires_at > datetime('now')`)
-        .orderBy("created_at", "desc")
-        .limit(4)
-        .execute()) as unknown as ListingRow[]
-    );
+    return (await this.db
+      .selectFrom("listings")
+      .selectAll()
+      .where("category", "=", category)
+      .where("id", "!=", listingId)
+      .where(sql<SqlBool>`active = 1`)
+      .where(sql<SqlBool>`expires_at > datetime('now')`)
+      .orderBy("created_at", "desc")
+      .limit(4)
+      .execute()) as unknown as ListingRow[];
   }
 
   async getSuggestTitles(q: string, limit: number = 20): Promise<string[]> {
@@ -565,30 +525,20 @@ export class ListingsRepository {
   }
 
   async getImages(listingId: string): Promise<ListingImageRow[]> {
-    return (
-      (await this.db
-        .selectFrom("listing_images")
-        .selectAll()
-        .where("listing_id", "=", listingId)
-        .orderBy("position", "asc")
-        .execute()) as unknown as ListingImageRow[]
-    );
+    return (await this.db
+      .selectFrom("listing_images")
+      .selectAll()
+      .where("listing_id", "=", listingId)
+      .orderBy("position", "asc")
+      .execute()) as unknown as ListingImageRow[];
   }
 
   async getSeller(userId: string): Promise<SellerRow | undefined> {
-    return (
-      (await this.db
-        .selectFrom("users")
-        .select([
-          "id",
-          "display_name",
-          "avatar_url",
-          "phone_verified",
-          "created_at",
-        ])
-        .where("id", "=", userId)
-        .executeTakeFirst()) as unknown as SellerRow | undefined
-    );
+    return (await this.db
+      .selectFrom("users")
+      .select(["id", "display_name", "avatar_url", "phone_verified", "created_at"])
+      .where("id", "=", userId)
+      .executeTakeFirst()) as unknown as SellerRow | undefined;
   }
 
   /**
@@ -649,9 +599,7 @@ export class ListingsRepository {
         AND u.email_notifications = 1
     `;
 
-    const result = await this.db.executeQuery(
-      CompiledQuery.raw(querySQL, [])
-    );
+    const result = await this.db.executeQuery(CompiledQuery.raw(querySQL, []));
 
     return (result.rows ?? []) as unknown as ExpiryReminderRow[];
   }

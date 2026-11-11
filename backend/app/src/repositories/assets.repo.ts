@@ -57,7 +57,7 @@ export class AssetsRepository {
     fileSizeBytes: number,
     contentType: string,
     checksumSha256: string | null,
-    position: number
+    position: number,
   ): Promise<ListingAssetRow> {
     return (await this.db
       .insertInto("listing_assets")
@@ -122,11 +122,7 @@ export class AssetsRepository {
   /**
    * Record a download
    */
-  async recordDownload(
-    listingId: string,
-    userId: string,
-    assetId: string | null
-  ): Promise<DownloadRow> {
+  async recordDownload(listingId: string, userId: string, assetId: string | null): Promise<DownloadRow> {
     return (await this.db
       .insertInto("downloads")
       .values({
@@ -152,10 +148,7 @@ export class AssetsRepository {
   /**
    * Get an asset by ID that belongs to a specific listing
    */
-  async getAssetByIdForListing(
-    assetId: string,
-    listingId: string
-  ): Promise<ListingAssetRow | undefined> {
+  async getAssetByIdForListing(assetId: string, listingId: string): Promise<ListingAssetRow | undefined> {
     return (await this.db
       .selectFrom("listing_assets")
       .selectAll()

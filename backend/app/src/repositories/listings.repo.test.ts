@@ -56,14 +56,15 @@ describe("ListingsRepository.getTotalDownloadsForUser", () => {
   const otherId = "user-test-002";
 
   const futureExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  const pastExpiry   = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const pastExpiry = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
   beforeEach(async () => {
     db = createInMemoryDb();
     repo = new ListingsRepository(db);
 
     // Insert two users
-    await db.insertInto("users")
+    await db
+      .insertInto("users")
       .values([
         { id: userId, email: "a@test.com", password_hash: "x" },
         { id: otherId, email: "b@test.com", password_hash: "x" },
@@ -81,40 +82,124 @@ describe("ListingsRepository.getTotalDownloadsForUser", () => {
   });
 
   it("sums download_count for active non-expired listings", async () => {
-    await db.insertInto("listings").values([
-      { id: "l1", user_id: userId, title: "A", description: "desc", category: "software", expires_at: futureExpiry, active: 1, download_count: 10 },
-      { id: "l2", user_id: userId, title: "B", description: "desc", category: "audio",    expires_at: futureExpiry, active: 1, download_count: 5  },
-    ]).execute();
+    await db
+      .insertInto("listings")
+      .values([
+        {
+          id: "l1",
+          user_id: userId,
+          title: "A",
+          description: "desc",
+          category: "software",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 10,
+        },
+        {
+          id: "l2",
+          user_id: userId,
+          title: "B",
+          description: "desc",
+          category: "audio",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 5,
+        },
+      ])
+      .execute();
 
     const total = await repo.getTotalDownloadsForUser(userId);
     expect(total).toBe(15);
   });
 
   it("excludes inactive listings", async () => {
-    await db.insertInto("listings").values([
-      { id: "l1", user_id: userId, title: "A", description: "desc", category: "software", expires_at: futureExpiry, active: 1, download_count: 10 },
-      { id: "l2", user_id: userId, title: "B", description: "desc", category: "audio",    expires_at: futureExpiry, active: 0, download_count: 99 },
-    ]).execute();
+    await db
+      .insertInto("listings")
+      .values([
+        {
+          id: "l1",
+          user_id: userId,
+          title: "A",
+          description: "desc",
+          category: "software",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 10,
+        },
+        {
+          id: "l2",
+          user_id: userId,
+          title: "B",
+          description: "desc",
+          category: "audio",
+          expires_at: futureExpiry,
+          active: 0,
+          download_count: 99,
+        },
+      ])
+      .execute();
 
     const total = await repo.getTotalDownloadsForUser(userId);
     expect(total).toBe(10);
   });
 
   it("excludes expired listings", async () => {
-    await db.insertInto("listings").values([
-      { id: "l1", user_id: userId, title: "A", description: "desc", category: "software", expires_at: futureExpiry, active: 1, download_count: 7 },
-      { id: "l2", user_id: userId, title: "B", description: "desc", category: "audio",    expires_at: pastExpiry,   active: 1, download_count: 50 },
-    ]).execute();
+    await db
+      .insertInto("listings")
+      .values([
+        {
+          id: "l1",
+          user_id: userId,
+          title: "A",
+          description: "desc",
+          category: "software",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 7,
+        },
+        {
+          id: "l2",
+          user_id: userId,
+          title: "B",
+          description: "desc",
+          category: "audio",
+          expires_at: pastExpiry,
+          active: 1,
+          download_count: 50,
+        },
+      ])
+      .execute();
 
     const total = await repo.getTotalDownloadsForUser(userId);
     expect(total).toBe(7);
   });
 
   it("does not include downloads from another user's listings", async () => {
-    await db.insertInto("listings").values([
-      { id: "l1", user_id: userId,  title: "A", description: "desc", category: "software", expires_at: futureExpiry, active: 1, download_count: 3 },
-      { id: "l2", user_id: otherId, title: "B", description: "desc", category: "audio",    expires_at: futureExpiry, active: 1, download_count: 100 },
-    ]).execute();
+    await db
+      .insertInto("listings")
+      .values([
+        {
+          id: "l1",
+          user_id: userId,
+          title: "A",
+          description: "desc",
+          category: "software",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 3,
+        },
+        {
+          id: "l2",
+          user_id: otherId,
+          title: "B",
+          description: "desc",
+          category: "audio",
+          expires_at: futureExpiry,
+          active: 1,
+          download_count: 100,
+        },
+      ])
+      .execute();
 
     const total = await repo.getTotalDownloadsForUser(userId);
     expect(total).toBe(3);
@@ -132,16 +217,58 @@ describe("ListingsRepository.listByOwner", () => {
   beforeEach(async () => {
     db = createInMemoryDb();
     repo = new ListingsRepository(db);
-    await db.insertInto("users").values([
-      { id: me, email: "me@test.com", password_hash: "x" },
-      { id: other, email: "other@test.com", password_hash: "x" },
-    ]).execute();
-    await db.insertInto("listings").values([
-      { id: "live", user_id: me, title: "Live", description: "d", category: "software", expires_at: future, active: 1, download_count: 0 },
-      { id: "off", user_id: me, title: "Off", description: "d", category: "audio", expires_at: future, active: 0, download_count: 0 },
-      { id: "old", user_id: me, title: "Old", description: "d", category: "audio", expires_at: past, active: 1, download_count: 0 },
-      { id: "theirs", user_id: other, title: "Theirs", description: "d", category: "audio", expires_at: future, active: 1, download_count: 0 },
-    ]).execute();
+    await db
+      .insertInto("users")
+      .values([
+        { id: me, email: "me@test.com", password_hash: "x" },
+        { id: other, email: "other@test.com", password_hash: "x" },
+      ])
+      .execute();
+    await db
+      .insertInto("listings")
+      .values([
+        {
+          id: "live",
+          user_id: me,
+          title: "Live",
+          description: "d",
+          category: "software",
+          expires_at: future,
+          active: 1,
+          download_count: 0,
+        },
+        {
+          id: "off",
+          user_id: me,
+          title: "Off",
+          description: "d",
+          category: "audio",
+          expires_at: future,
+          active: 0,
+          download_count: 0,
+        },
+        {
+          id: "old",
+          user_id: me,
+          title: "Old",
+          description: "d",
+          category: "audio",
+          expires_at: past,
+          active: 1,
+          download_count: 0,
+        },
+        {
+          id: "theirs",
+          user_id: other,
+          title: "Theirs",
+          description: "d",
+          category: "audio",
+          expires_at: future,
+          active: 1,
+          download_count: 0,
+        },
+      ])
+      .execute();
   });
 
   afterEach(async () => {

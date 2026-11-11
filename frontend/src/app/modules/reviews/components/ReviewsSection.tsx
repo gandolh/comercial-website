@@ -89,9 +89,7 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
         <StarRating value={review.rating} size="sm" />
       </div>
-      {review.body && (
-        <p className="text-sm text-on-surface-variant leading-relaxed">{review.body}</p>
-      )}
+      {review.body && <p className="text-sm text-on-surface-variant leading-relaxed">{review.body}</p>}
     </article>
   );
 }
@@ -107,9 +105,7 @@ function AggregateSummary({ ratingAvg, ratingCount }: AggregateSummaryProps) {
   const { t } = useTranslation();
 
   if (ratingCount === 0) {
-    return (
-      <p className="text-sm text-outline">{t("reviews.noReviewsYet")}</p>
-    );
+    return <p className="text-sm text-outline">{t("reviews.noReviewsYet")}</p>;
   }
 
   return (
@@ -119,9 +115,7 @@ function AggregateSummary({ ratingAvg, ratingCount }: AggregateSummaryProps) {
       </span>
       <div className="space-y-1">
         <StarRating value={Math.round(ratingAvg ?? 0)} />
-        <p className="text-xs text-outline">
-          {t("reviews.reviewCount", { count: ratingCount })}
-        </p>
+        <p className="text-xs text-outline">{t("reviews.reviewCount", { count: ratingCount })}</p>
       </div>
     </div>
   );
@@ -156,8 +150,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
       onSuccess?.();
     } catch (err: unknown) {
       const axiosErr = err as AxiosError<{ error?: string }>;
-      const msg: string =
-        axiosErr?.response?.data?.error ?? t("reviews.form.submitError");
+      const msg: string = axiosErr?.response?.data?.error ?? t("reviews.form.submitError");
       setError(msg);
     }
   };
@@ -167,9 +160,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <p className="text-sm font-medium text-on-surface-variant">
-          {t("reviews.form.ratingLabel")}
-        </p>
+        <p className="text-sm font-medium text-on-surface-variant">{t("reviews.form.ratingLabel")}</p>
         <StarRating value={rating} interactive onChange={setRating} />
         {error && <p className="text-xs text-error">{error}</p>}
       </div>
@@ -185,12 +176,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
       />
 
       <div className="flex items-center gap-3">
-        <Button
-          type="submit"
-          variant="primary"
-          size="sm"
-          loading={submitMutation.isPending}
-        >
+        <Button type="submit" variant="primary" size="sm" loading={submitMutation.isPending}>
           {isEditing ? t("reviews.form.update") : t("reviews.form.submit")}
         </Button>
       </div>
@@ -213,9 +199,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
   const [showForm, setShowForm] = useState(false);
 
   // The user's own review (null until loaded)
-  const myReview = data?.reviews.find(
-    (r) => r.buyer_user_id !== undefined && canReview
-  ) ?? null;
+  const myReview = data?.reviews.find((r) => r.buyer_user_id !== undefined && canReview) ?? null;
 
   const handleDelete = async () => {
     try {
@@ -243,10 +227,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
       {isLoading ? (
         <div className="h-10 bg-surface-container rounded-xl animate-pulse" />
       ) : (
-        <AggregateSummary
-          ratingAvg={data?.rating_avg ?? null}
-          ratingCount={data?.rating_count ?? 0}
-        />
+        <AggregateSummary ratingAvg={data?.rating_avg ?? null} ratingCount={data?.rating_count ?? 0} />
       )}
 
       {/* Buyer review form / CTA */}
@@ -254,17 +235,10 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
         <div className="bg-surface-container rounded-xl p-5 space-y-4">
           {myReview && !showForm ? (
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-on-surface">
-                {t("reviews.yourReview")}
-              </p>
+              <p className="text-sm font-semibold text-on-surface">{t("reviews.yourReview")}</p>
               <ReviewCard review={myReview} />
               <div className="flex gap-3">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowForm(true)}
-                  iconLeft="edit"
-                >
+                <Button variant="ghost" size="sm" onClick={() => setShowForm(true)} iconLeft="edit">
                   {t("reviews.form.edit")}
                 </Button>
                 <Button
@@ -283,11 +257,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
               <p className="text-sm font-semibold text-on-surface">
                 {myReview ? t("reviews.form.editHeading") : t("reviews.form.heading")}
               </p>
-              <ReviewForm
-                listingId={listingId}
-                existingReview={myReview}
-                onSuccess={() => setShowForm(false)}
-              />
+              <ReviewForm listingId={listingId} existingReview={myReview} onSuccess={() => setShowForm(false)} />
               {myReview && (
                 <button
                   type="button"

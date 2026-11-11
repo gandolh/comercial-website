@@ -56,17 +56,13 @@ export function CityAutocomplete({
       itemToStringValue={(city) => city}
       openOnInputClick
     >
-      <Autocomplete.InputGroup
-        className={`relative flex items-center gap-2 ${className}`}
-      >
+      <Autocomplete.InputGroup className={`relative flex items-center gap-2 ${className}`}>
         {isFetching ? (
           <span className="material-symbols-outlined text-outline shrink-0 animate-spin" style={{ fontSize: "20px" }}>
             progress_activity
           </span>
         ) : (
-          <span className="material-symbols-outlined text-outline shrink-0">
-            location_on
-          </span>
+          <span className="material-symbols-outlined text-outline shrink-0">location_on</span>
         )}
         <Autocomplete.Input
           className="bg-transparent border-none outline-none text-lg py-3 w-40 placeholder:text-outline text-on-surface"

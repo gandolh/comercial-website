@@ -6,11 +6,7 @@ export interface AuthResponse {
   user: User;
 }
 
-
-export async function login(data: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse> {
+export async function login(data: { email: string; password: string }): Promise<AuthResponse> {
   const res = await axiosInstance.post("/auth/login", data);
   return res.data;
 }
@@ -26,5 +22,3 @@ export async function verifyEmail(token: string): Promise<void> {
 export async function resendVerification(): Promise<void> {
   await axiosInstance.post("/auth/email/resend");
 }
-
-

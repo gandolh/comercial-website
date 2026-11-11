@@ -54,8 +54,24 @@ export const CreateListingRequestSchema = z
   })
   .superRefine((v, ctx) => {
     if (!v.active) return;
-    if (v.title.length < 5) ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 5, type: "string", inclusive: true, path: ["title"], message: "title must have at least 5 characters" });
-    if (v.description.length < 10) ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 10, type: "string", inclusive: true, path: ["description"], message: "description must have at least 10 characters" });
+    if (v.title.length < 5)
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 5,
+        type: "string",
+        inclusive: true,
+        path: ["title"],
+        message: "title must have at least 5 characters",
+      });
+    if (v.description.length < 10)
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 10,
+        type: "string",
+        inclusive: true,
+        path: ["description"],
+        message: "description must have at least 10 characters",
+      });
   });
 
 const UpdateListingRequestSchema = z.object({
@@ -101,10 +117,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     const query = parsed.data;
-    const optionalUserId = extractOptionalUserId(
-      request.headers.authorization,
-      ctx.config.jwtSecret
-    );
+    const optionalUserId = extractOptionalUserId(request.headers.authorization, ctx.config.jwtSecret);
 
     const { listings, total } = await repo.search(
       query.q,
@@ -117,7 +130,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       query.page,
       query.per_page,
       query.user_id,
-      query.active
+      query.active,
     );
 
     const cards: ListingCardResponse[] = [];
@@ -125,12 +138,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       const images = await repo.getImages(listing.id);
       const seller = await repo.getSeller(listing.user_id);
       if (seller) {
-        const card = toListingCardResponse(
-          listing,
-          images,
-          Boolean(seller.phone_verified),
-          ctx.config
-        );
+        const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
         cards.push(card);
       }
     }
@@ -151,8 +159,14 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    * in the same page shape as GET /listings. Query: active, expired, page, per_page.
    */
   const MyListingsQuerySchema = z.object({
-    active: z.enum(["true", "false"]).transform((v) => v === "true").optional(),
-    expired: z.enum(["true", "false"]).transform((v) => v === "true").optional(),
+    active: z
+      .enum(["true", "false"])
+      .transform((v) => v === "true")
+      .optional(),
+    expired: z
+      .enum(["true", "false"])
+      .transform((v) => v === "true")
+      .optional(),
     page: z.coerce.number().int().min(1).default(1),
     per_page: z.coerce.number().int().min(1).max(50).default(12),
   });
@@ -165,9 +179,12 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const userId = request.userId!;
     const { listings, total } = await repo.listByOwner(
       userId,
-      { ...(query.active !== undefined ? { active: query.active } : {}), ...(query.expired !== undefined ? { expired: query.expired } : {}) },
+      {
+        ...(query.active !== undefined ? { active: query.active } : {}),
+        ...(query.expired !== undefined ? { expired: query.expired } : {}),
+      },
       query.page,
-      query.per_page
+      query.per_page,
     );
     const seller = await repo.getSeller(userId);
     const cards: ListingCardResponse[] = [];
@@ -198,11 +215,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     const body = parsed.data;
 
     // Get user
-    const user = await ctx.db
-      .selectFrom("users")
-      .selectAll()
-      .where("id", "=", userId)
-      .executeTakeFirst();
+    const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
 
     if (!user) throw AppError.notFound();
 
@@ -225,7 +238,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       body.description,
       body.price_ron ?? null,
       body.category,
-      body.active
+      body.active,
     );
 
     return reply.send(toListingResponse(listing));
@@ -242,12 +255,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       const images = await repo.getImages(listing.id);
       const seller = await repo.getSeller(listing.user_id);
       if (seller) {
-        const card = toListingCardResponse(
-          listing,
-          images,
-          Boolean(seller.phone_verified),
-          ctx.config
-        );
+        const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
         cards.push(card);
       }
     }
@@ -275,10 +283,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
    */
   app.get("/listings/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
-    const optionalUserId = extractOptionalUserId(
-      request.headers.authorization,
-      ctx.config.jwtSecret
-    );
+    const optionalUserId = extractOptionalUserId(request.headers.authorization, ctx.config.jwtSecret);
 
     const listing = await repo.getById(id);
     if (!listing) {
@@ -287,9 +292,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
 
     // Non-owner cannot see inactive/expired
     if (optionalUserId !== listing.user_id) {
-      const expiresAt = typeof listing.expires_at === 'string'
-        ? new Date(listing.expires_at)
-        : listing.expires_at;
+      const expiresAt = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
       if (!listing.active || expiresAt <= new Date()) {
         throw AppError.notFound();
       }
@@ -331,7 +334,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       ctx.config,
       assetResponses,
       reviewAggregate.rating_avg,
-      reviewAggregate.rating_count
+      reviewAggregate.rating_count,
     );
 
     return reply.send(detail);
@@ -359,13 +362,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
 
     const body = parsed.data;
 
-    const updated = await repo.update(
-      id,
-      body.title,
-      body.description,
-      body.price_ron,
-      body.category
-    );
+    const updated = await repo.update(id, body.title, body.description, body.price_ron, body.category);
 
     return reply.send(toListingResponse(updated));
   });
@@ -405,11 +402,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     // Check email verified
-    const user = await ctx.db
-      .selectFrom("users")
-      .selectAll()
-      .where("id", "=", userId)
-      .executeTakeFirst();
+    const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
 
     if (!user || !user.email_verified) {
       throw AppError.forbidden();
@@ -426,11 +419,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     // Check ≥1 asset (downloadable file)
-    const assets = await ctx.db
-      .selectFrom("listing_assets")
-      .selectAll()
-      .where("listing_id", "=", id)
-      .execute();
+    const assets = await ctx.db.selectFrom("listing_assets").selectAll().where("listing_id", "=", id).execute();
     if (assets.length === 0) {
       throw AppError.validation("cel puțin un fișier descărcabil este necesar pentru publicare");
     }
@@ -463,9 +452,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
 
     // Check rate limit: if last_renewal > now-1h → 429
     // last_renewal = expires_at - 30 days
-    const expiresAtDate = typeof listing.expires_at === 'string'
-      ? new Date(listing.expires_at)
-      : listing.expires_at;
+    const expiresAtDate = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
     const lastRenewalTime = new Date(expiresAtDate);
     lastRenewalTime.setDate(lastRenewalTime.getDate() - 30);
 
@@ -486,25 +473,21 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
   /**
    * POST /listings/:id/deactivate — Deactivate listing (protected, owner only)
    */
-  app.post(
-    "/listings/:id/deactivate",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id } = request.params as { id: string };
+  app.post("/listings/:id/deactivate", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id } = request.params as { id: string };
 
-      const listing = await repo.getById(id);
-      if (!listing) throw AppError.notFound();
+    const listing = await repo.getById(id);
+    if (!listing) throw AppError.notFound();
 
-      if (listing.user_id !== userId) {
-        throw AppError.forbidden();
-      }
-
-      const updated = await repo.setActive(id, false);
-
-      return reply.send(toListingResponse(updated));
+    if (listing.user_id !== userId) {
+      throw AppError.forbidden();
     }
-  );
+
+    const updated = await repo.setActive(id, false);
+
+    return reply.send(toListingResponse(updated));
+  });
 
   /**
    * POST /listings/:id/activate — Activate listing (protected, owner only, 409 if expired)
@@ -521,9 +504,8 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
     }
 
     // 409 if expired
-    const expiresAtForActivate = typeof listing.expires_at === 'string'
-      ? new Date(listing.expires_at)
-      : listing.expires_at;
+    const expiresAtForActivate =
+      typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
     if (expiresAtForActivate <= new Date()) {
       throw AppError.conflict("listing has expired");
     }
@@ -551,12 +533,7 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
       const images = await repo.getImages(item.id);
       const seller = await repo.getSeller(item.user_id);
       if (seller) {
-        const card = toListingCardResponse(
-          item,
-          images,
-          Boolean(seller.phone_verified),
-          ctx.config
-        );
+        const card = toListingCardResponse(item, images, Boolean(seller.phone_verified), ctx.config);
         cards.push(card);
       }
     }
@@ -567,33 +544,29 @@ export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
   /**
    * GET /listings/:id/seller-phone — Get seller phone (protected, 403 if viewer is owner, 404 if no phone)
    */
-  app.get(
-    "/listings/:id/seller-phone",
-    { preHandler: appWithAuth.authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
-      const { id } = request.params as { id: string };
+  app.get("/listings/:id/seller-phone", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
+    const userId = request.userId!;
+    const { id } = request.params as { id: string };
 
-      const listing = await repo.getById(id);
-      if (!listing) throw AppError.notFound();
+    const listing = await repo.getById(id);
+    if (!listing) throw AppError.notFound();
 
-      // 403 if viewer is owner
-      if (listing.user_id === userId) {
-        throw AppError.forbidden();
-      }
-
-      // Get seller phone
-      const seller = await ctx.db
-        .selectFrom("users")
-        .select("phone")
-        .where("id", "=", listing.user_id)
-        .executeTakeFirst();
-
-      if (!seller || !seller.phone) {
-        throw AppError.notFound();
-      }
-
-      return reply.send({ phone: seller.phone });
+    // 403 if viewer is owner
+    if (listing.user_id === userId) {
+      throw AppError.forbidden();
     }
-  );
+
+    // Get seller phone
+    const seller = await ctx.db
+      .selectFrom("users")
+      .select("phone")
+      .where("id", "=", listing.user_id)
+      .executeTakeFirst();
+
+    if (!seller || !seller.phone) {
+      throw AppError.notFound();
+    }
+
+    return reply.send({ phone: seller.phone });
+  });
 };

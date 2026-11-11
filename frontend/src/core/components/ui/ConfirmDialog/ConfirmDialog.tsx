@@ -1,16 +1,16 @@
-import { AlertDialog } from '@base-ui/react/alert-dialog'
-import { Button } from '../Button'
+import { AlertDialog } from "@base-ui/react/alert-dialog";
+import { Button } from "../Button";
 
 interface ConfirmDialogProps {
-  open: boolean
-  onClose: () => void
-  onConfirm: () => void
-  title: string
-  description: string
-  confirmLabel?: string
-  cancelLabel?: string
-  variant?: 'danger' | 'primary'
-  loading?: boolean
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  variant?: "danger" | "primary";
+  loading?: boolean;
 }
 
 export function ConfirmDialog({
@@ -19,13 +19,18 @@ export function ConfirmDialog({
   onConfirm,
   title,
   description,
-  confirmLabel = 'Confirmă',
-  cancelLabel = 'Anulează',
-  variant = 'danger',
+  confirmLabel = "Confirmă",
+  cancelLabel = "Anulează",
+  variant = "danger",
   loading = false,
 }: ConfirmDialogProps) {
   return (
-    <AlertDialog.Root open={open} onOpenChange={(o) => { if (!o) onClose() }}>
+    <AlertDialog.Root
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) onClose();
+      }}
+    >
       <AlertDialog.Portal>
         <AlertDialog.Backdrop className="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50" />
         <AlertDialog.Popup className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-white/90 backdrop-blur-xl rounded-2xl shadow-ambient p-6 space-y-4">
@@ -50,5 +55,5 @@ export function ConfirmDialog({
         </AlertDialog.Popup>
       </AlertDialog.Portal>
     </AlertDialog.Root>
-  )
+  );
 }

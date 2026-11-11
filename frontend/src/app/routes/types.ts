@@ -2,9 +2,7 @@ import type { ComponentType, LazyExoticComponent } from "react";
 
 type UnknownRecord = Record<string, unknown>;
 
-export type RouteComponent =
-  | ComponentType<UnknownRecord>
-  | LazyExoticComponent<ComponentType<UnknownRecord>>;
+export type RouteComponent = ComponentType<UnknownRecord> | LazyExoticComponent<ComponentType<UnknownRecord>>;
 
 export interface ModuleRoute {
   path: string;

@@ -11,23 +11,15 @@ export const reviewsService = {
    * Fetch all reviews + aggregate for a listing.
    */
   async getReviews(listingId: string): Promise<ReviewsResponse> {
-    const res = await axiosInstance.get<ReviewsResponse>(
-      `/listings/${listingId}/reviews`
-    );
+    const res = await axiosInstance.get<ReviewsResponse>(`/listings/${listingId}/reviews`);
     return res.data;
   },
 
   /**
    * Create or update the authenticated buyer's review for a listing.
    */
-  async submitReview(
-    listingId: string,
-    payload: SubmitReviewRequest
-  ): Promise<Review> {
-    const res = await axiosInstance.post<Review>(
-      `/listings/${listingId}/reviews`,
-      payload
-    );
+  async submitReview(listingId: string, payload: SubmitReviewRequest): Promise<Review> {
+    const res = await axiosInstance.post<Review>(`/listings/${listingId}/reviews`, payload);
     return res.data;
   },
 

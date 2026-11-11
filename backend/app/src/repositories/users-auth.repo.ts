@@ -43,19 +43,15 @@ export class UsersAuthRepository {
   constructor(private db: Db) {}
 
   async findByEmail(email: string): Promise<UserRow | undefined> {
-    return this.db
-      .selectFrom("users")
-      .selectAll()
-      .where("email", "=", email)
-      .executeTakeFirst() as Promise<UserRow | undefined>;
+    return this.db.selectFrom("users").selectAll().where("email", "=", email).executeTakeFirst() as Promise<
+      UserRow | undefined
+    >;
   }
 
   async findById(id: string): Promise<UserRow | undefined> {
-    return this.db
-      .selectFrom("users")
-      .selectAll()
-      .where("id", "=", id)
-      .executeTakeFirst() as Promise<UserRow | undefined>;
+    return this.db.selectFrom("users").selectAll().where("id", "=", id).executeTakeFirst() as Promise<
+      UserRow | undefined
+    >;
   }
 
   async createUser(params: CreateUserParams): Promise<UserRow> {
@@ -100,21 +96,13 @@ export class UsersAuthRepository {
 
     if (!row) return null;
 
-    await this.db
-      .updateTable("email_verification_tokens")
-      .set({ used_at: now })
-      .where("token", "=", token)
-      .execute();
+    await this.db.updateTable("email_verification_tokens").set({ used_at: now }).where("token", "=", token).execute();
 
     return row.user_id;
   }
 
   async markEmailVerified(userId: string): Promise<void> {
-    await this.db
-      .updateTable("users")
-      .set({ email_verified: 1 })
-      .where("id", "=", userId)
-      .execute();
+    await this.db.updateTable("users").set({ email_verified: 1 }).where("id", "=", userId).execute();
   }
 
   async createPasswordResetToken(userId: string, expiresAtMs: number): Promise<string> {
@@ -141,21 +129,13 @@ export class UsersAuthRepository {
 
     if (!row) return null;
 
-    await this.db
-      .updateTable("password_reset_tokens")
-      .set({ used_at: now })
-      .where("token", "=", token)
-      .execute();
+    await this.db.updateTable("password_reset_tokens").set({ used_at: now }).where("token", "=", token).execute();
 
     return row.user_id;
   }
 
   async updatePassword(userId: string, passwordHash: string): Promise<void> {
-    await this.db
-      .updateTable("users")
-      .set({ password_hash: passwordHash })
-      .where("id", "=", userId)
-      .execute();
+    await this.db.updateTable("users").set({ password_hash: passwordHash }).where("id", "=", userId).execute();
   }
 
   async storePhoneVerificationCode(userId: string, phone: string, expiresAtMs: number): Promise<void> {
@@ -191,21 +171,13 @@ export class UsersAuthRepository {
 
     if (!row) return null;
 
-    await this.db
-      .updateTable("phone_verification_codes")
-      .set({ consumed_at: now })
-      .where("id", "=", row.id)
-      .execute();
+    await this.db.updateTable("phone_verification_codes").set({ consumed_at: now }).where("id", "=", row.id).execute();
 
     return { phone: row.phone, codeId: row.id };
   }
 
   async markPhoneVerified(userId: string, phone: string): Promise<void> {
-    await this.db
-      .updateTable("users")
-      .set({ phone_verified: 1, phone })
-      .where("id", "=", userId)
-      .execute();
+    await this.db.updateTable("users").set({ phone_verified: 1, phone }).where("id", "=", userId).execute();
   }
 
   async updateProfileFields(userId: string, params: UpdateProfileParams): Promise<UserRow | undefined> {

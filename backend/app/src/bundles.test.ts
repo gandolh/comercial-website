@@ -50,7 +50,7 @@ async function createListing(
   db: Kysely<DbSchema>,
   userId: string,
   title: string,
-  priceRon: number | null = null
+  priceRon: number | null = null,
 ): Promise<string> {
   const expires = new Date();
   expires.setDate(expires.getDate() + 30);
@@ -75,7 +75,7 @@ async function createPaidOrder(
   db: Kysely<DbSchema>,
   buyerUserId: string,
   listingId: string,
-  sellerUserId: string
+  sellerUserId: string,
 ): Promise<string> {
   const row = await db
     .insertInto("orders")
@@ -166,19 +166,13 @@ describe("BundlesRepository", () => {
     it("returns true when the buyer has a paid order for the bundle containing the child", async () => {
       await createPaidOrder(db, buyerUserId, bundleListingId, sellerUserId);
 
-      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(
-        buyerUserId,
-        childListingId
-      );
+      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(buyerUserId, childListingId);
       expect(hasAccess).toBe(true);
     });
 
     it("returns false when the user has NOT purchased the bundle", async () => {
       // nonBuyerUserId has no order at all
-      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(
-        nonBuyerUserId,
-        childListingId
-      );
+      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(nonBuyerUserId, childListingId);
       expect(hasAccess).toBe(false);
     });
 
@@ -196,10 +190,7 @@ describe("BundlesRepository", () => {
         })
         .execute();
 
-      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(
-        buyerUserId,
-        childListingId
-      );
+      const hasAccess = await bundlesRepo.hasBundlePurchaseForChild(buyerUserId, childListingId);
       expect(hasAccess).toBe(false);
     });
   });

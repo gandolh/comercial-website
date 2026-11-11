@@ -48,10 +48,7 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[var(--shadow-ambient)]">
       <div className="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
-        <Link
-          to="/"
-          className="text-2xl font-black text-primary tracking-tight font-[Manrope] no-underline"
-        >
+        <Link to="/" className="text-2xl font-black text-primary tracking-tight font-[Manrope] no-underline">
           Piață<span className="text-secondary">Ro</span>
         </Link>
 
@@ -68,9 +65,7 @@ export function Navbar() {
           >
             {t("nav.favorites")}
             {isAuthenticated && (favoriteIds.data?.length ?? 0) > 0 && (
-              <span className="ml-1 text-primary font-bold">
-                ({favoriteIds.data?.length})
-              </span>
+              <span className="ml-1 text-primary font-bold">({favoriteIds.data?.length})</span>
             )}
           </Link>
           <Link
@@ -94,9 +89,7 @@ export function Navbar() {
                   className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"
                   aria-label="Notificări"
                 >
-                  <span className="material-symbols-outlined">
-                    notifications
-                  </span>
+                  <span className="material-symbols-outlined">notifications</span>
                 </button>
                 <Dropdown
                   trigger={

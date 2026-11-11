@@ -32,10 +32,7 @@ export async function createDraft(category: string): Promise<ListingDraft> {
   return refreshDraft(response.data.id);
 }
 
-export async function updateDraft(
-  id: string,
-  payload: UpdateDraftPayload,
-): Promise<ListingDraft> {
+export async function updateDraft(id: string, payload: UpdateDraftPayload): Promise<ListingDraft> {
   await axiosInstance.patch(`/listings/${id}`, payload);
   return refreshDraft(id);
 }

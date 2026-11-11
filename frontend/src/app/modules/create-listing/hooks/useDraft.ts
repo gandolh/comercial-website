@@ -20,9 +20,7 @@ export function useDraft(draftId: string | null) {
   return useMemo(
     () => ({
       ...query,
-      remove: draftId
-        ? () => queryClient.removeQueries({ queryKey: ["listing", draftId] })
-        : undefined,
+      remove: draftId ? () => queryClient.removeQueries({ queryKey: ["listing", draftId] }) : undefined,
     }),
     [draftId, query, queryClient],
   );

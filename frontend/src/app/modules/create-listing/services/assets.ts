@@ -28,25 +28,17 @@ export interface PutFileOptions {
  * Backend: POST /listings/:id/assets
  * Response: { id, listing_id, s3_key, original_filename, file_size_bytes, content_type, position, created_at }
  */
-export async function uploadAsset(
-  listingId: string,
-  file: File,
-  options?: UploadAssetOptions,
-): Promise<ListingAsset> {
+export async function uploadAsset(listingId: string, file: File, options?: UploadAssetOptions): Promise<ListingAsset> {
   const form = new FormData();
   form.append("file", file, file.name);
 
-  const response = await axiosInstance.post<ListingAssetApi>(
-    `/listings/${listingId}/assets`,
-    form,
-    {
-      onUploadProgress: (event) => {
-        if (!options?.onUploadProgress || !event.total) return;
-        const progress = Math.round((event.loaded * 100) / event.total);
-        options.onUploadProgress(progress);
-      },
+  const response = await axiosInstance.post<ListingAssetApi>(`/listings/${listingId}/assets`, form, {
+    onUploadProgress: (event) => {
+      if (!options?.onUploadProgress || !event.total) return;
+      const progress = Math.round((event.loaded * 100) / event.total);
+      options.onUploadProgress(progress);
     },
-  );
+  });
 
   return mapAsset(response.data);
 }
@@ -77,11 +69,7 @@ export async function requestAssetUploadUrl(
 }
 
 /** No-op: upload already happened in requestAssetUploadUrl. */
-export async function putAssetToSignedUrl(
-  _uploadUrl: string,
-  _file: File,
-  _options?: PutFileOptions,
-): Promise<void> {
+export async function putAssetToSignedUrl(_uploadUrl: string, _file: File, _options?: PutFileOptions): Promise<void> {
   // Upload was already performed.
 }
 
@@ -106,10 +94,7 @@ export async function commitAsset(
 
 // ---------------------------------------------------------------------------
 
-export async function deleteAsset(
-  listingId: string,
-  assetId: string,
-): Promise<void> {
+export async function deleteAsset(listingId: string, assetId: string): Promise<void> {
   await axiosInstance.delete(`/listings/${listingId}/assets/${assetId}`);
 }
 

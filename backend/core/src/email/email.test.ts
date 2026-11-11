@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { EmailMessage, EmailService } from "./index.js";
-import {
-  SmtpEmailService,
-  LogEmailService,
-  createEmailService,
-} from "./index.js";
+import { SmtpEmailService, LogEmailService, createEmailService } from "./index.js";
 
 describe("EmailService", () => {
   describe("LogEmailService", () => {
@@ -37,10 +33,7 @@ describe("EmailService", () => {
 
       await service.send(message);
 
-      expect(logSpy).toHaveBeenCalledWith(
-        "[email]",
-        expect.stringContaining("test@example.com")
-      );
+      expect(logSpy).toHaveBeenCalledWith("[email]", expect.stringContaining("test@example.com"));
 
       logSpy.mockRestore();
     });
@@ -130,7 +123,7 @@ describe("EmailService", () => {
           to: "recipient@example.com",
           subject: "Test",
           html: "<p>Test</p>",
-        })
+        }),
       );
 
       sendMailSpy.mockRestore();

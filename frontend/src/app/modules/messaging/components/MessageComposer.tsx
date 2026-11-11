@@ -7,11 +7,7 @@ interface Props {
   placeholder?: string;
 }
 
-export const MessageComposer: React.FC<Props> = ({
-  onSend,
-  disabled,
-  placeholder,
-}) => {
+export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder }) => {
   const { t } = useTranslation();
   const [body, setBody] = useState("");
   const [isSending, setIsSending] = useState(false);

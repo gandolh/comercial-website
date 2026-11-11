@@ -1,42 +1,39 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
-type AlertVariant = 'info' | 'success' | 'warning' | 'error'
+type AlertVariant = "info" | "success" | "warning" | "error";
 
 interface AlertProps {
-  variant?: AlertVariant
-  title?: string
-  children: ReactNode
-  onClose?: () => void
-  className?: string
+  variant?: AlertVariant;
+  title?: string;
+  children: ReactNode;
+  onClose?: () => void;
+  className?: string;
 }
 
 const variantConfig: Record<AlertVariant, { icon: string; classes: string }> = {
   info: {
-    icon: 'info',
-    classes: 'bg-primary-fixed/20 text-on-surface border border-primary/20',
+    icon: "info",
+    classes: "bg-primary-fixed/20 text-on-surface border border-primary/20",
   },
   success: {
-    icon: 'check_circle',
-    classes: 'bg-tertiary-container/40 text-on-tertiary-container border border-tertiary/20',
+    icon: "check_circle",
+    classes: "bg-tertiary-container/40 text-on-tertiary-container border border-tertiary/20",
   },
   warning: {
-    icon: 'warning',
-    classes: 'bg-secondary-container/40 text-on-secondary-container border border-secondary/20',
+    icon: "warning",
+    classes: "bg-secondary-container/40 text-on-secondary-container border border-secondary/20",
   },
   error: {
-    icon: 'error',
-    classes: 'bg-error-container text-on-error-container border border-error/20',
+    icon: "error",
+    classes: "bg-error-container text-on-error-container border border-error/20",
   },
-}
+};
 
-export function Alert({ variant = 'info', title, children, onClose, className = '' }: AlertProps) {
-  const { icon, classes } = variantConfig[variant]
+export function Alert({ variant = "info", title, children, onClose, className = "" }: AlertProps) {
+  const { icon, classes } = variantConfig[variant];
 
   return (
-    <div
-      role="alert"
-      className={['flex gap-3 rounded-xl px-4 py-3', classes, className].join(' ')}
-    >
+    <div role="alert" className={["flex gap-3 rounded-xl px-4 py-3", classes, className].join(" ")}>
       <span className="material-symbols-outlined text-xl flex-shrink-0 mt-0.5" aria-hidden="true">
         {icon}
       </span>
@@ -57,5 +54,5 @@ export function Alert({ variant = 'info', title, children, onClose, className = 
         </button>
       )}
     </div>
-  )
+  );
 }

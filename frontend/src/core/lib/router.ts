@@ -67,34 +67,18 @@ function entriesToSearchParams(search: Record<string, unknown> | undefined) {
 
 export function useSearchParams(): [
   URLSearchParams,
-  (
-    args:
-      | URLSearchParams
-      | Record<string, unknown>
-      | ((prev: URLSearchParams) => URLSearchParams),
-  ) => void,
+  (args: URLSearchParams | Record<string, unknown> | ((prev: URLSearchParams) => URLSearchParams)) => void,
 ] {
   const router = useRouter();
   const state = useRouterState();
 
-  const searchSnapshot = useMemo(
-    () => state.location.search as Record<string, unknown>,
-    [state.location.search],
-  );
+  const searchSnapshot = useMemo(() => state.location.search as Record<string, unknown>, [state.location.search]);
   const pathname = state.location.pathname;
 
-  const currentParams = useMemo(
-    () => entriesToSearchParams(searchSnapshot),
-    [searchSnapshot],
-  );
+  const currentParams = useMemo(() => entriesToSearchParams(searchSnapshot), [searchSnapshot]);
 
   const setSearchParams = useCallback(
-    (
-      args:
-        | URLSearchParams
-        | Record<string, unknown>
-        | ((prev: URLSearchParams) => URLSearchParams),
-    ) => {
+    (args: URLSearchParams | Record<string, unknown> | ((prev: URLSearchParams) => URLSearchParams)) => {
       const base = new URLSearchParams(currentParams.toString());
 
       const nextParams = (() => {

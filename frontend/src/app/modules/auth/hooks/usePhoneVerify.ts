@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { requestPhoneCode, verifyPhone } from '../services/phone';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { requestPhoneCode, verifyPhone } from "../services/phone";
 
 export function usePhoneVerify() {
   const queryClient = useQueryClient();
@@ -11,7 +11,7 @@ export function usePhoneVerify() {
   const verify = useMutation({
     mutationFn: verifyPhone,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['me'] });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
     },
   });
 

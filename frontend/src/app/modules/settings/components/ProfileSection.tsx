@@ -94,9 +94,7 @@ export function ProfileSection() {
           <label className="text-sm font-medium text-on-surface">Email</label>
           <div className="p-3 bg-surface-container-high rounded-md text-on-surface-variant flex justify-between items-center">
             <span>{user?.email}</span>
-            <span className="text-xs italic">
-              Email-ul nu poate fi schimbat momentan
-            </span>
+            <span className="text-xs italic">Email-ul nu poate fi schimbat momentan</span>
           </div>
         </div>
 
@@ -107,12 +105,7 @@ export function ProfileSection() {
               {user?.phone || "Niciun număr adăugat"}
             </div>
             {!user?.phone_verified && (
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsPhoneModalOpen(true)}
-              >
+              <Button type="button" variant="secondary" size="sm" onClick={() => setIsPhoneModalOpen(true)}>
                 Verifică
               </Button>
             )}
@@ -176,12 +169,8 @@ export function ProfileSection() {
           />
         </div>
 
-        {saveSuccess && (
-          <p className="text-sm text-success">{t("settings.profile.savedMessage")}</p>
-        )}
-        {saveError && (
-          <p className="text-sm text-error">{t("settings.profile.errorMessage")}</p>
-        )}
+        {saveSuccess && <p className="text-sm text-success">{t("settings.profile.savedMessage")}</p>}
+        {saveError && <p className="text-sm text-error">{t("settings.profile.errorMessage")}</p>}
 
         <div className="pt-2">
           <Button type="submit" loading={updateProfileMutation.isPending}>
@@ -190,12 +179,7 @@ export function ProfileSection() {
         </div>
       </form>
 
-      {isPhoneModalOpen && (
-        <PhoneVerifyModal
-          open={isPhoneModalOpen}
-          onOpenChange={setIsPhoneModalOpen}
-        />
-      )}
+      {isPhoneModalOpen && <PhoneVerifyModal open={isPhoneModalOpen} onOpenChange={setIsPhoneModalOpen} />}
     </section>
   );
 }

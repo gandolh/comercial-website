@@ -12,11 +12,7 @@ interface FavoriteToggleProps {
   size?: "sm" | "md";
 }
 
-export function FavoriteToggle({
-  listingId,
-  className = "",
-  size = "md",
-}: FavoriteToggleProps) {
+export function FavoriteToggle({ listingId, className = "", size = "md" }: FavoriteToggleProps) {
   const location = useLocation();
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const favoriteIdsQuery = useFavoriteIds();
@@ -57,9 +53,7 @@ export function FavoriteToggle({
         style={{
           fontSize: iconSize,
           color: isFavorited ? "var(--color-error)" : "var(--color-primary)",
-          fontVariationSettings: isFavorited
-            ? "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24"
-            : undefined,
+          fontVariationSettings: isFavorited ? "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24" : undefined,
         }}
       >
         favorite

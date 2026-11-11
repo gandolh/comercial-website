@@ -21,9 +21,7 @@ export default function PublicProfilePage() {
   const { id } = useParams<{ id: string }>();
   const { data: _profileRaw, isLoading: isProfileLoading } = usePublicProfile(id!);
   const profile = _profileRaw as SellerProfile | undefined;
-  const { data: listingsPage, isLoading: isListingsLoading } = useUserListings(
-    id!,
-  );
+  const { data: listingsPage, isLoading: isListingsLoading } = useUserListings(id!);
   const { t } = useTranslation();
 
   if (isProfileLoading) {
@@ -46,15 +44,12 @@ export default function PublicProfilePage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-24 text-center">
         <h1 className="text-4xl font-black mb-4">{t("seller.notFound")}</h1>
-        <p className="text-on-surface-variant">
-          {t("seller.notFoundDesc")}
-        </p>
+        <p className="text-on-surface-variant">{t("seller.notFoundDesc")}</p>
       </div>
     );
   }
 
-  const hasSocialLinks =
-    profile.social_twitter || profile.social_instagram || profile.social_github;
+  const hasSocialLinks = profile.social_twitter || profile.social_instagram || profile.social_github;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -77,9 +72,7 @@ export default function PublicProfilePage() {
 
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2">
-              <h1 className="text-3xl font-black">
-                {profile.display_name || "Utilizator"}
-              </h1>
+              <h1 className="text-3xl font-black">{profile.display_name || "Utilizator"}</h1>
               {profile.phone_verified && (
                 <div className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="w-4 h-4" />
@@ -100,11 +93,15 @@ export default function PublicProfilePage() {
               </div>
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5" />
-                <span>{profile.active_listings_count} {t("seller.activeListings")}</span>
+                <span>
+                  {profile.active_listings_count} {t("seller.activeListings")}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Download className="w-5 h-5" />
-                <span>{(profile.total_downloads ?? 0)} {t("seller.totalDownloads")}</span>
+                <span>
+                  {profile.total_downloads ?? 0} {t("seller.totalDownloads")}
+                </span>
               </div>
             </div>
 
@@ -180,10 +177,7 @@ export default function PublicProfilePage() {
       {isListingsLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="h-80 bg-surface-container-low rounded-2xl animate-pulse"
-            />
+            <div key={i} className="h-80 bg-surface-container-low rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : listingsPage?.items && listingsPage.items.length > 0 ? (
@@ -194,9 +188,7 @@ export default function PublicProfilePage() {
         </div>
       ) : (
         <div className="bg-surface-container-low rounded-2xl p-12 text-center border border-dashed border-outline-variant">
-          <p className="text-on-surface-variant">
-            {t("seller.noListings")}
-          </p>
+          <p className="text-on-surface-variant">{t("seller.noListings")}</p>
         </div>
       )}
     </div>

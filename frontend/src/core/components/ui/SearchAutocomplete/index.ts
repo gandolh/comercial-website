@@ -1,1 +1,1 @@
-export { SearchAutocomplete } from './SearchAutocomplete'
+export { SearchAutocomplete } from "./SearchAutocomplete";

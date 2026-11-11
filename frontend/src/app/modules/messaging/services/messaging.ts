@@ -47,33 +47,24 @@ export interface MessageResponse {
 
 export const messagingService = {
   listConversations: async () => {
-    const { data } =
-      await axiosInstance.get<ConversationSummary[]>("/conversations");
+    const { data } = await axiosInstance.get<ConversationSummary[]>("/conversations");
     return data;
   },
 
   getConversation: async (id: string) => {
-    const { data } = await axiosInstance.get<ConversationSummary>(
-      `/conversations/${id}`,
-    );
+    const { data } = await axiosInstance.get<ConversationSummary>(`/conversations/${id}`);
     return data;
   },
 
   listMessages: async (id: string, after?: string) => {
-    const { data } = await axiosInstance.get<MessageResponse[]>(
-      `/conversations/${id}/messages`,
-      {
-        params: { after },
-      },
-    );
+    const { data } = await axiosInstance.get<MessageResponse[]>(`/conversations/${id}/messages`, {
+      params: { after },
+    });
     return data;
   },
 
   postMessage: async (id: string, body: string) => {
-    const { data } = await axiosInstance.post<MessageResponse>(
-      `/conversations/${id}/messages`,
-      { body },
-    );
+    const { data } = await axiosInstance.post<MessageResponse>(`/conversations/${id}/messages`, { body });
     return data;
   },
 
@@ -90,9 +81,7 @@ export const messagingService = {
   },
 
   getUnreadCount: async () => {
-    const { data } = await axiosInstance.get<{ count: number }>(
-      "/me/unread-count",
-    );
+    const { data } = await axiosInstance.get<{ count: number }>("/me/unread-count");
     return data.count;
   },
 };

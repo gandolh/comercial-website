@@ -5,15 +5,11 @@ import type { ModuleRoute } from "@app/routes/types";
 export const authRoutes: ModuleRoute[] = [
   {
     path: "/autentificare",
-    component: lazy(() =>
-      import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
-    ),
+    component: lazy(() => import("../pages/LoginPage").then((m) => ({ default: m.LoginPage }))),
   },
   {
     path: "/autentificare/ward",
-    component: lazy(() =>
-      import("../pages/WardReturnPage").then((m) => ({ default: m.WardReturnPage })),
-    ),
+    component: lazy(() => import("../pages/WardReturnPage").then((m) => ({ default: m.WardReturnPage }))),
   },
   {
     path: "/verifica-email",

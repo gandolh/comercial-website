@@ -10,11 +10,7 @@ interface PhoneVerifyModalProps {
   onSuccess?: () => void;
 }
 
-const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({
-  open,
-  onOpenChange,
-  onSuccess,
-}) => {
+const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpenChange, onSuccess }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState<"phone" | "code">("phone");
   const [phone, setPhone] = useState("");
@@ -67,15 +63,12 @@ const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({
   const isDev = import.meta.env.DEV;
 
   return (
-    <Modal
-      open={open}
-      onClose={() => onOpenChange(false)}
-      title={t("phoneVerify.title")}
-      size="sm"
-    >
+    <Modal open={open} onClose={() => onOpenChange(false)} title={t("phoneVerify.title")} size="sm">
       {isDev && (
         <div className="mb-4 flex items-center gap-2 rounded-xl bg-tertiary-container/30 p-3 text-sm text-on-tertiary-container">
-          <span className="material-symbols-outlined text-base" aria-hidden="true">info</span>
+          <span className="material-symbols-outlined text-base" aria-hidden="true">
+            info
+          </span>
           <span>{t("phoneVerify.devHint")}</span>
         </div>
       )}
@@ -84,14 +77,12 @@ const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({
         <form onSubmit={handleRequestCode} className="space-y-4">
           <div className="flex flex-col items-center text-center mb-2">
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-primary text-2xl" aria-hidden="true">phone</span>
+              <span className="material-symbols-outlined text-primary text-2xl" aria-hidden="true">
+                phone
+              </span>
             </div>
-            <h3 className="font-semibold text-on-surface mb-1">
-              {t("phoneVerify.stepPhone")}
-            </h3>
-            <p className="text-sm text-on-surface-variant">
-              {t("phoneVerify.phoneHelp")}
-            </p>
+            <h3 className="font-semibold text-on-surface mb-1">{t("phoneVerify.stepPhone")}</h3>
+            <p className="text-sm text-on-surface-variant">{t("phoneVerify.phoneHelp")}</p>
           </div>
 
           <Input
@@ -114,14 +105,13 @@ const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({
         <form onSubmit={handleVerifyCode} className="space-y-4">
           <div className="flex flex-col items-center text-center mb-2">
             <div className="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-tertiary text-2xl" aria-hidden="true">smartphone</span>
+              <span className="material-symbols-outlined text-tertiary text-2xl" aria-hidden="true">
+                smartphone
+              </span>
             </div>
-            <h3 className="font-semibold text-on-surface mb-1">
-              {t("phoneVerify.stepCode")}
-            </h3>
+            <h3 className="font-semibold text-on-surface mb-1">{t("phoneVerify.stepCode")}</h3>
             <p className="text-sm text-on-surface-variant">
-              {t("phoneVerify.codeSentTo")}{" "}
-              <span className="font-medium text-on-surface">{phone}</span>
+              {t("phoneVerify.codeSentTo")} <span className="font-medium text-on-surface">{phone}</span>
             </p>
           </div>
 

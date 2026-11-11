@@ -92,28 +92,18 @@ export function OrderConfirmationPage() {
       {isPaid ? (
         <div className="flex flex-col items-center space-y-4 text-center">
           <span className="material-symbols-outlined text-primary text-[72px]">check_circle</span>
-          <h1
-            className="text-3xl font-extrabold text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h1 className="text-3xl font-extrabold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             {t("orders.confirmation.successTitle")}
           </h1>
-          <p className="text-on-surface-variant">
-            {t("orders.confirmation.successBody")}
-          </p>
+          <p className="text-on-surface-variant">{t("orders.confirmation.successBody")}</p>
         </div>
       ) : (
         <div className="flex flex-col items-center space-y-4 text-center">
           <span className="material-symbols-outlined text-error text-[72px]">cancel</span>
-          <h1
-            className="text-3xl font-extrabold text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h1 className="text-3xl font-extrabold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             {t("orders.confirmation.pendingTitle")}
           </h1>
-          <p className="text-on-surface-variant">
-            {t("orders.confirmation.pendingBody")}
-          </p>
+          <p className="text-on-surface-variant">{t("orders.confirmation.pendingBody")}</p>
         </div>
       )}
 
@@ -137,9 +127,7 @@ export function OrderConfirmationPage() {
         {order.paid_at && (
           <div className="flex justify-between">
             <span className="text-on-surface-variant">{t("orders.confirmation.paidAt")}</span>
-            <span className="text-on-surface">
-              {new Date(order.paid_at).toLocaleString("ro-RO")}
-            </span>
+            <span className="text-on-surface">{new Date(order.paid_at).toLocaleString("ro-RO")}</span>
           </div>
         )}
       </div>
@@ -160,10 +148,7 @@ export function OrderConfirmationPage() {
         >
           {t("orders.confirmation.viewOrders")}
         </Link>
-        <Link
-          to="/"
-          className="text-center text-sm text-outline hover:text-primary transition-colors"
-        >
+        <Link to="/" className="text-center text-sm text-outline hover:text-primary transition-colors">
           {t("orders.confirmation.backHome")}
         </Link>
       </div>

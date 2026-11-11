@@ -1,11 +1,5 @@
 import { createElement } from "react";
-import {
-  Outlet,
-  Router,
-  createRoute,
-  createRootRoute,
-  type AnyRoute,
-} from "@tanstack/react-router";
+import { Outlet, Router, createRoute, createRootRoute, type AnyRoute } from "@tanstack/react-router";
 import type { ModuleRoute } from "@app/routes/types";
 import { MainLayout } from "@core/components/layout/MainLayout";
 import { AuthLayout } from "@core/components/layout/AuthLayout";
@@ -54,11 +48,7 @@ function normalizePath(path: string, index?: boolean): string {
 
   const trimmed = path.replace(/^\/+/, "");
 
-  const segments = trimmed
-    .split("/")
-    .map((segment) =>
-      segment.startsWith(":") ? `$${segment.slice(1)}` : segment,
-    );
+  const segments = trimmed.split("/").map((segment) => (segment.startsWith(":") ? `$${segment.slice(1)}` : segment));
 
   return segments.join("/") || "/";
 }
@@ -103,9 +93,7 @@ const authLayoutRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  mainLayoutRoute.addChildren(
-    createRoutes(mainLayoutRoute, [...mainModuleRoutes, fallbackRoute]),
-  ),
+  mainLayoutRoute.addChildren(createRoutes(mainLayoutRoute, [...mainModuleRoutes, fallbackRoute])),
   authLayoutRoute.addChildren(createRoutes(authLayoutRoute, [...authRoutes])),
 ]);
 

@@ -14,8 +14,7 @@ export function useSubmitReview(listingId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: SubmitReviewRequest) =>
-      reviewsService.submitReview(listingId, payload),
+    mutationFn: (payload: SubmitReviewRequest) => reviewsService.submitReview(listingId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", listingId] });
     },

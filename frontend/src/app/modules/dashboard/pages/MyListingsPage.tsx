@@ -12,13 +12,7 @@ import type { ListingCard as ListingCardType } from "@app/types/listing";
 
 type TabType = "active" | "inactive" | "expired";
 
-function ExpiryInfo({
-  expiresAt,
-  t,
-}: {
-  expiresAt: string;
-  t: (key: string, fallback?: string) => string;
-}) {
+function ExpiryInfo({ expiresAt, t }: { expiresAt: string; t: (key: string, fallback?: string) => string }) {
   const expiryDate = new Date(expiresAt);
   const now = new Date();
   const isExpired = expiryDate <= now;
@@ -45,8 +39,7 @@ function ExpiryInfo({
       <span className="material-symbols-outlined text-sm" aria-hidden="true">
         timer
       </span>
-      {t("dashboard.listings.expiresIn", "Expiră în")}{" "}
-      {formatDistanceToNow(expiryDate, { locale: ro })}
+      {t("dashboard.listings.expiresIn", "Expiră în")} {formatDistanceToNow(expiryDate, { locale: ro })}
     </div>
   );
 }
@@ -97,17 +90,11 @@ export function MyListingsPage() {
     <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12 space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1
-            className="text-3xl font-black text-on-surface"
-            style={{ fontFamily: "var(--font-headline)" }}
-          >
+          <h1 className="text-3xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
             {t("dashboard.listings.title", "Anunțurile mele")}
           </h1>
           <p className="text-on-surface-variant">
-            {t(
-              "dashboard.listings.subtitle",
-              "Gestionează și actualizează anunțurile tale.",
-            )}
+            {t("dashboard.listings.subtitle", "Gestionează și actualizează anunțurile tale.")}
           </p>
         </div>
         <Link
@@ -136,10 +123,7 @@ export function MyListingsPage() {
           role="status"
           className="flex items-center gap-3 bg-surface-container-low border border-outline-variant px-5 py-4 rounded-2xl text-sm text-on-surface-variant"
         >
-          <span
-            className="material-symbols-outlined text-xl flex-shrink-0"
-            aria-hidden="true"
-          >
+          <span className="material-symbols-outlined text-xl flex-shrink-0" aria-hidden="true">
             info
           </span>
           {t(
@@ -152,39 +136,22 @@ export function MyListingsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-32 bg-surface-container-low animate-pulse rounded-2xl"
-            />
+            <div key={i} className="h-32 bg-surface-container-low animate-pulse rounded-2xl" />
           ))}
         </div>
       ) : isError ? (
-        <ErrorCard
-          message={t(
-            "dashboard.listings.error",
-            "Nu am putut încărca anunțurile.",
-          )}
-          onRetry={refetch}
-        />
+        <ErrorCard message={t("dashboard.listings.error", "Nu am putut încărca anunțurile.")} onRetry={refetch} />
       ) : data?.listings?.length === 0 ? (
         <div className="bg-surface-container-lowest p-12 rounded-2xl border border-outline-variant text-center space-y-4">
           <div className="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mx-auto text-outline">
-            <span className="material-symbols-outlined text-4xl">
-              inventory
-            </span>
+            <span className="material-symbols-outlined text-4xl">inventory</span>
           </div>
           <div className="space-y-2">
             <h3 className="text-xl font-bold text-on-surface">
-              {t(
-                "dashboard.listings.empty.title",
-                "Niciun anunț în această categorie",
-              )}
+              {t("dashboard.listings.empty.title", "Niciun anunț în această categorie")}
             </h3>
             <p className="text-on-surface-variant max-w-sm mx-auto">
-              {t(
-                "dashboard.listings.empty.subtitle",
-                "Inspiră-te și postează primul tău anunț chiar acum!",
-              )}
+              {t("dashboard.listings.empty.subtitle", "Inspiră-te și postează primul tău anunț chiar acum!")}
             </p>
           </div>
           <Link
@@ -200,8 +167,7 @@ export function MyListingsPage() {
             const expiryDate = new Date(listing.expiresAt);
             const isExpired = expiryDate <= new Date();
             const daysLeft = differenceInDays(expiryDate, new Date());
-            const isExpiringSoon =
-              !isExpired && daysLeft <= 7 && expiryDate.getTime() - now < 7 * 24 * 60 * 60 * 1000;
+            const isExpiringSoon = !isExpired && daysLeft <= 7 && expiryDate.getTime() - now < 7 * 24 * 60 * 60 * 1000;
 
             return (
               <div
@@ -218,16 +184,10 @@ export function MyListingsPage() {
                 {/* Image */}
                 <div className="w-full md:w-48 h-32 bg-surface-container-low rounded-xl overflow-hidden flex-shrink-0">
                   {listing.coverUrl ? (
-                    <img
-                      src={listing.coverUrl}
-                      alt={listing.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={listing.coverUrl} alt={listing.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-outline">
-                      <span className="material-symbols-outlined text-4xl">
-                        image
-                      </span>
+                      <span className="material-symbols-outlined text-4xl">image</span>
                     </div>
                   )}
                 </div>
@@ -240,26 +200,18 @@ export function MyListingsPage() {
                         {listing.category}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-on-surface truncate">
-                      {listing.title}
-                    </h3>
+                    <h3 className="text-lg font-bold text-on-surface truncate">{listing.title}</h3>
                     <div className="text-xl font-black text-primary">
-                      {listing.priceRon
-                        ? `${listing.priceRon} RON`
-                        : "Preț negociabil"}
+                      {listing.priceRon ? `${listing.priceRon} RON` : "Preț negociabil"}
                     </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-on-surface-variant mt-4 md:mt-0">
                     <div className="flex items-center gap-1">
-                      <span
-                        className="material-symbols-outlined text-sm"
-                        aria-hidden="true"
-                      >
+                      <span className="material-symbols-outlined text-sm" aria-hidden="true">
                         calendar_today
                       </span>
-                      {t("dashboard.listings.postedAt", "Postat pe")}{" "}
-                      {format(new Date(listing.postedAt), "dd.MM.yyyy")}
+                      {t("dashboard.listings.postedAt", "Postat pe")} {format(new Date(listing.postedAt), "dd.MM.yyyy")}
                     </div>
                     <ExpiryInfo expiresAt={listing.expiresAt} t={t as (key: string, fallback?: string) => string} />
                   </div>
@@ -271,36 +223,26 @@ export function MyListingsPage() {
                     to={`/anunturi/${listing.id}/editeaza`}
                     className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-colors"
                   >
-                    <span className="material-symbols-outlined text-sm">
-                      edit
-                    </span>
+                    <span className="material-symbols-outlined text-sm">edit</span>
                     {t("listing.actions.edit")}
                   </Link>
 
                   {activeTab === "active" && (
                     <button
-                      onClick={() =>
-                        handleAction(() => deactivate.mutateAsync(listing.id))
-                      }
+                      onClick={() => handleAction(() => deactivate.mutateAsync(listing.id))}
                       className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-container-low text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-colors"
                     >
-                      <span className="material-symbols-outlined text-sm">
-                        pause
-                      </span>
+                      <span className="material-symbols-outlined text-sm">pause</span>
                       {t("listing.actions.deactivate")}
                     </button>
                   )}
 
                   {activeTab === "inactive" && (
                     <button
-                      onClick={() =>
-                        handleAction(() => activate.mutateAsync(listing.id))
-                      }
+                      onClick={() => handleAction(() => activate.mutateAsync(listing.id))}
                       className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-colors"
                     >
-                      <span className="material-symbols-outlined text-sm">
-                        play_arrow
-                      </span>
+                      <span className="material-symbols-outlined text-sm">play_arrow</span>
                       {t("listing.actions.activate")}
                     </button>
                   )}
@@ -319,9 +261,7 @@ export function MyListingsPage() {
                     onClick={() => setDeleteTarget(listing.id)}
                     className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-error hover:bg-error/10 rounded-xl font-bold transition-colors"
                   >
-                    <span className="material-symbols-outlined text-sm">
-                      delete
-                    </span>
+                    <span className="material-symbols-outlined text-sm">delete</span>
                     {t("listing.actions.delete")}
                   </button>
                 </div>

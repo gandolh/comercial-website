@@ -18,13 +18,9 @@ export const ConversationPage: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: conversations } = useConversations();
-  const { data: messages, isLoading } = useConversationMessages(
-    conversationId!,
-  );
+  const { data: messages, isLoading } = useConversationMessages(conversationId!);
 
-  const currentConversation = conversations?.find(
-    (c: ConversationSummary) => c.id === conversationId,
-  );
+  const currentConversation = conversations?.find((c: ConversationSummary) => c.id === conversationId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,13 +79,10 @@ export const ConversationPage: React.FC = () => {
 
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-bold font-[Manrope] text-on-surface truncate">
-            {currentConversation.counterparty.display_name ||
-              t("common:messaging.unknown_user")}
+            {currentConversation.counterparty.display_name || t("common:messaging.unknown_user")}
           </h2>
           <div className="flex items-center gap-1 text-xs text-on-surface-variant">
-            <span className="truncate">
-              {currentConversation.listing.title}
-            </span>
+            <span className="truncate">{currentConversation.listing.title}</span>
             <span>·</span>
             <span className="font-semibold text-primary flex-shrink-0">
               {currentConversation.listing.price_ron
@@ -111,20 +104,13 @@ export const ConversationPage: React.FC = () => {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col bg-surface-container-low">
         {messages?.map((msg: MessageResponse) => (
-          <MessageBubble
-            key={msg.id}
-            message={msg}
-            isMe={msg.sender_id === user?.id}
-          />
+          <MessageBubble key={msg.id} message={msg} isMe={msg.sender_id === user?.id} />
         ))}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Composer */}
-      <MessageComposer
-        onSend={handleSendMessage}
-        placeholder={t("common:messaging.type_message")}
-      />
+      <MessageComposer onSend={handleSendMessage} placeholder={t("common:messaging.type_message")} />
     </div>
   );
 };

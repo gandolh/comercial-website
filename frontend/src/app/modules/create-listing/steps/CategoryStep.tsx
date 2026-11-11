@@ -19,22 +19,14 @@ interface CategoryStepProps {
   selectedCategory?: string;
 }
 
-export function CategoryStep({
-  onSelect,
-  selectedCategory,
-}: CategoryStepProps) {
+export function CategoryStep({ onSelect, selectedCategory }: CategoryStepProps) {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           Ce vinzi astăzi?
         </h2>
-        <p className="text-on-surface-variant">
-          Alege categoria care se potrivește cel mai bine anunțului tău.
-        </p>
+        <p className="text-on-surface-variant">Alege categoria care se potrivește cel mai bine anunțului tău.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -55,10 +47,7 @@ export function CategoryStep({
                   : "bg-surface-container-lowest text-primary group-hover:bg-primary group-hover:text-on-primary"
               }`}
             >
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: "24px" }}
-              >
+              <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>
                 {icon}
               </span>
             </div>

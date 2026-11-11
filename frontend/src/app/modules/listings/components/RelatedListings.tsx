@@ -10,10 +10,7 @@ export function RelatedListings({ listings }: RelatedListingsProps) {
 
   return (
     <section className="mt-24">
-      <h2
-        className="text-3xl font-black mb-10 text-on-surface"
-        style={{ fontFamily: "var(--font-headline)" }}
-      >
+      <h2 className="text-3xl font-black mb-10 text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
         Anunțuri Similare
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

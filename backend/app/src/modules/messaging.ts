@@ -36,7 +36,7 @@ async function sendNewMessageNotification(
   conversationId: string,
   senderId: string,
   messageBody: string,
-  listingTitle: string
+  listingTitle: string,
 ): Promise<void> {
   try {
     // Determine recipient (the other participant)
@@ -48,10 +48,7 @@ async function sendNewMessageNotification(
 
     if (!conversation) return;
 
-    const recipientId =
-      senderId === conversation.buyer_id
-        ? conversation.seller_id
-        : conversation.buyer_id;
+    const recipientId = senderId === conversation.buyer_id ? conversation.seller_id : conversation.buyer_id;
 
     // Fetch recipient
     const recipient = await ctx.db
@@ -177,35 +174,24 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
       const summary = await buildConversationSummary(ctx, conversation.id, buyerId);
 
       return reply.send(summary);
-    }
+    },
   );
 
   // GET /conversations — list conversations for the user
-  app.get(
-    "/conversations",
-    { preHandler: (app as any).authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
+  app.get("/conversations", { preHandler: (app as any).authenticate }, async (request, reply) => {
+    const userId = request.userId!;
 
-      const conversations = await ctx.db
-        .selectFrom("conversations")
-        .select("id")
-        .where((eb) =>
-          eb.or([
-            eb("buyer_id", "=", userId),
-            eb("seller_id", "=", userId),
-          ])
-        )
-        .orderBy("last_message_at", "desc")
-        .execute();
+    const conversations = await ctx.db
+      .selectFrom("conversations")
+      .select("id")
+      .where((eb) => eb.or([eb("buyer_id", "=", userId), eb("seller_id", "=", userId)]))
+      .orderBy("last_message_at", "desc")
+      .execute();
 
-      const summaries = await Promise.all(
-        conversations.map((c: any) => buildConversationSummary(ctx, c.id, userId))
-      );
+    const summaries = await Promise.all(conversations.map((c: any) => buildConversationSummary(ctx, c.id, userId)));
 
-      return reply.send(summaries);
-    }
-  );
+    return reply.send(summaries);
+  });
 
   // GET /conversations/:id — get a specific conversation
   app.get<{ Params: { id: string } }>(
@@ -233,7 +219,7 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
       const summary = await buildConversationSummary(ctx, conversationId, userId);
 
       return reply.send(summary);
-    }
+    },
   );
 
   // GET /conversations/:id/messages — get messages in a conversation
@@ -272,11 +258,11 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
           conversation_id: m.conversation_id,
           sender_id: m.sender_id,
           body: m.body,
-          read_at: m.read_at ? (m.read_at) : null,
+          read_at: m.read_at ? m.read_at : null,
           created_at: m.created_at,
-        }))
+        })),
       );
-    }
+    },
   );
 
   // POST /conversations/:id/messages — add a message to a conversation
@@ -347,10 +333,10 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
         conversation_id: message.conversation_id,
         sender_id: message.sender_id,
         body: message.body,
-        read_at: message.read_at ? (message.read_at) : null,
+        read_at: message.read_at ? message.read_at : null,
         created_at: message.created_at,
       });
-    }
+    },
   );
 
   // POST /conversations/:id/read — mark messages as read
@@ -386,46 +372,33 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
         .execute();
 
       return reply.send({});
-    }
+    },
   );
 
   // GET /me/unread-count — get unread message count for the user
-  app.get(
-    "/me/unread-count",
-    { preHandler: (app as any).authenticate },
-    async (request, reply) => {
-      const userId = request.userId!;
+  app.get("/me/unread-count", { preHandler: (app as any).authenticate }, async (request, reply) => {
+    const userId = request.userId!;
 
-      // Count messages in conversations where user is a participant, sender != me, read_at null
-      const result = await ctx.db
-        .selectFrom("messages")
-        .innerJoin("conversations", "messages.conversation_id", "conversations.id")
-        .select(({ fn }) => fn.countAll<number>().as("count"))
-        .where((eb) =>
-          eb.or([
-            eb("conversations.buyer_id", "=", userId),
-            eb("conversations.seller_id", "=", userId),
-          ])
-        )
-        .where("messages.sender_id", "!=", userId)
-        .where("messages.read_at", "is", null as any)
-        .executeTakeFirst();
+    // Count messages in conversations where user is a participant, sender != me, read_at null
+    const result = await ctx.db
+      .selectFrom("messages")
+      .innerJoin("conversations", "messages.conversation_id", "conversations.id")
+      .select(({ fn }) => fn.countAll<number>().as("count"))
+      .where((eb) => eb.or([eb("conversations.buyer_id", "=", userId), eb("conversations.seller_id", "=", userId)]))
+      .where("messages.sender_id", "!=", userId)
+      .where("messages.read_at", "is", null as any)
+      .executeTakeFirst();
 
-      const count = result?.count || 0;
+    const count = result?.count || 0;
 
-      return reply.send({ count });
-    }
-  );
+    return reply.send({ count });
+  });
 };
 
 /**
  * Helper to build a ConversationSummary.
  */
-async function buildConversationSummary(
-  ctx: AppContext,
-  conversationId: string,
-  userId: string
-): Promise<any> {
+async function buildConversationSummary(ctx: AppContext, conversationId: string, userId: string): Promise<any> {
   const publicBaseUrl = ctx.config.publicBaseUrl;
 
   // Fetch conversation
@@ -471,22 +444,12 @@ async function buildConversationSummary(
   const coverUrl = imageUrl(coverImage?.s3_key || null, publicBaseUrl);
 
   // Determine counterparty
-  const counterpartyId =
-    userId === conversation.buyer_id ? conversation.seller_id : conversation.buyer_id;
+  const counterpartyId = userId === conversation.buyer_id ? conversation.seller_id : conversation.buyer_id;
 
   // Fetch counterparty user
   const counterparty = await ctx.db
     .selectFrom("users")
-    .select([
-      "id",
-      "email",
-      "display_name",
-      "avatar_url",
-      "email_verified",
-      "phone",
-      "phone_verified",
-      "created_at",
-    ])
+    .select(["id", "email", "display_name", "avatar_url", "email_verified", "phone", "phone_verified", "created_at"])
     .where("id", "=", counterpartyId)
     .executeTakeFirst();
 

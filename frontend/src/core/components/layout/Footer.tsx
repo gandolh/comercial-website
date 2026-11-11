@@ -40,10 +40,7 @@ export function Footer() {
             className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all"
             aria-label="Distribuie"
           >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "18px" }}
-            >
+            <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
               share
             </span>
           </button>
@@ -51,10 +48,7 @@ export function Footer() {
             className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all"
             aria-label="Email"
           >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: "18px" }}
-            >
+            <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
               mail
             </span>
           </button>

@@ -1,11 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  signToken,
-  verifyToken,
-  hashPassword,
-  verifyPassword,
-  authenticationPreHandler,
-} from "./index.js";
+import { signToken, verifyToken, hashPassword, verifyPassword, authenticationPreHandler } from "./index.js";
 
 describe("JWT Auth", () => {
   const secret = "test-secret-key-do-not-use-in-production";
@@ -148,7 +142,11 @@ describe("authenticationPreHandler behind the error handler", () => {
     const { registerErrorHandler } = await import("../errors/index.js");
     const app = Fastify();
     registerErrorHandler(app);
-    app.get("/secret", { preHandler: (req, reply) => authenticationPreHandler(req, reply, "test-secret") }, async () => ({ ok: true }));
+    app.get(
+      "/secret",
+      { preHandler: (req, reply) => authenticationPreHandler(req, reply, "test-secret") },
+      async () => ({ ok: true }),
+    );
     await app.ready();
     return app;
   }
@@ -164,7 +162,11 @@ describe("authenticationPreHandler behind the error handler", () => {
 
   it("lets a valid token through", async () => {
     const app = await appWithGuard();
-    const res = await app.inject({ method: "GET", url: "/secret", headers: { authorization: `Bearer ${signToken("user-1", "test-secret", 3600)}` } });
+    const res = await app.inject({
+      method: "GET",
+      url: "/secret",
+      headers: { authorization: `Bearer ${signToken("user-1", "test-secret", 3600)}` },
+    });
     expect(res.statusCode).toBe(200);
     await app.close();
   });

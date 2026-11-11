@@ -25,7 +25,9 @@ await mkdir(path.dirname(databasePath), { recursive: true });
 const db = new Database(databasePath);
 runMigrations(db, path.resolve(here, "../../migrations"));
 const seedDir = path.resolve(here, "../../seed/dev");
-for (const file of readdirSync(seedDir).filter((f) => f.endsWith(".sql")).sort()) {
+for (const file of readdirSync(seedDir)
+  .filter((f) => f.endsWith(".sql"))
+  .sort()) {
   db.exec(readFileSync(path.join(seedDir, file), "utf8"));
   console.log(`seed:dev applied ${file}`);
 }

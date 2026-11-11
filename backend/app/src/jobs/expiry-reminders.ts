@@ -19,7 +19,7 @@ import type { AppContext } from "../context.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 
 const JOB_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
-const INITIAL_DELAY_MS = 10 * 1000;           // 10 seconds after startup
+const INITIAL_DELAY_MS = 10 * 1000; // 10 seconds after startup
 
 async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
   const repo = new ListingsRepository(ctx.db);
@@ -57,13 +57,10 @@ async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
       }
 
       console.log(
-        `[expiry-reminders] Sent ${row.reminder_type} reminder for listing ${row.listing_id} to ${row.owner_email}`
+        `[expiry-reminders] Sent ${row.reminder_type} reminder for listing ${row.listing_id} to ${row.owner_email}`,
       );
     } catch (err) {
-      console.error(
-        `[expiry-reminders] Failed to send reminder for listing ${row.listing_id}:`,
-        err
-      );
+      console.error(`[expiry-reminders] Failed to send reminder for listing ${row.listing_id}:`, err);
     }
   }
 }

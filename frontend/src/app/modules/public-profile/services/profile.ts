@@ -19,17 +19,12 @@ export interface ListingsPageResponse {
   total_pages: number;
 }
 
-export async function getPublicProfile(
-  userId: string,
-): Promise<PublicUserResponse> {
+export async function getPublicProfile(userId: string): Promise<PublicUserResponse> {
   const res = await axiosInstance.get(`/users/${userId}`);
   return res.data;
 }
 
-export async function getUserListings(
-  userId: string,
-  params?: Record<string, unknown>,
-): Promise<ListingsPageResponse> {
+export async function getUserListings(userId: string, params?: Record<string, unknown>): Promise<ListingsPageResponse> {
   const res = await axiosInstance.get(`/users/${userId}/listings`, { params });
   return res.data;
 }

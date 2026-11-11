@@ -60,8 +60,7 @@ function setCached(cui: number, data: CompanyData): void {
 
 // ─── ANAF fetch helper ───────────────────────────────────────────────────────
 
-const ANAF_URL =
-  "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v9/ws/tva";
+const ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v9/ws/tva";
 const FETCH_TIMEOUT_MS = 8_000;
 
 function todayString(): string {
@@ -81,10 +80,7 @@ async function fetchFromAnaf(cui: number): Promise<AnafApiResponse> {
     });
 
     if (!res.ok) {
-      throw new AppError(
-        502,
-        `ANAF API returned HTTP ${res.status}`,
-      );
+      throw new AppError(502, `ANAF API returned HTTP ${res.status}`);
     }
 
     return (await res.json()) as AnafApiResponse;
@@ -108,9 +104,7 @@ function parseCui(raw: string): number {
   const digits = trimmed.startsWith("RO") ? trimmed.slice(2) : trimmed;
 
   if (!/^\d{2,10}$/.test(digits)) {
-    throw AppError.validation(
-      "CUI invalid — trebuie să fie un număr de 2–10 cifre, opțional precedat de 'RO'",
-    );
+    throw AppError.validation("CUI invalid — trebuie să fie un număr de 2–10 cifre, opțional precedat de 'RO'");
   }
 
   return parseInt(digits, 10);
@@ -144,10 +138,7 @@ export const registerAnafRoutes: RouteRegistrar = (app, _ctx) => {
     const apiResp = await fetchFromAnaf(cui);
 
     // "notFound" array contains CUIs ANAF doesn't know about
-    if (
-      Array.isArray(apiResp.notFound) &&
-      apiResp.notFound.includes(cui)
-    ) {
+    if (Array.isArray(apiResp.notFound) && apiResp.notFound.includes(cui)) {
       throw AppError.notFound();
     }
 

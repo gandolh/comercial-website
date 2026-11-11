@@ -15,7 +15,10 @@ describe("moveAssetsOutOfUploads", () => {
     writeFileSync(path.join(uploads, "cover.jpg"), "image");
     const db = new Database(":memory:");
     db.exec("CREATE TABLE listing_assets (s3_key TEXT NOT NULL)");
-    db.prepare("INSERT INTO listing_assets (s3_key) VALUES (?), (?)").run("listings/l1/pack.zip", "listings/l1/gone.zip");
+    db.prepare("INSERT INTO listing_assets (s3_key) VALUES (?), (?)").run(
+      "listings/l1/pack.zip",
+      "listings/l1/gone.zip",
+    );
 
     expect(await moveAssetsOutOfUploads(db, uploads, assets)).toBe(1);
     expect(existsSync(path.join(assets, "listings", "l1", "pack.zip"))).toBe(true);

@@ -6,7 +6,7 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 
 export interface StorageConfig {
-  uploadsDir: string;   // absolute path to uploads directory on disk
+  uploadsDir: string; // absolute path to uploads directory on disk
   publicBaseUrl: string; // e.g. http://localhost:8080/uploads
 }
 

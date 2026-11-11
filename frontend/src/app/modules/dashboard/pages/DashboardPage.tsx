@@ -13,16 +13,10 @@ import { Link } from "@core/lib/router";
 export function DashboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const {
-    data: stats,
-    isLoading: statsLoading,
-    isError: statsError,
-    refetch: refetchStats,
-  } = useMyStats();
+  const { data: stats, isLoading: statsLoading, isError: statsError, refetch: refetchStats } = useMyStats();
   const { data: activeListings } = useMyListings({ active: true });
 
-  const displayName =
-    user?.display_name || user?.email?.split("@")[0] || "Utilizator";
+  const displayName = user?.display_name || user?.email?.split("@")[0] || "Utilizator";
 
   if (statsLoading) {
     return (
@@ -30,10 +24,7 @@ export function DashboardPage() {
         <div className="h-12 w-64 bg-surface-container-low animate-pulse rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-32 bg-surface-container-low animate-pulse rounded-2xl"
-            />
+            <div key={i} className="h-32 bg-surface-container-low animate-pulse rounded-2xl" />
           ))}
         </div>
       </main>
@@ -44,10 +35,7 @@ export function DashboardPage() {
     return (
       <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12">
         <ErrorCard
-          message={t(
-            "dashboard.error",
-            "Nu am putut încărca datele panoului de control.",
-          )}
+          message={t("dashboard.error", "Nu am putut încărca datele panoului de control.")}
           onRetry={refetchStats}
         />
       </main>
@@ -69,10 +57,7 @@ export function DashboardPage() {
     <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12 space-y-12">
       {/* Header */}
       <header className="space-y-2">
-        <h1
-          className="text-4xl font-black text-on-surface"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
           {t("dashboard.greeting", "Bună")}, {displayName}!
         </h1>
         <p className="text-on-surface-variant">

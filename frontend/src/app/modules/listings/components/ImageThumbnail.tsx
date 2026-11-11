@@ -27,17 +27,11 @@ export function ImageThumbnail({
       onDrop={() => onDropOn(image.id)}
       className="relative rounded-xl border border-outline-variant overflow-hidden bg-surface"
     >
-      <img
-        src={image.url}
-        alt={`Poza ${index + 1}`}
-        className="w-full aspect-square object-cover"
-      />
+      <img src={image.url} alt={`Poza ${index + 1}`} className="w-full aspect-square object-cover" />
 
       <div className="absolute top-2 left-2 flex gap-2">
         {isCover ? (
-          <span className="px-2 py-1 text-xs font-bold rounded-full bg-primary text-on-primary">
-            Copertă
-          </span>
+          <span className="px-2 py-1 text-xs font-bold rounded-full bg-primary text-on-primary">Copertă</span>
         ) : (
           <button
             type="button"

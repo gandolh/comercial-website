@@ -10,13 +10,7 @@ interface DetailsStepProps {
   submitLabel?: string;
 }
 
-export function DetailsStep({
-  initialData,
-  onNext,
-  onBack,
-  hideFooter = false,
-  submitLabel,
-}: DetailsStepProps) {
+export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, submitLabel }: DetailsStepProps) {
   const {
     register,
     handleSubmit,
@@ -34,20 +28,12 @@ export function DetailsStep({
   const description = watch("description");
 
   return (
-    <form
-      onSubmit={handleSubmit(onNext)}
-      className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500"
-    >
+    <form onSubmit={handleSubmit(onNext)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
-        <h2
-          className="text-2xl font-black"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
           Spune-ne mai multe
         </h2>
-        <p className="text-on-surface-variant">
-          Un titlu clar și o descriere detaliată te ajută să vinzi mai repede.
-        </p>
+        <p className="text-on-surface-variant">Un titlu clar și o descriere detaliată te ajută să vinzi mai repede.</p>
       </div>
 
       <div className="space-y-6">
@@ -62,9 +48,7 @@ export function DetailsStep({
               type="text"
               placeholder="Ex: iPhone 13 Pro 128GB Stare Perfectă"
               className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all ${
-                errors.title
-                  ? "border-error"
-                  : "border-transparent focus:border-primary"
+                errors.title ? "border-error" : "border-transparent focus:border-primary"
               }`}
             />
             <span
@@ -75,9 +59,7 @@ export function DetailsStep({
               {title.length}/200
             </span>
           </div>
-          {errors.title && (
-            <p className="text-error text-xs px-1">{errors.title.message}</p>
-          )}
+          {errors.title && <p className="text-error text-xs px-1">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">
@@ -91,28 +73,19 @@ export function DetailsStep({
               rows={6}
               placeholder="Descrie produsul tău în detaliu. Menționează starea, defectele (dacă există) și de ce îl vinzi."
               className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all resize-none ${
-                errors.description
-                  ? "border-error"
-                  : "border-transparent focus:border-primary"
+                errors.description ? "border-error" : "border-transparent focus:border-primary"
               }`}
             />
             <span
               className={`absolute right-4 bottom-4 text-xs ${
-                description.length > 5000
-                  ? "text-error"
-                  : "text-on-surface-variant"
+                description.length > 5000 ? "text-error" : "text-on-surface-variant"
               }`}
             >
               {description.length}/5000
             </span>
           </div>
-          {errors.description && (
-            <p className="text-error text-xs px-1">
-              {errors.description.message}
-            </p>
-          )}
+          {errors.description && <p className="text-error text-xs px-1">{errors.description.message}</p>}
         </div>
-
       </div>
 
       {!hideFooter && (
