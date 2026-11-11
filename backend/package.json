@@ -18,7 +18,7 @@
     "seed:samples": "npm run build --workspace @my-olx/core && npm run seed:samples --workspace @my-olx/app"
   },
   "devDependencies": {
-    "typescript": "5.7.3",
+    "typescript": "6.0.3",
     "tsx": "4.23.15",
     "vitest": "4.1.12",
     "@types/node": "22.10.5"
