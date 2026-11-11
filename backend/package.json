@@ -10,8 +10,12 @@
   "scripts": {
     "dev": "npm run build --workspace @my-olx/core && npm run dev --workspace @my-olx/app",
     "build": "npm run build --workspace @my-olx/core && npm run build --workspace @my-olx/app",
+    "pretest": "npm run build",
     "test": "vitest run",
     "typecheck": "tsc -b core app",
+    "lint": "eslint .",
+    "knip": "knip",
+    "check:fast": "npm run typecheck && node ../scripts/check-fast.mjs",
     "migrate": "npm run migrate --workspace @my-olx/app",
     "seed:dev": "npm run build --workspace @my-olx/core && npm run seed:dev --workspace @my-olx/app",
     "create-owner": "npm run build --workspace @my-olx/core && npm run create-owner --workspace @my-olx/app",

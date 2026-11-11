@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
+    "knip": "knip",
+    "check:fast": "npm run typecheck && node ../scripts/check-fast.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
