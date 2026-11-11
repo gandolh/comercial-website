@@ -1,0 +1,3 @@
+# The Prettier reformat (style: format with Prettier). Set once per clone:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+0553f6ade223e97a3ff707948abf88d13c73ed8c
