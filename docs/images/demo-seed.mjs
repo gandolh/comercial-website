@@ -16,7 +16,6 @@
 // <previews dir> holds the PNGs rendered from demo-previews.html (shots.md has
 // the loop). [api] is http://localhost:8080 by default. Every title, name and
 // picture is invented.
-/* global process, console, fetch, FormData, Blob, Buffer */
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { crc32 } from "node:zlib";
