@@ -1,4 +1,5 @@
 import { forwardRef, type InputHTMLAttributes } from "react";
+import { Checkbox } from "../Checkbox";
 
 interface PriceInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
   label?: string;
@@ -58,15 +59,12 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
           </span>
         </div>
         {onNegotiableChange && (
-          <label className="mt-2 inline-flex items-center gap-2 cursor-pointer select-none text-sm text-on-surface-variant">
-            <input
-              type="checkbox"
-              checked={negotiable}
-              onChange={(e) => onNegotiableChange(e.target.checked)}
-              className="w-4 h-4 rounded accent-primary"
-            />
-            Preț negociabil
-          </label>
+          <Checkbox
+            checked={negotiable}
+            onCheckedChange={onNegotiableChange}
+            label="Preț negociabil"
+            className="mt-2 text-sm text-on-surface-variant select-none"
+          />
         )}
         {error && <p className="mt-1.5 text-sm text-error">{error}</p>}
         {hint && !error && <p className="mt-1.5 text-sm text-on-surface-variant">{hint}</p>}

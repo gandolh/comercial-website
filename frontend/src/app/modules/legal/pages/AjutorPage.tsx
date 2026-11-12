@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Accordion, AccordionItem } from "@core/components/ui";
 
 const FAQ_ITEMS = [
   {
@@ -97,7 +98,11 @@ export function AjutorPage() {
           <p className="text-on-surface-variant text-lg">Găsești răspunsuri rapide la cele mai comune întrebări.</p>
         </header>
 
-        <div className="space-y-10">
+        <Accordion
+          className="space-y-10"
+          value={openItem ? [openItem] : []}
+          onValueChange={(open) => setOpenItem(open[0] ?? null)}
+        >
           {FAQ_ITEMS.map((group) => (
             <section key={group.category} className="space-y-3">
               <h2
@@ -107,37 +112,19 @@ export function AjutorPage() {
                 {group.category}
               </h2>
               <div className="space-y-2">
-                {group.questions.map((item) => {
-                  const key = `${group.category}-${item.q}`;
-                  const isOpen = openItem === key;
-                  return (
-                    <div key={key} className="bg-surface-container rounded-xl overflow-hidden">
-                      <button
-                        className="w-full flex items-center justify-between gap-4 p-4 text-left hover:bg-surface-container-high transition-colors"
-                        onClick={() => setOpenItem(isOpen ? null : key)}
-                        aria-expanded={isOpen}
-                      >
-                        <span className="font-medium text-on-surface">{item.q}</span>
-                        <span
-                          className="material-symbols-outlined text-on-surface-variant shrink-0 transition-transform"
-                          style={{
-                            fontSize: "20px",
-                            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                          }}
-                        >
-                          expand_more
-                        </span>
-                      </button>
-                      {isOpen && (
-                        <div className="px-4 pb-4 text-on-surface-variant text-sm leading-relaxed">{item.a}</div>
-                      )}
-                    </div>
-                  );
-                })}
+                {group.questions.map((item) => (
+                  <AccordionItem
+                    key={`${group.category}-${item.q}`}
+                    value={`${group.category}-${item.q}`}
+                    question={item.q}
+                  >
+                    {item.a}
+                  </AccordionItem>
+                ))}
               </div>
             </section>
           ))}
-        </div>
+        </Accordion>
 
         <section className="bg-secondary-container rounded-2xl p-8 text-center space-y-3">
           <span className="material-symbols-outlined text-on-secondary-container block" style={{ fontSize: "36px" }}>

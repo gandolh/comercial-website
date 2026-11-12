@@ -1,5 +1,7 @@
 import { Slider } from "@core/components/ui/Slider";
 import { Button } from "@core/components/ui/Button";
+import { RadioGroup, RadioOption, Switch } from "@core/components/ui";
+import { useId } from "react";
 import type { FilterState } from "../types";
 import { LICENSE_OPTIONS, FORMAT_OPTIONS } from "../types";
 
@@ -21,6 +23,48 @@ function formatRON(v: number) {
   return v >= PRICE_MAX ? `${PRICE_MAX.toLocaleString("ro-RO")}+ RON` : `${v.toLocaleString("ro-RO")} RON`;
 }
 
+/** "Toate" is the empty value; a radio needs a value of its own, so the group reads it as "all". */
+const ALL = "all";
+
+interface FilterRadiosProps {
+  title: string;
+  name: string;
+  options: readonly { value: string; label: string }[];
+  value: string | null;
+  onValueChange: (value: string) => void;
+}
+
+function FilterRadios({ title, name, options, value, onValueChange }: FilterRadiosProps) {
+  const titleId = useId();
+  return (
+    <div className="space-y-3">
+      <h3 id={titleId} className="text-xs font-bold uppercase tracking-widest text-outline">
+        {title}
+      </h3>
+      <RadioGroup
+        name={name}
+        aria-labelledby={titleId}
+        value={value || ALL}
+        onValueChange={(next) => onValueChange(next === ALL ? "" : String(next))}
+        className="space-y-2"
+      >
+        {options.map((option) => (
+          <RadioOption
+            key={option.value}
+            value={option.value || ALL}
+            labelClassName="group"
+            label={
+              <span className="text-sm font-medium text-on-surface-variant transition-colors group-hover:text-on-surface">
+                {option.label}
+              </span>
+            }
+          />
+        ))}
+      </RadioGroup>
+    </div>
+  );
+}
+
 export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps) {
   const priceRange: [number, number] = [filters.pret_min ?? 0, filters.pret_max ?? PRICE_MAX];
 
@@ -33,46 +77,22 @@ export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps
     <aside className="w-72 flex-shrink-0 hidden md:block">
       <div className="sticky top-28 space-y-8">
         {/* Tip Licență */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Tip Licență</h3>
-          <div className="space-y-2">
-            {LICENSE_OPTIONS.map(({ value, label }) => (
-              <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="radio"
-                  name="licenta"
-                  checked={filters.licenta === value}
-                  onChange={() => onChange("licenta", value || null)}
-                  className="w-4 h-4 text-primary focus:ring-0 border-outline-variant accent-primary"
-                />
-                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
-                  {label}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterRadios
+          title="Tip Licență"
+          name="licenta"
+          options={LICENSE_OPTIONS}
+          value={filters.licenta}
+          onValueChange={(value) => onChange("licenta", value || null)}
+        />
 
         {/* Format Fișier */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Format Fișier</h3>
-          <div className="space-y-2">
-            {FORMAT_OPTIONS.map(({ value, label }) => (
-              <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="radio"
-                  name="format"
-                  checked={filters.format === value}
-                  onChange={() => onChange("format", value || null)}
-                  className="w-4 h-4 text-primary focus:ring-0 border-outline-variant accent-primary"
-                />
-                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
-                  {label}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterRadios
+          title="Format Fișier"
+          name="format"
+          options={FORMAT_OPTIONS}
+          value={filters.format}
+          onValueChange={(value) => onChange("format", value || null)}
+        />
 
         {/* Preț */}
         <Slider
@@ -86,40 +106,23 @@ export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps
         />
 
         {/* Data publicării */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-outline">Data Publicării</h3>
-          <div className="space-y-2">
-            {DATE_OPTIONS.map(({ value, label }) => (
-              <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="radio"
-                  name="data"
-                  checked={filters.data === value}
-                  onChange={() => onChange("data", value)}
-                  className="w-4 h-4 text-primary focus:ring-0 border-outline-variant accent-primary"
-                />
-                <span className="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
-                  {label}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterRadios
+          title="Data Publicării"
+          name="data"
+          options={DATE_OPTIONS}
+          value={filters.data}
+          onValueChange={(value) => onChange("data", value)}
+        />
 
         {/* Autor verificat */}
         <div className="pt-6 border-t border-surface-container-high">
-          <label className="flex items-center justify-between cursor-pointer">
-            <span className="text-sm font-bold text-on-surface">Autor Verificat</span>
-            <div className="relative inline-flex items-center">
-              <input
-                type="checkbox"
-                checked={filters.verificat}
-                onChange={(e) => onChange("verificat", e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-surface-container-highest rounded-full peer peer-checked:bg-tertiary-container peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" />
-            </div>
-          </label>
+          <Switch
+            label={<span className="text-sm font-bold text-on-surface">Autor Verificat</span>}
+            labelFirst
+            tone="tertiary"
+            checked={filters.verificat}
+            onCheckedChange={(checked) => onChange("verificat", checked)}
+          />
         </div>
 
         {/* Reset */}

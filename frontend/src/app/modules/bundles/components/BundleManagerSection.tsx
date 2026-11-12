@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useId, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useBundleItems, useSetBundleItems } from "../hooks/useBundleItems";
 import { useMyListings } from "@app/modules/dashboard/hooks/useMyListings";
 import type { ListingCard } from "@app/types/listing";
+import { Checkbox, Switch } from "@core/components/ui";
 
 interface BundleManagerSectionProps {
   /** The listing being edited (the bundle parent). */
@@ -32,6 +33,7 @@ interface BundleManagerSectionProps {
  */
 export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }: BundleManagerSectionProps) {
   const { t } = useTranslation();
+  const toggleLabelId = useId();
 
   const [localIsBundle, setLocalIsBundle] = useState(isBundle);
   // null = not yet touched by user; string[] = user has interacted
@@ -103,14 +105,16 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
       {/* Toggle */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-semibold text-on-surface">{t("bundles.edit.toggleLabel")}</p>
+          <p id={toggleLabelId} className="font-semibold text-on-surface">
+            {t("bundles.edit.toggleLabel")}
+          </p>
           <p className="text-sm text-on-surface-variant mt-0.5">{t("bundles.edit.toggleHint")}</p>
         </div>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={localIsBundle}
-          onClick={() => {
+        <Switch
+          size="lg"
+          aria-labelledby={toggleLabelId}
+          checked={localIsBundle}
+          onCheckedChange={() => {
             setLocalIsBundle((v) => !v);
             if (!localIsBundle) {
               // Toggling off — clear local selection
@@ -120,18 +124,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
               setLocalSelectedIds(null);
             }
           }}
-          className={[
-            "relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none",
-            localIsBundle ? "bg-primary" : "bg-outline",
-          ].join(" ")}
-        >
-          <span
-            className={[
-              "inline-block h-5 w-5 rounded-full bg-on-primary shadow transition-transform",
-              localIsBundle ? "translate-x-6" : "translate-x-1",
-            ].join(" ")}
-          />
-        </button>
+        />
       </div>
 
       {/* Child picker — only shown when bundle is enabled */}
@@ -162,11 +155,9 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
                         checked ? "bg-primary-container/30" : "bg-surface-container-lowest hover:bg-surface-container",
                       ].join(" ")}
                     >
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         checked={checked}
-                        onChange={() => handleToggleChild(listing.id)}
-                        className="h-4 w-4 rounded accent-primary"
+                        onCheckedChange={() => handleToggleChild(listing.id)}
                         aria-label={listing.title}
                       />
                       {listing.coverUrl ? (

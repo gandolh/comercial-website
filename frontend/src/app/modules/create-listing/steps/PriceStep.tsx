@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Switch } from "@core/components/ui";
 import { priceStepSchema, type PriceStepInput } from "../schemas";
 
 interface PriceStepProps {
@@ -12,7 +13,6 @@ interface PriceStepProps {
 
 export function PriceStep({ initialData, onNext, onBack, hideFooter = false, submitLabel }: PriceStepProps) {
   const {
-    register,
     handleSubmit,
     setValue,
     watch,
@@ -64,12 +64,12 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
             {errors.priceRon && <p className="text-error text-xs px-1">{errors.priceRon.message}</p>}
           </div>
 
-          <div className="flex items-center gap-3 px-1">
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" {...register("isFree")} className="sr-only peer" />
-              <div className="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-            </label>
-            <span className="text-sm font-medium text-on-surface">Gratuit</span>
+          <div className="px-1">
+            <Switch
+              label={<span className="text-sm font-medium text-on-surface">Gratuit</span>}
+              checked={isFree}
+              onCheckedChange={(checked) => setValue("isFree", checked, { shouldDirty: true })}
+            />
           </div>
         </div>
       </div>

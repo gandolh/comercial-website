@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@core/lib/auth";
+import { Checkbox } from "@core/components/ui";
 import { PhoneVerifyModal } from "../../auth/components/PhoneVerifyModal";
 import { reviewStepSchema, type ReviewStepInput } from "../schemas";
 import type { ListingDraft } from "../services/drafts";
@@ -31,12 +32,14 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
   const {
-    register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ReviewStepInput>({
     resolver: zodResolver(reviewStepSchema),
   });
+  const acceptsTerms = watch("acceptsTerms");
 
   const totalSizeBytes = draft.assets.reduce((sum, a) => sum + a.fileSizeBytes, 0);
   const fileCount = draft.assets.length;
@@ -193,16 +196,19 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       {/* Terms + publish form */}
       <form onSubmit={handleSubmit(onPublish)} className="space-y-6">
         <div className="space-y-3 px-4">
-          <label className="flex items-start gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              {...register("acceptsTerms")}
-              className="mt-1 w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary bg-surface-container-low transition-colors"
-            />
-            <span className="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
-              {t("createListing.preview.termsConfirm")}
-            </span>
-          </label>
+          <Checkbox
+            size="lg"
+            checked={acceptsTerms === true}
+            // The schema's field is the literal `true`; an unticked box fails it with the schema's own message.
+            onCheckedChange={(checked) => setValue("acceptsTerms", checked as true, { shouldValidate: true })}
+            className="group items-start gap-3"
+            boxClassName="mt-1"
+            label={
+              <span className="text-sm text-on-surface-variant transition-colors group-hover:text-on-surface">
+                {t("createListing.preview.termsConfirm")}
+              </span>
+            }
+          />
           {errors.acceptsTerms && <p className="text-error text-xs px-8">{errors.acceptsTerms.message}</p>}
         </div>
 

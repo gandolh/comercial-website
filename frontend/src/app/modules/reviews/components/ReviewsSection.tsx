@@ -7,6 +7,7 @@ import { useReviews, useSubmitReview, useDeleteReview } from "../hooks/useReview
 import type { Review } from "../types/index";
 import { Button } from "@core/components/ui/Button/Button";
 import { Textarea } from "@core/components/ui/Textarea/Textarea";
+import { Radio, RadioGroup } from "@core/components/ui";
 
 // ─── Star display/picker ──────────────────────────────────────────────────────
 
@@ -22,46 +23,48 @@ function StarRating({ value, interactive = false, onChange, size = "md" }: StarR
   const [hovered, setHovered] = useState(0);
   const iconSize = size === "sm" ? "text-[16px]" : "text-[24px]";
 
-  return (
-    <div
-      className="flex items-center gap-0.5"
-      role={interactive ? "radiogroup" : undefined}
-      aria-label={interactive ? "Rating" : undefined}
+  const star = (n: number, filled: boolean) => (
+    <span
+      className={[
+        "material-symbols-outlined",
+        iconSize,
+        filled ? "text-rating" : "text-outline-variant",
+        interactive ? "transition-colors group-hover:text-rating" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={{ fontVariationSettings: filled ? "'FILL' 1" : "'FILL' 0" }}
+      aria-hidden={interactive ? true : undefined}
+      aria-label={interactive ? undefined : `${n} stele`}
     >
-      {[1, 2, 3, 4, 5].map((star) => {
-        const filled = interactive ? (hovered || value) >= star : value >= star;
-        return (
-          <span
-            key={star}
-            className={[
-              "material-symbols-outlined",
-              iconSize,
-              filled ? "text-yellow-400" : "text-outline-variant",
-              interactive ? "cursor-pointer transition-colors hover:text-yellow-400" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            style={{ fontVariationSettings: filled ? "'FILL' 1" : "'FILL' 0" }}
-            onClick={interactive ? () => onChange?.(star) : undefined}
-            onMouseEnter={interactive ? () => setHovered(star) : undefined}
-            onMouseLeave={interactive ? () => setHovered(0) : undefined}
-            role={interactive ? "radio" : undefined}
-            aria-checked={interactive ? value === star : undefined}
-            aria-label={`${star} stele`}
-            tabIndex={interactive ? 0 : undefined}
-            onKeyDown={
-              interactive
-                ? (e) => {
-                    if (e.key === "Enter" || e.key === " ") onChange?.(star);
-                  }
-                : undefined
-            }
-          >
-            star
-          </span>
-        );
-      })}
-    </div>
+      star
+    </span>
+  );
+
+  if (!interactive) {
+    return <div className="flex items-center gap-0.5">{[1, 2, 3, 4, 5].map((n) => star(n, value >= n))}</div>;
+  }
+
+  return (
+    <RadioGroup
+      aria-label="Rating"
+      value={value === 0 ? null : String(value)}
+      onValueChange={(next) => onChange?.(Number(next))}
+      className="flex items-center gap-0.5"
+    >
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Radio
+          key={n}
+          value={String(n)}
+          aria-label={`${n} stele`}
+          className="group flex rounded-sm"
+          onMouseEnter={() => setHovered(n)}
+          onMouseLeave={() => setHovered(0)}
+        >
+          {star(n, (hovered || value) >= n)}
+        </Radio>
+      ))}
+    </RadioGroup>
   );
 }
 
