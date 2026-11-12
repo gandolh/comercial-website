@@ -1,5 +1,6 @@
 import { Menu } from "@base-ui/react/menu";
 import type { ReactElement, ReactNode } from "react";
+import { cn } from "@core/lib/cn";
 
 export interface DropdownItem {
   key: string;
@@ -15,17 +16,18 @@ export interface DropdownLinkItem extends DropdownItem {
 }
 
 interface DropdownProps {
-  trigger: ReactNode;
+  /** The button that opens the menu. It is passed through `render`, so it is the trigger and nothing nests in it. */
+  trigger: ReactElement;
   items: (DropdownItem | DropdownLinkItem)[];
   align?: "start" | "end";
 }
 
 const itemClass = (variant?: "default" | "danger") =>
-  [
-    "flex items-center gap-2 w-full px-4 py-2 text-sm font-medium transition-colors cursor-default",
-    "outline-none data-[highlighted]:bg-surface-container",
+  cn(
+    "flex w-full cursor-default items-center gap-2 px-4 py-2 text-sm font-medium transition-colors",
+    "outline-none data-highlighted:bg-surface-container",
     variant === "danger" ? "text-error" : "text-on-surface",
-  ].join(" ");
+  );
 
 function isLinkItem(item: DropdownItem | DropdownLinkItem): item is DropdownLinkItem {
   return "renderLink" in item;
@@ -34,13 +36,13 @@ function isLinkItem(item: DropdownItem | DropdownLinkItem): item is DropdownLink
 export function Dropdown({ trigger, items, align = "end" }: DropdownProps) {
   return (
     <Menu.Root>
-      <Menu.Trigger render={(props) => <span {...props}>{trigger}</span>}></Menu.Trigger>
+      <Menu.Trigger render={trigger} />
       <Menu.Portal>
-        <Menu.Positioner side="bottom" align={align} sideOffset={8} className="outline-none z-50">
-          <Menu.Popup className="min-w-48 bg-surface-container-lowest rounded-xl shadow-ambient py-1.5 outline-none">
+        <Menu.Positioner side="bottom" align={align} sideOffset={8} className="z-popup outline-none">
+          <Menu.Popup className="min-w-48 rounded-xl bg-surface-container-lowest py-1.5 shadow-ambient outline-none">
             {items.map((item, idx) => {
               if (item.key === "__separator__") {
-                return <Menu.Separator key={`sep-${idx}`} className="my-1 border-t border-outline-variant mx-2" />;
+                return <Menu.Separator key={`sep-${idx}`} className="mx-2 my-1 border-t border-outline-variant" />;
               }
 
               if (isLinkItem(item)) {

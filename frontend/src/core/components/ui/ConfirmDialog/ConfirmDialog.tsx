@@ -51,11 +51,7 @@ export function ConfirmDialog({
             {description}
           </AlertDialog.Description>
           <div className="flex justify-end gap-3 pt-2">
-            <AlertDialog.Close
-              ref={cancelRef}
-              disabled={loading}
-              render={<Button variant="ghost" size="sm" />}
-            >
+            <AlertDialog.Close ref={cancelRef} disabled={loading} render={<Button variant="ghost" size="sm" />}>
               {cancelLabel}
             </AlertDialog.Close>
             <Button variant={variant} size="sm" loading={loading} onClick={onConfirm}>

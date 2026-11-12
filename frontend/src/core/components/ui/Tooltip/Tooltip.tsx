@@ -1,9 +1,10 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 interface TooltipProps {
   content: ReactNode;
-  children: ReactNode;
+  /** The control the tooltip labels. It is passed through `render`, so it is the trigger and nothing nests in it. */
+  children: ReactElement;
   side?: "top" | "bottom" | "left" | "right";
   delay?: number;
 }
@@ -12,12 +13,10 @@ export function Tooltip({ content, children, side = "top", delay = 300 }: Toolti
   return (
     <BaseTooltip.Provider delay={delay}>
       <BaseTooltip.Root>
-        <BaseTooltip.Trigger render={(props) => <span {...props} className="inline-flex" />}>
-          {children}
-        </BaseTooltip.Trigger>
+        <BaseTooltip.Trigger render={children} />
         <BaseTooltip.Portal>
-          <BaseTooltip.Positioner side={side} sideOffset={6}>
-            <BaseTooltip.Popup className="bg-inverse-surface text-inverse-on-surface text-xs font-medium px-3 py-1.5 rounded-lg shadow-ambient max-w-xs z-50">
+          <BaseTooltip.Positioner side={side} sideOffset={6} className="z-popup">
+            <BaseTooltip.Popup className="max-w-xs rounded-lg bg-inverse-surface px-3 py-1.5 text-xs font-medium text-inverse-on-surface shadow-ambient motion-safe:transition-opacity motion-safe:duration-100 data-starting-style:opacity-0 data-ending-style:opacity-0">
               {content}
             </BaseTooltip.Popup>
           </BaseTooltip.Positioner>
