@@ -197,3 +197,17 @@ dependencies. dependency-cruiser: 0 violations. `check-base-ui` 2 errors and 1 w
 `check-structure` 116 errors and 5 warnings, both `--warn-only`. `check:fast` takes about 20 s for both
 projects with one file changed, and `check` about a minute. Outcome note in
 [brief 11](briefs/done/11-the-house-style-harness.md).
+
+## [2026-11-12] done | Brief 12 — Base UI by the conventions, and a theme switch
+
+Every interactive widget is on Base UI 1.9.0 behind a wrapper in `frontend/src/core/components/ui/`: `Modal` on
+`Dialog` (Esc guard, focus on the first field, outside clicks off for its two form callers), `ConfirmDialog`
+(one close path, held while `loading`), `Dropdown` and `Tooltip` (the caller's element through `render`),
+`Switch`, `Checkbox`, `RadioGroup` (filters, star rating, theme), `Accordion`, and a `Toast` behind the old
+`toast.*` call shape (`sonner` removed; the `alert()` in `PasswordSection` is a success toast). The two native
+`<select>`s stay native (Q16). The 23 white and black classes, the rating yellow, the 13 `rgba(` shadows, the
+raw z values and the 47 inline font families moved to role tokens and utilities; the icon-font rule stays
+unlayered, with its comment. A Light / Dark / System switch sits in the footer (`data-theme` on `<html>`, a
+first visit light, kept in `localStorage`). `check-base-ui` went from 2 errors and 1 warning to 0 and runs
+strict. Outcome note, counts and deviations in [brief 12](briefs/done/12-base-ui-by-the-conventions.md).
+

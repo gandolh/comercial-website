@@ -176,3 +176,101 @@ One commit per numbered step. After each, `npm run check` passes with `check-bas
 - Brief 13 touches `backend/` only, so it can run before or after this one, but never in the same hour as brief 11.
 - The skills library's `check-base-ui` heuristic for rule 9 may flag a `render` function that returns a `<span>`. That is a false positive only where the span is the element, which it no longer is after step 5.
 - The owner's phone has no navigation links: the navbar hides them below `md` (`Navbar.tsx:58`). Q40 moves phone menu panels to `Drawer`, but this repo has none. Adding one is a feature, so it stays out of this brief, and the redesign (brief 14) may propose it on the board.
+
+## Outcome (2026-11-12)
+
+Built in eleven commits on `main` (`2dbffbd` to `bdd3ccc`), one per step. Everything is in `frontend/`, plus the
+root `package.json`, `scripts/conventions.json`, `.claude/rules/web.md` and the corpus.
+
+**`check-base-ui`, before and after.** Before (strict): 2 errors and 1 warning: rule 5 ×1 (`index.css` was not
+declared the one stylesheet), rule 11 ×1 (`alert()` in `PasswordSection.tsx`), rule 9 ×1 (the span trigger in
+`Dropdown.tsx`). After: 0 errors, 0 warnings, strict (`--warn-only` is gone from `check:conventions`). The
+named exceptions in `scripts/conventions.json`: rule 10 (the native `Select`), rule 5 for inline `fontSize` (32
+sites), `fontVariationSettings` (3) and computed `width` (3), and rule 13 for `CookieConsent`.
+
+**Review-only counts (rules 4-8), before and after.** Inline `style={}`: 87 before (47 `fontFamily`, 31
+`fontSize`, 3 widths, 6 other) and 38 after (32 `fontSize`, 3 `fontVariationSettings`, 3 widths). The 32 `fontSize`
+are the 31 plus the toast's close icon, the accordion chevron and the toast icon, less one that went with the old
+`Toast`; they stay because the unlayered `.material-symbols-outlined` rule beats a `text-*` size (decision 6).
+`white` and `black` classes 16 matched by the grep (23 by the brief's count) to 0; raw palette classes 4 to 0
+(`--color-rating`); `rgba(` shadows and rings 13 to 0 (`shadow-focus`, `shadow-focus-error`, `shadow-popup`,
+`shadow-card`, `shadow-search`); raw `z-50` ×9 and `z-10` ×3 to the tokens `z-nav`, `z-overlay`, `z-popup`,
+`z-toast`, `z-raised`. The popups' `z` is on each `Positioner`. Hand-built widgets (rule 13): the switch, the six
+checkboxes, the three radio groups, the star rating, the FAQ, `Modal` and the toast are all Base UI now.
+
+**What shipped.** `Modal` (Dialog; Escape guard, focus on the first `[data-autofocus]` else field, outside clicks
+off), `ConfirmDialog` (one close path, held while `loading`), `Dropdown` and `Tooltip` (`render={trigger}`),
+`Switch`, `Checkbox`, `RadioGroup` (`Radio`, `RadioOption`), `Accordion`, `Toaster` and `toast`, `ThemeSwitch`,
+`cn()`, the theme store `core/lib/theme.ts`, the boot script and `<meta name="theme-color">` in `index.html`.
+`sonner` is out; `clsx` 2.1.1, `tailwind-merge` 3.7.0 and `vitest` 4.1.12 are in, pinned. The `toast` object keeps
+sonner's call shape, with `warning`, `info`, `custom` and `dismiss`; an error toast has no timeout and a labelled
+Dismiss ("Închide notificarea"); one toast shows at a time; the viewport is a live region from the first render
+and sits at `top-24`, under the navbar, so a toast that stays never covers its controls. `PasswordSection`'s
+`alert()` is `toast.success` with the same text.
+
+**Size** (`npm run build`, gzip): CSS 10.2 kB to 10.6 kB (59.9 kB to 61.7 kB raw); JS 188.9 kB to 203.8 kB (604.5
+kB to 644.0 kB raw): `tailwind-merge` is about 9 kB of that, the rest the Base UI parts, less `sonner`. Built
+CSS layer order: `components`, `properties`, `theme`, `base`, `utilities` (components is empty), and the
+unlayered rules (the dark roles, `.material-symbols-outlined`) after them. The two remote font `@import`s stay at
+the top of the file. No `light-dark()` is used, so the `color-scheme` note of the dry run only applies as the
+declaration `color-scheme` beside the dark roles.
+
+**Checks run:** `npm run check` at the root (exit 0: typecheck, ESLint at 0 errors with the Tailwind rules and the
+class order as errors, Prettier, knip, dependency-cruiser 0 violations, `check-base-ui` 0, 160 backend tests,
+27 frontend tests); `npm run build` in `frontend/`; `bash corpus/lint.sh`. Playwright (headless Chrome, scratch
+scripts, a seeded local database, a made-up local account set by `npm run seed:dev` and the samples): all 22
+flow checks pass: `Modal` Esc closes, an outside click does not, Tab stays inside, focus returns to the opener,
+the page does not scroll behind; `Dropdown` Enter opens, arrows move, Esc closes, the trigger is one button;
+the star rating changes with the arrow keys; the FAQ opens one at a time; a first visit with the system in dark
+is light, Dark sets `data-theme="dark"` and survives a reload with no flash (the first paint is already dark),
+System follows the browser live and survives a reload, the arrow keys move the theme, and the browser-bar colour
+follows. `ConfirmDialog` with `loading`: Esc does nothing and the dialog stays; Cancel closes once (a throwaway
+harness page, deleted, because the one caller never passes `loading`).
+Light-theme screenshots at 1280 and 390 px, before and after the commits (11 scenes each): 0.00% to 0.13% of
+pixels differ in 17 of the 22, and the rest are known and intended: the contact modal (the navbar is now dimmed
+under the backdrop, where the old one sat above it, and the dialog is exactly centred), the toast (it sits under
+the navbar now), the FAQ (an accordion, same look), and the 390 px bundle switch (it kept its width; before, a flex
+parent squeezed it). Contrast: every text and surface pair in the dark theme is at 4.5:1 or more, and
+`index.css.test.ts` holds 18 of them.
+
+**Checks skipped:** no `docker build`; no deploy; the "Settings with the password form" screenshot: `PasswordSection`
+is not on the Settings page (knip lists it as unused, and its `alert()` fix is only reachable once it is wired in),
+so Settings is shot without it; "the phone-verify modal" used a seeded account with an unverified phone.
+
+**Deviations:**
+
+- **Three visual toggles are `Switch`es, not `Checkbox`es** (`FilterSidebar` "Autor Verificat",
+  `PriceStep` and `LocationPriceStep` "Gratuit"): they were checkboxes drawn as switch tracks, apply at once, and a
+  `Checkbox` drawn like that would be wrong for a screen reader. The three real boxes (negotiable, the bundle
+  rows, the terms) are `Checkbox`.
+- **The z tokens are `--z-index-*`** (`z-nav` is still the class). Tailwind 4 reads `z-*` from `--z-index-*`; `--z-nav`
+  does nothing. The skill's reference has it right. A fifth, `z-raised`, covers the three local `z-10`.
+- **Two roles beyond the brief's list:** `scrim`/`on-scrim` (the dialogs' dim and the avatar overlay) and `on-fill` (white text on a
+  badge that keeps its fill in both themes), so the dark theme can use black for the first and keep the second.
+- **The dark `primary-container` is lighter, not darker, than `primary`** (`#d9e2ff` against `#b2c5ff`). The app
+  puts `on-primary` text on it (the hero) and hovers a `bg-primary` button to it; stock Material 3 would give
+  `#0040a1` and an unreadable hover. See [wiki/carpathian-clear.md](../../wiki/carpathian-clear.md).
+- **`grep -rn "prefers-color-scheme" frontend/src` is not empty:** the store's `matchMedia("(prefers-color-scheme: dark)")`
+  (`core/lib/theme.ts:10`, step 10.2 asks for it) and the test that checks the stylesheet has no such query. No
+  CSS or class uses it. The Vite starter logo's own `<style>` (`src/assets/vite.svg`, unused) had one and is deleted.
+- **The tests are typed by `tsconfig.node.json`,** not the app's, so Node types do not leak into the app code
+  (they turn `setTimeout`'s result into `Timeout`). The stylesheet is read as text with `fs`: `?raw` and `?inline`
+  both give the compiled or an empty file under vitest, and Tailwind drops the roles no class uses.
+- **`text-success` and `bg-success/10`** (`ProfileSection.tsx`) were classes that styled nothing; they are
+  `text-tertiary` and `bg-tertiary/10` now (the green they were meant to be). The dead `animate-in`, `fade-in` and
+  `slide-in-from-*` classes (no plugin provides them) are removed. The house `no-unknown-classes` rule found both.
+- **The unused `Toast.tsx`** was deleted, not folded in. `Tooltip`, `CityAutocomplete` and `Chip` stay (knip warns).
+- **`Dropdown`'s `renderLink` item** (no caller) still drops Base UI's props; left as it was.
+- The old toasts sat at the top edge, over the navbar; the new ones sit below it (`top-24`). A moved toast is the
+  one visible change outside Q19's parity.
+- The unchecked track of a `Switch` and the unfilled star are low-contrast against the page (about 1.2:1 and
+  1.6:1 in light, as before): kept for parity. The skill's rule is that a control is never faded below 3:1.
+
+**Owner steps:**
+
+1. `npm ci` in the vps-deploy checkout's `frontend/`, since the dependencies changed (`clsx`, `tailwind-merge` and `vitest`
+   in, `sonner` out).
+2. `node cli.ts piataro deploy`, from the vps-deploy checkout (this brief changed only `frontend/`).
+3. Look at the dark screenshots' values: the dark palette is the brief's default and a taste call (decision 3). The
+   values are in `frontend/src/index.css` under `:root[data-theme="dark"]` and in
+   [wiki/carpathian-clear.md](../../wiki/carpathian-clear.md). Switch in the footer.

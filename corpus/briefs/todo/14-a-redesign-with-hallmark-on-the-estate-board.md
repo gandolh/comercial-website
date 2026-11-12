@@ -2,7 +2,7 @@
 
 **Depends on:**
 
-- In comercial-website: [brief 12](12-base-ui-by-the-conventions.md), which settles the Base UI wrappers, the z, shadow and rating tokens, `cn()` and the Light / Dark / System switch. A redesign is then mostly a new token set and layout. Brief 11's formatter and lint run on every redesign commit.
+- In comercial-website: [brief 12](../done/12-base-ui-by-the-conventions.md), which settles the Base UI wrappers, the z, shadow and rating tokens, `cn()` and the Light / Dark / System switch. A redesign is then mostly a new token set and layout. Brief 11's formatter and lint run on every redesign commit.
 - In the owner's skills library:
   - brief 24, which vendors Hallmark as the design skill and adopts taste-skill 2.5's ideas (palettes and type dealt by trade, its copy layer);
   - the estate redesign board: one artifact with a page per app, owned by the skills library.

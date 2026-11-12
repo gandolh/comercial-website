@@ -1,9 +1,9 @@
 ---
-summary: Dated snapshot (2026-11-11) — PiațăRo as a deployed demo; briefs 01-11 are done (one line each), briefs 10 and 11 wait for a deploy, and the owner's steps.
-updated: 2026-11-11
+summary: Dated snapshot (2026-11-12) — PiațăRo as a deployed demo; briefs 01-12 are done (one line each), briefs 10, 11 and 12 wait for a deploy, and the owner's steps.
+updated: 2026-11-12
 ---
 
-# Status — 2026-11-11
+# Status — 2026-11-12
 
 Built in April-May 2026 and paused since 2026-05-29; README and docs added 2026-10-16; security
 updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
@@ -22,11 +22,12 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 09 (done): the API's container (`infrastructure/`) and vps-deploy's `piataro` stack.
 - 10 (done): Base UI 1.9.0, pinned exactly in `frontend/`.
 - 11 (done, ready for deploy): the house style and its harness: vendored `vendor/house-style/` 1.1.0, Prettier at 120, `npm run check` and `check:fast`, ESLint with typed rules in both projects, TypeScript 6.0.3 in the backend, `.claude/rules/`. Warnings held for later: `no-explicit-any`, `n/no-process-env`, `no-console`, `no-misused-promises` ([todos/house-style-warnings.md](../todos/house-style-warnings.md)).
+- 12 (done, ready for deploy): Base UI by the conventions, and a Light / Dark / System theme switch in the footer: wrappers for `Modal`, `ConfirmDialog`, `Dropdown`, `Tooltip`, `Switch`, `Checkbox`, `RadioGroup`, `Accordion` and a `Toast` behind sonner's call shape (sonner removed); role tokens for colour, shadow and z; `check-base-ui` 0 and strict; the first frontend tests. The dark values are the brief's default, for the owner to look at.
 
 ## Owed by the owner
 
 1. Push this repo and vps-deploy.
-2. `npm install` in this checkout's `frontend/` (the deploy builds it there; brief 11 changed its pins and dropped its ESLint packages).
+2. `npm ci` in this checkout's `frontend/` (the deploy builds it there; brief 11 changed its pins, brief 12 added `clsx`, `tailwind-merge` and `vitest` and dropped `sonner`).
    Once per clone: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 3. In vps-deploy, `npm run setup -- --stack piataro`. It makes `JWT_SECRET` and the Ward client key in
    `secrets/piataro.env`, registers the piataro app at Ward, and asks for `OWNER_EMAIL`, `OWNER_NAME`
