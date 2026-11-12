@@ -9,8 +9,8 @@ const base = process.env.PIATARO_BASE ?? "/";
 export default defineConfig({
   base,
   plugins: [react(), tailwindcss()],
-  // The frontend's tests run in node: the cn() merge and the stylesheet. Flows are checked in Playwright.
-  test: { environment: "node", css: { include: [/\.css\?inline$/] } },
+  // The frontend's tests run in node: the cn() merge and the stylesheet, read as text. Flows are checked in Playwright.
+  test: { environment: "node" },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "./src"),

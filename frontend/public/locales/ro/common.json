@@ -92,7 +92,13 @@
     "cookies": "Politică Cookies",
     "about": "Despre",
     "help": "Ajutor",
-    "contact": "Contact"
+    "contact": "Contact",
+    "theme": {
+      "label": "Tema",
+      "light": "Luminos",
+      "dark": "Întunecat",
+      "system": "Sistem"
+    }
   },
   "messaging": {
     "messages": "Mesaje",

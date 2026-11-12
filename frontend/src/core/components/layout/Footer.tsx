@@ -1,5 +1,6 @@
 import { Link } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
+import { ThemeSwitch } from "@core/components/ui";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -35,23 +36,26 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex gap-4">
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
-            aria-label="Distribuie"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
-              share
-            </span>
-          </button>
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
-            aria-label="Email"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
-              mail
-            </span>
-          </button>
+        <div className="flex flex-col items-center gap-4">
+          <ThemeSwitch />
+          <div className="flex gap-4">
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
+              aria-label="Distribuie"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
+                share
+              </span>
+            </button>
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
+              aria-label="Email"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
+                mail
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </footer>

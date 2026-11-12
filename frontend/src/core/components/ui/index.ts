@@ -3,6 +3,7 @@ export { Input } from "./Input";
 export { Textarea } from "./Textarea";
 export { Select } from "./Select";
 export { Switch } from "./Switch";
+export { ThemeSwitch } from "./ThemeSwitch";
 export { Checkbox } from "./Checkbox";
 export { RadioGroup, Radio, RadioOption } from "./RadioGroup";
 export { Accordion, AccordionItem } from "./Accordion";

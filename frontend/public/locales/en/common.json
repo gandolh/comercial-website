@@ -32,7 +32,13 @@
     "cookies": "Cookie Policy",
     "about": "About",
     "help": "Help",
-    "contact": "Contact"
+    "contact": "Contact",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
   },
   "categories": {
     "browseTitle": "Browse all categories",
