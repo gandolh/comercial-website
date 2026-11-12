@@ -10,7 +10,7 @@ import { startExpiryReminderJob } from "./features/reminders/index.js";
 import { registerAuthRoutes } from "./features/auth/index.js";
 import { healthRoutes } from "./features/health/index.js";
 import { registerUsersRoutes } from "./features/users/index.js";
-import { registerFavoritesRoutes } from "./features/favorites/index.js";
+import { favoritesRoutes } from "./features/favorites/index.js";
 import { registerListingsRoutes } from "./features/listings/index.js";
 import { registerImagesRoutes } from "./features/images/index.js";
 import { registerAssetsRoutes } from "./features/assets/index.js";
@@ -82,7 +82,7 @@ export async function buildApp(
 
   registerAuthRoutes(app, ctx);
   registerUsersRoutes(app, ctx);
-  registerFavoritesRoutes(app, ctx);
+  await app.register(favoritesRoutes, ctx);
   registerListingsRoutes(app, ctx);
   registerImagesRoutes(app, ctx);
   registerAssetsRoutes(app, ctx);

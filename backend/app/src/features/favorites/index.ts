@@ -1,1 +1,1 @@
-export { registerFavoritesRoutes } from "./routes.js";
+export { favoritesRoutes } from "./routes.js";
