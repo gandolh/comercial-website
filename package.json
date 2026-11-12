@@ -16,7 +16,7 @@
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run check:conventions && npm test",
     "check:fast": "npm --prefix backend run check:fast && npm --prefix frontend run check:fast && node scripts/check-fast.mjs",
-    "check:conventions": "npm --prefix backend run knip && npm --prefix frontend run knip && depcruise backend/app/src backend/core/src frontend/src && node vendor/house-style/bin/check-base-ui.mjs && node vendor/house-style/bin/check-structure.mjs --warn-only",
+    "check:conventions": "npm --prefix backend run knip && npm --prefix frontend run knip && depcruise backend/app/src backend/core/src frontend/src && node vendor/house-style/bin/check-base-ui.mjs && node vendor/house-style/bin/check-structure.mjs",
     "house-style:sync": "node vendor/house-style/bin/sync.mjs"
   },
   "devDependencies": {

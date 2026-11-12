@@ -1,5 +1,5 @@
 // Shared application context: the wired dependencies every route module receives.
-// server.ts builds this once and passes it to each route registrar.
+// app.ts builds this once and registers each feature plugin with it as the plugin's options.
 import type { Db } from "@my-olx/core";
 import type { EmailService, StorageService } from "@my-olx/core";
 import type { Config } from "./config.js";
@@ -13,12 +13,3 @@ export interface AppContext {
   assetStorage: StorageService;
   email: EmailService;
 }
-
-/**
- * A route module exports a `register` function of this shape. server.ts collects
- * them and registers each under the app. Each module declares its own routes
- * (full paths, e.g. "/auth/login") and uses `app.authenticate` (from @my-olx/core
- * registerAuth) as a preHandler for protected routes.
- */
-import type { FastifyInstance } from "fastify";
-export type RouteRegistrar = (app: FastifyInstance, ctx: AppContext) => void;

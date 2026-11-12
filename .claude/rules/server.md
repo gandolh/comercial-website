@@ -5,18 +5,34 @@ paths:
 
 # The backend (`backend/core/src`, `backend/app/src`)
 
-- Read the `code-structure` skill before you add or move a route, a plugin or a module.
-- `@my-olx/core` is a plugin library: auth, config, db, email, errors, http, storage. It knows nothing about
-  listings or orders. Domain code goes in `@my-olx/app`.
-- Errors are `AppError`, which the one handler in `core/src/errors` maps to a status and `{ error }`. Route
-  modules throw it for a failure.
-- A protected handler reads the signed-in user with `requireUserId(request)` (`app/src/auth-user.ts`), never
+Follow the `code-structure` skill; these are its rules as they hold here.
+
+- `app/src/server.ts` alone listens: settings, `prepareStorage`, `buildApp`, close-with-grace, the timeouts
+  (`connectionTimeout` 10 s, `keepAliveTimeout` 125 s, no whole-request timeout because of the 500 MB
+  uploads). `app/src/app.ts` exports `buildApp(config, options)` and registers by name: the zod compilers,
+  then core's plugins `errors`, `http`, `auth`, then each feature through its `index.ts`.
+- `app/src/config.ts` is the only reader of `process.env` (`n/no-process-env` is an error) and the only
+  reader of `NODE_ENV` (the dev seed's guard). The CLIs take their settings from it.
+- `@my-olx/core` is the plugin library: `plugins/` (fastify-plugin wrapped, typed options), `lib/` (no
+  Fastify import: `AppError`, tokens, email, storage), `db/`. It knows nothing about listings or orders and
+  reads no environment.
+- A feature is `app/src/features/<name>/`: `routes.ts` (a `FastifyPluginAsyncZod<AppContext>`), optional
+  `schemas.ts`, `service.ts`, `store.ts`, and `index.ts`, its public surface. Another feature imports it only
+  through that index (dependency-cruiser). A store several features share lives in `app/src/db/`.
+- Every route declares its `params`, `querystring` and `body` with zod, and a `response` schema for each
+  success status its handler sends, never a 401/403/404/409/422 (the error plugin writes those). Response
+  schemas are output schemas: no `.transform()`, no `.strict()`. No handler parses request input. Streams,
+  file bodies and redirects declare inputs only, each with a `scripts/conventions.json` entry.
+- Validation runs before the `authenticate` preHandler: a malformed body answers 422 even signed out.
+- Errors are `AppError` (`core/src/lib/api-error.ts`). The one handler (`core/src/plugins/errors.ts`) answers
+  `{ error }`: 422 with the first issue's message (or the route's `fixedValidationMessage`), Fastify's own 4xx
+  with their status, anything else a logged 500 `internal error`.
+- A protected handler reads the signed-in user with `requireUserId(request)` (from `@my-olx/core`), never
   `request.userId!`.
 - The API never serves a paid file from the public uploads folder: paid files live under `ASSETS_DIR`.
 - Dates and money rules are in [corpus/wiki/business-rules.md](../../corpus/wiki/business-rules.md).
-- `core/src/config/index.ts` is the env reader. Several files still read `process.env` themselves (an ESLint
-  warning for now); add no new reader.
-- No `console` outside the CLIs (`seed-dev`, `seed-samples`, `create-owner`, `migrate`, `server`,
-  `create-server`). Log through Fastify's logger.
+- No `console` outside the CLIs (`seed-dev`, `seed-samples`, `create-owner`, `migrate`). Log through
+  Fastify's logger.
 - `backend/app/vendor/` is Ward's generated library. Never edit it.
-- `npm run check:conventions` runs `check-structure` over these folders, `--warn-only` for now.
+- Tests use `startTestApp()` (`app/src/testing/test-app.ts`): the whole app on a temporary data folder.
+- `npm run check:conventions` runs `check-structure` strict over these folders.

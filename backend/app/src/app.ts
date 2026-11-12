@@ -26,10 +26,7 @@ import { wardClientFrom } from "./features/ward/index.js";
 import type { WardClient } from "../vendor/ward/ward-auth.js";
 
 /** Fastify's options that belong to the process. server.ts sets them; a test leaves them out. */
-type ServerOptions = Pick<
-  FastifyServerOptions,
-  "logger" | "trustProxy" | "connectionTimeout" | "requestTimeout" | "keepAliveTimeout"
->;
+type ServerOptions = Pick<FastifyServerOptions, "logger" | "trustProxy" | "connectionTimeout" | "keepAliveTimeout">;
 
 export interface BuildAppOptions {
   server?: ServerOptions;

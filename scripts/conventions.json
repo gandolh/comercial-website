@@ -64,6 +64,48 @@
       "path": "backend/app/src/testing/test-app.ts",
       "match": "startTestApp",
       "reason": "The test helper keeps its name, startTestApp, rather than the skill's buildTestApp: renaming touches every test that imports it for nothing (brief 13, decision 7)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/assets/routes.ts",
+      "match": "GET /listings/:id/download",
+      "reason": "Streams the listing's file (createReadStream): a binary reply has no response schema; its params are declared (Q53)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/assets/routes.ts",
+      "match": "GET /listings/:id/assets/:asset_id/download",
+      "reason": "Streams one asset file (createReadStream): a binary reply has no response schema; its params are declared (Q53)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/invoices/routes.ts",
+      "match": "GET /invoices/:id/pdf",
+      "reason": "Sends the invoice as a PDF file: a binary reply has no response schema; its params are declared (Q53)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/invoices/routes.ts",
+      "match": "GET /invoices/:id/xml",
+      "reason": "Sends the invoice as UBL XML: not JSON, so no response schema; its params are declared (Q53)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/ward/routes.ts",
+      "match": "GET /auth/ward/start",
+      "reason": "Redirects to Ward: a 302 with no body has no response schema; its query string is declared (Q53)."
+    },
+    {
+      "check": "structure",
+      "rule": 6,
+      "path": "backend/app/src/features/ward/routes.ts",
+      "match": "GET /auth/ward/callback",
+      "reason": "Redirects back into the app: a 302 with no body has no response schema; its query string is a loose object, since Ward sends what it sends (Q53)."
     }
   ]
 }

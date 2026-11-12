@@ -17,7 +17,7 @@ const { app } = await buildApp(config, {
     trustProxy: config.trustedProxies,
     // A socket silent this long mid-request is cut. The longest silent wait is the ANAF lookup (8 s).
     connectionTimeout: 10_000,
-    // requestTimeout stays at Fastify's default, 0 (no limit): a 500 MB upload on a slow line takes
+    // The whole-request timeout stays at Fastify's default, 0 (no limit): a 500 MB upload on a slow line takes
     // minutes, and a whole-request limit would cut it. A limit, if one is ever wanted, is per route.
     // Longer than Caddy keeps an idle upstream connection (2 minutes), so Caddy never sends a request
     // down a socket the server has just closed.
