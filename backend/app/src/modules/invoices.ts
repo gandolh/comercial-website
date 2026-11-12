@@ -57,7 +57,7 @@ const ProfileUpsertSchema = z.object({
   address: z.string().max(500).nullable().optional(),
   iban: z.string().max(34).nullable().optional(),
   bank_name: z.string().max(100).nullable().optional(),
-  email: z.string().email().nullable().optional(),
+  email: z.email().nullable().optional(),
   phone: z.string().max(20).nullable().optional(),
 });
 
@@ -75,7 +75,7 @@ const CreateInvoiceSchema = z.object({
   seller_address: z.string().max(500).nullable().optional(),
   seller_iban: z.string().max(34).nullable().optional(),
   seller_bank: z.string().max(100).nullable().optional(),
-  seller_email: z.string().email().nullable().optional(),
+  seller_email: z.email().nullable().optional(),
   buyer_name: z.string().min(1).max(200),
   buyer_cui: z.string().max(20).nullable().optional(),
   buyer_address: z.string().max(500).nullable().optional(),

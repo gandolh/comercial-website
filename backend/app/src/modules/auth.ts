@@ -147,7 +147,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       return reply.code(200).send(response);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        throw AppError.validation(error.errors[0]?.message || "validation failed");
+        throw AppError.validation(error.issues[0]?.message || "validation failed");
       }
       throw error;
     }
@@ -182,7 +182,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       return reply.code(200).send({});
     } catch (error) {
       if (error instanceof z.ZodError) {
-        throw AppError.validation(error.errors[0]?.message || "validation failed");
+        throw AppError.validation(error.issues[0]?.message || "validation failed");
       }
       throw error;
     }
@@ -218,7 +218,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       return reply.code(200).send({});
     } catch (error) {
       if (error instanceof z.ZodError) {
-        throw AppError.validation(error.errors[0]?.message || "validation failed");
+        throw AppError.validation(error.issues[0]?.message || "validation failed");
       }
       // On any error, still return 200
       return reply.code(200).send({});
@@ -252,7 +252,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
         return reply.code(200).send({});
       } catch (error) {
         if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
+          throw AppError.validation(error.issues[0]?.message || "validation failed");
         }
         throw error;
       }
@@ -284,7 +284,7 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
         return reply.code(200).send({});
       } catch (error) {
         if (error instanceof z.ZodError) {
-          throw AppError.validation(error.errors[0]?.message || "validation failed");
+          throw AppError.validation(error.issues[0]?.message || "validation failed");
         }
         throw error;
       }

@@ -53,18 +53,18 @@ export const CreateListingRequestSchema = z
     if (!v.active) return;
     if (v.title.length < 5)
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: "too_small",
         minimum: 5,
-        type: "string",
+        origin: "string",
         inclusive: true,
         path: ["title"],
         message: "title must have at least 5 characters",
       });
     if (v.description.length < 10)
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
+        code: "too_small",
         minimum: 10,
-        type: "string",
+        origin: "string",
         inclusive: true,
         path: ["description"],
         message: "description must have at least 10 characters",

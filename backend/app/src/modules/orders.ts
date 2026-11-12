@@ -77,8 +77,8 @@ async function hasPaidOrder(ctx: AppContext, userId: string, listingId: string):
 
 const CreateOrderSchema = z.object({
   listing_id: z.string().min(1),
-  return_url: z.string().url().optional(),
-  cancel_url: z.string().url().optional(),
+  return_url: z.url().optional(),
+  cancel_url: z.url().optional(),
 });
 
 // ─── Response mapper ─────────────────────────────────────────────────────────

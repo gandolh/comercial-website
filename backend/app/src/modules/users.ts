@@ -151,7 +151,6 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
       email_notifications: z.boolean().optional(),
       bio: z.string().max(500).nullable().optional(),
       website: z
-        .string()
         .url()
         .nullable()
         .optional()
@@ -165,7 +164,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
     try {
       body = schema.parse(request.body);
     } catch (err) {
-      throw AppError.validation((err as any).errors[0]?.message || "invalid request");
+      throw AppError.validation((err as any).issues[0]?.message || "invalid request");
     }
 
     const userId = requireUserId(request);
@@ -354,7 +353,7 @@ export const registerUsersRoutes: RouteRegistrar = (app, ctx) => {
     try {
       body = schema.parse(request.body);
     } catch (err) {
-      throw AppError.validation((err as any).errors[0]?.message || "invalid request");
+      throw AppError.validation((err as any).issues[0]?.message || "invalid request");
     }
 
     const userId = requireUserId(request);

@@ -90,7 +90,7 @@ export function registerErrorHandler(app: FastifyInstance): void {
 
     // Zod validation error
     if (isZodError(error)) {
-      const message = (error as ZodError).errors[0]?.message || "validation failed";
+      const message = error.issues[0]?.message || "validation failed";
       return reply.code(422).send({
         error: message,
       });
