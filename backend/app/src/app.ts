@@ -12,7 +12,7 @@ import { healthRoutes } from "./features/health/index.js";
 import { registerUsersRoutes } from "./features/users/index.js";
 import { favoritesRoutes } from "./features/favorites/index.js";
 import { registerListingsRoutes } from "./features/listings/index.js";
-import { registerImagesRoutes } from "./features/images/index.js";
+import { imagesRoutes } from "./features/images/index.js";
 import { registerAssetsRoutes } from "./features/assets/index.js";
 import { messagingRoutes } from "./features/messaging/index.js";
 import { anafRoutes } from "./features/anaf/index.js";
@@ -84,7 +84,7 @@ export async function buildApp(
   registerUsersRoutes(app, ctx);
   await app.register(favoritesRoutes, ctx);
   registerListingsRoutes(app, ctx);
-  registerImagesRoutes(app, ctx);
+  await app.register(imagesRoutes, ctx);
   registerAssetsRoutes(app, ctx);
   await app.register(messagingRoutes, ctx);
   await app.register(anafRoutes);

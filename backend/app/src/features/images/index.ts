@@ -1,1 +1,1 @@
-export { registerImagesRoutes } from "./routes.js";
+export { imagesRoutes } from "./routes.js";

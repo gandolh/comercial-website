@@ -1,7 +1,8 @@
 import "@fastify/multipart";
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError, listingImageKey } from "@my-olx/core";
-import type { RouteRegistrar } from "../../context.js";
+import type { AppContext } from "../../context.js";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
 import { mkdir } from "node:fs/promises";
@@ -19,6 +20,18 @@ const reorderSchema = z.object({
   order: z.array(z.string().min(1)),
 });
 
+const listingParamsSchema = z.object({ id: z.string() });
+const imageParamsSchema = z.object({ id: z.string(), image_id: z.string() });
+
+// ─── Reply schemas: output only, separate from the input ones ────────────────
+
+const imageSchema = z.object({
+  id: z.string(),
+  listing_id: z.string(),
+  url: z.string(),
+  position: z.number(),
+});
+
 function toImageResponse(
   row: { id: string; listing_id: string; s3_key: string; position: number },
   publicBaseUrl: string,
@@ -28,11 +41,12 @@ function toImageResponse(
   return { id: row.id, listing_id: row.listing_id, url, position: row.position };
 }
 
-export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
+export const imagesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   // POST /listings/:id/images  (multipart upload — replaces the two-step presign+commit flow)
-  app.post<{ Params: { id: string } }>(
+  // The body is multipart, read by request.file(): no body schema.
+  app.post(
     "/listings/:id/images",
-    { preHandler: app.authenticate },
+    { preHandler: app.authenticate, schema: { params: listingParamsSchema, response: { 200: imageSchema } } },
     async (request, reply) => {
       const listingId = request.params.id;
       const userId = requireUserId(request);
@@ -96,14 +110,17 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // PATCH /listings/:id/images/reorder
-  app.patch<{ Params: { id: string } }>(
+  app.patch(
     "/listings/:id/images/reorder",
-    { preHandler: app.authenticate },
+    {
+      preHandler: app.authenticate,
+      schema: { params: listingParamsSchema, body: reorderSchema, response: { 200: z.array(imageSchema) } },
+    },
     async (request, reply) => {
       const listingId = request.params.id;
       const userId = requireUserId(request);
 
-      const body = reorderSchema.parse(request.body);
+      const body = request.body;
 
       const listing = await ctx.db
         .selectFrom("listings")
@@ -152,9 +169,9 @@ export const registerImagesRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // DELETE /listings/:id/images/:image_id
-  app.delete<{ Params: { id: string; image_id: string } }>(
+  app.delete(
     "/listings/:id/images/:image_id",
-    { preHandler: app.authenticate },
+    { preHandler: app.authenticate, schema: { params: imageParamsSchema, response: { 200: z.object({}) } } },
     async (request, reply) => {
       const listingId = request.params.id;
       const imageId = request.params.image_id;
