@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
@@ -9,11 +9,13 @@ const base = process.env.PIATARO_BASE ?? "/";
 export default defineConfig({
   base,
   plugins: [react(), tailwindcss()],
+  // The frontend's tests run in node: the cn() merge and the stylesheet. Flows are checked in Playwright.
+  test: { environment: "node", css: { include: [/\.css\?inline$/] } },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@core": path.resolve(__dirname, "./src/core"),
-      "@app": path.resolve(__dirname, "./src/app"),
+      "@": path.resolve(import.meta.dirname, "./src"),
+      "@core": path.resolve(import.meta.dirname, "./src/core"),
+      "@app": path.resolve(import.meta.dirname, "./src/app"),
     },
   },
 });
