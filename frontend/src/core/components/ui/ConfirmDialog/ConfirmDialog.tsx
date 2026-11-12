@@ -1,4 +1,5 @@
 import { AlertDialog } from "@base-ui/react/alert-dialog";
+import { useRef } from "react";
 import { Button } from "../Button";
 
 interface ConfirmDialogProps {
@@ -13,6 +14,10 @@ interface ConfirmDialogProps {
   loading?: boolean;
 }
 
+/**
+ * A confirm question. Cancel has focus when it opens; Esc, Cancel and the question's own close all go through
+ * `onClose`, once. While `loading` the dialog cannot be dismissed. An alert dialog ignores an outside click.
+ */
 export function ConfirmDialog({
   open,
   onClose,
@@ -24,30 +29,35 @@ export function ConfirmDialog({
   variant = "danger",
   loading = false,
 }: ConfirmDialogProps) {
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
   return (
     <AlertDialog.Root
       open={open}
-      onOpenChange={(o) => {
-        if (!o) onClose();
+      onOpenChange={(next) => {
+        if (!next && !loading) onClose();
       }}
     >
       <AlertDialog.Portal>
-        <AlertDialog.Backdrop className="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50" />
-        <AlertDialog.Popup className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-white/90 backdrop-blur-xl rounded-2xl shadow-ambient p-6 space-y-4">
-          <AlertDialog.Title className="font-headline font-bold text-on-surface text-xl leading-tight">
+        <AlertDialog.Backdrop className="fixed inset-0 z-overlay bg-scrim/40 backdrop-blur-sm motion-safe:transition-opacity motion-safe:duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0" />
+        <AlertDialog.Popup
+          initialFocus={cancelRef}
+          className="fixed top-1/2 left-1/2 z-overlay w-full max-w-sm -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-2xl bg-surface-container-lowest/90 p-6 shadow-ambient backdrop-blur-xl outline-none motion-safe:transition-[opacity,scale] motion-safe:duration-150 data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0"
+        >
+          <AlertDialog.Title className="font-headline text-xl leading-tight font-bold text-on-surface">
             {title}
           </AlertDialog.Title>
-          <AlertDialog.Description className="text-on-surface-variant text-sm leading-relaxed">
+          <AlertDialog.Description className="text-sm leading-relaxed text-on-surface-variant">
             {description}
           </AlertDialog.Description>
-          <div className="flex gap-3 justify-end pt-2">
+          <div className="flex justify-end gap-3 pt-2">
             <AlertDialog.Close
-              render={(props) => (
-                <Button {...props} variant="ghost" size="sm" onClick={onClose}>
-                  {cancelLabel}
-                </Button>
-              )}
-            />
+              ref={cancelRef}
+              disabled={loading}
+              render={<Button variant="ghost" size="sm" />}
+            >
+              {cancelLabel}
+            </AlertDialog.Close>
             <Button variant={variant} size="sm" loading={loading} onClick={onConfirm}>
               {confirmLabel}
             </Button>

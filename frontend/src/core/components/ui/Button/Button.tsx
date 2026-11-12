@@ -1,9 +1,11 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
+import { cn } from "@core/lib/cn";
 
 type Variant = "primary" | "secondary" | "tertiary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+// ComponentProps carries `ref` (React 19), so a Base UI trigger can render this button through `render`.
+interface ButtonProps extends ComponentProps<"button"> {
   variant?: Variant;
   size?: Size;
   loading?: boolean;
@@ -44,7 +46,7 @@ export function Button({
   iconLeft,
   iconRight,
   children,
-  className = "",
+  className,
   disabled,
   ...props
 }: ButtonProps) {
@@ -54,14 +56,14 @@ export function Button({
     <button
       {...props}
       disabled={isDisabled}
-      className={[
+      className={cn(
         "inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200",
-        "disabled:opacity-50 disabled:cursor-not-allowed",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         "outline-none",
         variantClasses[variant],
         sizeClasses[size],
         className,
-      ].join(" ")}
+      )}
     >
       {loading ? (
         <span className={`material-symbols-outlined animate-spin ${iconSizes[size]}`} aria-hidden="true">
