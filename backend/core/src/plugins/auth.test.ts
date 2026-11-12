@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { signToken, verifyToken, hashPassword, verifyPassword, authenticationPreHandler } from "./index.js";
+import { signToken, verifyToken, hashPassword, verifyPassword, authenticationPreHandler } from "./auth.js";
 
 describe("JWT Auth", () => {
   const secret = "test-secret-key-do-not-use-in-production";
@@ -139,7 +139,7 @@ describe("JWT Auth", () => {
 describe("authenticationPreHandler behind the error handler", () => {
   async function appWithGuard() {
     const { default: Fastify } = await import("fastify");
-    const { errors } = await import("../plugins/errors.js");
+    const { errors } = await import("./errors.js");
     const app = Fastify();
     await app.register(errors);
     app.get(

@@ -9,7 +9,7 @@
     ".": "./dist/index.js",
     "./db": "./dist/db/index.js",
     "./errors": "./dist/plugins/errors.js",
-    "./auth": "./dist/auth/index.js",
+    "./auth": "./dist/plugins/auth.js",
     "./http": "./dist/http/index.js",
     "./storage": "./dist/storage/index.js",
     "./email": "./dist/email/index.js"
