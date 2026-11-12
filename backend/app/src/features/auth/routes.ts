@@ -1,6 +1,7 @@
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError, verifyPassword, signToken } from "@my-olx/core";
-import type { RouteRegistrar } from "../../context.js";
+import type { AppContext } from "../../context.js";
 import { UsersAuthRepository } from "./store.js";
 import { requireUserId } from "@my-olx/core";
 
@@ -103,14 +104,33 @@ const phoneVerifySchema = z.object({
     .refine((v) => /^\d{6}$/.test(v), "code must contain only digits"),
 });
 
-export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
+// ─── Reply schemas: output only, separate from the input ones ────────────────
+
+const userSummarySchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  display_name: z.string().nullable(),
+  avatar_url: z.string().nullable(),
+  email_verified: z.boolean(),
+  phone: z.string().nullable(),
+  phone_verified: z.boolean(),
+  created_at: z.string(),
+});
+
+const authReplySchema = z.object({ token: z.string(), user: userSummarySchema });
+
+/** The empty acknowledgement most auth routes answer. */
+const emptyReplySchema = z.object({});
+
+export const authRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   const repo = new UsersAuthRepository(ctx.db);
 
   /**
    * POST /auth/register — closed. Only the owner signs in (the demo decision of 2026-11-03); their
    * account is made by `npm run create-owner` at deploy.
    */
-  app.post("/auth/register", async () => {
+  // It reads nothing and answers only 403, which the error plugin writes: an empty schema.
+  app.post("/auth/register", { schema: {} }, async () => {
     throw AppError.forbidden();
   });
 
@@ -118,10 +138,11 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
    * POST /auth/login
    * Authenticates a user with email and password.
    */
-  app.post<{ Body: unknown }>("/auth/login", async (request, reply) => {
-    try {
-      const body = loginSchema.parse(request.body);
-      const { email, password } = body;
+  app.post(
+    "/auth/login",
+    { schema: { body: loginSchema, response: { 200: authReplySchema } } },
+    async (request, reply) => {
+      const { email, password } = request.body;
 
       // Find user by email
       const user = await repo.findByEmail(email);
@@ -145,19 +166,14 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       };
 
       return reply.code(200).send(response);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw AppError.validation(error.issues[0]?.message || "validation failed");
-      }
-      throw error;
-    }
-  });
+    },
+  );
 
   /**
    * POST /auth/logout
    * Stateless logout (just returns 200).
    */
-  app.post<{ Body: unknown }>("/auth/logout", async (_request, reply) => {
+  app.post("/auth/logout", { schema: { response: { 200: emptyReplySchema } } }, async (_request, reply) => {
     return reply.code(200).send({});
   });
 
@@ -165,10 +181,11 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
    * POST /auth/email/verify
    * Verifies an email using a token.
    */
-  app.post<{ Body: unknown }>("/auth/email/verify", async (request, reply) => {
-    try {
-      const body = emailVerifySchema.parse(request.body);
-      const { token } = body;
+  app.post(
+    "/auth/email/verify",
+    { schema: { body: emailVerifySchema, response: { 200: emptyReplySchema } } },
+    async (request, reply) => {
+      const { token } = request.body;
 
       // Consume token and get user_id
       const userId = await repo.consumeEmailVerificationToken(token);
@@ -180,50 +197,45 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
       await repo.markEmailVerified(userId);
 
       return reply.code(200).send({});
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw AppError.validation(error.issues[0]?.message || "validation failed");
-      }
-      throw error;
-    }
-  });
+    },
+  );
 
   /**
    * POST /auth/email/resend
    * Resends the verification email (always returns 200 to avoid user enumeration).
    */
-  app.post<{ Body: unknown }>("/auth/email/resend", async (request, reply) => {
-    try {
-      const body = emailResendSchema.parse(request.body);
-      const { email } = body;
+  app.post(
+    "/auth/email/resend",
+    { schema: { body: emailResendSchema, response: { 200: emptyReplySchema } } },
+    async (request, reply) => {
+      try {
+        const { email } = request.body;
 
-      // Find user (no error if not found — user enumeration prevention)
-      const user = await repo.findByEmail(email);
-      if (user && !user.email_verified) {
-        // Create new verification token
-        const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
-        const token = await repo.createEmailVerificationToken(user.id, expiresAtMs);
+        // Find user (no error if not found — user enumeration prevention)
+        const user = await repo.findByEmail(email);
+        if (user && !user.email_verified) {
+          // Create new verification token
+          const expiresAtMs = Date.now() + 24 * 60 * 60 * 1000;
+          const token = await repo.createEmailVerificationToken(user.id, expiresAtMs);
 
-        // Send email
-        const verificationLink = `${ctx.config.frontendBaseUrl}/verifica-email?token=${token}`;
-        await ctx.email.send({
-          to: user.email,
-          subject: "Verify your email",
-          html: `Click <a href="${verificationLink}">here</a> to verify your email.`,
-          text: `Verify your email: ${verificationLink}`,
-        });
+          // Send email
+          const verificationLink = `${ctx.config.frontendBaseUrl}/verifica-email?token=${token}`;
+          await ctx.email.send({
+            to: user.email,
+            subject: "Verify your email",
+            html: `Click <a href="${verificationLink}">here</a> to verify your email.`,
+            text: `Verify your email: ${verificationLink}`,
+          });
+        }
+
+        // Always return 200
+        return reply.code(200).send({});
+      } catch {
+        // On any error, still return 200
+        return reply.code(200).send({});
       }
-
-      // Always return 200
-      return reply.code(200).send({});
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw AppError.validation(error.issues[0]?.message || "validation failed");
-      }
-      // On any error, still return 200
-      return reply.code(200).send({});
-    }
-  });
+    },
+  );
 
   // The password reset (forgot + reset) was removed on 2026-11-03: it works by email, and the demo
   // sends none. The owner resets their password with `npm run create-owner`.
@@ -232,30 +244,22 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
    * POST /auth/phone/request-code
    * Requests a phone verification code (PROTECTED).
    */
-  app.post<{ Body: unknown }>(
+  app.post(
     "/auth/phone/request-code",
-    { preHandler: (app as any).authenticate },
+    { preHandler: app.authenticate, schema: { body: phoneRequestCodeSchema, response: { 200: emptyReplySchema } } },
     async (request, reply) => {
-      try {
-        const body = phoneRequestCodeSchema.parse(request.body);
-        const { phone } = body;
-        const userId = requireUserId(request);
+      const { phone } = request.body;
+      const userId = requireUserId(request);
 
-        // Store phone verification code (expires in 10 minutes)
-        const expiresAtMs = Date.now() + 10 * 60 * 1000;
-        await repo.storePhoneVerificationCode(userId, phone, expiresAtMs);
+      // Store phone verification code (expires in 10 minutes)
+      const expiresAtMs = Date.now() + 10 * 60 * 1000;
+      await repo.storePhoneVerificationCode(userId, phone, expiresAtMs);
 
-        // If stub provider, log the code; otherwise send via SMS provider
-        // Phone provider is always stub (no SMS service configured)
-        request.log.info(`[PHONE] Code for ${phone}: 123456`);
+      // If stub provider, log the code; otherwise send via SMS provider
+      // Phone provider is always stub (no SMS service configured)
+      request.log.info(`[PHONE] Code for ${phone}: 123456`);
 
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.issues[0]?.message || "validation failed");
-        }
-        throw error;
-      }
+      return reply.code(200).send({});
     },
   );
 
@@ -263,31 +267,23 @@ export const registerAuthRoutes: RouteRegistrar = (app, ctx) => {
    * POST /auth/phone/verify
    * Verifies phone with a code (PROTECTED).
    */
-  app.post<{ Body: unknown }>(
+  app.post(
     "/auth/phone/verify",
-    { preHandler: (app as any).authenticate },
+    { preHandler: app.authenticate, schema: { body: phoneVerifySchema, response: { 200: emptyReplySchema } } },
     async (request, reply) => {
-      try {
-        const body = phoneVerifySchema.parse(request.body);
-        const { code } = body;
-        const userId = requireUserId(request);
+      const { code } = request.body;
+      const userId = requireUserId(request);
 
-        // Verify the code
-        const result = await repo.verifyPhoneCode(userId, code);
-        if (!result) {
-          throw AppError.notFound();
-        }
-
-        // Mark user as phone verified and set phone
-        await repo.markPhoneVerified(userId, result.phone);
-
-        return reply.code(200).send({});
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw AppError.validation(error.issues[0]?.message || "validation failed");
-        }
-        throw error;
+      // Verify the code
+      const result = await repo.verifyPhoneCode(userId, code);
+      if (!result) {
+        throw AppError.notFound();
       }
+
+      // Mark user as phone verified and set phone
+      await repo.markPhoneVerified(userId, result.phone);
+
+      return reply.code(200).send({});
     },
   );
 };

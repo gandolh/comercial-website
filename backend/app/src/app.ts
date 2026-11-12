@@ -7,7 +7,7 @@ import type { Config } from "./config.js";
 import { getCorsOrigins } from "./config.js";
 import type { AppContext } from "./context.js";
 import { startExpiryReminderJob } from "./features/reminders/index.js";
-import { registerAuthRoutes } from "./features/auth/index.js";
+import { authRoutes } from "./features/auth/index.js";
 import { healthRoutes } from "./features/health/index.js";
 import { usersRoutes } from "./features/users/index.js";
 import { favoritesRoutes } from "./features/favorites/index.js";
@@ -80,7 +80,7 @@ export async function buildApp(
   // The features, each an encapsulated plugin given the context: its hooks stay inside it.
   await app.register(healthRoutes);
 
-  registerAuthRoutes(app, ctx);
+  await app.register(authRoutes, ctx);
   await app.register(usersRoutes, ctx);
   await app.register(favoritesRoutes, ctx);
   registerListingsRoutes(app, ctx);

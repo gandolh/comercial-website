@@ -1,1 +1,1 @@
-export { registerAuthRoutes } from "./routes.js";
+export { authRoutes } from "./routes.js";
