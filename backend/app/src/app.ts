@@ -8,14 +8,14 @@ import { getCorsOrigins } from "./config.js";
 import type { AppContext } from "./context.js";
 import { startExpiryReminderJob } from "./features/reminders/index.js";
 import { registerAuthRoutes } from "./features/auth/index.js";
-import { registerHealthRoutes } from "./features/health/index.js";
+import { healthRoutes } from "./features/health/index.js";
 import { registerUsersRoutes } from "./features/users/index.js";
 import { registerFavoritesRoutes } from "./features/favorites/index.js";
 import { registerListingsRoutes } from "./features/listings/index.js";
 import { registerImagesRoutes } from "./features/images/index.js";
 import { registerAssetsRoutes } from "./features/assets/index.js";
 import { registerMessagingRoutes } from "./features/messaging/index.js";
-import { registerAnafRoutes } from "./features/anaf/index.js";
+import { anafRoutes } from "./features/anaf/index.js";
 import { registerInvoicesRoutes } from "./features/invoices/index.js";
 import { registerOrdersRoutes } from "./features/orders/index.js";
 import { registerReviewsRoutes } from "./features/reviews/index.js";
@@ -77,7 +77,8 @@ export async function buildApp(
     await ctx.db.destroy();
   });
 
-  registerHealthRoutes(app);
+  // The features, each an encapsulated plugin given the context: its hooks stay inside it.
+  await app.register(healthRoutes);
 
   registerAuthRoutes(app, ctx);
   registerUsersRoutes(app, ctx);
@@ -86,7 +87,7 @@ export async function buildApp(
   registerImagesRoutes(app, ctx);
   registerAssetsRoutes(app, ctx);
   registerMessagingRoutes(app, ctx);
-  registerAnafRoutes(app, ctx);
+  await app.register(anafRoutes);
   registerInvoicesRoutes(app, ctx);
   registerOrdersRoutes(app, ctx);
   registerReviewsRoutes(app, ctx);

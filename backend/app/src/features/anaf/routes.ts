@@ -1,17 +1,19 @@
-import type { RouteRegistrar } from "../../context.js";
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { AppError } from "@my-olx/core";
+import { z } from "zod";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-/** The normalised company data returned to callers. */
-export interface CompanyData {
-  cui: number;
-  denumire: string;
-  adresa: string;
-  nrRegCom: string;
-  scpTVA: boolean;
-  stare: string;
-}
+/** The normalised company data returned to callers: the reply's schema. */
+const companyDataSchema = z.object({
+  cui: z.number(),
+  denumire: z.string(),
+  adresa: z.string(),
+  nrRegCom: z.string(),
+  scpTVA: z.boolean(),
+  stare: z.string(),
+});
+type CompanyData = z.infer<typeof companyDataSchema>;
 
 /** Shape of a single entry in the ANAF v9 response `found` array. */
 interface AnafFoundEntry {
@@ -112,7 +114,7 @@ function parseCui(raw: string): number {
 
 // ─── Route registrar ─────────────────────────────────────────────────────────
 
-export const registerAnafRoutes: RouteRegistrar = (app, _ctx) => {
+export const anafRoutes: FastifyPluginAsyncZod = async (app) => {
   /**
    * GET /anaf/company/:cui
    *
@@ -122,45 +124,49 @@ export const registerAnafRoutes: RouteRegistrar = (app, _ctx) => {
    * Returns 200 + CompanyData, 404 if unknown CUI, 422 if invalid CUI,
    * 502 if ANAF is unreachable.
    */
-  app.get("/anaf/company/:cui", async (request, reply) => {
-    const { cui: rawCui } = request.params as { cui: string };
+  app.get(
+    "/anaf/company/:cui",
+    { schema: { params: z.object({ cui: z.string() }), response: { 200: companyDataSchema } } },
+    async (request, reply) => {
+      const { cui: rawCui } = request.params;
 
-    // Validate / normalise
-    const cui = parseCui(rawCui);
+      // Validate / normalise
+      const cui = parseCui(rawCui);
 
-    // Cache hit
-    const cached = getCached(cui);
-    if (cached) {
-      return reply.send(cached);
-    }
+      // Cache hit
+      const cached = getCached(cui);
+      if (cached) {
+        return reply.send(cached);
+      }
 
-    // Proxy to ANAF
-    const apiResp = await fetchFromAnaf(cui);
+      // Proxy to ANAF
+      const apiResp = await fetchFromAnaf(cui);
 
-    // "notFound" array contains CUIs ANAF doesn't know about
-    if (Array.isArray(apiResp.notFound) && apiResp.notFound.includes(cui)) {
-      throw AppError.notFound();
-    }
+      // "notFound" array contains CUIs ANAF doesn't know about
+      if (Array.isArray(apiResp.notFound) && apiResp.notFound.includes(cui)) {
+        throw AppError.notFound();
+      }
 
-    const entry = apiResp.found?.[0];
-    if (!entry) {
-      throw AppError.notFound();
-    }
+      const entry = apiResp.found?.[0];
+      if (!entry) {
+        throw AppError.notFound();
+      }
 
-    const dg = entry.date_generale ?? {};
-    const tva = entry.inregistrare_scop_Tva ?? {};
-    const stare = entry.stare_inregistrare ?? {};
+      const dg = entry.date_generale ?? {};
+      const tva = entry.inregistrare_scop_Tva ?? {};
+      const stare = entry.stare_inregistrare ?? {};
 
-    const company: CompanyData = {
-      cui: dg.cui ?? cui,
-      denumire: dg.denumire ?? "",
-      adresa: dg.adresa ?? "",
-      nrRegCom: dg.nrRegCom ?? "",
-      scpTVA: tva.scpTVA ?? false,
-      stare: stare.stare ?? "",
-    };
+      const company: CompanyData = {
+        cui: dg.cui ?? cui,
+        denumire: dg.denumire ?? "",
+        adresa: dg.adresa ?? "",
+        nrRegCom: dg.nrRegCom ?? "",
+        scpTVA: tva.scpTVA ?? false,
+        stare: stare.stare ?? "",
+      };
 
-    setCached(cui, company);
-    return reply.send(company);
-  });
+      setCached(cui, company);
+      return reply.send(company);
+    },
+  );
 };

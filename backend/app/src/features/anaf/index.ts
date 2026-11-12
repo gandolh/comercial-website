@@ -1,1 +1,1 @@
-export { registerAnafRoutes } from "./routes.js";
+export { anafRoutes } from "./routes.js";
