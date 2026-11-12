@@ -1,1 +1,1 @@
-export { registerPayoutsRoutes } from "./routes.js";
+export { payoutsRoutes } from "./routes.js";

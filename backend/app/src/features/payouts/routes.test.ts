@@ -106,6 +106,23 @@ describe("the simulated ledger", () => {
   });
 });
 
+describe("the payout request's schema", () => {
+  it("answers a malformed body 422 before it asks for a session (validation runs before authenticate)", async () => {
+    const t = await startTestApp();
+    for (const headers of [{}, t.bearer("someone")]) {
+      const res = await t.app.inject({ method: "POST", url: "/me/payouts", headers, payload: { request_id: "x" } });
+      expect([res.statusCode, res.json()]).toEqual([422, { error: "request_id is required" }]);
+    }
+    const signedOut = await t.app.inject({
+      method: "POST",
+      url: "/me/payouts",
+      payload: { request_id: "a-valid-request" },
+    });
+    expect(signedOut.statusCode).toBe(401);
+    await t.app.close();
+  });
+});
+
 describe("the ledger migration", () => {
   it("backfills the fee on orders paid before it", async () => {
     const { default: Database } = await import("better-sqlite3");

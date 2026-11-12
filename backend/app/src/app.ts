@@ -21,7 +21,7 @@ import { registerOrdersRoutes } from "./features/orders/index.js";
 import { registerReviewsRoutes } from "./features/reviews/index.js";
 import { registerBundlesRoutes } from "./features/bundles/index.js";
 import { registerWardRoutes } from "./features/ward/index.js";
-import { registerPayoutsRoutes } from "./features/payouts/index.js";
+import { payoutsRoutes } from "./features/payouts/index.js";
 import { wardClientFrom } from "./features/ward/index.js";
 import type { WardClient } from "../vendor/ward/ward-auth.js";
 
@@ -92,7 +92,7 @@ export async function buildApp(
   registerOrdersRoutes(app, ctx);
   registerReviewsRoutes(app, ctx);
   registerBundlesRoutes(app, ctx);
-  registerPayoutsRoutes(app, ctx);
+  await app.register(payoutsRoutes, ctx);
   const ward = options.ward === undefined ? await wardClientFrom(config.ward) : (options.ward ?? undefined);
   registerWardRoutes(app, ctx, ward);
 
