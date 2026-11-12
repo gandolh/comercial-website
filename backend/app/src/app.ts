@@ -9,7 +9,7 @@ import type { AppContext } from "./context.js";
 import { startExpiryReminderJob } from "./features/reminders/index.js";
 import { registerAuthRoutes } from "./features/auth/index.js";
 import { healthRoutes } from "./features/health/index.js";
-import { registerUsersRoutes } from "./features/users/index.js";
+import { usersRoutes } from "./features/users/index.js";
 import { favoritesRoutes } from "./features/favorites/index.js";
 import { registerListingsRoutes } from "./features/listings/index.js";
 import { imagesRoutes } from "./features/images/index.js";
@@ -81,7 +81,7 @@ export async function buildApp(
   await app.register(healthRoutes);
 
   registerAuthRoutes(app, ctx);
-  registerUsersRoutes(app, ctx);
+  await app.register(usersRoutes, ctx);
   await app.register(favoritesRoutes, ctx);
   registerListingsRoutes(app, ctx);
   await app.register(imagesRoutes, ctx);
