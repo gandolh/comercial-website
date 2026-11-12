@@ -15,6 +15,7 @@ import Database from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
 import { runMigrations } from "@my-olx/core";
 import { BundlesRepository } from "../../db/bundles-store.js";
+import { startTestApp } from "../../testing/test-app.js";
 import type { Database as DbSchema } from "@my-olx/core";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -237,5 +238,30 @@ describe("Bundle ownership enforcement (simulated)", () => {
 
     const isOwner = listing.user_id === callerUserId;
     expect(isOwner).toBe(true);
+  });
+});
+
+describe("the bundle items' schema", () => {
+  it("answers an empty list 422 with its message, before it asks for a session (validation runs first)", async () => {
+    const t = await startTestApp();
+    for (const headers of [{}, t.bearer("someone")]) {
+      const res = await t.app.inject({
+        method: "POST",
+        url: "/listings/any/bundle-items",
+        headers,
+        payload: { child_listing_ids: [] },
+      });
+      expect([res.statusCode, res.json()]).toEqual([
+        422,
+        { error: "Pachetul trebuie să conțină cel puțin un anunț copil" },
+      ]);
+    }
+    const signedOut = await t.app.inject({
+      method: "POST",
+      url: "/listings/any/bundle-items",
+      payload: { child_listing_ids: ["a"] },
+    });
+    expect(signedOut.statusCode).toBe(401);
+    await t.app.close();
   });
 });

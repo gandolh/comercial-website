@@ -1,1 +1,1 @@
-export { registerBundlesRoutes } from "./routes.js";
+export { bundlesRoutes } from "./routes.js";

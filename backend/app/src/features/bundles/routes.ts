@@ -10,13 +10,13 @@
  *   GET  /listings/:id/bundle-items             (public)  — get child listing cards
  */
 
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
-import type { RouteRegistrar } from "../../context.js";
+import type { AppContext } from "../../context.js";
 import { BundlesRepository } from "../../db/bundles-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 import { toListingCardResponse } from "../listings/index.js";
-import type { FastifyInstance } from "fastify";
 import { requireUserId } from "@my-olx/core";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
@@ -28,12 +28,33 @@ const SetBundleItemsSchema = z.object({
     .max(50, "Pachetul poate conține cel mult 50 de anunțuri"),
 });
 
-// ─── Route registrar ─────────────────────────────────────────────────────────
+const bundleParamsSchema = z.object({ id: z.string() });
 
-export const registerBundlesRoutes: RouteRegistrar = (app, ctx) => {
+// ─── Reply schemas: output only, separate from the input ones ────────────────
+
+const bundleItemsReplySchema = z.object({
+  bundle_listing_id: z.string(),
+  child_listing_ids: z.array(z.string()),
+});
+
+/** A child listing as a card (the shape listings' toListingCardResponse builds). */
+const listingCardSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  price_ron: z.number().nullable(),
+  category: z.string(),
+  cover_url: z.string().nullable(),
+  seller_verified: z.boolean(),
+  posted_at: z.string(),
+  active: z.boolean(),
+  expires_at: z.string(),
+});
+
+// ─── Route plugin ────────────────────────────────────────────────────────────
+
+export const bundlesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   const bundlesRepo = new BundlesRepository(ctx.db);
   const listingsRepo = new ListingsRepository(ctx.db);
-  const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
    * POST /listings/:id/bundle-items
@@ -41,63 +62,71 @@ export const registerBundlesRoutes: RouteRegistrar = (app, ctx) => {
    * Marks the parent listing as is_bundle=1.
    * Validates: caller owns the bundle listing; all children exist.
    */
-  app.post("/listings/:id/bundle-items", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id: bundleId } = request.params as { id: string };
+  app.post(
+    "/listings/:id/bundle-items",
+    {
+      preHandler: app.authenticate,
+      schema: { params: bundleParamsSchema, body: SetBundleItemsSchema, response: { 200: bundleItemsReplySchema } },
+    },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id: bundleId } = request.params;
 
-    const parsed = SetBundleItemsSchema.safeParse(request.body);
-    if (!parsed.success) throw AppError.validation(parsed.error.message);
+      const { child_listing_ids: childIds } = request.body;
 
-    const { child_listing_ids: childIds } = parsed.data;
+      // Verify the bundle listing exists and belongs to the caller.
+      const bundle = await listingsRepo.getById(bundleId);
+      if (!bundle) throw AppError.notFound();
+      if (bundle.user_id !== userId) throw AppError.forbidden();
 
-    // Verify the bundle listing exists and belongs to the caller.
-    const bundle = await listingsRepo.getById(bundleId);
-    if (!bundle) throw AppError.notFound();
-    if (bundle.user_id !== userId) throw AppError.forbidden();
+      // Prevent a listing from being a child of itself.
+      if (childIds.includes(bundleId)) {
+        throw AppError.validation("Un pachet nu poate conține propriul anunț");
+      }
 
-    // Prevent a listing from being a child of itself.
-    if (childIds.includes(bundleId)) {
-      throw AppError.validation("Un pachet nu poate conține propriul anunț");
-    }
+      // Verify all child listings exist.
+      const childRows = await Promise.all(childIds.map((id) => listingsRepo.getById(id)));
+      const missingIdx = childRows.findIndex((r) => !r);
+      if (missingIdx !== -1) {
+        throw AppError.validation(`Anunțul copil cu ID-ul '${childIds[missingIdx]}' nu a fost găsit`);
+      }
 
-    // Verify all child listings exist.
-    const childRows = await Promise.all(childIds.map((id) => listingsRepo.getById(id)));
-    const missingIdx = childRows.findIndex((r) => !r);
-    if (missingIdx !== -1) {
-      throw AppError.validation(`Anunțul copil cu ID-ul '${childIds[missingIdx]}' nu a fost găsit`);
-    }
+      await bundlesRepo.setBundleItems(bundleId, childIds);
 
-    await bundlesRepo.setBundleItems(bundleId, childIds);
-
-    return reply.status(200).send({
-      bundle_listing_id: bundleId,
-      child_listing_ids: childIds,
-    });
-  });
+      return reply.status(200).send({
+        bundle_listing_id: bundleId,
+        child_listing_ids: childIds,
+      });
+    },
+  );
 
   /**
    * GET /listings/:id/bundle-items
    * Public endpoint — returns the child listings as listing cards.
    */
-  app.get("/listings/:id/bundle-items", async (request, reply) => {
-    const { id: bundleId } = request.params as { id: string };
+  app.get(
+    "/listings/:id/bundle-items",
+    { schema: { params: bundleParamsSchema, response: { 200: z.array(listingCardSchema) } } },
+    async (request, reply) => {
+      const { id: bundleId } = request.params;
 
-    // Verify the bundle listing exists.
-    const bundle = await listingsRepo.getById(bundleId);
-    if (!bundle) throw AppError.notFound();
+      // Verify the bundle listing exists.
+      const bundle = await listingsRepo.getById(bundleId);
+      if (!bundle) throw AppError.notFound();
 
-    const children = await bundlesRepo.getBundleChildren(bundleId);
+      const children = await bundlesRepo.getBundleChildren(bundleId);
 
-    // Build card responses (images + seller verification needed for full card).
-    const cards = await Promise.all(
-      children.map(async (child) => {
-        const images = await listingsRepo.getImages(child.id);
-        const seller = await listingsRepo.getSeller(child.user_id);
-        const sellerVerified = Boolean(seller?.phone_verified);
-        return toListingCardResponse(child, images, sellerVerified, ctx.config);
-      }),
-    );
+      // Build card responses (images + seller verification needed for full card).
+      const cards = await Promise.all(
+        children.map(async (child) => {
+          const images = await listingsRepo.getImages(child.id);
+          const seller = await listingsRepo.getSeller(child.user_id);
+          const sellerVerified = Boolean(seller?.phone_verified);
+          return toListingCardResponse(child, images, sellerVerified, ctx.config);
+        }),
+      );
 
-    return reply.send(cards);
-  });
+      return reply.send(cards);
+    },
+  );
 };
