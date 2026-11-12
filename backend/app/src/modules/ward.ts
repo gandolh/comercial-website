@@ -21,7 +21,7 @@ import { AppError, signToken } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
 import type { AppContext } from "../context.js";
 import type { WardClient } from "../../vendor/ward/ward-auth.js";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 type Flow = Awaited<ReturnType<WardClient["startAuthorization"]>>["flow"];
 

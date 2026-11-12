@@ -1,4 +1,5 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from "fastify";
+import fp from "fastify-plugin";
 import { AppError } from "../lib/api-error.js";
 import { verifyToken } from "../lib/tokens.js";
 
@@ -47,15 +48,29 @@ export async function authenticationPreHandler(
   }
 }
 
+export interface AuthOptions {
+  /** JWT secret for verifying tokens (the config's `jwtSecret`). */
+  secret: string;
+}
+
 /**
- * Register authentication on a Fastify app.
- * Decorates the app with an `authenticate` preHandler and sets up JWT error handling.
- *
- * @param app - Fastify instance
- * @param secret - JWT secret for signing/verifying tokens
+ * Authentication, wrapped in fastify-plugin so it reaches every route: decorates the app with the
+ * `authenticate` preHandler (the one decorator, listed in scripts/conventions.json), which protected
+ * routes name in their options.
  */
-export function registerAuth(app: FastifyInstance, secret: string): void {
+const authPlugin: FastifyPluginAsync<AuthOptions> = async (app, { secret }) => {
   app.decorate("authenticate", async function (request: FastifyRequest, reply: FastifyReply) {
     await authenticationPreHandler(request, reply, secret);
   });
+};
+
+export const auth = fp(authPlugin, { name: "auth" });
+
+/**
+ * The signed-in user's id. The `authenticate` preHandler sets it before a protected handler runs, so a miss
+ * here means a route forgot the preHandler: answer 401 instead of carrying an undefined id into a query.
+ */
+export function requireUserId(request: FastifyRequest): string {
+  if (request.userId === undefined) throw AppError.unauthorized();
+  return request.userId;
 }

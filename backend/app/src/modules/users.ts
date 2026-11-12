@@ -4,7 +4,7 @@ import { sql } from "kysely";
 import type { SqlBool } from "kysely";
 import type { RouteRegistrar } from "../context.js";
 import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 // Helpers
 function imageUrl(s3Key: string, config: any): string {
   if (!s3Key) return null as any;

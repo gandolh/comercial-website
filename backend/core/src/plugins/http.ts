@@ -1,4 +1,5 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsync } from "fastify";
+import fp from "fastify-plugin";
 import fastifyCors from "@fastify/cors";
 import fastifyCompress from "@fastify/compress";
 import fastifyMultipart from "@fastify/multipart";
@@ -12,8 +13,11 @@ export interface HttpOptions {
   uploadsDir: string;
 }
 
-/** CORS, compression, multipart (500 MB a file) and the static `/uploads/` route. */
-export async function registerHttp(app: FastifyInstance, options: HttpOptions): Promise<void> {
+/**
+ * CORS, compression, multipart (500 MB a file) and the static `/uploads/` route, wrapped in
+ * fastify-plugin so they reach every route.
+ */
+const httpPlugin: FastifyPluginAsync<HttpOptions> = async (app, options) => {
   await app.register(fastifyCors, {
     origin: options.corsOrigins,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -33,4 +37,6 @@ export async function registerHttp(app: FastifyInstance, options: HttpOptions): 
     prefix: "/uploads/",
     decorateReply: false,
   });
-}
+};
+
+export const http = fp(httpPlugin, { name: "http" });

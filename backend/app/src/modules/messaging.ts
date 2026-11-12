@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { RouteRegistrar, AppContext } from "../context.js";
 import { AppError, newMessageEmail } from "@my-olx/core";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 /**
  * Helper to construct image URL from S3 key.

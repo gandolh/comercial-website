@@ -16,7 +16,7 @@ import type { RouteRegistrar } from "../context.js";
 import type { FastifyInstance } from "fastify";
 import { ReviewsRepository } from "../repositories/reviews.repo.js";
 import { hasPaidOrder } from "./orders.js";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 

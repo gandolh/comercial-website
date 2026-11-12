@@ -2,7 +2,7 @@ import { z } from "zod";
 import { AppError } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import type { FastifyInstance } from "fastify";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

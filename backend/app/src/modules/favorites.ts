@@ -1,5 +1,5 @@
 import type { RouteRegistrar } from "../context.js";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 interface ListingCardResponse {
   id: string;

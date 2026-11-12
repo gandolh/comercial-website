@@ -13,7 +13,7 @@ export default [
       "app/src/seed-samples.ts",
       "app/src/create-owner.ts",
       "app/src/migrate.ts",
-      "core/src/email/index.ts",
+      "core/src/lib/email.ts",
     ],
     // The env reader: the one place that says what the app needs.
     env: ["app/src/config.ts"],

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import Fastify from "fastify";
-import { registerHttp } from "./index.js";
-import type { HttpOptions } from "./index.js";
+import { http } from "./http.js";
+import type { HttpOptions } from "./http.js";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -10,7 +10,7 @@ import path from "node:path";
 async function buildApp(overrides: Partial<HttpOptions> = {}) {
   const uploadsDir = await mkdtemp(path.join(tmpdir(), "my-olx-test-"));
   const app = Fastify();
-  await registerHttp(app, { corsOrigins: ["http://localhost:5173"], uploadsDir, ...overrides });
+  await app.register(http, { corsOrigins: ["http://localhost:5173"], uploadsDir, ...overrides });
   app.get("/health", async () => ({ status: "ok" }));
   return app;
 }

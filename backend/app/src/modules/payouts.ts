@@ -16,7 +16,7 @@ import type { Database } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
 import type { AppContext } from "../context.js";
 import { PLATFORM_FEE_RATE } from "../payout-fee.js";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 const PayoutRequestSchema = z.object({ request_id: z.string().min(8).max(100) });
 

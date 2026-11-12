@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import type { EmailMessage, EmailService } from "./index.js";
-import { SmtpEmailService, LogEmailService, createEmailService } from "./index.js";
+import type { EmailMessage, EmailService } from "./email.js";
+import { SmtpEmailService, LogEmailService, createEmailService } from "./email.js";
 
 describe("EmailService", () => {
   describe("LogEmailService", () => {

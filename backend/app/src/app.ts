@@ -1,6 +1,6 @@
 // Builds the API: the Fastify app, its plugins and every route, on a prepared data folder (prepareStorage).
 // server.ts listens on it; tests build the same app on a temporary database (test-app.ts). It never listens.
-import { createDb, createEmailService, registerAuth, errors, registerHttp, StorageService } from "@my-olx/core";
+import { auth, createDb, createEmailService, errors, http, StorageService } from "@my-olx/core";
 import { serializerCompiler, validatorCompiler } from "@fastify/type-provider-zod";
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
 import type { Config } from "./config.js";
@@ -53,8 +53,9 @@ export async function buildApp(
   // The error plugin first: it sets the error and 404 handlers on the root, so every plugin after it,
   // and every route, answers in its body.
   await app.register(errors);
-  await registerHttp(app, { corsOrigins: getCorsOrigins(config.corsAllowedOrigins), uploadsDir: config.uploadsDir });
-  registerAuth(app, config.jwtSecret);
+  // Then the other cross-cutting plugins, by name: CORS, compression, multipart and /uploads/, then auth.
+  await app.register(http, { corsOrigins: getCorsOrigins(config.corsAllowedOrigins), uploadsDir: config.uploadsDir });
+  await app.register(auth, { secret: config.jwtSecret });
 
   const ctx: AppContext = {
     db: createDb(config.databasePath),

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { listingImageKey, listingAssetKey, StorageService } from "./index.js";
+import { listingImageKey, listingAssetKey, StorageService } from "./storage.js";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";

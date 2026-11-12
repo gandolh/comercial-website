@@ -17,7 +17,7 @@ import { BundlesRepository } from "../repositories/bundles.repo.js";
 import { ListingsRepository } from "../repositories/listings.repo.js";
 import { toListingCardResponse } from "../listings-helpers.js";
 import type { FastifyInstance } from "fastify";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 

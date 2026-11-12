@@ -15,7 +15,7 @@ import {
 } from "../listings-helpers.js";
 import { AppError } from "@my-olx/core";
 import type { FastifyInstance } from "fastify";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 /**
  * Helper: Extract optional user ID from Authorization header

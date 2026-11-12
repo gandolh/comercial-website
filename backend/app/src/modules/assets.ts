@@ -11,7 +11,7 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 /**
  * Fire-and-forget: notify the listing owner when their asset reaches 1 download.

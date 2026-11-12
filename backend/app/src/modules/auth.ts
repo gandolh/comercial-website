@@ -2,7 +2,7 @@ import { z } from "zod";
 import { AppError, verifyPassword, signToken } from "@my-olx/core";
 import type { RouteRegistrar } from "../context.js";
 import { UsersAuthRepository } from "../repositories/users-auth.repo.js";
-import { requireUserId } from "../auth-user.js";
+import { requireUserId } from "@my-olx/core";
 
 /**
  * Type-safe UserSummary response object.
