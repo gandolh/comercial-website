@@ -1,14 +1,18 @@
-// Builds the API: data folders, migrations, the asset move, the Fastify app and every route.
-// server.ts listens on it; tests build the same app on a temporary database (test-app.ts).
+// Builds the API: the Fastify app, its plugins and every route, on a prepared data folder (prepareStorage).
+// server.ts listens on it; tests build the same app on a temporary database (test-app.ts). It never listens.
 import {
-  buildApp,
   createDb,
   createEmailService,
   registerAuth,
   registerErrorHandler,
+  registerHttp,
   StorageService,
 } from "@my-olx/core";
+import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
+import type { Config } from "./config.js";
+import { getCorsOrigins } from "./config.js";
 import type { AppContext } from "./context.js";
+import { startExpiryReminderJob } from "./jobs/expiry-reminders.js";
 import { registerAuthRoutes } from "./modules/auth.js";
 import { registerUsersRoutes } from "./modules/users.js";
 import { registerFavoritesRoutes } from "./modules/favorites.js";
@@ -21,49 +25,35 @@ import { registerInvoicesRoutes } from "./modules/invoices.js";
 import { registerOrdersRoutes } from "./modules/orders.js";
 import { registerReviewsRoutes } from "./modules/reviews.js";
 import { registerBundlesRoutes } from "./modules/bundles.js";
-import { moveAssetsOutOfUploads } from "./move-assets.js";
 import { registerWardRoutes } from "./modules/ward.js";
 import { registerPayoutsRoutes } from "./modules/payouts.js";
-import { wardClientFromEnv } from "./ward-client.js";
+import { wardClientFrom } from "./ward-client.js";
 import type { WardClient } from "../vendor/ward/ward-auth.js";
-import { runMigrations } from "@my-olx/core";
-import Database from "better-sqlite3";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { mkdir } from "node:fs/promises";
 
-import type { FastifyInstance } from "fastify";
-import type { Config } from "@my-olx/core";
+/** Fastify's options that belong to the process. server.ts sets them; a test leaves them out. */
+export type ServerOptions = Pick<
+  FastifyServerOptions,
+  "logger" | "trustProxy" | "connectionTimeout" | "requestTimeout" | "keepAliveTimeout"
+>;
+
+export interface BuildAppOptions {
+  server?: ServerOptions;
+  /** Overrides the client `config.ward` would make: tests pass a fake, or `null` for local login only. */
+  ward?: WardClient | null;
+  /** Run the expiry-reminder job while the app is up. server.ts turns it on; tests leave it off. */
+  reminders?: boolean;
+}
 
 /**
- * `ward` overrides the client the `WARD_OIDC_*` settings would make: tests pass a fake, or `null`
- * for local login only.
+ * The app, ready to listen and not listening. Closing it stops the reminder job and closes the database.
  */
-export async function createServer(
+export async function buildApp(
   config: Config,
-  options: { ward?: WardClient | null } = {},
+  options: BuildAppOptions = {},
 ): Promise<{ app: FastifyInstance; ctx: AppContext }> {
-  // Ensure data directories exist
-  await mkdir(path.dirname(config.databasePath), { recursive: true });
-  await mkdir(config.uploadsDir, { recursive: true });
-  await mkdir(config.assetsDir, { recursive: true });
-
-  // Run migrations before starting the server
-  const here = path.dirname(fileURLToPath(import.meta.url));
-  const migrationsDir = path.resolve(here, "../../migrations");
-  const sqliteDb = new Database(config.databasePath);
-  const ran = runMigrations(sqliteDb, migrationsDir);
-  if (ran.length > 0) {
-    console.log(`Applied ${ran.length} migration(s):`, ran);
-  }
-  const movedAssets = await moveAssetsOutOfUploads(sqliteDb, config.uploadsDir, config.assetsDir);
-  if (movedAssets > 0) {
-    console.log(`Moved ${movedAssets} asset file(s) out of the public uploads folder into ${config.assetsDir}`);
-  }
-  sqliteDb.close();
-
-  const app = await buildApp(config);
+  const app = Fastify(options.server);
   registerErrorHandler(app);
+  await registerHttp(app, { corsOrigins: getCorsOrigins(config.corsAllowedOrigins), uploadsDir: config.uploadsDir });
   registerAuth(app, config.jwtSecret);
 
   const ctx: AppContext = {
@@ -73,6 +63,19 @@ export async function createServer(
     assetStorage: new StorageService({ uploadsDir: config.assetsDir, publicBaseUrl: config.publicBaseUrl }),
     email: createEmailService({}),
   };
+
+  let stopReminders: (() => void) | undefined;
+  if (options.reminders === true) {
+    app.addHook("onReady", async () => {
+      stopReminders = startExpiryReminderJob(ctx);
+    });
+  }
+  app.addHook("onClose", async () => {
+    stopReminders?.();
+    await ctx.db.destroy();
+  });
+
+  app.get("/health", async () => ({ status: "ok" }));
 
   registerAuthRoutes(app, ctx);
   registerUsersRoutes(app, ctx);
@@ -87,7 +90,7 @@ export async function createServer(
   registerReviewsRoutes(app, ctx);
   registerBundlesRoutes(app, ctx);
   registerPayoutsRoutes(app, ctx);
-  const ward = options.ward === undefined ? await wardClientFromEnv() : (options.ward ?? undefined);
+  const ward = options.ward === undefined ? await wardClientFrom(config.ward) : (options.ward ?? undefined);
   registerWardRoutes(app, ctx, ward);
 
   return { app, ctx };

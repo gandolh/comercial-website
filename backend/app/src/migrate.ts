@@ -4,15 +4,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import { runMigrations } from "@my-olx/core";
-import { loadConfig } from "@my-olx/core";
+import { loadEnvFile, resolveDataPaths } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 // src/migrate.ts -> ../../migrations (backend/migrations)
 const migrationsDir = path.resolve(here, "../../migrations");
 
 async function main(): Promise<void> {
-  const config = loadConfig();
-  const db = new Database(config.databasePath);
+  loadEnvFile();
+  const { databasePath } = resolveDataPaths();
+  const db = new Database(databasePath);
   try {
     const ran = runMigrations(db, migrationsDir);
     if (ran.length === 0) {

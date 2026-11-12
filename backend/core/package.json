@@ -12,8 +12,7 @@
     "./auth": "./dist/auth/index.js",
     "./http": "./dist/http/index.js",
     "./storage": "./dist/storage/index.js",
-    "./email": "./dist/email/index.js",
-    "./config": "./dist/config/index.js"
+    "./email": "./dist/email/index.js"
   },
   "scripts": {
     "build": "tsc -b",

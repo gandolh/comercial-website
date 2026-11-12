@@ -1,7 +1,8 @@
 // Shared application context: the wired dependencies every route module receives.
 // server.ts builds this once and passes it to each route registrar.
 import type { Db } from "@my-olx/core";
-import type { Config, EmailService, StorageService } from "@my-olx/core";
+import type { EmailService, StorageService } from "@my-olx/core";
+import type { Config } from "./config.js";
 
 export interface AppContext {
   db: Db;

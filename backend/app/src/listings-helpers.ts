@@ -1,4 +1,4 @@
-import type { Config } from "@my-olx/core";
+import type { Config } from "./config.js";
 import type { ListingImageRow, ListingRow, SellerRow } from "./repositories/listings.repo.js";
 
 export function imageUrl(s3Key: string | null, config: Config): string | null {

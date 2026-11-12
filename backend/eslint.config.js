@@ -6,19 +6,17 @@ export default [
   ...houseStyle({
     root: import.meta.dirname,
     server: ["app/src", "core/src"],
-    // The seed and owner commands and the migrator talk to the person running them, the server entry and
-    // createServer log before the logger exists, and the log email service prints by design.
+    // The seed and owner commands and the migrator talk to the person running them, and the log email
+    // service prints by design. The server entry logs through Fastify's logger.
     console: [
       "app/src/seed-dev.ts",
       "app/src/seed-samples.ts",
       "app/src/create-owner.ts",
       "app/src/migrate.ts",
-      "app/src/server.ts",
-      "app/src/create-server.ts",
       "core/src/email/index.ts",
     ],
     // The env reader: the one place that says what the app needs.
-    env: ["core/src/config/index.ts"],
+    env: ["app/src/config.ts"],
     ignores: ["app/vendor/**", "app/data/**", "data/**"],
   }),
   {
@@ -28,14 +26,6 @@ export default [
     name: "piataro-backend/any-warns",
     files: ["app/src/**"],
     rules: { "@typescript-eslint/no-explicit-any": "warn" },
-  },
-  {
-    // A warning for now (2026-11-11): these files still read the environment themselves. When the server
-    // takes its settings from config.ts, this block goes and the rule is an error again.
-    name: "piataro-backend/process-env-warns",
-    files: ["app/src/**", "core/src/**"],
-    ignores: ["**/*.test.ts", "core/src/config/index.ts"],
-    rules: { "n/no-process-env": "warn" },
   },
   {
     // A warning for now (2026-11-11): these helpers run outside a request and the app context carries no

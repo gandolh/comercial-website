@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import { crc32 } from "node:zlib";
 import { runMigrations } from "@my-olx/core";
 import { splitOrderAmount } from "./payout-fee.js";
+import { loadEnvFile, resolveDataPaths } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 /** backend/seed/samples/previews, from app/src (tsx) and app/dist (a build) alike. */
@@ -277,11 +278,8 @@ export async function seedSamples(
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-  const envFile = path.resolve(here, "../../.env");
-  if (existsSync(envFile)) process.loadEnvFile(envFile);
-  const databasePath = process.env.DATABASE_PATH ?? path.resolve("data/my-olx.db");
-  const uploadsDir = process.env.UPLOADS_DIR ?? path.resolve("data/uploads");
-  const assetsDir = process.env.ASSETS_DIR ?? path.resolve("data/assets");
+  loadEnvFile();
+  const { databasePath, uploadsDir, assetsDir } = resolveDataPaths();
   await mkdir(path.dirname(databasePath), { recursive: true });
   const db = new Database(databasePath);
   runMigrations(db, path.resolve(here, "../../migrations"));

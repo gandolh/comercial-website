@@ -1,26 +1,28 @@
 /**
  * `npm run seed:dev`: the demo accounts, listings and assets for local development, from
  * `backend/seed/dev/*.sql` in name order. Development only: the accounts share the known password
- * `12345678`, so this refuses to run unless NODE_ENV=development. Applies the migrations first,
+ * `12345678`, so it refuses to run outside development (`loadDevSeedConfig`). Applies the migrations first,
  * so it works on a fresh database; the SQL uses INSERT OR IGNORE, so a rerun is harmless.
  */
 import Database from "better-sqlite3";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runMigrations } from "@my-olx/core";
+import { ConfigError, loadDevSeedConfig, loadEnvFile } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const envFile = path.resolve(here, "../../.env");
-if (existsSync(envFile)) process.loadEnvFile(envFile);
+loadEnvFile();
 
-if (process.env.NODE_ENV !== "development") {
-  console.error("seed:dev creates accounts with a known password; it runs only with NODE_ENV=development.");
+let databasePath: string;
+try {
+  ({ databasePath } = loadDevSeedConfig());
+} catch (err) {
+  if (!(err instanceof ConfigError)) throw err;
+  console.error(err.message);
   process.exit(1);
 }
-
-const databasePath = process.env.DATABASE_PATH ?? path.resolve("data/my-olx.db");
 await mkdir(path.dirname(databasePath), { recursive: true });
 const db = new Database(databasePath);
 runMigrations(db, path.resolve(here, "../../migrations"));

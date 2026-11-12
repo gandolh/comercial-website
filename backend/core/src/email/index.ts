@@ -108,8 +108,6 @@ export function createEmailService(config: EmailServiceConfig): EmailService {
 // Notification templates
 // ---------------------------------------------------------------------------
 
-const BASE_URL = process.env.FRONTEND_BASE_URL ?? "http://localhost:5173";
-
 function emailFooter(unsubscribeUrl: string): string {
   return `
     <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb" />
@@ -132,16 +130,26 @@ export function newMessageEmail(params: {
   conversationId: string;
   listingTitle: string;
   unsubscribeUserId: string;
+  /** The frontend's base URL, for the links (the config's `frontendBaseUrl`). */
+  baseUrl: string;
 }): EmailMessage {
-  const { recipientEmail, recipientName, senderName, messagePreview, conversationId, listingTitle, unsubscribeUserId } =
-    params;
+  const {
+    recipientEmail,
+    recipientName,
+    senderName,
+    messagePreview,
+    conversationId,
+    listingTitle,
+    unsubscribeUserId,
+    baseUrl,
+  } = params;
 
   const greeting = recipientName ? `Bună, ${recipientName}!` : "Bună!";
   const from = senderName ?? "Cineva";
   const preview = messagePreview.length > 200 ? messagePreview.substring(0, 200) + "…" : messagePreview;
 
-  const conversationLink = `${BASE_URL}/mesaje/${conversationId}`;
-  const unsubscribeUrl = `${BASE_URL}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
+  const conversationLink = `${baseUrl}/mesaje/${conversationId}`;
+  const unsubscribeUrl = `${baseUrl}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
 
   const html = `
     <!DOCTYPE html>
@@ -188,12 +196,14 @@ export function expiryReminderEmail(params: {
   expiresAt: string;
   variant: "3zile" | "azi";
   unsubscribeUserId: string;
+  /** The frontend's base URL, for the links (the config's `frontendBaseUrl`). */
+  baseUrl: string;
 }): EmailMessage {
-  const { ownerEmail, ownerName, listingTitle, listingId, expiresAt, variant, unsubscribeUserId } = params;
+  const { ownerEmail, ownerName, listingTitle, listingId, expiresAt, variant, unsubscribeUserId, baseUrl } = params;
 
   const greeting = ownerName ? `Bună, ${ownerName}!` : "Bună!";
-  const listingLink = `${BASE_URL}/anunt/${listingId}`;
-  const unsubscribeUrl = `${BASE_URL}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
+  const listingLink = `${baseUrl}/anunt/${listingId}`;
+  const unsubscribeUrl = `${baseUrl}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
 
   const expiryDate = new Date(expiresAt).toLocaleDateString("ro-RO", {
     year: "numeric",
@@ -252,12 +262,14 @@ export function firstDownloadEmail(params: {
   listingId: string;
   downloadCount: number;
   unsubscribeUserId: string;
+  /** The frontend's base URL, for the links (the config's `frontendBaseUrl`). */
+  baseUrl: string;
 }): EmailMessage {
-  const { ownerEmail, ownerName, listingTitle, listingId, downloadCount, unsubscribeUserId } = params;
+  const { ownerEmail, ownerName, listingTitle, listingId, downloadCount, unsubscribeUserId, baseUrl } = params;
 
   const greeting = ownerName ? `Bună, ${ownerName}!` : "Bună!";
-  const listingLink = `${BASE_URL}/anunt/${listingId}`;
-  const unsubscribeUrl = `${BASE_URL}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
+  const listingLink = `${baseUrl}/anunt/${listingId}`;
+  const unsubscribeUrl = `${baseUrl}/setari/notificari?unsubscribe=${unsubscribeUserId}`;
 
   const html = `
     <!DOCTYPE html>

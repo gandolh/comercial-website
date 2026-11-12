@@ -46,6 +46,7 @@ async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
         expiresAt: row.expires_at,
         variant: row.reminder_type,
         unsubscribeUserId: row.user_id,
+        baseUrl: ctx.config.frontendBaseUrl,
       });
 
       await ctx.email.send(msg);
@@ -68,16 +69,20 @@ async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
 /**
  * Start the expiry-reminder background job.
  * Fires once after INITIAL_DELAY_MS, then repeats every JOB_INTERVAL_MS.
- * Returns the interval handle so callers can clear it if needed.
+ * Returns a function that stops it: the app calls it when it closes.
  */
-export function startExpiryReminderJob(ctx: AppContext): NodeJS.Timeout {
+export function startExpiryReminderJob(ctx: AppContext): () => void {
+  let interval: NodeJS.Timeout | undefined;
   const timer = setTimeout(() => {
     void runExpiryReminderJob(ctx);
 
-    setInterval(() => {
+    interval = setInterval(() => {
       void runExpiryReminderJob(ctx);
     }, JOB_INTERVAL_MS);
   }, INITIAL_DELAY_MS);
 
-  return timer;
+  return () => {
+    clearTimeout(timer);
+    clearInterval(interval);
+  };
 }

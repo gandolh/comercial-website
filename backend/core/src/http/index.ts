@@ -1,21 +1,21 @@
-import Fastify, { type FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import fastifyCompress from "@fastify/compress";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
-import { mkdir } from "node:fs/promises";
-import type { Config } from "../config/index.js";
-import { getCorsOrigins } from "../config/index.js";
 
-export async function buildApp(config: Config): Promise<FastifyInstance> {
-  const logLevel = process.env.LOG_LEVEL ?? "info";
+/** What the HTTP plugins need from the app's settings. */
+export interface HttpOptions {
+  /** The origins CORS allows, each one whole (`http://localhost:5173`). */
+  corsOrigins: string[];
+  /** The public uploads folder, served at `/uploads/`. prepareStorage creates it before the app is built. */
+  uploadsDir: string;
+}
 
-  const app = Fastify({ logger: { level: logLevel } });
-
-  const corsOrigins = getCorsOrigins(config.corsAllowedOrigins);
-
+/** CORS, compression, multipart (500 MB a file) and the static `/uploads/` route. */
+export async function registerHttp(app: FastifyInstance, options: HttpOptions): Promise<void> {
   await app.register(fastifyCors, {
-    origin: corsOrigins,
+    origin: options.corsOrigins,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Authorization", "Content-Type", "Accept"],
     credentials: true,
@@ -28,14 +28,9 @@ export async function buildApp(config: Config): Promise<FastifyInstance> {
   });
 
   // Serve uploaded files at /uploads/<key>
-  await mkdir(config.uploadsDir, { recursive: true });
   await app.register(fastifyStatic, {
-    root: config.uploadsDir,
+    root: options.uploadsDir,
     prefix: "/uploads/",
     decorateReply: false,
   });
-
-  app.get("/health", async () => ({ status: "ok" }));
-
-  return app;
 }

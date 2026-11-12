@@ -66,6 +66,7 @@ async function simulateJobRun(
         expiresAt: row.expires_at,
         variant: row.reminder_type,
         unsubscribeUserId: row.user_id,
+        baseUrl: "http://localhost:5173",
       });
 
       await emailService.send(msg);

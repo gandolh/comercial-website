@@ -45,6 +45,7 @@ async function sendFirstDownloadNotification(ctx: AppContext, listingId: string,
       listingId,
       downloadCount,
       unsubscribeUserId: listing.user_id,
+      baseUrl: ctx.config.frontendBaseUrl,
     });
 
     await ctx.email.send(msg);

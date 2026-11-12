@@ -75,6 +75,7 @@ async function sendNewMessageNotification(
       conversationId,
       listingTitle,
       unsubscribeUserId: recipientId,
+      baseUrl: ctx.config.frontendBaseUrl,
     });
 
     await ctx.email.send(msg);
