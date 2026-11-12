@@ -2,5 +2,14 @@
   "$schema": "../vendor/house-style/conventions.schema.json",
   "web": ["frontend/src"],
   "server": ["backend/app/src", "backend/core/src"],
-  "shared": []
+  "shared": [],
+  "stylesheet": "index.css",
+  "exceptions": [
+    {
+      "check": "base-ui",
+      "rule": 10,
+      "path": "frontend/src/core/components/ui/Select",
+      "reason": "The two selects (the sort bar and the invoice form) stay a native <select>: both are used on phones, where the native picker is the better control (2026-11-10, Q16, brief 12 decision 4). There is no Base UI Select, so rule 10 has nothing to check."
+    }
+  ]
 }
