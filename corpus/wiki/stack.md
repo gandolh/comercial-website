@@ -1,6 +1,6 @@
 ---
 summary: The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-updated: 2026-11-03
+updated: 2026-11-12
 ---
 
 # Tech Stack
@@ -14,17 +14,20 @@ updated: 2026-11-03
 **Workspace:**
 ```
 backend/
-  core/        ← @my-olx/core — db, auth, storage, config, http factory, errors, email
-  app/         ← @my-olx/app  — routes, modules, repositories
+  core/        ← @my-olx/core — the plugin library: plugins/ (errors, http, auth), lib/, db/
+  app/         ← @my-olx/app  — server.ts, app.ts, config.ts, features/<name>/, db/ (shared stores)
   migrations/  ← raw .sql files (SQLite); auto-applied at startup
 ```
 
-**4-layer architecture (within `app/`):**
-```
-routes/ → handlers/ → services/ → repositories/
-```
-- `routes/` — Fastify route registration (not yet split into handlers/services in current code; modules contain all three layers)
-- `repositories/` — Kysely queries; boolean columns stored as 0/1 integers (SQLite convention)
+**Code structure (since 2026-11-12, brief 13; the `code-structure` skill):** one folder per feature,
+`app/src/features/<name>/` (`routes.ts`, `schemas.ts`, `service.ts`, `store.ts`, `index.ts`), with the
+stores several features share in `app/src/db/`. Most handlers still hold their Kysely queries (rule 7 is
+the next step). Boolean columns are stored as 0/1 integers (SQLite convention).
+
+**Validation and replies:** zod 4.6.7 through `@fastify/type-provider-zod` 1.0.3 on every route (params,
+querystring, body and a response schema per success status), with its required peers `@fastify/swagger`
+9.9.3 and `openapi-types` 12.1.3, installed but unused at run time. `fastify-plugin` 6.0.1 wraps core's
+plugins; `close-with-grace` 2.5.0 ends the process on SIGTERM.
 
 **DB:** SQLite (`better-sqlite3`) + Kysely. Synchronous migrator; auto-runs `migrations/*.sql` at every server startup. DB file: `backend/data/my-olx.db`.
 
@@ -36,7 +39,7 @@ routes/ → handlers/ → services/ → repositories/
 
 **Auth:** JWT + Argon2. `core/auth/`. Token carries `user_id`.
 
-**Storage:** Disk-based (`core/storage/`). Listing images go to `UPLOADS_DIR` (default `data/uploads/`), served by `@fastify/static` at `/uploads/<key>`. Files for sale go to `ASSETS_DIR` (default `data/assets/`), which is not served: they leave only through the download routes, which check the order (since 2026-11-03). Upload via `@fastify/multipart` direct POST — no presigned URLs.
+**Storage:** Disk-based (`core/src/lib/storage.ts`). Listing images go to `UPLOADS_DIR` (default `data/uploads/`), served by `@fastify/static` at `/uploads/<key>`. Files for sale go to `ASSETS_DIR` (default `data/assets/`), which is not served: they leave only through the download routes, which check the order (since 2026-11-03). Upload via `@fastify/multipart` direct POST — no presigned URLs.
 
 **Email:** `LogEmailService` (console log) in dev; `SmtpEmailService` for prod — swap via `createEmailService({host: ...})`.
 

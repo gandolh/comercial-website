@@ -1,6 +1,6 @@
 ---
 summary: How buyers get files: free downloads, orders gating paid ones through the simulated fake payment (Stripe removed 2026-11-03), and download-all.
-updated: 2026-11-03
+updated: 2026-11-12
 ---
 
 # Digital-Asset Commerce (Purchase & Download)
@@ -32,12 +32,12 @@ The Stripe provider, its config guard and the payment webhook were removed on 20
   (`pending|paid|failed|cancelled`), provider (`fake`), provider_ref, created_at, paid_at. Migration
   `20260620020000_orders.sql`.
 
-Endpoints (in `modules/orders.ts`):
+Endpoints (in `features/orders/routes.ts`; the provider and the paid-order check in `service.ts`):
 - `POST /orders` — create order / get checkout URL. Idempotent: returns an existing `paid` order instead of re-charging.
 - `GET /orders`, `GET /orders/:id` — buyer's order history / status.
 - `POST /orders/:id/mark-paid` — the fake payment; only the order's buyer may call it. Idempotent.
 
-**Download-gate rule** (`modules/assets.ts`, both download endpoints): if the listing is *not* free
+**Download-gate rule** (`features/assets/routes.ts`, both download endpoints): if the listing is *not* free
 (`price_ron` is a positive number) *and* the requester is not the listing owner, a `paid` order for
 that listing is required, else `403`. Free listings (`price_ron` null or ≤ 0) and the owner always pass.
 

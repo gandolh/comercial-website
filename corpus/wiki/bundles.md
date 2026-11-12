@@ -1,6 +1,6 @@
 ---
 summary: Event-template bundles: a listing that sells several child listings at one price, and how buying it grants their downloads.
-updated: 2026-05-29
+updated: 2026-11-12
 ---
 
 # Event-Template Bundles
@@ -18,12 +18,12 @@ machinery instead of duplicating it.
 - Migration `20260621030000_bundles.sql`: adds `is_bundle INTEGER NOT NULL DEFAULT 0` to `listings`,
   and creates `bundle_items` (bundle_listing_id, child_listing_id, position; PK on the pair; FKs
   ON DELETE CASCADE). Kysely: `is_bundle` on `ListingsTable`, new `BundleItemsTable`.
-- `repositories/bundles.repo.ts`: `setBundleItems` (replace children), `getBundleChildren` (as listing
+- `db/bundles-store.ts`: `setBundleItems` (replace children), `getBundleChildren` (as listing
   cards), `hasBundlePurchaseForChild` (JOIN `bundle_items` → `orders` WHERE status='paid').
 
 ## Download access (the key wiring)
 
-The download-access check in `modules/assets.ts` was extended (via a `canDownloadListing()` helper) to
+The download-access check in `features/assets/routes.ts` was extended (via a `canDownloadListing()` helper) to
 grant access when, **in order**: the listing is free → the user owns it → the user has a direct paid
 order → the user purchased a **bundle** that contains this listing as a child. Additive — direct
 purchases behave exactly as before. See [digital-asset-commerce](digital-asset-commerce.md) for the order/download base.

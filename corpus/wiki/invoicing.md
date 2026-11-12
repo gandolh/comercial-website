@@ -1,6 +1,6 @@
 ---
 summary: The offline invoice generator (PDF and UBL 2.1 e-Factura XML, issuer profiles) and the ANAF CUI lookup; never checked against live ANAF, which the owner dropped on 2026-11-03.
-updated: 2026-05-29
+updated: 2026-11-12
 ---
 
 # Invoicing & ANAF CUI Lookup
@@ -11,7 +11,7 @@ Originated from todos `invoice-generator`, `cui-lookup`.
 
 ## ANAF CUI company lookup
 
-- `GET /anaf/company/:cui` (`modules/anaf.ts`) — proxies the public ANAF VAT-payer API
+- `GET /anaf/company/:cui` (`features/anaf/routes.ts`) — proxies the public ANAF VAT-payer API
   (`webservicesp.anaf.ro/PlatitorTvaRest/api/v9/ws/tva`) and returns normalized
   `{ cui, denumire, adresa, nrRegCom, scpTVA, stare }`.
 - Input normalized (strips leading `RO`, numeric check). Invalid format → `422`; unknown CUI → `404`;
@@ -27,7 +27,7 @@ Scope decision: **download only — no ANAF OAuth / SPV submission.**
   - `invoices`: id, user_id, series, number, issue_date, due_date, seller_* snapshot, buyer_*, line_items
     (JSON text), currency, subtotal, vat_amount, total, **`order_id` (nullable, no FK — reserved for
     [digital-asset-commerce](digital-asset-commerce.md))**, created_at. `UNIQUE(user_id, series, number)`; number auto-increments per (user, series).
-- **Endpoints** (`modules/invoices.ts`, all JWT-authenticated): `GET/PUT /invoices/profile`,
+- **Endpoints** (`features/invoices/routes.ts`, all JWT-authenticated): `GET/PUT /invoices/profile`,
   `GET/POST /invoices`, `GET /invoices/:id`, `GET /invoices/:id/pdf`, `GET /invoices/:id/xml`.
 - **PDF** is hand-built (raw PDF 1.4 bytes, Helvetica/WinAnsi) — no PDF library.
 - **XML** is UBL 2.1 with `urn:efactura.mfinante.ro:CIUS-RO:1.0.1`, string-templated — no library.

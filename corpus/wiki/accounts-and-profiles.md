@@ -1,6 +1,6 @@
 ---
 summary: Seller profiles and the upload flow (2026-05-29), and sign-in since 2026-11-03 — owner only (create-owner), no sign-up or email reset, Sign in with Ward linked by subject.
-updated: 2026-11-03
+updated: 2026-11-12
 ---
 
 # Accounts & Seller Profiles
@@ -55,6 +55,6 @@ to match the current disk-based backend contract:
 ## Sign-in since 2026-11-03
 
 Sign-up and the email password reset are gone: only the owner has an account, made by
-`npm run create-owner`. "Sign in with Ward" (`modules/ward.ts`, the vendored `ward-auth` client) is a
+`npm run create-owner`. "Sign in with Ward" (`features/ward/routes.ts`, the vendored `ward-auth` client) is a
 second way in once the owner links it from Settings; it finds the user by `users.ward_subject`.
 See [decisions](decisions.md) → *Two ways in*.

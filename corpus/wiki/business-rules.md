@@ -1,6 +1,6 @@
 ---
 summary: The enforced marketplace rules (listing rate limit, expiry, the publish requirement, pricing, the platform fee) and where each is checked.
-updated: 2026-11-03
+updated: 2026-11-12
 ---
 
 # Business Rules
@@ -32,10 +32,10 @@ Enforced constraints that define how the marketplace operates. All violations ar
 
 - **Currency:** RON only.
 - **Optional:** Price may be `null` meaning the listing is free.
-- **Platform fee: 2.5%** of each paid order (`PLATFORM_FEE_RATE`, `app/src/payout-fee.ts`), rounded to
+- **Platform fee: 2.5%** of each paid order (`PLATFORM_FEE_RATE`, `app/src/lib/payout-fee.ts`), rounded to
   the ban half up and recorded on the order when it is paid (`platform_fee_ron`, `seller_net_ron`), so a
   new rate never touches past orders.
-- **Payouts are simulated** (`modules/payouts.ts`): a seller's balance is their net on paid orders minus
+- **Payouts are simulated** (`features/payouts/routes.ts`): a seller's balance is their net on paid orders minus
   payouts; a payout takes the whole balance at once, moves no money, and is idempotent per request id.
 
 ## Users

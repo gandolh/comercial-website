@@ -62,8 +62,8 @@ files of every listing it groups.
   [bundles](../corpus/wiki/bundles.md)
 - [corpus/wiki/business-rules.md](../corpus/wiki/business-rules.md):
   the limits and rules the code enforces
-- Code: [backend/app/src/modules/](../backend/app/src/modules/),
+- Code: [backend/app/src/features/](../backend/app/src/features/),
   [backend/core/src/](../backend/core/src/),
   [frontend/src/app/modules/](../frontend/src/app/modules/)
-- There is no API contract file: the route modules in `backend/app/src/modules/` are the contract
+- There is no API contract file: the route schemas in `backend/app/src/features/*/routes.ts` are the contract
   (`backend/app/CONTRACT.md`, the pre-pivot API, was removed on 2026-11-03).

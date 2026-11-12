@@ -77,7 +77,7 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 - `backend/tsconfig.base.json` writes the house flags out instead of extending the vendored base, because the
   Docker build copies only `backend/`. Change it by hand when the house base changes.
 - Several lint rules are warnings for now, each with a dated note in the project's `eslint.config.js`:
-  `no-explicit-any`, `n/no-process-env` and `no-console` in the backend, `no-misused-promises` in the frontend.
+  `no-explicit-any` and `no-console` in the backend, `no-misused-promises` in the frontend.
 
 ## Hard rules
 
@@ -94,18 +94,25 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 
 ```
 backend/
-  core/src/       @my-olx/core: auth/ (JWT + Argon2, the authenticate hook), config/, db/ (Kysely,
-                  SQLite, the migrator), email/, errors/ (AppError + the Fastify error handler),
-                  http/ (the Fastify factory: CORS, multipart, static /uploads/), storage/ (disk)
-  app/src/        @my-olx/app: server.ts (the entry), modules/ (one file per domain: auth, listings,
-                  assets, images, orders, invoices, reviews, bundles, messaging, favorites, users,
-                  anaf), repositories/ (Kysely queries), jobs/ (expiry reminders)
+  core/src/       @my-olx/core, the plugin library: plugins/ (errors, http: CORS, compression,
+                  multipart, /uploads/; auth: the authenticate preHandler; each a fastify-plugin),
+                  lib/ (AppError, JWT + Argon2 tokens, email, disk storage; no Fastify), db/ (Kysely,
+                  SQLite, the migrator). It reads no environment.
+  app/src/        @my-olx/app: server.ts (the entry: listens), app.ts (buildApp), config.ts (the one
+                  reader of the environment), features/<name>/ (routes.ts, schemas.ts, service.ts,
+                  store.ts, index.ts: auth, users, favorites, listings, images, assets, bundles,
+                  messaging, orders, reviews, payouts, invoices, anaf, ward, health, reminders),
+                  db/ (the stores several features share), lib/, startup/ (prepareStorage: folders,
+                  migrations, the asset move), testing/ (startTestApp)
   migrations/     raw .sql files, applied at start
 ```
 
-Routes live in `app/src/modules/*.ts`; each registers its routes on the Fastify app and throws
-`AppError` for failures, which the error handler maps to a status and `{ error }` JSON. There is no
-separate API contract file: the route modules are the contract.
+Routes live in `app/src/features/<name>/routes.ts`, each feature a `FastifyPluginAsyncZod` that `app.ts`
+registers through its `index.ts`. Every route declares its zod schemas (params, querystring, body and a
+response schema per success status; streams and redirects inputs only), through
+`@fastify/type-provider-zod`. Handlers throw `AppError`, which the error plugin maps to a status and
+`{ error }` JSON (422 for validation, which runs before the `authenticate` preHandler). The route schemas
+are the API contract. `.claude/rules/server.md` has the rules.
 
 ### Frontend
 
@@ -123,7 +130,7 @@ Tokens in `design/design-system/carpathian-clear.json` (Material Design 3 conven
 
 See `corpus/wiki/business-rules.md`. In short: 5 listings per rolling week per user; listings expire
 30 days after creation; publishing needs at least one downloadable asset (images are previews);
-prices in RON, `null` is free; 13 categories (`backend/app/src/listings-helpers.ts`); Romanian UI with
+prices in RON, `null` is free; 13 categories (`backend/app/src/features/listings/helpers.ts`); Romanian UI with
 correct diacritics (ă, â, î, ș, ț).
 
 ## brief-board

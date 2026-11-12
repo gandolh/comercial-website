@@ -146,7 +146,7 @@ account is refused.
 ## Email
 
 No SMTP server is wired in (`createEmailService({})` in
-`backend/app/src/create-server.ts`), so every email, such as expiry reminders,
+`backend/app/src/app.ts`), so every email, such as expiry reminders,
 is written to the API's log instead of being sent.
 
 ## Payments

@@ -86,3 +86,18 @@ off it, never off the system setting. A first visit is light; the choice lives i
 setting, since only the owner has an account); System is resolved in script and follows the browser live. The
 control is a `RadioGroup` in the footer, reachable signed out. Rejected: following the system on a first visit
 and a toggle in the profile menu.
+
+## The server in the house code structure
+_2026-11-10, built 2026-11-12 (brief 13)_ — The backend follows the `code-structure` skill. `backend/core` stays
+a separate package (decision 1's default), now the skill's `plugins/` (errors, http, auth: each a
+`fastify-plugin` with typed options, registered by name) and `lib/` (no Fastify) plus `db/`; it reads no
+environment. `backend/app/src` has `server.ts` (listens), `app.ts` (`buildApp`), `config.ts` (the one reader
+of the environment, `JWT_SECRET` required everywhere) and `features/<name>/`, with the stores several
+features share in `db/` (Q54). Every route declares zod schemas through `@fastify/type-provider-zod`, a
+response schema for each success status, so a column added to a table no longer reaches a client; streams,
+file bodies and redirects declare inputs only. The error body stays `{ error }` and validation stays 422,
+now before the `authenticate` preHandler (Q52), and Fastify's own 4xx keep their status (they answered 500).
+Rejected: `@fastify/autoload` (registration by name keeps the order and the option types visible), TypeBox
+(zod was already the repo's validator, and the skill's provider is zod), the layer split
+(`routes/`/`services/`/`repositories/`, which spreads one domain over four folders), and folding `core` into
+`app` (the owner's to call: it is asked on the board).

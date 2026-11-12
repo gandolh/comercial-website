@@ -1,6 +1,6 @@
 ---
 summary: Verified-purchase reviews: a 1-5 star rating plus text, one per buyer per listing, and the average on the listing page.
-updated: 2026-05-29
+updated: 2026-11-12
 ---
 
 # Reviews & Ratings
@@ -22,9 +22,9 @@ from real customers.
 - Migration `20260621020000_reviews.sql`: `reviews` table (id, listing_id, buyer_user_id, rating 1–5,
   body, created_at, updated_at) with a **UNIQUE index on (listing_id, buyer_user_id)** enforcing
   one-per-buyer, plus an index for listing-scoped fetches. Kysely `ReviewsTable` added to the schema.
-- `repositories/reviews.repo.ts`: upsert, list-for-listing (joins buyer `display_name`, newest first),
+- `db/reviews-store.ts`: upsert, list-for-listing (joins buyer `display_name`, newest first),
   aggregate (avg + count), get-mine, delete-mine.
-- `modules/reviews.ts` (`registerReviewsRoutes`):
+- `features/reviews/routes.ts` (`reviewsRoutes`):
   - `POST /listings/:id/reviews` — auth + paid-order gate; upserts the caller's review.
   - `GET /listings/:id/reviews` — public; returns `{ reviews, rating_avg, rating_count }`.
   - `DELETE /listings/:id/reviews/mine` — auth; removes the caller's review.
