@@ -29,7 +29,7 @@ function saved(): Theme {
   }
 }
 
-export function resolveTheme(theme: Theme): ResolvedTheme {
+function resolveTheme(theme: Theme): ResolvedTheme {
   if (theme === "system") return window.matchMedia(DARK_QUERY).matches ? "dark" : "light";
   return theme;
 }

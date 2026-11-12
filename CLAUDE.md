@@ -70,7 +70,8 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
   workspace of another.
 - The app imports `@my-olx/core` from `core/dist/`: after changing `core/`, rebuild it (`npm test` and
   `npm run dev` do).
-- The frontend has no tests; its gate is typecheck, lint and build.
+- The frontend has two vitest files (the `cn()` merge, and the stylesheet read as text: dark-theme contrast, the
+  browser-bar colours); flows are checked in Playwright. Its gate is typecheck, lint, those tests and build.
 - `vendor/house-style/` is a generated copy: never edit it, `npm run house-style:sync` refreshes it.
   `backend/app/vendor/` is Ward's generated library: never edit that either.
 - `backend/tsconfig.base.json` writes the house flags out instead of extending the vendored base, because the
