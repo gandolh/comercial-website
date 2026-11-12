@@ -25,3 +25,22 @@ describe("the auth bodies' schemas", () => {
     await t.app.close();
   });
 });
+
+describe("Fastify's own 4xx through the whole app", () => {
+  it("answers bad JSON 400 and an unknown route 404, in the { error } body, not 500", async () => {
+    const t = await startTestApp();
+    const bad = await t.app.inject({
+      method: "POST",
+      url: "/auth/login",
+      headers: { "content-type": "application/json" },
+      payload: "{{{",
+    });
+    expect([bad.statusCode, bad.json()]).toEqual([
+      400,
+      { error: "Body is not valid JSON but content-type is set to 'application/json'" },
+    ]);
+    const unknown = await t.app.inject({ method: "GET", url: "/nothing-here" });
+    expect([unknown.statusCode, unknown.json()]).toEqual([404, { error: "not found" }]);
+    await t.app.close();
+  });
+});
