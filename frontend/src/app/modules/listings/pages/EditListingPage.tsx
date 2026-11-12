@@ -40,17 +40,17 @@ export function EditListingPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-2xl mx-auto py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-primary text-5xl">progress_activity</span>
+      <div className="mx-auto max-w-2xl py-24 text-center">
+        <span className="material-symbols-outlined animate-spin text-5xl text-primary">progress_activity</span>
       </div>
     );
   }
 
   if (error || !listing) {
     return (
-      <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
+      <div className="mx-auto max-w-2xl space-y-4 py-24 text-center">
         <h2 className="text-2xl font-bold">Anunțul nu a fost găsit.</h2>
-        <button onClick={() => navigate("/")} className="text-primary font-bold hover:underline">
+        <button onClick={() => navigate("/")} className="font-bold text-primary hover:underline">
           Înapoi la prima pagină
         </button>
       </div>
@@ -81,22 +81,22 @@ export function EditListingPage() {
 
   return (
     <main className="mt-24 pb-24">
-      <div className="max-w-4xl mx-auto px-6 space-y-12">
+      <div className="mx-auto max-w-4xl space-y-12 px-6">
         <button
           onClick={() => navigate(`/anunturi/${listing.id}`)}
-          className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors font-medium"
+          className="flex items-center gap-2 font-medium text-on-surface-variant transition-colors hover:text-on-surface"
         >
           <ChevronLeft className="h-4 w-4" />
           Înapoi la anunț
         </button>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <h1 className="text-3xl font-bold">{t("edit.title")}</h1>
           <div className="flex items-center gap-3">
             <RenewButton listingId={listing.id} expiresAt={listing.expiresAt} />
             <button
               onClick={toggleActive}
-              className={`px-4 py-2 rounded-lg font-bold text-sm border-2 transition-colors ${
+              className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-colors ${
                 listing.active
                   ? "border-outline text-on-surface hover:bg-surface-container"
                   : "border-primary text-primary hover:bg-primary-container"
@@ -108,8 +108,8 @@ export function EditListingPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-8">
-          <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.details")}</h2>
+          <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
+            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.details")}</h2>
             <DetailsStep
               initialData={{
                 title: listing.title,
@@ -126,13 +126,13 @@ export function EditListingPage() {
             />
           </section>
 
-          <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.photos")}</h2>
+          <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
+            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.photos")}</h2>
             <PhotosStep listingId={listing.id} images={listing.images} onImagesChange={refetch} hideFooter />
           </section>
 
-          <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-            <h2 className="text-xl font-bold border-b pb-4">{t("edit.sections.locationPrice")}</h2>
+          <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
+            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.locationPrice")}</h2>
             <LocationPriceStep
               initialData={{
                 priceRon: listing.priceRon,

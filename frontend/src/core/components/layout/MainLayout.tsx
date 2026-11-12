@@ -8,8 +8,8 @@ import { CookieConsent } from "@core/components/ui/CookieConsent";
 
 function PageLoader() {
   return (
-    <main className="pt-24 flex-1">
-      <div className="max-w-screen-2xl mx-auto px-8 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <main className="flex-1 pt-24">
+      <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-8 px-8 py-16 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <CardSkeleton key={i} />
         ))}

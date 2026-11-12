@@ -22,11 +22,9 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
-          Imagini de previzualizare
-        </h2>
+    <div className="space-y-8 duration-500">
+      <div className="space-y-2 text-center">
+        <h2 className="font-headline text-2xl font-black">Imagini de previzualizare</h2>
         <p className="text-on-surface-variant">Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).</p>
       </div>
 
@@ -35,10 +33,10 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
 
         {hasImages && (
           <div className="space-y-4">
-            <div className="flex justify-between items-center px-1">
-              <h3 className="font-bold text-sm">Fotografiile tale ({images.length}/10)</h3>
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-sm font-bold">Fotografiile tale ({images.length}/10)</h3>
               {images.length < 3 && (
-                <span className="text-xs bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-medium">
+                <span className="rounded-full bg-secondary-container px-3 py-1 text-xs font-medium text-on-secondary-container">
                   Recomandăm minim 3 poze
                 </span>
               )}
@@ -48,9 +46,9 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
         )}
 
         {!hasImages && !isUploading && (
-          <div className="bg-surface-container-low border-2 border-dashed border-outline-variant rounded-3xl p-12 text-center space-y-4">
-            <span className="material-symbols-outlined text-outline text-5xl">add_a_photo</span>
-            <p className="text-on-surface-variant text-sm max-w-xs mx-auto">
+          <div className="space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
+            <span className="material-symbols-outlined text-5xl text-outline">add_a_photo</span>
+            <p className="mx-auto max-w-xs text-sm text-on-surface-variant">
               Adaugă imagini opționale pentru a face anunțul mai atractiv.
             </p>
           </div>
@@ -62,7 +60,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 px-8 py-4 rounded-full font-bold border-2 border-outline-variant hover:bg-surface-container-low transition-colors"
+            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>
@@ -70,7 +68,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
             type="button"
             disabled={isUploading}
             onClick={onNext}
-            className="flex-[2] px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md disabled:opacity-50"
+            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
           >
             {isUploading ? "Se încarcă..." : "Continuă"}
           </button>

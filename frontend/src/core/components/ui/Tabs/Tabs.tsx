@@ -18,7 +18,7 @@ interface TabsProps {
 export function Tabs({ value, onValueChange, tabs, children, className = "" }: TabsProps) {
   return (
     <BaseTabs.Root value={value} onValueChange={onValueChange} className={className}>
-      <BaseTabs.List className="flex border-b border-outline-variant overflow-x-auto">
+      <BaseTabs.List className="flex overflow-x-auto border-b border-outline-variant">
         {tabs.map((tab) => (
           <BaseTabs.Tab
             key={tab.value}
@@ -38,7 +38,7 @@ export function Tabs({ value, onValueChange, tabs, children, className = "" }: T
             {tab.label}
             <span
               aria-hidden="true"
-              className="absolute bottom-0 left-0 right-0 h-1 rounded-t-full bg-primary scale-x-0 transition-transform duration-200 group-data-[active]:scale-x-100"
+              className="absolute right-0 bottom-0 left-0 h-1 scale-x-0 rounded-t-full bg-primary transition-transform duration-200 group-data-[active]:scale-x-100"
             />
           </BaseTabs.Tab>
         ))}

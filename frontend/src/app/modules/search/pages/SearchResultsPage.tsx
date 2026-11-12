@@ -56,16 +56,16 @@ export function SearchResultsPage() {
   }
 
   return (
-    <main className="mt-24 flex-grow max-w-screen-2xl mx-auto w-full px-8 pb-16 flex gap-8">
+    <main className="mx-auto mt-24 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
       <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
 
-      <section className="flex-grow min-w-0">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <section className="min-w-0 grow">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div className="space-y-1">
-            <h1 className="text-2xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+            <h1 className="font-headline text-2xl font-black text-on-surface">
               {q ? `Rezultate pentru "${q}"` : "Toate anunțurile"}
             </h1>
-            <p className="text-on-surface-variant text-sm">
+            <p className="text-sm text-on-surface-variant">
               {isFetching ? "Se încarcă..." : `${data?.totalCount || 0} anunțuri găsite`}
             </p>
           </div>

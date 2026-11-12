@@ -38,7 +38,7 @@ function FilterRadios({ title, name, options, value, onValueChange }: FilterRadi
   const titleId = useId();
   return (
     <div className="space-y-3">
-      <h3 id={titleId} className="text-xs font-bold uppercase tracking-widest text-outline">
+      <h3 id={titleId} className="text-xs font-bold tracking-widest text-outline uppercase">
         {title}
       </h3>
       <RadioGroup
@@ -74,7 +74,7 @@ export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps
   }
 
   return (
-    <aside className="w-72 flex-shrink-0 hidden md:block">
+    <aside className="hidden w-72 shrink-0 md:block">
       <div className="sticky top-28 space-y-8">
         {/* Tip Licență */}
         <FilterRadios
@@ -115,7 +115,7 @@ export function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps
         />
 
         {/* Autor verificat */}
-        <div className="pt-6 border-t border-surface-container-high">
+        <div className="border-t border-surface-container-high pt-6">
           <Switch
             label={<span className="text-sm font-bold text-on-surface">Autor Verificat</span>}
             labelFirst

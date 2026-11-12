@@ -57,10 +57,10 @@ export function ImageUploader({ existingCount, onUploadFiles }: ImageUploaderPro
           }
           void handleFiles(event.dataTransfer.files);
         }}
-        className="border-2 border-dashed border-outline rounded-2xl p-6 text-center bg-surface-container"
+        className="rounded-2xl border-2 border-dashed border-outline bg-surface-container p-6 text-center"
       >
         <p className="font-semibold text-on-surface">Trage poze aici sau selectează din telefon</p>
-        <p className="text-sm text-on-surface-variant mt-1">
+        <p className="mt-1 text-sm text-on-surface-variant">
           JPG, PNG, WebP. Maxim 10MB per fișier. {remainingSlots} sloturi rămase.
         </p>
         <Button

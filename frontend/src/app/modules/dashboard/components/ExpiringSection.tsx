@@ -38,18 +38,18 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {listings.map((listing) => {
           const expiresAt = parseISO(listing.expiresAt);
           const daysLeft = differenceInDays(expiresAt, new Date());
           const isCritical = daysLeft <= 3;
 
           return (
-            <div key={listing.id} className="relative group">
+            <div key={listing.id} className="group relative">
               <ListingCard listing={listing} />
 
               {/* Expiry badge overlay */}
-              <div className="absolute top-2 right-2 z-10">
+              <div className="absolute top-2 right-2 z-raised">
                 {isCritical ? (
                   <Badge variant="error" icon="warning">
                     {daysLeft <= 0
@@ -60,7 +60,7 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
                         })}
                   </Badge>
                 ) : (
-                  <div className="bg-surface-container-high text-on-surface-variant px-2 py-1 rounded text-xs font-bold shadow-lg">
+                  <div className="rounded-sm bg-surface-container-high px-2 py-1 text-xs font-bold text-on-surface-variant shadow-lg">
                     {t("dashboard.expiringSoon.expiresIn", "Expiră în")}{" "}
                     {formatDistanceToNow(expiresAt, { locale: ro })}
                   </div>
@@ -73,7 +73,7 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
                   listingId={listing.id}
                   expiresAt={listing.expiresAt}
                   alwaysShow
-                  className="w-full justify-center py-2.5 rounded-xl"
+                  className="w-full justify-center rounded-xl py-2.5"
                 />
               </div>
             </div>

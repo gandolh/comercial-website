@@ -18,17 +18,17 @@ export function ListingCard({ listing }: ListingCardProps) {
   return (
     <Link
       to={`/anunturi/${listing.id}`}
-      className="bg-surface-container-lowest rounded-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 cursor-pointer no-underline block"
+      className="group block cursor-pointer overflow-hidden rounded-xl bg-surface-container-lowest no-underline transition-all duration-300 hover:shadow-2xl"
     >
       <div className="relative h-64 overflow-hidden">
         {listing.coverUrl ? (
           <img
             src={listing.coverUrl}
             alt={listing.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-surface-container flex items-center justify-center text-outline">
+          <div className="flex h-full w-full items-center justify-center bg-surface-container text-outline">
             <span className="material-symbols-outlined" style={{ fontSize: "48px" }}>
               image
             </span>
@@ -36,27 +36,27 @@ export function ListingCard({ listing }: ListingCardProps) {
         )}
         <FavoriteToggle listingId={listing.id} className="absolute top-4 right-4" size="sm" />
         {listing.sellerVerified && (
-          <span className="absolute bottom-4 left-4 bg-tertiary-container text-on-tertiary text-xs font-bold px-3 py-1 rounded-full">
+          <span className="absolute bottom-4 left-4 rounded-full bg-tertiary-container px-3 py-1 text-xs font-bold text-on-fill">
             {t("listing.verified")}
           </span>
         )}
         {isExpired && (
-          <span className="absolute bottom-4 right-4 bg-error text-on-primary text-xs font-bold px-3 py-1 rounded-full">
+          <span className="absolute right-4 bottom-4 rounded-full bg-error px-3 py-1 text-xs font-bold text-on-primary">
             Expirat
           </span>
         )}
       </div>
 
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 p-6">
         <div className="flex flex-col">
           <span className="text-2xl font-black text-primary">
             {listing.priceRon != null ? `${listing.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
           </span>
-          <h3 className="text-lg font-bold leading-tight text-on-surface group-hover:text-primary transition-colors">
+          <h3 className="text-lg leading-tight font-bold text-on-surface transition-colors group-hover:text-primary">
             {listing.title}
           </h3>
         </div>
-        <div className="flex items-center gap-2 text-sm text-on-surface-variant font-medium tracking-wide">
+        <div className="flex items-center gap-2 text-sm font-medium tracking-wide text-on-surface-variant">
           <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
             schedule
           </span>

@@ -76,11 +76,11 @@ function ReviewCard({ review }: { review: Review }) {
   const dateStr = format(new Date(review.created_at), "d MMM yyyy", { locale: ro });
 
   return (
-    <article className="bg-surface-container-lowest border border-surface-container-high rounded-xl px-5 py-4 space-y-2">
+    <article className="space-y-2 rounded-xl border border-surface-container-high bg-surface-container-lowest px-5 py-4">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className="w-9 h-9 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm shrink-0"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary"
             aria-hidden="true"
           >
             {name.charAt(0).toUpperCase()}
@@ -92,7 +92,7 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
         <StarRating value={review.rating} size="sm" />
       </div>
-      {review.body && <p className="text-sm text-on-surface-variant leading-relaxed">{review.body}</p>}
+      {review.body && <p className="text-sm leading-relaxed text-on-surface-variant">{review.body}</p>}
     </article>
   );
 }
@@ -217,25 +217,21 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
     <section className="space-y-6" aria-labelledby="reviews-heading">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
-        <h2
-          id="reviews-heading"
-          className="text-lg font-bold text-on-surface"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
+        <h2 id="reviews-heading" className="font-headline text-lg font-bold text-on-surface">
           {t("reviews.title")}
         </h2>
       </div>
 
       {/* Aggregate summary */}
       {isLoading ? (
-        <div className="h-10 bg-surface-container rounded-xl animate-pulse" />
+        <div className="h-10 animate-pulse rounded-xl bg-surface-container" />
       ) : (
         <AggregateSummary ratingAvg={data?.rating_avg ?? null} ratingCount={data?.rating_count ?? 0} />
       )}
 
       {/* Buyer review form / CTA */}
       {canReview && (
-        <div className="bg-surface-container rounded-xl p-5 space-y-4">
+        <div className="space-y-4 rounded-xl bg-surface-container p-5">
           {myReview && !showForm ? (
             <div className="space-y-3">
               <p className="text-sm font-semibold text-on-surface">{t("reviews.yourReview")}</p>
@@ -265,7 +261,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="text-xs text-outline hover:text-on-surface transition-colors"
+                  className="text-xs text-outline transition-colors hover:text-on-surface"
                 >
                   {t("reviews.form.cancelEdit")}
                 </button>
@@ -279,11 +275,11 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
       {isLoading ? (
         <div className="space-y-3">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-20 bg-surface-container rounded-xl animate-pulse" />
+            <div key={i} className="h-20 animate-pulse rounded-xl bg-surface-container" />
           ))}
         </div>
       ) : !data || data.reviews.length === 0 ? (
-        <p className="text-sm text-outline py-4">{t("reviews.noReviewsYet")}</p>
+        <p className="py-4 text-sm text-outline">{t("reviews.noReviewsYet")}</p>
       ) : (
         <ul className="space-y-3" aria-label={t("reviews.title")}>
           {data.reviews.map((review) => (

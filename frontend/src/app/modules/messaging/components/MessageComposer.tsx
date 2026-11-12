@@ -43,7 +43,7 @@ export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4 bg-surface-container-lowest border-t border-surface-container-low flex items-end gap-2"
+      className="flex items-end gap-2 border-t border-surface-container-low bg-surface-container-lowest p-4"
     >
       <textarea
         ref={textareaRef}
@@ -52,13 +52,13 @@ export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder
         onKeyDown={handleKeyDown}
         placeholder={placeholder || t("common:messaging.type_message")}
         disabled={disabled || isSending}
-        className="flex-1 max-h-32 p-3 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 text-sm"
+        className="max-h-32 flex-1 resize-none rounded-xl bg-surface-container-low p-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-50"
         rows={1}
       />
       <button
         type="submit"
         disabled={!body.trim() || disabled || isSending}
-        className="p-2 bg-primary text-on-primary rounded-full hover:opacity-90 disabled:opacity-30 transition-opacity flex-shrink-0"
+        className="shrink-0 rounded-full bg-primary p-2 text-on-primary transition-opacity hover:opacity-90 disabled:opacity-30"
       >
         <span className="material-symbols-outlined text-xl">send</span>
       </button>

@@ -39,18 +39,16 @@ export function LocationPriceStep({
   };
 
   return (
-    <form onSubmit={handleSubmit(onNext)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
-          Stabilește prețul
-        </h2>
+    <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
+      <div className="space-y-2 text-center">
+        <h2 className="font-headline text-2xl font-black">Stabilește prețul</h2>
         <p className="text-on-surface-variant">Cât costă produsul tău digital?</p>
       </div>
 
       <div className="space-y-6">
         <div className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="priceRon" className="block font-bold text-sm px-1">
+            <label htmlFor="priceRon" className="block px-1 text-sm font-bold">
               Preț (RON)
             </label>
             <div className="relative">
@@ -61,13 +59,13 @@ export function LocationPriceStep({
                 placeholder="Ex: 150"
                 defaultValue={initialData?.priceRon ?? ""}
                 onChange={handlePriceChange}
-                className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all ${
+                className={`w-full rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
                   errors.priceRon ? "border-error" : "border-transparent focus:border-primary"
                 } ${isFree ? "opacity-50 grayscale" : ""}`}
               />
-              <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-outline">RON</span>
+              <span className="absolute top-1/2 right-5 -translate-y-1/2 font-bold text-outline">RON</span>
             </div>
-            {errors.priceRon && <p className="text-error text-xs px-1">{errors.priceRon.message}</p>}
+            {errors.priceRon && <p className="px-1 text-xs text-error">{errors.priceRon.message}</p>}
           </div>
 
           <div className="px-1">
@@ -85,13 +83,13 @@ export function LocationPriceStep({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 px-8 py-4 rounded-full font-bold border-2 border-outline-variant hover:bg-surface-container-low transition-colors"
+            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>
           <button
             type="submit"
-            className="flex-[2] px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md"
+            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Continuă"}
           </button>
@@ -102,7 +100,7 @@ export function LocationPriceStep({
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md"
+            className="rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Salvează"}
           </button>

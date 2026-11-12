@@ -19,8 +19,8 @@ export function EmptyState({ icon = "inbox", title, description, action, classNa
         {icon}
       </span>
       <div className="space-y-1">
-        <p className="font-headline font-semibold text-on-surface text-lg">{title}</p>
-        {description && <p className="text-sm text-on-surface-variant max-w-xs">{description}</p>}
+        <p className="font-headline text-lg font-semibold text-on-surface">{title}</p>
+        {description && <p className="max-w-xs text-sm text-on-surface-variant">{description}</p>}
       </div>
       {action && <div className="mt-2">{action}</div>}
     </div>

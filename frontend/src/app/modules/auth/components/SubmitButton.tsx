@@ -11,11 +11,11 @@ export function SubmitButton({ isLoading, children, disabled, ...props }: Submit
       type="submit"
       disabled={disabled || isLoading}
       className={`
-        w-full py-3 px-6 rounded-lg font-semibold text-on-primary
+        w-full rounded-lg px-6 py-3 font-semibold text-on-primary
         transition-all duration-200
         ${
           disabled || isLoading
-            ? "bg-surface-variant text-on-surface-variant cursor-not-allowed"
+            ? "cursor-not-allowed bg-surface-variant text-on-surface-variant"
             : "bg-primary hover:bg-primary-container hover:shadow-lg active:scale-[0.98]"
         }
       `}
@@ -23,7 +23,7 @@ export function SubmitButton({ isLoading, children, disabled, ...props }: Submit
     >
       {isLoading ? (
         <span className="flex items-center justify-center gap-2">
-          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+          <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path
               className="opacity-75"

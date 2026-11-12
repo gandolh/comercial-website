@@ -10,6 +10,33 @@
       "rule": 10,
       "path": "frontend/src/core/components/ui/Select",
       "reason": "The two selects (the sort bar and the invoice form) stay a native <select>: both are used on phones, where the native picker is the better control (2026-11-10, Q16, brief 12 decision 4). There is no Base UI Select, so rule 10 has nothing to check."
+    },
+    {
+      "check": "base-ui",
+      "rule": 5,
+      "path": "frontend/src",
+      "match": "fontSize",
+      "reason": "The icon font's own rule in index.css (.material-symbols-outlined, font-size 24px) sits outside every layer and beats a text-* size, so an icon of another size carries an inline fontSize. Moving the rule into a layer would resize every icon that today has a losing text-* class (brief 12 decision 6). An Icon component with a size prop would remove them; it touches 66 files and waits for its own brief."
+    },
+    {
+      "check": "base-ui",
+      "rule": 5,
+      "path": "frontend/src",
+      "match": "fontVariationSettings",
+      "reason": "The same unlayered .material-symbols-outlined rule sets font-variation-settings, so a filled icon (a chosen star, a favourite, a verified badge) sets its own FILL axis inline."
+    },
+    {
+      "check": "base-ui",
+      "rule": 5,
+      "path": "frontend/src",
+      "match": "width:",
+      "reason": "Computed geometry: a progress bar's width is its percentage (rule 5 allows it)."
+    },
+    {
+      "check": "base-ui",
+      "rule": 13,
+      "path": "frontend/src/core/components/ui/CookieConsent.tsx",
+      "reason": "A non-modal banner with role=dialog and aria-modal=false. Base UI has no banner part, and a modal Dialog would be wrong: the page behind it stays usable until the visitor answers."
     }
   ]
 }

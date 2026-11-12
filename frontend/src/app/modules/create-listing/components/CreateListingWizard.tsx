@@ -124,17 +124,17 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
 
   if (isDraftLoading) {
     return (
-      <div className="max-w-2xl mx-auto py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-primary text-5xl">progress_activity</span>
+      <div className="mx-auto max-w-2xl py-24 text-center">
+        <span className="material-symbols-outlined animate-spin text-5xl text-primary">progress_activity</span>
       </div>
     );
   }
 
   if (draftError) {
     return (
-      <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
+      <div className="mx-auto max-w-2xl space-y-4 py-24 text-center">
         <h2 className="text-2xl font-bold">Ups! Ceva n-a mers bine.</h2>
-        <button onClick={() => navigate("/adauga-anunt")} className="text-primary font-bold hover:underline">
+        <button onClick={() => navigate("/adauga-anunt")} className="font-bold text-primary hover:underline">
           Începe de la capăt
         </button>
       </div>
@@ -143,9 +143,9 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
 
   return (
     <main className="mt-24 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="mx-auto max-w-4xl px-6">
         {/* Progress indicator */}
-        <div className="mb-12 flex justify-between items-center px-4 overflow-x-auto gap-4">
+        <div className="mb-12 flex items-center justify-between gap-4 overflow-x-auto px-4">
           {[
             { id: "category", label: "Categorie" },
             { id: "details", label: "Detalii" },
@@ -160,9 +160,9 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
             const isActive = s.id === step;
 
             return (
-              <div key={s.id} className="flex items-center gap-2 flex-shrink-0">
+              <div key={s.id} className="flex shrink-0 items-center gap-2">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
                     isActive
                       ? "bg-primary text-on-primary"
                       : isCompleted
@@ -175,14 +175,14 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
                 <span className={`text-sm font-bold ${isActive ? "text-on-surface" : "text-on-surface-variant"}`}>
                   {s.label}
                 </span>
-                {idx < 5 && <div className="w-4 md:w-8 h-[2px] bg-surface-container-highest ml-2" />}
+                {idx < 5 && <div className="ml-2 h-[2px] w-4 bg-surface-container-highest md:w-8" />}
               </div>
             );
           })}
         </div>
 
         {/* Step Content */}
-        <div className="max-w-2xl mx-auto">
+        <div className="mx-auto max-w-2xl">
           {step === "category" && <CategoryStep selectedCategory={draft?.category} onSelect={handleCategorySelect} />}
           {step === "details" && (
             <DetailsStep

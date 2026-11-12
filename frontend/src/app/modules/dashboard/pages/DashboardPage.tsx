@@ -20,11 +20,11 @@ export function DashboardPage() {
 
   if (statsLoading) {
     return (
-      <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12 space-y-12">
-        <div className="h-12 w-64 bg-surface-container-low animate-pulse rounded-xl" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-24">
+        <div className="h-12 w-64 animate-pulse rounded-xl bg-surface-container-low" />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-32 bg-surface-container-low animate-pulse rounded-2xl" />
+            <div key={i} className="h-32 animate-pulse rounded-2xl bg-surface-container-low" />
           ))}
         </div>
       </main>
@@ -33,7 +33,7 @@ export function DashboardPage() {
 
   if (statsError) {
     return (
-      <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12">
+      <main className="mx-auto min-h-screen max-w-screen-2xl px-8 py-12 pt-24">
         <ErrorCard
           message={t("dashboard.error", "Nu am putut încărca datele panoului de control.")}
           onRetry={refetchStats}
@@ -54,10 +54,10 @@ export function DashboardPage() {
   const expiringSoonCount = stats?.listings.expiringSoon ?? 0;
 
   return (
-    <main className="pt-24 min-h-screen max-w-screen-2xl mx-auto px-8 py-12 space-y-12">
+    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-24">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+        <h1 className="font-headline text-4xl font-black text-on-surface">
           {t("dashboard.greeting", "Bună")}, {displayName}!
         </h1>
         <p className="text-on-surface-variant">
@@ -69,9 +69,9 @@ export function DashboardPage() {
       {expiringSoonCount > 0 && (
         <div
           role="alert"
-          className="flex items-center gap-3 bg-error-container text-on-error-container px-5 py-4 rounded-2xl"
+          className="flex items-center gap-3 rounded-2xl bg-error-container px-5 py-4 text-on-error-container"
         >
-          <span className="material-symbols-outlined text-2xl flex-shrink-0" aria-hidden="true">
+          <span className="material-symbols-outlined shrink-0 text-2xl" aria-hidden="true">
             warning
           </span>
           <p className="font-semibold">
@@ -82,7 +82,7 @@ export function DashboardPage() {
           </p>
           <Link
             to="/cont/anunturi"
-            className="ml-auto flex-shrink-0 underline font-bold hover:opacity-80 transition-opacity"
+            className="ml-auto shrink-0 font-bold underline transition-opacity hover:opacity-80"
           >
             {t("dashboard.expiringSoon.bannerAction", "Vezi anunțurile")}
           </Link>
@@ -90,7 +90,7 @@ export function DashboardPage() {
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title={t("dashboard.stats.activeListings", "Anunțuri active")}
           value={stats?.listings.active || 0}
@@ -125,9 +125,9 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-12">
+        <div className="space-y-12 lg:col-span-2">
           {/* Quota */}
           <QuotaCard
             count={stats?.listings.weeklyPostCount || 0}
@@ -147,21 +147,21 @@ export function DashboardPage() {
           <RecentConversations />
 
           {/* Quick Actions */}
-          <div className="bg-primary-container p-6 rounded-2xl space-y-4">
+          <div className="space-y-4 rounded-2xl bg-primary-container p-6">
             <h3 className="font-bold text-on-primary-container">
               {t("dashboard.quickActions.title", "Acțiuni rapide")}
             </h3>
             <div className="grid gap-2">
               <Link
                 to="/adauga-anunt"
-                className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-xl hover:shadow-md transition-shadow font-bold text-primary"
+                className="flex items-center gap-3 rounded-xl bg-surface-container-lowest p-3 font-bold text-primary transition-shadow hover:shadow-md"
               >
                 <span className="material-symbols-outlined">add_circle</span>
                 {t("nav.addListing")}
               </Link>
               <Link
                 to="/cont/setari"
-                className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-xl hover:shadow-md transition-shadow font-bold text-on-surface"
+                className="flex items-center gap-3 rounded-xl bg-surface-container-lowest p-3 font-bold text-on-surface transition-shadow hover:shadow-md"
               >
                 <span className="material-symbols-outlined">settings</span>
                 {t("dashboard.quickActions.settings", "Setări cont")}

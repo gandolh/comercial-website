@@ -9,13 +9,13 @@ interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(({ label, error, ...props }, ref) => {
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-on-surface mb-2">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-on-surface">{label}</label>
       <input
         ref={ref}
         className={`
-            w-full px-4 py-3 rounded-lg border transition-colors
-            bg-surface-container text-on-surface
-            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+            w-full rounded-lg border bg-surface-container px-4 py-3
+            text-on-surface transition-colors
+            focus:border-transparent focus:ring-2 focus:ring-primary focus:outline-none
             ${error ? "border-error focus:ring-error" : "border-outline-variant hover:border-outline"}
           `}
         {...props}

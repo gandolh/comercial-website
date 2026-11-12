@@ -30,22 +30,22 @@ export function AvatarUploader() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-        <div className="w-32 h-32 rounded-full overflow-hidden bg-surface-container-high border-2 border-outline-variant flex items-center justify-center">
+      <div className="group relative cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+        <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border-2 border-outline-variant bg-surface-container-high">
           {user?.avatar_url ? (
-            <img src={user.avatar_url} alt={user.display_name || "User"} className="w-full h-full object-cover" />
+            <img src={user.avatar_url} alt={user.display_name || "User"} className="h-full w-full object-cover" />
           ) : (
             <div className="text-4xl font-bold text-on-surface-variant">
               {user?.display_name?.[0] || user?.email?.[0]?.toUpperCase()}
             </div>
           )}
         </div>
-        <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <Camera className="text-white w-8 h-8" />
+        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-scrim/40 opacity-0 transition-opacity group-hover:opacity-100">
+          <Camera className="h-8 w-8 text-on-scrim" />
         </div>
         {uploadMutation.isPending && (
-          <div className="absolute inset-0 bg-black/20 rounded-full flex items-center justify-center">
-            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-scrim/20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           </div>
         )}
       </div>

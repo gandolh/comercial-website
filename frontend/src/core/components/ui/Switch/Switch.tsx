@@ -37,7 +37,7 @@ export function Switch({ label, labelFirst = false, size = "md", tone = "primary
     >
       <BaseSwitch.Thumb
         className={cn(
-          "block rounded-full border border-outline-variant bg-surface-container-lowest motion-safe:transition-transform data-checked:border-surface-container-lowest",
+          "block rounded-full border border-outline-variant bg-surface-container-lowest data-checked:border-surface-container-lowest motion-safe:transition-transform",
           SIZES[size].thumb,
         )}
       />

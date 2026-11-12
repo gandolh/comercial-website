@@ -75,13 +75,13 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
 
       {step === "phone" ? (
         <form onSubmit={handleRequestCode} className="space-y-4">
-          <div className="flex flex-col items-center text-center mb-2">
-            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-primary text-2xl" aria-hidden="true">
+          <div className="mb-2 flex flex-col items-center text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <span className="material-symbols-outlined text-2xl text-primary" aria-hidden="true">
                 phone
               </span>
             </div>
-            <h3 className="font-semibold text-on-surface mb-1">{t("phoneVerify.stepPhone")}</h3>
+            <h3 className="mb-1 font-semibold text-on-surface">{t("phoneVerify.stepPhone")}</h3>
             <p className="text-sm text-on-surface-variant">{t("phoneVerify.phoneHelp")}</p>
           </div>
 
@@ -103,13 +103,13 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
         </form>
       ) : (
         <form onSubmit={handleVerifyCode} className="space-y-4">
-          <div className="flex flex-col items-center text-center mb-2">
-            <div className="w-12 h-12 bg-tertiary/10 rounded-full flex items-center justify-center mb-3">
-              <span className="material-symbols-outlined text-tertiary text-2xl" aria-hidden="true">
+          <div className="mb-2 flex flex-col items-center text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-tertiary/10">
+              <span className="material-symbols-outlined text-2xl text-tertiary" aria-hidden="true">
                 smartphone
               </span>
             </div>
-            <h3 className="font-semibold text-on-surface mb-1">{t("phoneVerify.stepCode")}</h3>
+            <h3 className="mb-1 font-semibold text-on-surface">{t("phoneVerify.stepCode")}</h3>
             <p className="text-sm text-on-surface-variant">
               {t("phoneVerify.codeSentTo")} <span className="font-medium text-on-surface">{phone}</span>
             </p>
@@ -128,7 +128,7 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
             }}
             required
             data-autofocus
-            className="text-center text-2xl tracking-[0.5em] font-mono"
+            className="text-center font-mono text-2xl tracking-[0.5em]"
             fullWidth
           />
 

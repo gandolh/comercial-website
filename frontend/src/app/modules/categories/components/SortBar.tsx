@@ -19,11 +19,11 @@ const SORT_OPTIONS = [
 
 export function SortBar({ sortare, viewMode, onSortChange, onViewModeChange }: SortBarProps) {
   return (
-    <div className="flex items-center gap-4 w-full md:w-auto">
-      <div className="flex bg-surface-container-low p-1 rounded-xl">
+    <div className="flex w-full items-center gap-4 md:w-auto">
+      <div className="flex rounded-xl bg-surface-container-low p-1">
         <button
           onClick={() => onViewModeChange("grid")}
-          className={`p-2 rounded-lg transition-colors ${viewMode === "grid" ? "bg-surface-container-lowest shadow-sm" : "hover:bg-surface-container-high"}`}
+          className={`rounded-lg p-2 transition-colors ${viewMode === "grid" ? "bg-surface-container-lowest shadow-sm" : "hover:bg-surface-container-high"}`}
           aria-label="Vedere grilă"
         >
           <span
@@ -35,7 +35,7 @@ export function SortBar({ sortare, viewMode, onSortChange, onViewModeChange }: S
         </button>
         <button
           onClick={() => onViewModeChange("list")}
-          className={`p-2 rounded-lg transition-colors ${viewMode === "list" ? "bg-surface-container-lowest shadow-sm" : "hover:bg-surface-container-high"}`}
+          className={`rounded-lg p-2 transition-colors ${viewMode === "list" ? "bg-surface-container-lowest shadow-sm" : "hover:bg-surface-container-high"}`}
           aria-label="Vedere listă"
         >
           <span

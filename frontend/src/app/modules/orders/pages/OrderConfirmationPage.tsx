@@ -61,8 +61,8 @@ export function OrderConfirmationPage() {
 
   if (loading) {
     return (
-      <main className="pt-28 pb-20 px-4 flex flex-col items-center justify-center min-h-[50vh]">
-        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4" />
+      <main className="flex min-h-[50vh] flex-col items-center justify-center px-4 pt-28 pb-20">
+        <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
         <p className="text-on-surface-variant">{t("orders.confirmation.loading")}</p>
       </main>
     );
@@ -70,11 +70,11 @@ export function OrderConfirmationPage() {
 
   if (error || !order) {
     return (
-      <main className="pt-28 pb-20 px-4 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <span className="material-symbols-outlined text-error text-[64px]">error</span>
+      <main className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 px-4 pt-28 pb-20">
+        <span className="material-symbols-outlined text-[64px] text-error">error</span>
         <h1 className="text-2xl font-bold text-on-surface">{t("orders.confirmation.errorTitle")}</h1>
         <p className="text-on-surface-variant">{error ?? t("orders.confirmation.loadError")}</p>
-        <Link to="/" className="text-primary font-bold hover:underline">
+        <Link to="/" className="font-bold text-primary hover:underline">
           {t("orders.confirmation.backHome")}
         </Link>
       </main>
@@ -85,29 +85,29 @@ export function OrderConfirmationPage() {
   const listingHref = `/anunturi/${order.listing_id}`;
 
   return (
-    <main className="pt-28 pb-20 px-4 max-w-lg mx-auto space-y-8">
+    <main className="mx-auto max-w-lg space-y-8 px-4 pt-28 pb-20">
       {isPaid ? (
         <div className="flex flex-col items-center space-y-4 text-center">
-          <span className="material-symbols-outlined text-primary text-[72px]">check_circle</span>
-          <h1 className="text-3xl font-extrabold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+          <span className="material-symbols-outlined text-[72px] text-primary">check_circle</span>
+          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
             {t("orders.confirmation.successTitle")}
           </h1>
           <p className="text-on-surface-variant">{t("orders.confirmation.successBody")}</p>
         </div>
       ) : (
         <div className="flex flex-col items-center space-y-4 text-center">
-          <span className="material-symbols-outlined text-error text-[72px]">cancel</span>
-          <h1 className="text-3xl font-extrabold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
+          <span className="material-symbols-outlined text-[72px] text-error">cancel</span>
+          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
             {t("orders.confirmation.pendingTitle")}
           </h1>
           <p className="text-on-surface-variant">{t("orders.confirmation.pendingBody")}</p>
         </div>
       )}
 
-      <div className="bg-surface-container rounded-2xl p-6 space-y-3 text-sm">
+      <div className="space-y-3 rounded-2xl bg-surface-container p-6 text-sm">
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.orderId")}</span>
-          <span className="font-mono text-on-surface text-xs">{order.id}</span>
+          <span className="font-mono text-xs text-on-surface">{order.id}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.amount")}</span>
@@ -133,7 +133,7 @@ export function OrderConfirmationPage() {
         {isPaid && (
           <Link
             to={listingHref}
-            className="flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
+            className="flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-on-primary transition-opacity hover:opacity-90"
           >
             <span className="material-symbols-outlined text-[20px]">download</span>
             {t("orders.confirmation.goDownload")}
@@ -141,11 +141,11 @@ export function OrderConfirmationPage() {
         )}
         <Link
           to="/comenzi"
-          className="flex items-center justify-center gap-2 border border-outline-variant text-on-surface px-6 py-3 rounded-full font-semibold hover:bg-surface-container transition-colors"
+          className="flex items-center justify-center gap-2 rounded-full border border-outline-variant px-6 py-3 font-semibold text-on-surface transition-colors hover:bg-surface-container"
         >
           {t("orders.confirmation.viewOrders")}
         </Link>
-        <Link to="/" className="text-center text-sm text-outline hover:text-primary transition-colors">
+        <Link to="/" className="text-center text-sm text-outline transition-colors hover:text-primary">
           {t("orders.confirmation.backHome")}
         </Link>
       </div>

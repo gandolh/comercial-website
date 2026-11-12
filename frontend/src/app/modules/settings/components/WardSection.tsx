@@ -28,17 +28,17 @@ export function WardSection() {
   };
 
   return (
-    <section className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant shadow-sm space-y-4">
+    <section className="space-y-4 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
       <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
-        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-          <span className="material-symbols-outlined text-primary text-xl" aria-hidden="true">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+          <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
             key
           </span>
         </div>
         <h2 className="text-xl font-bold text-on-surface">Autentificare cu Ward</h2>
       </div>
       {error && (
-        <div className="p-3 rounded-lg bg-error-container text-on-error-container text-sm">
+        <div className="rounded-lg bg-error-container p-3 text-sm text-on-error-container">
           {wardErrorMessage(error)}
         </div>
       )}

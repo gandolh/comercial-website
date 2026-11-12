@@ -34,11 +34,11 @@ export function Alert({ variant = "info", title, children, onClose, className = 
 
   return (
     <div role="alert" className={["flex gap-3 rounded-xl px-4 py-3", classes, className].join(" ")}>
-      <span className="material-symbols-outlined text-xl flex-shrink-0 mt-0.5" aria-hidden="true">
+      <span className="material-symbols-outlined mt-0.5 shrink-0 text-xl" aria-hidden="true">
         {icon}
       </span>
-      <div className="flex-1 min-w-0">
-        {title && <p className="font-semibold text-sm mb-0.5">{title}</p>}
+      <div className="min-w-0 flex-1">
+        {title && <p className="mb-0.5 text-sm font-semibold">{title}</p>}
         <div className="text-sm leading-relaxed">{children}</div>
       </div>
       {onClose && (
@@ -46,7 +46,7 @@ export function Alert({ variant = "info", title, children, onClose, className = 
           type="button"
           onClick={onClose}
           aria-label="Închide alerta"
-          className="flex-shrink-0 rounded-full p-0.5 hover:opacity-70 transition-opacity"
+          className="shrink-0 rounded-full p-0.5 transition-opacity hover:opacity-70"
         >
           <span className="material-symbols-outlined text-base" aria-hidden="true">
             close

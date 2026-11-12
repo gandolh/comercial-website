@@ -37,7 +37,7 @@ export function InvoiceList({ invoices }: Props) {
 
   if (invoices.length === 0) {
     return (
-      <p className="text-on-surface-variant text-sm py-4">
+      <p className="py-4 text-sm text-on-surface-variant">
         {t("invoices.list.empty", "Nu ai generat nicio factură încă.")}
       </p>
     );
@@ -48,11 +48,11 @@ export function InvoiceList({ invoices }: Props) {
       {invoices.map((inv) => (
         <div
           key={inv.id}
-          className="bg-surface-container-low rounded-xl border border-outline-variant p-4 flex flex-col sm:flex-row sm:items-center gap-3"
+          className="flex flex-col gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-4 sm:flex-row sm:items-center"
         >
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-bold text-on-surface text-sm">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-bold text-on-surface">
                 {inv.series}-{inv.number}
               </span>
               <span className="text-xs text-on-surface-variant">{formatDate(inv.issue_date)}</span>
@@ -62,14 +62,14 @@ export function InvoiceList({ invoices }: Props) {
                 </span>
               )}
             </div>
-            <div className="text-sm text-on-surface-variant mt-0.5 truncate">
+            <div className="mt-0.5 truncate text-sm text-on-surface-variant">
               {t("invoices.list.buyer", "Client:")} {inv.buyer_name}
             </div>
-            <div className="text-sm font-semibold text-primary mt-0.5">
+            <div className="mt-0.5 text-sm font-semibold text-primary">
               {inv.total.toFixed(2)} {inv.currency}
             </div>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="flex shrink-0 gap-2">
             <Button
               type="button"
               variant="secondary"

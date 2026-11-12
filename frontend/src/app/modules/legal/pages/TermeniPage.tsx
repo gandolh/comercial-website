@@ -1,12 +1,10 @@
 export function TermeniPage() {
   return (
-    <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
-      <div className="max-w-3xl mx-auto space-y-10">
+    <main className="mx-auto max-w-screen-xl px-4 pt-28 pb-20 md:px-8">
+      <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Termeni și Condiții
-          </h1>
-          <p className="text-on-surface-variant text-sm">Ultima actualizare: 1 mai 2026</p>
+          <h1 className="font-headline text-4xl font-black text-on-surface">Termeni și Condiții</h1>
+          <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
         <Section title="1. Despre my-olx">
@@ -44,7 +42,7 @@ export function TermeniPage() {
             de <strong>14 zile calendaristice</strong> de la data achiziției, fără a preciza motive și fără costuri
             suplimentare, <em>cu excepția</em> cazului în care:
           </p>
-          <ul className="list-disc list-inside mt-3 space-y-1 text-on-surface-variant">
+          <ul className="mt-3 list-inside list-disc space-y-1 text-on-surface-variant">
             <li>Ai consimțit expres că livrarea conținutului digital începe imediat după achiziție, și</li>
             <li>
               Ai confirmat că ai înțeles că dreptul de retragere se pierde în momentul în care descărcarea a început.
@@ -81,7 +79,7 @@ export function TermeniPage() {
 
         <Section title="8. Soluționarea litigiilor">
           <p>Eventualele litigii vor fi soluționate pe cale amiabilă. Dacă nu este posibil, te poți adresa:</p>
-          <ul className="list-disc list-inside mt-3 space-y-1 text-on-surface-variant">
+          <ul className="mt-3 list-inside list-disc space-y-1 text-on-surface-variant">
             <li>
               <strong>ANPC</strong> — Autoritatea Națională pentru Protecția Consumatorilor, str. Gheorghe Manu nr. 28,
               sector 1, București
@@ -92,7 +90,7 @@ export function TermeniPage() {
                 href="https://ec.europa.eu/consumers/odr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary ml-1 hover:underline"
+                className="ml-1 text-primary hover:underline"
               >
                 ec.europa.eu/consumers/odr
               </a>
@@ -124,10 +122,8 @@ export function TermeniPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-        {title}
-      </h2>
-      <div className="text-on-surface-variant leading-relaxed">{children}</div>
+      <h2 className="font-headline text-xl font-bold text-on-surface">{title}</h2>
+      <div className="leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );
 }

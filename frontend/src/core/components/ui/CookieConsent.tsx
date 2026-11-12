@@ -26,9 +26,9 @@ export function CookieConsent() {
       role="dialog"
       aria-modal="false"
       aria-label={t("cookies.bannerLabel")}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant shadow-lg"
+      className="fixed right-0 bottom-0 left-0 z-overlay border-t border-outline-variant bg-surface shadow-lg"
     >
-      <div className="max-w-screen-2xl mx-auto px-4 py-4 sm:px-8 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <div className="mx-auto flex max-w-screen-2xl flex-col items-start gap-4 px-4 py-4 sm:flex-row sm:items-center sm:px-8 sm:py-5">
         {/* Text */}
         <div className="flex-1 text-sm text-on-surface-variant">
           <p>
@@ -44,7 +44,7 @@ export function CookieConsent() {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-row gap-3 flex-shrink-0">
+        <div className="flex shrink-0 flex-row gap-3">
           <Button variant="secondary" size="sm" onClick={handleReject} aria-label={t("cookies.rejectAll")}>
             {t("cookies.rejectAll")}
           </Button>

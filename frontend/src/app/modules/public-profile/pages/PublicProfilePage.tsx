@@ -26,13 +26,13 @@ export function PublicProfilePage() {
 
   if (isProfileLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="bg-surface-container-low rounded-3xl p-8 mb-12 animate-pulse">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-32 h-32 rounded-full bg-surface-container-high" />
+      <div className="mx-auto max-w-7xl px-4 py-12">
+        <div className="mb-12 animate-pulse rounded-3xl bg-surface-container-low p-8">
+          <div className="flex flex-col items-center gap-8 md:flex-row">
+            <div className="h-32 w-32 rounded-full bg-surface-container-high" />
             <div className="flex-1 space-y-4">
-              <div className="h-8 bg-surface-container-high rounded w-48" />
-              <div className="h-4 bg-surface-container-high rounded w-32" />
+              <div className="h-8 w-48 rounded-sm bg-surface-container-high" />
+              <div className="h-4 w-32 rounded-sm bg-surface-container-high" />
             </div>
           </div>
         </div>
@@ -42,8 +42,8 @@ export function PublicProfilePage() {
 
   if (!profile) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-        <h1 className="text-4xl font-black mb-4">{t("seller.notFound")}</h1>
+      <div className="mx-auto max-w-7xl px-4 py-24 text-center">
+        <h1 className="mb-4 text-4xl font-black">{t("seller.notFound")}</h1>
         <p className="text-on-surface-variant">{t("seller.notFoundDesc")}</p>
       </div>
     );
@@ -52,38 +52,38 @@ export function PublicProfilePage() {
   const hasSocialLinks = profile.social_twitter || profile.social_instagram || profile.social_github;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-12">
       {/* Profile Header */}
-      <div className="bg-surface-container-low rounded-3xl p-8 mb-12 border border-outline-variant shadow-sm">
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="w-32 h-32 rounded-full overflow-hidden bg-surface-container-high border-4 border-white shadow-md shrink-0">
+      <div className="mb-12 rounded-3xl border border-outline-variant bg-surface-container-low p-8 shadow-sm">
+        <div className="flex flex-col items-center gap-8 md:flex-row">
+          <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface-container-lowest bg-surface-container-high shadow-md">
             {profile.avatar_url ? (
               <img
                 src={profile.avatar_url}
                 alt={profile.display_name || "Seller"}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-on-surface-variant">
+              <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-on-surface-variant">
                 {profile.display_name?.[0] || "U"}
               </div>
             )}
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2">
+            <div className="mb-2 flex flex-wrap items-center justify-center gap-3 md:justify-start">
               <h1 className="text-3xl font-black">{profile.display_name || "Utilizator"}</h1>
               {profile.phone_verified && (
-                <div className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                  <ShieldCheck className="w-4 h-4" />
+                <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold tracking-wider text-primary uppercase">
+                  <ShieldCheck className="h-4 w-4" />
                   <span>{t("seller.verifiedSeller")}</span>
                 </div>
               )}
             </div>
 
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 text-on-surface-variant mb-4">
+            <div className="mb-4 flex flex-wrap justify-center gap-6 text-on-surface-variant md:justify-start">
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+                <Calendar className="h-5 w-5" />
                 <span>
                   {t("seller.memberSince")}{" "}
                   {format(new Date(profile.member_since), "MMMM yyyy", {
@@ -92,13 +92,13 @@ export function PublicProfilePage() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Package className="w-5 h-5" />
+                <Package className="h-5 w-5" />
                 <span>
                   {profile.active_listings_count} {t("seller.activeListings")}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Download className="w-5 h-5" />
+                <Download className="h-5 w-5" />
                 <span>
                   {profile.total_downloads ?? 0} {t("seller.totalDownloads")}
                 </span>
@@ -107,22 +107,22 @@ export function PublicProfilePage() {
 
             {/* Bio */}
             {profile.bio && (
-              <p className="text-on-surface-variant text-sm leading-relaxed mb-4 max-w-xl text-center md:text-left">
+              <p className="mb-4 max-w-xl text-center text-sm leading-relaxed text-on-surface-variant md:text-left">
                 {profile.bio}
               </p>
             )}
 
             {/* Website + Social links */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <div className="flex flex-wrap justify-center gap-4 md:justify-start">
               {profile.website && (
                 <a
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-primary hover:underline text-sm font-medium"
+                  className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                   aria-label={t("seller.website")}
                 >
-                  <Globe className="w-4 h-4" />
+                  <Globe className="h-4 w-4" />
                   <span>{profile.website.replace(/^https?:\/\//, "")}</span>
                 </a>
               )}
@@ -134,9 +134,9 @@ export function PublicProfilePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t("seller.twitter")}
-                      className="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors text-sm"
+                      className="flex items-center gap-1 text-sm text-on-surface-variant transition-colors hover:text-primary"
                     >
-                      <AtSign className="w-4 h-4" />
+                      <AtSign className="h-4 w-4" />
                       <span>{profile.social_twitter}</span>
                     </a>
                   )}
@@ -146,9 +146,9 @@ export function PublicProfilePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t("seller.instagram")}
-                      className="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors text-sm"
+                      className="flex items-center gap-1 text-sm text-on-surface-variant transition-colors hover:text-primary"
                     >
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="h-4 w-4" />
                       <span>{t("seller.instagram")}</span>
                     </a>
                   )}
@@ -158,9 +158,9 @@ export function PublicProfilePage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t("seller.github")}
-                      className="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors text-sm"
+                      className="flex items-center gap-1 text-sm text-on-surface-variant transition-colors hover:text-primary"
                     >
-                      <Link2 className="w-4 h-4" />
+                      <Link2 className="h-4 w-4" />
                       <span>{profile.social_github}</span>
                     </a>
                   )}
@@ -172,22 +172,22 @@ export function PublicProfilePage() {
       </div>
 
       {/* Listings Grid */}
-      <h2 className="text-2xl font-black mb-8">{t("seller.listingsTitle")}</h2>
+      <h2 className="mb-8 text-2xl font-black">{t("seller.listingsTitle")}</h2>
 
       {isListingsLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-80 bg-surface-container-low rounded-2xl animate-pulse" />
+            <div key={i} className="h-80 animate-pulse rounded-2xl bg-surface-container-low" />
           ))}
         </div>
       ) : listingsPage?.items && listingsPage.items.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {listingsPage.items.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
         </div>
       ) : (
-        <div className="bg-surface-container-low rounded-2xl p-12 text-center border border-dashed border-outline-variant">
+        <div className="rounded-2xl border border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
           <p className="text-on-surface-variant">{t("seller.noListings")}</p>
         </div>
       )}

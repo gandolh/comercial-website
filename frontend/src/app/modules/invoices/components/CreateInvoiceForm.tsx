@@ -147,22 +147,22 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Header info */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.create.series", "Serie")}
           </label>
           <Input {...register("series")} placeholder="FCT" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.create.issueDate", "Data emiterii")}
           </label>
           <Input {...register("issue_date")} type="date" />
-          {errors.issue_date && <p className="text-error text-sm mt-1">{errors.issue_date.message}</p>}
+          {errors.issue_date && <p className="mt-1 text-sm text-error">{errors.issue_date.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.create.dueDate", "Scadență (opțional)")}
           </label>
           <Input {...register("due_date")} type="date" />
@@ -170,42 +170,42 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       </div>
 
       {/* Seller section */}
-      <section className="bg-surface-container-low rounded-xl p-4 border border-outline-variant space-y-3">
+      <section className="space-y-3 rounded-xl border border-outline-variant bg-surface-container-low p-4">
         <h3 className="text-base font-bold text-on-surface">{t("invoices.create.sellerSection", "Furnizor")}</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerName", "Denumire furnizor")}
             </label>
             <Input {...register("seller_name")} placeholder="S.C. Firma Mea S.R.L." />
-            {errors.seller_name && <p className="text-error text-sm mt-1">{errors.seller_name.message}</p>}
+            {errors.seller_name && <p className="mt-1 text-sm text-error">{errors.seller_name.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerCui", "CUI")}
             </label>
             <Input {...register("seller_cui")} placeholder="RO12345678" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerRegCom", "Reg. Com.")}
             </label>
             <Input {...register("seller_reg_com")} placeholder="J40/1234/2020" />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerAddress", "Adresă furnizor")}
             </label>
             <Input {...register("seller_address")} placeholder="Str. Exemplu nr.1, București" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerIban", "IBAN")}
             </label>
             <Input {...register("seller_iban")} placeholder="RO49AAAA1B31007593840000" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.sellerBank", "Bancă")}
             </label>
             <Input {...register("seller_bank")} placeholder="Banca Transilvania" />
@@ -214,11 +214,11 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       </section>
 
       {/* Buyer section */}
-      <section className="bg-surface-container-low rounded-xl p-4 border border-outline-variant space-y-3">
+      <section className="space-y-3 rounded-xl border border-outline-variant bg-surface-container-low p-4">
         <h3 className="text-base font-bold text-on-surface">{t("invoices.create.buyerSection", "Client")}</h3>
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-on-surface-variant mb-1">
+            <label className="mb-1 block text-sm font-medium text-on-surface-variant">
               {t("invoices.create.buyerCui", "CUI / CNP client")}
             </label>
             <Input id="buyer-cui" {...register("buyer_cui")} placeholder="RO87654321" />
@@ -229,17 +229,17 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
               : t("invoices.create.autofill", "Auto-completare ANAF")}
           </Button>
         </div>
-        {cuiError && <p className="text-error text-sm">{cuiError}</p>}
+        {cuiError && <p className="text-sm text-error">{cuiError}</p>}
 
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.create.buyerName", "Denumire client")}
           </label>
           <Input {...register("buyer_name")} placeholder="S.C. Client S.R.L." />
-          {errors.buyer_name && <p className="text-error text-sm mt-1">{errors.buyer_name.message}</p>}
+          {errors.buyer_name && <p className="mt-1 text-sm text-error">{errors.buyer_name.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.create.buyerAddress", "Adresă client")}
           </label>
           <Input {...register("buyer_address")} placeholder="Str. Exemplu nr.2, Cluj-Napoca" />
@@ -249,24 +249,24 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       {/* Line items */}
       <section className="space-y-3">
         <h3 className="text-base font-bold text-on-surface">{t("invoices.create.lineItems", "Produse / Servicii")}</h3>
-        {errors.line_items?.root && <p className="text-error text-sm">{errors.line_items.root.message}</p>}
+        {errors.line_items?.root && <p className="text-sm text-error">{errors.line_items.root.message}</p>}
         <div className="space-y-2">
           {fields.map((field, idx) => (
             <div
               key={field.id}
-              className="grid grid-cols-12 gap-2 items-start bg-surface-container-low rounded-xl p-3 border border-outline-variant"
+              className="grid grid-cols-12 items-start gap-2 rounded-xl border border-outline-variant bg-surface-container-low p-3"
             >
               <div className="col-span-12 sm:col-span-5">
-                <label className="block text-xs font-medium text-on-surface-variant mb-1">
+                <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   {t("invoices.create.description", "Descriere")}
                 </label>
                 <Input {...register(`line_items.${idx}.description`)} placeholder="Serviciu / Produs" />
                 {errors.line_items?.[idx]?.description && (
-                  <p className="text-error text-xs mt-0.5">{errors.line_items[idx]?.description?.message}</p>
+                  <p className="mt-0.5 text-xs text-error">{errors.line_items[idx]?.description?.message}</p>
                 )}
               </div>
               <div className="col-span-4 sm:col-span-2">
-                <label className="block text-xs font-medium text-on-surface-variant mb-1">
+                <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   {t("invoices.create.qty", "Cant.")}
                 </label>
                 <Input
@@ -278,7 +278,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                 />
               </div>
               <div className="col-span-4 sm:col-span-2">
-                <label className="block text-xs font-medium text-on-surface-variant mb-1">
+                <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   {t("invoices.create.unitPrice", "Preț unit. (RON)")}
                 </label>
                 <Input
@@ -290,7 +290,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                 />
               </div>
               <div className="col-span-3 sm:col-span-2">
-                <label className="block text-xs font-medium text-on-surface-variant mb-1">
+                <label className="mb-1 block text-xs font-medium text-on-surface-variant">
                   {t("invoices.create.vatRate", "TVA")}
                 </label>
                 <Select {...register(`line_items.${idx}.vat_rate`, { valueAsNumber: true })} options={VAT_OPTIONS} />
@@ -299,7 +299,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
                 <button
                   type="button"
                   onClick={() => remove(idx)}
-                  className="text-error hover:opacity-70 p-1"
+                  className="p-1 text-error hover:opacity-70"
                   aria-label={t("invoices.create.removeLine", "Șterge linie")}
                 >
                   <span className="material-symbols-outlined text-base" aria-hidden="true">
@@ -321,7 +321,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       </section>
 
       {/* Totals */}
-      <div className="bg-surface-container rounded-xl p-4 border border-outline-variant text-sm space-y-1">
+      <div className="space-y-1 rounded-xl border border-outline-variant bg-surface-container p-4 text-sm">
         <div className="flex justify-between text-on-surface-variant">
           <span>{t("invoices.create.subtotal", "Subtotal fără TVA")}</span>
           <span>{subtotal.toFixed(2)} RON</span>
@@ -330,7 +330,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
           <span>{t("invoices.create.vatTotal", "Total TVA")}</span>
           <span>{vatAmount.toFixed(2)} RON</span>
         </div>
-        <div className="flex justify-between font-bold text-on-surface text-base border-t border-outline-variant pt-2 mt-2">
+        <div className="mt-2 flex justify-between border-t border-outline-variant pt-2 text-base font-bold text-on-surface">
           <span>{t("invoices.create.total", "TOTAL")}</span>
           <span>{total.toFixed(2)} RON</span>
         </div>
@@ -345,7 +345,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
       </div>
 
       {create.isError && (
-        <p className="text-error text-sm">
+        <p className="text-sm text-error">
           {t("invoices.create.error", "Eroare la generarea facturii. Încearcă din nou.")}
         </p>
       )}

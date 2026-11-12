@@ -11,18 +11,16 @@ export function SettingsPage() {
 
   return (
     <main className="mt-24 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
-        <h1 className="text-3xl font-black mb-8" style={{ fontFamily: "var(--font-headline)" }}>
-          Setările contului
-        </h1>
+      <div className="mx-auto max-w-4xl px-6">
+        <h1 className="mb-8 font-headline text-3xl font-black">Setările contului</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             {/* Section: Profile */}
-            <section className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant shadow-sm space-y-6">
+            <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
               <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary text-xl" aria-hidden="true">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
                     person
                   </span>
                 </div>
@@ -31,21 +29,21 @@ export function SettingsPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-on-surface-variant mb-1">Nume afișat</label>
-                  <div className="bg-surface-container text-on-surface px-4 py-3 rounded-lg border border-outline-variant">
+                  <label className="mb-1 block text-sm font-medium text-on-surface-variant">Nume afișat</label>
+                  <div className="rounded-lg border border-outline-variant bg-surface-container px-4 py-3 text-on-surface">
                     {user?.display_name || user?.email?.split("@")[0] || "—"}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-on-surface-variant mb-1">Adresa de email</label>
-                  <div className="flex items-center gap-2 bg-surface-container text-on-surface px-4 py-3 rounded-lg border border-outline-variant">
-                    <span className="material-symbols-outlined text-outline text-base" aria-hidden="true">
+                  <label className="mb-1 block text-sm font-medium text-on-surface-variant">Adresa de email</label>
+                  <div className="flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container px-4 py-3 text-on-surface">
+                    <span className="material-symbols-outlined text-base text-outline" aria-hidden="true">
                       mail
                     </span>
                     <span>{user?.email}</span>
                     {user?.email_verified && (
-                      <span className="ml-auto bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                      <span className="ml-auto rounded-full bg-tertiary-container px-2 py-0.5 text-[10px] font-bold text-on-tertiary-container uppercase">
                         Verificat
                       </span>
                     )}
@@ -60,26 +58,26 @@ export function SettingsPage() {
             <ProfileSection />
 
             {/* Section: Phone Verification */}
-            <section className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant shadow-sm space-y-6">
+            <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
               <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary text-xl" aria-hidden="true">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
                     phone
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-on-surface">Verificare Telefon</h2>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex flex-col items-center gap-6 md:flex-row">
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-on-surface">{user?.phone || "Niciun număr adăugat"}</span>
                     {user?.phone_verified ? (
-                      <span className="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                      <span className="rounded-full bg-tertiary-container px-2 py-0.5 text-[10px] font-bold text-on-tertiary-container uppercase">
                         Verificat
                       </span>
                     ) : (
-                      <span className="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                      <span className="rounded-full bg-secondary-container px-2 py-0.5 text-[10px] font-bold text-on-secondary-container uppercase">
                         Neverificat
                       </span>
                     )}
@@ -98,8 +96,8 @@ export function SettingsPage() {
               </div>
 
               {user?.phone_verified && (
-                <div className="bg-primary/5 rounded-xl p-4 flex items-start gap-3 border border-primary/10">
-                  <span className="material-symbols-outlined text-primary shrink-0 mt-0.5" aria-hidden="true">
+                <div className="flex items-start gap-3 rounded-xl border border-primary/10 bg-primary/5 p-4">
+                  <span className="material-symbols-outlined mt-0.5 shrink-0 text-primary" aria-hidden="true">
                     shield
                   </span>
                   <div className="text-sm text-on-surface-variant">
@@ -112,9 +110,9 @@ export function SettingsPage() {
           </div>
 
           <div className="space-y-6">
-            <section className="bg-surface-container-low rounded-2xl p-6 border border-outline-variant shadow-sm">
-              <h3 className="font-bold text-on-surface mb-4">Suport</h3>
-              <p className="text-sm text-on-surface-variant mb-4">Ai nevoie de ajutor cu setările contului tău?</p>
+            <section className="rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
+              <h3 className="mb-4 font-bold text-on-surface">Suport</h3>
+              <p className="mb-4 text-sm text-on-surface-variant">Ai nevoie de ajutor cu setările contului tău?</p>
               <Button variant="ghost" className="w-full border-2 border-outline-variant">
                 Contactează Echipa
               </Button>

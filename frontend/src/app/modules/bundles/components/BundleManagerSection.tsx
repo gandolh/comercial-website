@@ -99,8 +99,8 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
   const bundlePriceAbove = showPriceHelper && priceRon != null && priceRon >= sumPrices;
 
   return (
-    <section className="bg-surface p-6 rounded-2xl border border-outline-variant space-y-6">
-      <h2 className="text-xl font-bold border-b pb-4">{t("bundles.edit.sectionTitle")}</h2>
+    <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
+      <h2 className="border-b pb-4 text-xl font-bold">{t("bundles.edit.sectionTitle")}</h2>
 
       {/* Toggle */}
       <div className="flex items-center justify-between gap-4">
@@ -108,7 +108,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           <p id={toggleLabelId} className="font-semibold text-on-surface">
             {t("bundles.edit.toggleLabel")}
           </p>
-          <p className="text-sm text-on-surface-variant mt-0.5">{t("bundles.edit.toggleHint")}</p>
+          <p className="mt-0.5 text-sm text-on-surface-variant">{t("bundles.edit.toggleHint")}</p>
         </div>
         <Switch
           size="lg"
@@ -135,13 +135,13 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           {pickListLoading || childrenLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-14 bg-surface-container-low animate-pulse rounded-xl" />
+                <div key={i} className="h-14 animate-pulse rounded-xl bg-surface-container-low" />
               ))}
             </div>
           ) : candidateListings.length === 0 ? (
             <p className="text-sm text-outline italic">{t("bundles.edit.noOtherListings")}</p>
           ) : (
-            <ul className="divide-y divide-outline-variant rounded-xl border border-outline-variant overflow-hidden max-h-80 overflow-y-auto">
+            <ul className="max-h-80 divide-y divide-outline-variant overflow-hidden overflow-y-auto rounded-xl border border-outline-variant">
               {candidateListings.map((listing) => {
                 const checked = selectedSet.has(listing.id);
                 const priceLabel =
@@ -164,18 +164,18 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
                         <img
                           src={listing.coverUrl}
                           alt={listing.title}
-                          className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                          className="h-10 w-10 shrink-0 rounded-lg object-cover"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0">
-                          <span className="material-symbols-outlined text-outline text-[18px]">draft</span>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-container">
+                          <span className="material-symbols-outlined text-[18px] text-outline">draft</span>
                         </div>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-on-surface truncate">{listing.title}</p>
-                        <p className="text-xs text-outline mt-0.5 capitalize">{listing.category}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-on-surface">{listing.title}</p>
+                        <p className="mt-0.5 text-xs text-outline capitalize">{listing.category}</p>
                       </div>
-                      <span className="text-sm font-bold text-primary whitespace-nowrap">{priceLabel}</span>
+                      <span className="text-sm font-bold whitespace-nowrap text-primary">{priceLabel}</span>
                     </label>
                   </li>
                 );
@@ -193,18 +193,18 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
                   : "border-tertiary/40 bg-tertiary-container/20 text-on-surface",
               ].join(" ")}
             >
-              <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-on-surface-variant">{t("bundles.edit.sumLabel")}</span>
                 <span className="font-bold text-on-surface">{sumPrices.toLocaleString("ro-RO")} RON</span>
               </div>
               {discountPct !== null && discountPct > 0 && (
-                <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-on-surface-variant">{t("bundles.edit.discountLabel")}</span>
                   <span className="font-bold text-tertiary">-{discountPct}%</span>
                 </div>
               )}
               {bundlePriceAbove && (
-                <p className="text-xs text-error font-medium pt-1">{t("bundles.edit.priceWarning")}</p>
+                <p className="pt-1 text-xs font-medium text-error">{t("bundles.edit.priceWarning")}</p>
               )}
             </div>
           )}
@@ -219,7 +219,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           type="button"
           onClick={handleSave}
           disabled={setItems.isPending}
-          className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-semibold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {setItems.isPending && (
             <span className="material-symbols-outlined animate-spin text-xl" aria-hidden="true">

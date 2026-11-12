@@ -16,7 +16,7 @@ export function Tooltip({ content, children, side = "top", delay = 300 }: Toolti
         <BaseTooltip.Trigger render={children} />
         <BaseTooltip.Portal>
           <BaseTooltip.Positioner side={side} sideOffset={6} className="z-popup">
-            <BaseTooltip.Popup className="max-w-xs rounded-lg bg-inverse-surface px-3 py-1.5 text-xs font-medium text-inverse-on-surface shadow-ambient motion-safe:transition-opacity motion-safe:duration-100 data-starting-style:opacity-0 data-ending-style:opacity-0">
+            <BaseTooltip.Popup className="max-w-xs rounded-lg bg-inverse-surface px-3 py-1.5 text-xs font-medium text-inverse-on-surface shadow-ambient data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-100">
               {content}
             </BaseTooltip.Popup>
           </BaseTooltip.Positioner>

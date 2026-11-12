@@ -17,21 +17,21 @@ export const ConversationsPage: React.FC = () => {
   const conversationId = pathname.startsWith("/mesaje/") ? pathname.replace("/mesaje/", "") : undefined;
 
   return (
-    <div className="pt-24 h-screen flex flex-col">
-      <div className="flex flex-1 min-h-0 max-w-screen-xl mx-auto w-full px-4 pb-6 gap-4">
+    <div className="flex h-screen flex-col pt-24">
+      <div className="mx-auto flex min-h-0 w-full max-w-screen-xl flex-1 gap-4 px-4 pb-6">
         {/* Sidebar */}
         <aside
-          className={`w-full md:w-80 flex-shrink-0 flex flex-col bg-white rounded-xl shadow-[var(--shadow-ambient)] overflow-hidden ${
+          className={`flex w-full shrink-0 flex-col overflow-hidden rounded-xl bg-surface-container-lowest shadow-ambient md:w-80 ${
             conversationId ? "hidden md:flex" : "flex"
           }`}
         >
-          <div className="p-4 border-b border-surface-container-low">
-            <h1 className="text-xl font-bold font-[Manrope] text-on-surface">{t("common:messaging.messages")}</h1>
+          <div className="border-b border-surface-container-low p-4">
+            <h1 className="font-[Manrope] text-xl font-bold text-on-surface">{t("common:messaging.messages")}</h1>
           </div>
           <div className="flex-1 overflow-y-auto">
             {isLoading ? (
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              <div className="flex h-32 items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
               </div>
             ) : conversations && conversations.length > 0 ? (
               conversations.map((conv: ConversationSummary) => (
@@ -43,7 +43,7 @@ export const ConversationsPage: React.FC = () => {
                 />
               ))
             ) : (
-              <div className="p-8 text-center text-on-surface-variant text-sm">
+              <div className="p-8 text-center text-sm text-on-surface-variant">
                 {t("common:messaging.no_conversations")}
               </div>
             )}
@@ -52,7 +52,7 @@ export const ConversationsPage: React.FC = () => {
 
         {/* Right panel */}
         <main
-          className={`flex-1 min-w-0 flex flex-col bg-white rounded-xl shadow-[var(--shadow-ambient)] overflow-hidden ${
+          className={`flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-surface-container-lowest shadow-ambient ${
             !conversationId ? "hidden md:flex" : "flex"
           }`}
         >

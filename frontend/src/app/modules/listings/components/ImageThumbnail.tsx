@@ -25,18 +25,18 @@ export function ImageThumbnail({
       onDragStart={() => onDragStart(image.id)}
       onDragOver={(event) => event.preventDefault()}
       onDrop={() => onDropOn(image.id)}
-      className="relative rounded-xl border border-outline-variant overflow-hidden bg-surface"
+      className="relative overflow-hidden rounded-xl border border-outline-variant bg-surface"
     >
-      <img src={image.url} alt={`Poza ${index + 1}`} className="w-full aspect-square object-cover" />
+      <img src={image.url} alt={`Poza ${index + 1}`} className="aspect-square w-full object-cover" />
 
       <div className="absolute top-2 left-2 flex gap-2">
         {isCover ? (
-          <span className="px-2 py-1 text-xs font-bold rounded-full bg-primary text-on-primary">Copertă</span>
+          <span className="rounded-full bg-primary px-2 py-1 text-xs font-bold text-on-primary">Copertă</span>
         ) : (
           <button
             type="button"
             onClick={() => onSetAsCover(image.id)}
-            className="px-2 py-1 text-xs font-semibold rounded-full bg-surface-bright/90 text-on-surface"
+            className="rounded-full bg-surface-bright/90 px-2 py-1 text-xs font-semibold text-on-surface"
           >
             Setează copertă
           </button>
@@ -46,7 +46,7 @@ export function ImageThumbnail({
       <button
         type="button"
         onClick={() => onDelete(image.id)}
-        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-error text-white flex items-center justify-center"
+        className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-error text-on-error"
         aria-label="Șterge poza"
       >
         <span className="material-symbols-outlined text-[18px]">delete</span>

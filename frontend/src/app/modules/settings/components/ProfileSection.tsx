@@ -87,8 +87,8 @@ export function ProfileSection() {
   };
 
   return (
-    <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant">
-      <h3 className="text-xl font-semibold mb-6">{t("settings.profile.title")}</h3>
+    <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-semibold">{t("settings.profile.title")}</h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
@@ -102,7 +102,7 @@ export function ProfileSection() {
 
         <div className="space-y-1">
           <label className="text-sm font-medium text-on-surface">Email</label>
-          <div className="p-3 bg-surface-container-high rounded-md text-on-surface-variant flex justify-between items-center">
+          <div className="flex items-center justify-between rounded-md bg-surface-container-high p-3 text-on-surface-variant">
             <span>{user?.email}</span>
             <span className="text-xs italic">Email-ul nu poate fi schimbat momentan</span>
           </div>
@@ -111,7 +111,7 @@ export function ProfileSection() {
         <div className="space-y-1">
           <label className="text-sm font-medium text-on-surface">Telefon</label>
           <div className="flex gap-2">
-            <div className="flex-1 p-3 bg-surface-container-high rounded-md text-on-surface-variant">
+            <div className="flex-1 rounded-md bg-surface-container-high p-3 text-on-surface-variant">
               {user?.phone || "Niciun număr adăugat"}
             </div>
             {!user?.phone_verified && (
@@ -120,7 +120,7 @@ export function ProfileSection() {
               </Button>
             )}
             {user?.phone_verified && (
-              <div className="px-4 py-2 bg-success/10 text-success rounded-md font-medium flex items-center gap-1">
+              <div className="flex items-center gap-1 rounded-md bg-tertiary/10 px-4 py-2 font-medium text-tertiary">
                 ✓ Verificat
               </div>
             )}
@@ -152,7 +152,7 @@ export function ProfileSection() {
         />
 
         {/* Social links */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input
             label={t("settings.profile.twitterLabel")}
             id="social_twitter"
@@ -179,7 +179,7 @@ export function ProfileSection() {
           />
         </div>
 
-        {saveSuccess && <p className="text-sm text-success">{t("settings.profile.savedMessage")}</p>}
+        {saveSuccess && <p className="text-sm text-tertiary">{t("settings.profile.savedMessage")}</p>}
         {saveError && <p className="text-sm text-error">{t("settings.profile.errorMessage")}</p>}
 
         <div className="pt-2">

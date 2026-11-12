@@ -45,14 +45,13 @@ export function FavoriteToggle({ listingId, className = "", size = "md" }: Favor
       type="button"
       onClick={handleClick}
       disabled={toggleFavorite.isPending}
-      className={`${dimension} bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-all ${className}`}
+      className={`${dimension} flex items-center justify-center rounded-full bg-surface-container-lowest/80 shadow-sm backdrop-blur-md transition-all hover:bg-surface-container-lowest ${className}`}
       aria-label={isFavorited ? "Elimină de la favorite" : "Adaugă la favorite"}
     >
       <span
-        className="material-symbols-outlined"
+        className={isFavorited ? "material-symbols-outlined text-error" : "material-symbols-outlined text-primary"}
         style={{
           fontSize: iconSize,
-          color: isFavorited ? "var(--color-error)" : "var(--color-primary)",
           fontVariationSettings: isFavorited ? "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24" : undefined,
         }}
       >

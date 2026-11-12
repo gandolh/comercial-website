@@ -27,10 +27,10 @@ export function EarningsSection() {
   const lastPayout = e.payouts[0];
 
   return (
-    <section className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant space-y-5">
-      <div className="flex justify-between items-start gap-4">
+    <section className="space-y-5 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-lg font-bold text-on-surface mb-1">Câștiguri</h3>
+          <h3 className="mb-1 text-lg font-bold text-on-surface">Câștiguri</h3>
           <p className="text-sm text-on-surface-variant">
             Din vânzări, după comisionul PiațăRo de {feePercent}%. Retragerile sunt simulate: nu se transferă bani.
           </p>
@@ -59,9 +59,9 @@ export function EarningsSection() {
       {e.sales.length > 0 && (
         <ul className="divide-y divide-outline-variant text-sm">
           {e.sales.slice(0, 5).map((s) => (
-            <li key={s.order_id} className="py-2 flex justify-between gap-4">
+            <li key={s.order_id} className="flex justify-between gap-4 py-2">
               <span className="truncate">{s.title}</span>
-              <span className="text-on-surface-variant whitespace-nowrap">
+              <span className="whitespace-nowrap text-on-surface-variant">
                 {ron(s.amount_ron)} − {ron(s.fee_ron)} = <strong className="text-on-surface">{ron(s.net_ron)}</strong>
               </span>
             </li>

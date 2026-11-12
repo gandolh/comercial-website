@@ -14,7 +14,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className={fullWidth ? "w-full" : ""}>
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-on-surface-variant mb-1.5">
+          <label htmlFor={inputId} className="mb-1.5 block text-sm font-medium text-on-surface-variant">
             {label}
           </label>
         )}
@@ -28,9 +28,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             "px-4 py-3 leading-relaxed resize-y",
             "outline-none transition-all duration-200",
             "placeholder:text-on-surface-variant/60",
-            "focus:bg-surface-container-lowest focus:shadow-[0_0_0_1px_rgba(0,86,210,0.3)]",
+            "focus:bg-surface-container-lowest focus:shadow-focus",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            error ? "shadow-[0_0_0_1px_rgba(186,26,26,0.4)]" : "",
+            error ? "shadow-focus-error" : "",
             className,
           ]
             .filter(Boolean)

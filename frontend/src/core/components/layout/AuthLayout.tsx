@@ -16,7 +16,7 @@ export function AuthLayout() {
       <div className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <Link to="/" className="text-3xl font-black text-primary tracking-tight font-[Manrope] no-underline">
+            <Link to="/" className="font-[Manrope] text-3xl font-black tracking-tight text-primary no-underline">
               Piață<span className="text-secondary">Ro</span>
             </Link>
           </div>

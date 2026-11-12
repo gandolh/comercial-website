@@ -29,7 +29,7 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
 
     return (
       <div className={fullWidth ? "w-full" : ""}>
-        <label htmlFor={inputId} className="block text-sm font-medium text-on-surface-variant mb-1.5">
+        <label htmlFor={inputId} className="mb-1.5 block text-sm font-medium text-on-surface-variant">
           {label}
         </label>
         <div className="relative">
@@ -46,15 +46,15 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
               "outline-none transition-all duration-200",
               "placeholder:text-on-surface-variant/60",
               "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-              "focus:bg-surface-container-lowest focus:shadow-[0_0_0_1px_rgba(0,86,210,0.3)]",
+              "focus:bg-surface-container-lowest focus:shadow-focus",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              error ? "shadow-[0_0_0_1px_rgba(186,26,26,0.4)]" : "",
+              error ? "shadow-focus-error" : "",
               className,
             ]
               .filter(Boolean)
               .join(" ")}
           />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-on-surface-variant pointer-events-none">
+          <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-sm font-medium text-on-surface-variant">
             RON
           </span>
         </div>

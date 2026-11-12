@@ -34,7 +34,7 @@ function ToastList() {
       <Toast.Root
         key={item.id}
         toast={item}
-        className="w-full translate-x-(--toast-swipe-movement-x) translate-y-(--toast-swipe-movement-y) outline-none motion-safe:transition-[opacity,translate] motion-safe:duration-200 data-ending-style:opacity-0 data-limited:hidden data-starting-style:opacity-0 data-swiping:duration-0"
+        className="w-full translate-x-(--toast-swipe-movement-x) translate-y-(--toast-swipe-movement-y) outline-none data-ending-style:opacity-0 data-limited:hidden data-starting-style:opacity-0 data-swiping:duration-0 motion-safe:transition-[opacity,translate] motion-safe:duration-200"
       >
         {item.data?.render ? (
           <Toast.Content>{item.data.render()}</Toast.Content>

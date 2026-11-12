@@ -96,7 +96,7 @@ export function ImageGalleryEditor({ listingId, images, onImagesChange }: ImageG
     <section className="space-y-6">
       <ImageUploader existingCount={sortedImages.length} onUploadFiles={handleUpload} />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {sortedImages.map((image, index) => (
           <ImageThumbnail
             key={image.id}

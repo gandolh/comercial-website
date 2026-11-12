@@ -22,7 +22,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
 
   if (hasPaidOrder) {
     return (
-      <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-3 rounded-xl font-semibold text-sm">
+      <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">
         <span className="material-symbols-outlined text-[20px]">verified</span>
         {t("orders.buyButton.owned")}
       </div>
@@ -68,7 +68,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
       <button
         onClick={handleBuy}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full font-bold text-base hover:opacity-90 active:scale-95 transition-all disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-bold text-on-primary transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
         aria-label={t("orders.buyButton.ariaLabel", { price: priceRon })}
       >
         <span className="material-symbols-outlined text-[20px]">{loading ? "hourglass_empty" : "shopping_cart"}</span>
@@ -76,8 +76,8 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
           ? t("orders.buyButton.loading")
           : t("orders.buyButton.label", { price: priceRon.toLocaleString("ro-RO") })}
       </button>
-      <p className="text-on-surface-variant text-xs text-center px-2">{t("orders.buyButton.simulated")}</p>
-      {error && <p className="text-error text-xs text-center px-2">{error}</p>}
+      <p className="px-2 text-center text-xs text-on-surface-variant">{t("orders.buyButton.simulated")}</p>
+      {error && <p className="px-2 text-center text-xs text-error">{error}</p>}
     </div>
   );
 }

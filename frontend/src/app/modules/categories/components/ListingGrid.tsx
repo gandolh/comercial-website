@@ -25,7 +25,7 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
   if (isLoading) {
     return (
       <div
-        className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" : "flex flex-col gap-6"}
+        className={viewMode === "grid" ? "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col gap-6"}
       >
         {Array.from({ length: 6 }).map((_, i) => (
           <CardSkeleton key={i} />
@@ -36,15 +36,15 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
 
   if (listings.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
+      <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
         <span className="material-symbols-outlined text-outline" style={{ fontSize: "48px" }}>
           search_off
         </span>
         <p className="text-lg font-bold text-on-surface">Niciun anunț găsit</p>
-        <p className="text-on-surface-variant text-sm">Încearcă să modifici filtrele pentru mai multe rezultate.</p>
+        <p className="text-sm text-on-surface-variant">Încearcă să modifici filtrele pentru mai multe rezultate.</p>
         <button
           onClick={onReset}
-          className="mt-2 px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold text-sm hover:opacity-90 active:scale-95 transition-all"
+          className="mt-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-on-primary transition-all hover:opacity-90 active:scale-95"
         >
           Resetează Filtrele
         </button>
@@ -59,25 +59,25 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
           <Link
             key={l.id}
             to={`/anunturi/${l.id}`}
-            className="flex gap-4 bg-surface-container-lowest rounded-xl overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer no-underline relative"
+            className="relative flex cursor-pointer gap-4 overflow-hidden rounded-xl bg-surface-container-lowest no-underline transition-all duration-300 hover:shadow-ambient"
           >
             {l.coverUrl ? (
-              <img src={l.coverUrl} alt={l.title} className="w-40 h-32 object-cover flex-shrink-0" />
+              <img src={l.coverUrl} alt={l.title} className="h-32 w-40 shrink-0 object-cover" />
             ) : (
-              <div className="w-40 h-32 bg-surface-container flex-shrink-0 flex items-center justify-center text-outline">
+              <div className="flex h-32 w-40 shrink-0 items-center justify-center bg-surface-container text-outline">
                 <span className="material-symbols-outlined">image</span>
               </div>
             )}
-            <div className="p-4 flex flex-col justify-center gap-1">
+            <div className="flex flex-col justify-center gap-1 p-4">
               <span className="text-xl font-black text-primary">
                 {l.priceRon !== null ? `${l.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
               </span>
               <h3 className="font-bold text-on-surface">{l.title}</h3>
-              <p className="text-xs text-outline uppercase tracking-wider font-medium">
+              <p className="text-xs font-medium tracking-wider text-outline uppercase">
                 {formatRelativeTime(l.postedAt)}
               </p>
               {l.sellerVerified && (
-                <span className="text-xs font-bold text-white bg-tertiary-container px-2 py-0.5 rounded-full self-start">
+                <span className="self-start rounded-full bg-tertiary-container px-2 py-0.5 text-xs font-bold text-on-fill">
                   Verificat
                 </span>
               )}
@@ -90,7 +90,7 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {listings.map((l) => (
         <ListingCard key={l.id} listing={l} />
       ))}

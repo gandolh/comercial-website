@@ -20,10 +20,10 @@ export function AuthRequiredToast({
       >
         lock
       </span>
-      <span className="text-sm leading-snug flex-1">{message}</span>
+      <span className="flex-1 text-sm leading-snug">{message}</span>
       <a
         href={loginHref}
-        className="shrink-0 rounded font-headline text-sm font-semibold whitespace-nowrap text-inverse-primary hover:underline focus-visible:outline-none"
+        className="shrink-0 rounded-sm font-headline text-sm font-semibold whitespace-nowrap text-inverse-primary hover:underline focus-visible:outline-none"
       >
         {loginLabel}
       </a>

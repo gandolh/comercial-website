@@ -19,11 +19,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   }
 
   return (
-    <div className="mt-16 flex justify-center items-center gap-4">
+    <div className="mt-16 flex items-center justify-center gap-4">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="w-12 h-12 flex items-center justify-center rounded-full border border-surface-container-highest text-outline hover:bg-surface-container transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-surface-container-highest text-outline transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Pagina anterioară"
       >
         <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
@@ -34,15 +34,15 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       <div className="flex items-center gap-2">
         {pages.map((p, i) =>
           p === "..." ? (
-            <span key={`ellipsis-${i}`} className="text-outline px-2">
+            <span key={`ellipsis-${i}`} className="px-2 text-outline">
               ...
             </span>
           ) : (
             <button
               key={p}
               onClick={() => onPageChange(p)}
-              className={`w-12 h-12 rounded-full font-bold transition-colors ${
-                p === currentPage ? "bg-primary text-on-primary" : "hover:bg-surface-container text-on-surface-variant"
+              className={`h-12 w-12 rounded-full font-bold transition-colors ${
+                p === currentPage ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container"
               }`}
             >
               {p}
@@ -54,7 +54,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="w-12 h-12 flex items-center justify-center rounded-full border border-surface-container-highest text-outline hover:bg-surface-container transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-surface-container-highest text-outline transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Pagina următoare"
       >
         <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>

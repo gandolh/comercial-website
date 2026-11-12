@@ -1,13 +1,11 @@
 import { Link } from "@core/lib/router";
 export function ConfidentialitatePage() {
   return (
-    <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
-      <div className="max-w-3xl mx-auto space-y-10">
+    <main className="mx-auto max-w-screen-xl px-4 pt-28 pb-20 md:px-8">
+      <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Politică de Confidențialitate
-          </h1>
-          <p className="text-on-surface-variant text-sm">Ultima actualizare: 1 mai 2026</p>
+          <h1 className="font-headline text-4xl font-black text-on-surface">Politică de Confidențialitate</h1>
+          <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
         <Section title="1. Operatorul de date">
@@ -104,7 +102,7 @@ export function ConfidentialitatePage() {
               },
             ].map(({ right, desc }) => (
               <li key={right} className="flex gap-2">
-                <span className="font-semibold text-on-surface min-w-fit">{right}:</span>
+                <span className="min-w-fit font-semibold text-on-surface">{right}:</span>
                 <span>{desc}</span>
               </li>
             ))}
@@ -120,7 +118,7 @@ export function ConfidentialitatePage() {
 
         <Section title="5. Partajarea datelor cu terți">
           <p>Nu vindem datele tale personale. Putem partaja date cu:</p>
-          <ul className="list-disc list-inside mt-3 space-y-1">
+          <ul className="mt-3 list-inside list-disc space-y-1">
             <li>Furnizori de servicii tehnice (hosting, email tranzacțional)</li>
             <li>Autorități publice, în cazul obligațiilor legale</li>
             <li>Procesatori de plăți, pentru finalizarea tranzacțiilor</li>
@@ -160,10 +158,8 @@ export function ConfidentialitatePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-        {title}
-      </h2>
-      <div className="text-on-surface-variant leading-relaxed">{children}</div>
+      <h2 className="font-headline text-xl font-bold text-on-surface">{title}</h2>
+      <div className="leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );
 }
@@ -180,7 +176,7 @@ function DataRow({
   retention: string;
 }) {
   return (
-    <div className="bg-surface-container rounded-xl p-4 space-y-1">
+    <div className="space-y-1 rounded-xl bg-surface-container p-4">
       <p className="font-semibold text-on-surface">{category}</p>
       <p className="text-sm">
         <span className="text-on-surface-variant">Date: </span>

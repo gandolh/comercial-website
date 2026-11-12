@@ -63,11 +63,11 @@ export function CategoryPage() {
   }
 
   return (
-    <main className="mt-24 flex-grow max-w-screen-2xl mx-auto w-full px-8 pb-16 flex gap-8">
+    <main className="mx-auto mt-24 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
       <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
 
-      <section className="flex-grow min-w-0">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <section className="min-w-0 grow">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <CategoryHeader slug={slug} totalCount={data?.totalCount} isLoading={isFetching} />
           <SortBar
             sortare={filters.sortare}

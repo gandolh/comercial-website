@@ -22,32 +22,32 @@ export function CategoryIndexPage() {
   const { t } = useTranslation();
 
   return (
-    <main className="pt-24 min-h-screen">
-      <section className="px-8 py-16 md:py-24 bg-surface-container-low">
-        <div className="max-w-screen-xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-4">
+    <main className="min-h-screen pt-24">
+      <section className="bg-surface-container-low px-8 py-16 md:py-24">
+        <div className="mx-auto max-w-screen-xl text-center">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-on-surface md:text-5xl">
             {t("categories.browseTitle", "Răsfoiește toate categoriile")}
           </h1>
-          <p className="text-lg text-on-surface-variant max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-on-surface-variant">
             {t("categories.browseSubtitle", "Găsește exact ceea ce cauți printre mii de anunțuri verificate.")}
           </p>
         </div>
       </section>
 
-      <section className="px-8 py-20 max-w-screen-2xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <section className="mx-auto max-w-screen-2xl px-8 py-20">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {CATEGORIES.map(({ icon, label, slug }) => (
             <button
               key={slug}
               onClick={() => navigate(`/categorii/${slug}`)}
-              className="bg-surface-container-lowest p-8 rounded-xl flex flex-col items-center justify-center text-center gap-4 hover:shadow-xl transition-all group cursor-pointer border border-outline-variant hover:border-primary"
+              className="group flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-8 text-center transition-all hover:border-primary hover:shadow-xl"
             >
-              <div className="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary">
                 <span className="material-symbols-outlined" style={{ fontSize: "32px" }}>
                   {icon}
                 </span>
               </div>
-              <span className="font-bold text-on-surface leading-tight">{label}</span>
+              <span className="leading-tight font-bold text-on-surface">{label}</span>
             </button>
           ))}
         </div>

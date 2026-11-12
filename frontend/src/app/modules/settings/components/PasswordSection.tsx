@@ -34,8 +34,8 @@ export function PasswordSection() {
   };
 
   return (
-    <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant">
-      <h3 className="text-xl font-semibold mb-6">Securitate</h3>
+    <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
+      <h3 className="mb-6 text-xl font-semibold">Securitate</h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
@@ -68,7 +68,7 @@ export function PasswordSection() {
           fullWidth
         />
 
-        {error && <p className="text-error text-sm">{error}</p>}
+        {error && <p className="text-sm text-error">{error}</p>}
 
         <div className="pt-2">
           <Button type="submit" loading={changePasswordMutation.isPending}>

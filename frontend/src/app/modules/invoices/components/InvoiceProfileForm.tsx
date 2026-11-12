@@ -89,13 +89,13 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* CUI row with auto-fill */}
-      <div className="flex gap-2 items-end">
+      <div className="flex items-end gap-2">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.profile.cui", "CUI / CIF")}
           </label>
           <Input id="profile-cui" {...register("cui")} placeholder="RO12345678" />
-          {errors.cui && <p className="text-error text-sm mt-1">{errors.cui.message}</p>}
+          {errors.cui && <p className="mt-1 text-sm text-error">{errors.cui.message}</p>}
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={autofillFromCui} disabled={cuiLoading}>
           {cuiLoading
@@ -103,54 +103,54 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
             : t("invoices.profile.autofill", "Auto-completare ANAF")}
         </Button>
       </div>
-      {cuiError && <p className="text-error text-sm">{cuiError}</p>}
+      {cuiError && <p className="text-sm text-error">{cuiError}</p>}
 
       <div>
-        <label className="block text-sm font-medium text-on-surface-variant mb-1">
+        <label className="mb-1 block text-sm font-medium text-on-surface-variant">
           {t("invoices.profile.companyName", "Denumire firmă / Nume")}
         </label>
         <Input {...register("company_name")} placeholder="S.C. Exemplu S.R.L." />
-        {errors.company_name && <p className="text-error text-sm mt-1">{errors.company_name.message}</p>}
+        {errors.company_name && <p className="mt-1 text-sm text-error">{errors.company_name.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-on-surface-variant mb-1">
+        <label className="mb-1 block text-sm font-medium text-on-surface-variant">
           {t("invoices.profile.regCom", "Nr. Reg. Comerțului")}
         </label>
         <Input {...register("reg_com")} placeholder="J40/1234/2020" />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-on-surface-variant mb-1">
+        <label className="mb-1 block text-sm font-medium text-on-surface-variant">
           {t("invoices.profile.address", "Adresă")}
         </label>
         <Input {...register("address")} placeholder="Str. Exemplu nr. 1, București" />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-on-surface-variant mb-1">
+        <label className="mb-1 block text-sm font-medium text-on-surface-variant">
           {t("invoices.profile.iban", "IBAN")}
         </label>
         <Input {...register("iban")} placeholder="RO49AAAA1B31007593840000" />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-on-surface-variant mb-1">
+        <label className="mb-1 block text-sm font-medium text-on-surface-variant">
           {t("invoices.profile.bankName", "Bancă")}
         </label>
         <Input {...register("bank_name")} placeholder="Banca Transilvania" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.profile.email", "Email facturare")}
           </label>
           <Input {...register("email")} type="email" placeholder="facturare@firma.ro" />
-          {errors.email && <p className="text-error text-sm mt-1">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-sm text-error">{errors.email.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-on-surface-variant mb-1">
+          <label className="mb-1 block text-sm font-medium text-on-surface-variant">
             {t("invoices.profile.phone", "Telefon")}
           </label>
           <Input {...register("phone")} placeholder="+40721000000" />
@@ -166,10 +166,10 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
       </div>
 
       {upsert.isSuccess && (
-        <p className="text-tertiary text-sm">{t("invoices.profile.saved", "Profilul a fost salvat.")}</p>
+        <p className="text-sm text-tertiary">{t("invoices.profile.saved", "Profilul a fost salvat.")}</p>
       )}
       {upsert.isError && (
-        <p className="text-error text-sm">{t("invoices.profile.saveError", "Eroare la salvare. Încearcă din nou.")}</p>
+        <p className="text-sm text-error">{t("invoices.profile.saveError", "Eroare la salvare. Încearcă din nou.")}</p>
       )}
     </form>
   );

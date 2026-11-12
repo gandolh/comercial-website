@@ -46,35 +46,35 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[var(--shadow-ambient)]">
-      <div className="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
-        <Link to="/" className="text-2xl font-black text-primary tracking-tight font-[Manrope] no-underline">
+    <nav className="fixed top-0 z-nav w-full bg-surface-container-lowest/80 shadow-ambient backdrop-blur-xl">
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-8 py-4">
+        <Link to="/" className="font-[Manrope] text-2xl font-black tracking-tight text-primary no-underline">
           Piață<span className="text-secondary">Ro</span>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden items-center space-x-8 md:flex">
           <Link
             to="/categorii"
-            className="text-on-surface-variant font-medium hover:text-primary transition-colors no-underline"
+            className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
           >
             {t("nav.categories")}
           </Link>
           <Link
             to="/favorite"
-            className="text-on-surface-variant font-medium hover:text-primary transition-colors no-underline"
+            className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
           >
             {t("nav.favorites")}
             {isAuthenticated && (favoriteIds.data?.length ?? 0) > 0 && (
-              <span className="ml-1 text-primary font-bold">({favoriteIds.data?.length})</span>
+              <span className="ml-1 font-bold text-primary">({favoriteIds.data?.length})</span>
             )}
           </Link>
           <Link
             to="/mesaje"
-            className="text-on-surface-variant font-medium hover:text-primary transition-colors no-underline flex items-center gap-1"
+            className="flex items-center gap-1 font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
           >
             {t("nav.messages")}
             {isAuthenticated && (unreadCount.data ?? 0) > 0 && (
-              <span className="bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-on-primary">
                 {unreadCount.data}
               </span>
             )}
@@ -86,7 +86,7 @@ export function Navbar() {
             <>
               <div className="flex gap-2">
                 <button
-                  className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"
+                  className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high"
                   aria-label="Notificări"
                 >
                   <span className="material-symbols-outlined">notifications</span>
@@ -94,12 +94,12 @@ export function Navbar() {
                 <Dropdown
                   trigger={
                     <button
-                      className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex items-center gap-2"
+                      className="flex items-center gap-2 rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high"
                       aria-label="Profil"
                     >
                       <span className="material-symbols-outlined">person</span>
                       {user?.email && (
-                        <span className="hidden md:inline text-sm font-medium text-on-surface">
+                        <span className="hidden text-sm font-medium text-on-surface md:inline">
                           {user.display_name || user.email.split("@")[0]}
                         </span>
                       )}
@@ -111,7 +111,7 @@ export function Navbar() {
               </div>
               <Link
                 to="/adauga-anunt"
-                className="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg no-underline"
+                className="rounded-full bg-primary px-6 py-2.5 font-bold text-on-primary no-underline shadow-lg transition-all duration-150 hover:scale-105 active:scale-95"
               >
                 {t("nav.addListing")}
               </Link>
@@ -120,7 +120,7 @@ export function Navbar() {
             <>
               <Link
                 to="/autentificare"
-                className="text-on-surface-variant font-medium hover:text-primary transition-colors no-underline"
+                className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
               >
                 Conectare
               </Link>

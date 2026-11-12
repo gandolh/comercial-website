@@ -33,7 +33,7 @@ export function AccordionItem({ value, question, children }: AccordionItemProps)
   return (
     <BaseAccordion.Item value={value} className="overflow-hidden rounded-xl bg-surface-container">
       <BaseAccordion.Header className="m-0">
-        <BaseAccordion.Trigger className="group flex w-full items-center justify-between gap-4 p-4 text-left outline-none transition-colors hover:bg-surface-container-high focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary">
+        <BaseAccordion.Trigger className="group flex w-full items-center justify-between gap-4 p-4 text-left transition-colors outline-none hover:bg-surface-container-high focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset">
           <span className="font-medium text-on-surface">{question}</span>
           <span
             className="material-symbols-outlined shrink-0 text-on-surface-variant transition-transform group-data-panel-open:rotate-180"

@@ -26,7 +26,7 @@ export function Pagination({ page, totalPages, onPageChange, className = "" }: P
 
       {pages.map((p, i) =>
         p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-3 py-2 text-on-surface-variant text-sm select-none">
+          <span key={`ellipsis-${i}`} className="px-3 py-2 text-sm text-on-surface-variant select-none">
             …
           </span>
         ) : (

@@ -11,12 +11,12 @@ export function RecentConversations() {
 
   const recent = conversations?.slice(0, 3) || [];
 
-  if (isLoading) return <div className="h-48 animate-pulse bg-surface-container-low rounded-2xl" />;
+  if (isLoading) return <div className="h-48 animate-pulse rounded-2xl bg-surface-container-low" />;
 
   if (recent.length === 0)
     return (
-      <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant text-center">
-        <span className="material-symbols-outlined text-4xl text-outline mb-2">forum</span>
+      <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-8 text-center">
+        <span className="material-symbols-outlined mb-2 text-4xl text-outline">forum</span>
         <p className="text-on-surface-variant">{t("dashboard.messages.noRecent", "Nu ai conversații recente")}</p>
       </div>
     );
@@ -27,7 +27,7 @@ export function RecentConversations() {
         <h2 className="text-xl font-bold text-on-surface">
           {t("dashboard.messages.recentTitle", "Conversații recente")}
         </h2>
-        <Link to="/mesaje" className="text-primary font-bold text-sm hover:underline">
+        <Link to="/mesaje" className="text-sm font-bold text-primary hover:underline">
           {t("dashboard.messages.viewAll", "Vezi toate")}
         </Link>
       </div>
@@ -37,14 +37,14 @@ export function RecentConversations() {
           <Link
             key={conv.id}
             to={`/mesaje/${conv.id}`}
-            className="flex items-center gap-4 p-4 bg-surface-container-lowest border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors group"
+            className="group flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4 transition-colors hover:bg-surface-container-low"
           >
-            <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
               {conv.counterparty?.display_name?.[0]?.toUpperCase() || conv.counterparty?.email?.[0]?.toUpperCase()}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-start mb-0.5">
-                <p className="font-bold text-on-surface truncate">
+            <div className="min-w-0 flex-1">
+              <div className="mb-0.5 flex items-start justify-between">
+                <p className="truncate font-bold text-on-surface">
                   {conv.counterparty?.display_name || conv.counterparty?.email?.split("@")[0]}
                 </p>
                 <span className="text-xs text-on-surface-variant">
@@ -54,9 +54,9 @@ export function RecentConversations() {
                   })}
                 </span>
               </div>
-              <p className="text-sm text-on-surface-variant truncate">{conv.listing?.title}</p>
+              <p className="truncate text-sm text-on-surface-variant">{conv.listing?.title}</p>
             </div>
-            <span className="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="material-symbols-outlined text-outline opacity-0 transition-opacity group-hover:opacity-100">
               chevron_right
             </span>
           </Link>

@@ -49,7 +49,7 @@ export function Chip({
             onRemove();
           }}
           aria-label={`Elimină ${label}`}
-          className="ml-0.5 rounded-full hover:opacity-70 transition-opacity"
+          className="ml-0.5 rounded-full transition-opacity hover:opacity-70"
         >
           <span className="material-symbols-outlined text-base leading-none" aria-hidden="true">
             close

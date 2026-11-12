@@ -29,7 +29,7 @@ export function LoginPage() {
   return (
     <AuthCardShell title="Autentifică-te" description="PiațăRo este o demonstrație: doar proprietarul are cont.">
       {wardError && (
-        <div className="mb-4 p-3 rounded-lg bg-error-container text-on-error-container text-sm">
+        <div className="mb-4 rounded-lg bg-error-container p-3 text-sm text-on-error-container">
           {wardErrorMessage(wardError)}
         </div>
       )}
@@ -53,7 +53,7 @@ export function LoginPage() {
         />
 
         {loginMutation.isError && (
-          <div className="p-3 rounded-lg bg-error-container text-on-error-container text-sm">
+          <div className="rounded-lg bg-error-container p-3 text-sm text-on-error-container">
             Email sau parolă incorectă. Te rugăm să încerci din nou.
           </div>
         )}
@@ -65,7 +65,7 @@ export function LoginPage() {
         {ward.data?.enabled && (
           <a
             href={wardStartUrl()}
-            className="block w-full text-center px-6 py-3 rounded-full font-semibold border-2 border-outline-variant hover:bg-surface-container-low transition-colors no-underline text-on-surface"
+            className="block w-full rounded-full border-2 border-outline-variant px-6 py-3 text-center font-semibold text-on-surface no-underline transition-colors hover:bg-surface-container-low"
           >
             Intră cu Ward
           </a>

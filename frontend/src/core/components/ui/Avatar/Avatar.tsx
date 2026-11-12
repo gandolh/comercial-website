@@ -37,7 +37,7 @@ export function Avatar({ src, name, size = "md", className = "" }: AvatarProps) 
 
   return (
     <div
-      className={`${base} bg-primary-fixed text-on-primary-fixed font-semibold`}
+      className={`${base} bg-primary-fixed font-semibold text-on-primary-fixed`}
       aria-label={name ? `Avatar pentru ${name}` : "Avatar utilizator"}
     >
       {name ? (

@@ -1,17 +1,15 @@
 export function ContactPage() {
   return (
-    <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-xl mx-auto">
-      <div className="max-w-3xl mx-auto space-y-12">
+    <main className="mx-auto max-w-screen-xl px-4 pt-28 pb-20 md:px-8">
+      <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
-          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Contact
-          </h1>
-          <p className="text-on-surface-variant text-lg">
+          <h1 className="font-headline text-4xl font-black text-on-surface">Contact</h1>
+          <p className="text-lg text-on-surface-variant">
             Suntem aici pentru a te ajuta. Alege canalul potrivit nevoii tale.
           </p>
         </header>
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid gap-6 sm:grid-cols-2">
           <ContactCard
             icon="support_agent"
             title="Suport general"
@@ -42,38 +40,34 @@ export function ContactPage() {
           />
         </div>
 
-        <section className="bg-surface-container rounded-2xl p-8 space-y-4">
-          <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Date de identificare
-          </h2>
-          <dl className="space-y-2 text-on-surface-variant text-sm leading-relaxed">
+        <section className="space-y-4 rounded-2xl bg-surface-container p-8">
+          <h2 className="font-headline text-xl font-bold text-on-surface">Date de identificare</h2>
+          <dl className="space-y-2 text-sm leading-relaxed text-on-surface-variant">
             <div className="flex gap-2">
-              <dt className="font-semibold text-on-surface min-w-24">Denumire:</dt>
+              <dt className="min-w-24 font-semibold text-on-surface">Denumire:</dt>
               <dd>SC PiațăRo SRL</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-semibold text-on-surface min-w-24">CUI:</dt>
+              <dt className="min-w-24 font-semibold text-on-surface">CUI:</dt>
               <dd>RO12345678</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-semibold text-on-surface min-w-24">Sediu:</dt>
+              <dt className="min-w-24 font-semibold text-on-surface">Sediu:</dt>
               <dd>București, România</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-semibold text-on-surface min-w-24">Reg. com.:</dt>
+              <dt className="min-w-24 font-semibold text-on-surface">Reg. com.:</dt>
               <dd>J40/1234/2024</dd>
             </div>
           </dl>
-          <p className="text-on-surface-variant text-sm mt-4">
+          <p className="mt-4 text-sm text-on-surface-variant">
             Informații obligatorii conform ANSPDCP și legislației privind comerțul electronic (Legea nr. 365/2002).
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Timp de răspuns
-          </h2>
-          <p className="text-on-surface-variant leading-relaxed">
+          <h2 className="font-headline text-xl font-bold text-on-surface">Timp de răspuns</h2>
+          <p className="leading-relaxed text-on-surface-variant">
             Ne străduim să răspundem la toate solicitările în termen de{" "}
             <strong className="text-on-surface">2 zile lucrătoare</strong>. Solicitările GDPR sunt procesate în termenul
             legal de 30 de zile. Program suport: Luni–Vineri, 09:00–18:00 (EET).
@@ -98,15 +92,15 @@ function ContactCard({
   href: string;
 }) {
   return (
-    <div className="bg-surface-container rounded-2xl p-6 space-y-3 hover:shadow-md transition-shadow">
-      <span className="material-symbols-outlined text-primary block" style={{ fontSize: "28px" }}>
+    <div className="space-y-3 rounded-2xl bg-surface-container p-6 transition-shadow hover:shadow-md">
+      <span className="material-symbols-outlined block text-primary" style={{ fontSize: "28px" }}>
         {icon}
       </span>
       <div>
         <h3 className="font-bold text-on-surface">{title}</h3>
-        <p className="text-on-surface-variant text-sm mt-1">{description}</p>
+        <p className="mt-1 text-sm text-on-surface-variant">{description}</p>
       </div>
-      <a href={href} className="text-primary text-sm font-medium hover:underline break-all">
+      <a href={href} className="text-sm font-medium break-all text-primary hover:underline">
         {contact}
       </a>
     </div>

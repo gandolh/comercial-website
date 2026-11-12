@@ -14,21 +14,21 @@ export function QuotaCard({ count, limit, resetsAt }: QuotaCardProps) {
   const resetDate = new Date(resetsAt);
 
   return (
-    <div className="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant">
-      <div className="flex justify-between items-start mb-6">
+    <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6">
+      <div className="mb-6 flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-bold text-on-surface mb-1">{t("dashboard.quota.title", "Limita săptămânală")}</h3>
+          <h3 className="mb-1 text-lg font-bold text-on-surface">{t("dashboard.quota.title", "Limita săptămânală")}</h3>
           <p className="text-sm text-on-surface-variant">
             {t("dashboard.quota.subtitle", "Anunțuri postate în ultimele 7 zile")}
           </p>
         </div>
-        <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">
+        <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
           {count} / {limit}
         </div>
       </div>
 
       <div className="space-y-4">
-        <div className="h-3 bg-surface-container-high rounded-full overflow-hidden">
+        <div className="h-3 overflow-hidden rounded-full bg-surface-container-high">
           <div
             className={`h-full transition-all duration-500 ${count >= limit ? "bg-error" : "bg-primary"}`}
             style={{ width: `${percentage}%` }}

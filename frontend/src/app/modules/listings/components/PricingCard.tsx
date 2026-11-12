@@ -60,17 +60,12 @@ export function PricingCard({
   };
 
   return (
-    <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-[0_12px_48px_rgba(0,0,0,0.04)] space-y-8">
+    <div className="space-y-8 rounded-2xl bg-surface-container-lowest p-8 shadow-card">
       <div className="flex justify-end">
         <FavoriteToggle listingId={listingId} />
       </div>
       <div className="hidden lg:block">
-        <h1
-          className="text-2xl font-extrabold tracking-tight text-on-surface mb-2"
-          style={{ fontFamily: "var(--font-headline)" }}
-        >
-          {title}
-        </h1>
+        <h1 className="mb-2 font-headline text-2xl font-extrabold tracking-tight text-on-surface">{title}</h1>
         <div className="text-4xl font-black text-primary">{formattedPrice}</div>
       </div>
 
@@ -78,7 +73,7 @@ export function PricingCard({
         {isOwner ? (
           <Link
             to={`/anunturi/${listingId}/editeaza`}
-            className="w-full bg-primary text-on-primary py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all no-underline"
+            className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary no-underline transition-all hover:opacity-90 active:scale-95"
           >
             <span className="material-symbols-outlined">edit</span>
             {t("listing.actions.edit")}
@@ -88,7 +83,7 @@ export function PricingCard({
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className="w-full bg-primary text-on-primary py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
             >
               <span className="material-symbols-outlined">download</span>
               {isDownloading ? "Se descarcă..." : t("listing.download.button")}
@@ -101,7 +96,7 @@ export function PricingCard({
                 }
                 setIsContactModalOpen(true);
               }}
-              className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all"
+              className="flex w-full items-center justify-center gap-3 rounded-full bg-secondary-container py-4 text-lg font-bold text-on-secondary-container transition-all hover:opacity-90 active:scale-95"
             >
               <span className="material-symbols-outlined">mail</span>
               {t("listing.download.contactAuthor")}
@@ -117,7 +112,7 @@ export function PricingCard({
                 }
                 setIsContactModalOpen(true);
               }}
-              className="w-full bg-primary text-on-primary py-4 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 active:scale-95 transition-all"
+              className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary transition-all hover:opacity-90 active:scale-95"
             >
               <span className="material-symbols-outlined">chat</span>
               Trimite Mesaj
@@ -133,14 +128,14 @@ export function PricingCard({
         onClose={() => setIsContactModalOpen(false)}
       />
 
-      <div className="flex items-center justify-between pt-4 border-t border-surface-container-high">
+      <div className="flex items-center justify-between border-t border-surface-container-high pt-4">
         {isDigitalAsset && (
-          <div className="flex items-center gap-2 text-outline text-sm">
+          <div className="flex items-center gap-2 text-sm text-outline">
             <span className="material-symbols-outlined text-[18px]">download</span>
             {t("listing.specs.downloads", { count: downloadCount })}
           </div>
         )}
-        <div className="flex items-center gap-2 text-outline text-sm ml-auto">
+        <div className="ml-auto flex items-center gap-2 text-sm text-outline">
           <span className="material-symbols-outlined text-[18px]">visibility</span>
           {viewCount} vizualizări
         </div>

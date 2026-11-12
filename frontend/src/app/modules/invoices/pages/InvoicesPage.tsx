@@ -30,14 +30,12 @@ export function InvoicesPage() {
 
   return (
     <main className="mt-24 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="mx-auto max-w-4xl px-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-3xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-              {t("invoices.page.title", "Facturi")}
-            </h1>
-            <p className="text-on-surface-variant text-sm mt-1">
+            <h1 className="font-headline text-3xl font-black text-on-surface">{t("invoices.page.title", "Facturi")}</h1>
+            <p className="mt-1 text-sm text-on-surface-variant">
               {t("invoices.page.subtitle", "Generează și descarcă facturi PDF și e-Factura XML.")}
             </p>
           </div>
@@ -72,11 +70,11 @@ export function InvoicesPage() {
         {/* List view */}
         {view === "list" && (
           <section>
-            <h2 className="text-xl font-bold text-on-surface mb-4">{t("invoices.list.heading", "Facturi generate")}</h2>
+            <h2 className="mb-4 text-xl font-bold text-on-surface">{t("invoices.list.heading", "Facturi generate")}</h2>
             {invoicesLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-16 bg-surface-container-low animate-pulse rounded-xl" />
+                  <div key={i} className="h-16 animate-pulse rounded-xl bg-surface-container-low" />
                 ))}
               </div>
             )}
@@ -93,19 +91,19 @@ export function InvoicesPage() {
         {/* Create view */}
         {view === "create" && (
           <section>
-            <h2 className="text-xl font-bold text-on-surface mb-4">{t("invoices.create.heading", "Factură nouă")}</h2>
+            <h2 className="mb-4 text-xl font-bold text-on-surface">{t("invoices.create.heading", "Factură nouă")}</h2>
             {!profileLoading && <CreateInvoiceForm profile={profile} onCreated={() => setView("list")} />}
-            {profileLoading && <div className="h-8 w-48 bg-surface-container-low animate-pulse rounded" />}
+            {profileLoading && <div className="h-8 w-48 animate-pulse rounded-sm bg-surface-container-low" />}
           </section>
         )}
 
         {/* Profile view */}
         {view === "profile" && (
           <section>
-            <h2 className="text-xl font-bold text-on-surface mb-2">
+            <h2 className="mb-2 text-xl font-bold text-on-surface">
               {t("invoices.profile.heading", "Profilul de facturare")}
             </h2>
-            <p className="text-on-surface-variant text-sm mb-4">
+            <p className="mb-4 text-sm text-on-surface-variant">
               {t(
                 "invoices.profile.description",
                 "Datele salvate aici vor pre-completa automat câmpurile furnizorului la fiecare factură nouă.",
@@ -114,7 +112,7 @@ export function InvoicesPage() {
             {profileLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-10 bg-surface-container-low animate-pulse rounded-xl" />
+                  <div key={i} className="h-10 animate-pulse rounded-xl bg-surface-container-low" />
                 ))}
               </div>
             )}

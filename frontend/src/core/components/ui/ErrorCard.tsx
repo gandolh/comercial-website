@@ -5,15 +5,15 @@ interface ErrorCardProps {
 
 export function ErrorCard({ message, onRetry }: ErrorCardProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+    <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
       <span className="material-symbols-outlined text-error" style={{ fontSize: "48px" }}>
         error
       </span>
-      <p className="text-on-surface font-medium">{message ?? "A apărut o eroare. Încearcă din nou."}</p>
+      <p className="font-medium text-on-surface">{message ?? "A apărut o eroare. Încearcă din nou."}</p>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="bg-primary text-on-primary px-6 py-2 rounded-full font-bold hover:bg-primary-container transition-colors"
+          className="rounded-full bg-primary px-6 py-2 font-bold text-on-primary transition-colors hover:bg-primary-container"
         >
           Încearcă din nou
         </button>

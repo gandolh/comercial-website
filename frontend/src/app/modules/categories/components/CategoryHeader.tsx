@@ -12,13 +12,11 @@ export function CategoryHeader({ slug, totalCount, isLoading }: CategoryHeaderPr
 
   return (
     <div>
-      <h1 className="text-3xl font-black text-on-surface tracking-tight" style={{ fontFamily: "var(--font-headline)" }}>
-        {label}
-      </h1>
+      <h1 className="font-headline text-3xl font-black tracking-tight text-on-surface">{label}</h1>
       {isLoading ? (
-        <Skeleton className="h-4 w-48 mt-1" />
+        <Skeleton className="mt-1 h-4 w-48" />
       ) : (
-        <p className="text-outline font-medium mt-1">{totalCount ?? 0} de anunțuri găsite</p>
+        <p className="mt-1 font-medium text-outline">{totalCount ?? 0} de anunțuri găsite</p>
       )}
     </div>
   );

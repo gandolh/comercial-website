@@ -7,7 +7,7 @@ import { useDraft } from "../hooks/useDraft";
 function LoadingScreen() {
   return (
     <main className="mt-24 flex-1">
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center space-y-4">
+      <div className="mx-auto max-w-2xl space-y-4 px-6 py-24 text-center">
         <span className="material-symbols-outlined animate-spin text-primary" style={{ fontSize: "48px" }}>
           progress_activity
         </span>
@@ -42,16 +42,14 @@ export function CreateListingPage() {
   if (user && !user.email_verified) {
     return (
       <main className="mt-24 flex-1">
-        <div className="max-w-2xl mx-auto px-6 py-16 text-center space-y-6">
-          <h1 className="text-3xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
-            Verifică-ți emailul
-          </h1>
+        <div className="mx-auto max-w-2xl space-y-6 px-6 py-16 text-center">
+          <h1 className="font-headline text-3xl font-black">Verifică-ți emailul</h1>
           <p className="text-on-surface-variant">
             Pentru a posta un anunț trebuie să confirmi adresa de email. Verifică inbox-ul și apasă pe linkul de
             confirmare.
           </p>
           <button
-            className="px-6 py-3 rounded-full bg-primary text-on-primary font-semibold"
+            className="rounded-full bg-primary px-6 py-3 font-semibold text-on-primary"
             onClick={() => navigate("/verifica-email")}
           >
             Retrimite emailul de confirmare

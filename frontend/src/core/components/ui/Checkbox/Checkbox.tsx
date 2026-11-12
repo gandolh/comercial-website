@@ -20,7 +20,7 @@ export function Checkbox({ label, size = "md", className, boxClassName, ...props
     <BaseCheckbox.Root
       {...props}
       className={cn(
-        "flex shrink-0 cursor-pointer items-center justify-center rounded border border-outline bg-surface-container-lowest text-on-primary outline-none",
+        "flex shrink-0 cursor-pointer items-center justify-center rounded-sm border border-outline bg-surface-container-lowest text-on-primary outline-none",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         "data-checked:border-primary data-checked:bg-primary data-disabled:cursor-not-allowed data-disabled:opacity-50",
         SIZES[size],

@@ -48,7 +48,7 @@ export function Slider({
     <div className="space-y-3">
       {label && (
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-widest text-outline">{label}</span>
+          <span className="text-xs font-bold tracking-widest text-outline uppercase">{label}</span>
           <span className="text-xs font-medium text-on-surface-variant">
             {formatValue(local[0])} – {formatValue(local[1])}
           </span>
@@ -61,17 +61,17 @@ export function Slider({
         min={min}
         max={max}
         step={step}
-        className="flex w-full touch-none select-none flex-col"
+        className="flex w-full touch-none flex-col select-none"
       >
         <BaseSlider.Control className="flex w-full items-center py-1">
           <BaseSlider.Track className="relative h-1.5 w-full rounded-full bg-surface-container-highest">
             <BaseSlider.Indicator className="absolute h-full rounded-full bg-primary" />
             <BaseSlider.Thumb
-              className="size-4 rounded-full bg-white border-2 border-primary shadow-md hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary transition-transform cursor-grab active:cursor-grabbing"
+              className="size-4 cursor-grab rounded-full border-2 border-primary bg-surface-container-lowest shadow-md transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary active:cursor-grabbing"
               aria-label="Preț minim"
             />
             <BaseSlider.Thumb
-              className="size-4 rounded-full bg-white border-2 border-primary shadow-md hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary transition-transform cursor-grab active:cursor-grabbing"
+              className="size-4 cursor-grab rounded-full border-2 border-primary bg-surface-container-lowest shadow-md transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary active:cursor-grabbing"
               aria-label="Preț maxim"
             />
           </BaseSlider.Track>

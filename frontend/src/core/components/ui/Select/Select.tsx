@@ -21,7 +21,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className={fullWidth ? "w-full" : ""}>
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-on-surface-variant mb-1.5">
+          <label htmlFor={inputId} className="mb-1.5 block text-sm font-medium text-on-surface-variant">
             {label}
           </label>
         )}
@@ -34,9 +34,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               "w-full appearance-none rounded-xl bg-surface-container-high text-on-surface",
               "px-4 py-3 pr-10 leading-relaxed",
               "outline-none transition-all duration-200 cursor-pointer",
-              "focus:bg-surface-container-lowest focus:shadow-[0_0_0_1px_rgba(0,86,210,0.3)]",
+              "focus:bg-surface-container-lowest focus:shadow-focus",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              error ? "shadow-[0_0_0_1px_rgba(186,26,26,0.4)]" : "",
+              error ? "shadow-focus-error" : "",
               className,
             ]
               .filter(Boolean)
@@ -54,7 +54,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ))}
           </select>
           <span
-            className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl"
+            className="material-symbols-outlined pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xl text-on-surface-variant"
             aria-hidden="true"
           >
             expand_more

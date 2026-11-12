@@ -58,21 +58,21 @@ export function CityAutocomplete({
     >
       <Autocomplete.InputGroup className={`relative flex items-center gap-2 ${className}`}>
         {isFetching ? (
-          <span className="material-symbols-outlined text-outline shrink-0 animate-spin" style={{ fontSize: "20px" }}>
+          <span className="material-symbols-outlined shrink-0 animate-spin text-outline" style={{ fontSize: "20px" }}>
             progress_activity
           </span>
         ) : (
-          <span className="material-symbols-outlined text-outline shrink-0">location_on</span>
+          <span className="material-symbols-outlined shrink-0 text-outline">location_on</span>
         )}
         <Autocomplete.Input
-          className="bg-transparent border-none outline-none text-lg py-3 w-40 placeholder:text-outline text-on-surface"
+          className="w-40 border-none bg-transparent py-3 text-lg text-on-surface outline-none placeholder:text-outline"
           placeholder={placeholder}
           aria-label="Selectează orașul"
         />
         {inputValue && (
           <Autocomplete.Clear
             aria-label="Șterge locația"
-            className="flex items-center justify-center text-outline hover:text-on-surface transition-colors cursor-pointer"
+            className="flex cursor-pointer items-center justify-center text-outline transition-colors hover:text-on-surface"
           >
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
               close
@@ -83,7 +83,7 @@ export function CityAutocomplete({
 
       <Autocomplete.Portal>
         <Autocomplete.Positioner sideOffset={8} align="start">
-          <Autocomplete.Popup className="bg-surface-container-lowest rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-hidden min-w-[280px] max-h-72 overflow-y-auto outline-none">
+          <Autocomplete.Popup className="max-h-72 min-w-[280px] overflow-hidden overflow-y-auto rounded-xl bg-surface-container-lowest shadow-popup outline-none">
             <Autocomplete.Empty className="px-4 py-3 text-sm text-on-surface-variant">
               {isFetching ? "Se caută..." : "Niciun oraș găsit"}
             </Autocomplete.Empty>
@@ -92,7 +92,7 @@ export function CityAutocomplete({
                 <Autocomplete.Item
                   key={city}
                   value={city}
-                  className="flex items-center justify-between px-4 py-2.5 cursor-pointer text-sm text-on-surface hover:bg-surface-container-low data-[highlighted]:bg-surface-container-low transition-colors"
+                  className="flex cursor-pointer items-center justify-between px-4 py-2.5 text-sm text-on-surface transition-colors hover:bg-surface-container-low data-[highlighted]:bg-surface-container-low"
                 >
                   <span className="font-medium">{city}</span>
                 </Autocomplete.Item>

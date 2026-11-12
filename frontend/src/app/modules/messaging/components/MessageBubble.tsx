@@ -9,15 +9,15 @@ interface Props {
 
 export const MessageBubble: React.FC<Props> = ({ message, isMe }) => {
   return (
-    <div className={`flex flex-col mb-4 ${isMe ? "items-end" : "items-start"}`}>
+    <div className={`mb-4 flex flex-col ${isMe ? "items-end" : "items-start"}`}>
       <div
-        className={`max-w-[70%] p-3 rounded-2xl text-sm ${
-          isMe ? "bg-primary text-on-primary rounded-br-none" : "bg-surface-container text-on-surface rounded-bl-none"
+        className={`max-w-[70%] rounded-2xl p-3 text-sm ${
+          isMe ? "rounded-br-none bg-primary text-on-primary" : "rounded-bl-none bg-surface-container text-on-surface"
         }`}
       >
-        <p className="whitespace-pre-wrap break-words">{message.body}</p>
+        <p className="break-words whitespace-pre-wrap">{message.body}</p>
       </div>
-      <span className="text-[10px] text-on-surface-variant mt-1">{format(new Date(message.created_at), "HH:mm")}</span>
+      <span className="mt-1 text-[10px] text-on-surface-variant">{format(new Date(message.created_at), "HH:mm")}</span>
     </div>
   );
 };

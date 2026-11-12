@@ -45,46 +45,46 @@ export const ConversationPage: React.FC = () => {
 
   if (isLoading || !currentConversation) {
     return (
-      <div className="flex-1 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      <div className="flex flex-1 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="px-4 py-3 bg-surface-container-lowest border-b border-surface-container-low flex items-center gap-3">
+      <div className="flex items-center gap-3 border-b border-surface-container-low bg-surface-container-lowest px-4 py-3">
         <button
           onClick={() => navigate("/mesaje")}
           aria-label={t("common:messaging.back_to_messages")}
-          className="md:hidden p-2 hover:bg-surface-container rounded-full transition-colors text-on-surface-variant"
+          className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container md:hidden"
         >
           <span className="material-symbols-outlined text-xl">arrow_back</span>
         </button>
 
-        <div className="w-10 h-10 bg-surface-container rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-container">
           {currentConversation.counterparty.avatar_url ? (
             <img
               src={currentConversation.counterparty.avatar_url}
               alt={currentConversation.counterparty.display_name || ""}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <span className="text-on-surface-variant font-bold text-sm">
+            <span className="text-sm font-bold text-on-surface-variant">
               {(currentConversation.counterparty.display_name || "U").charAt(0).toUpperCase()}
             </span>
           )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <h2 className="text-sm font-bold font-[Manrope] text-on-surface truncate">
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate font-[Manrope] text-sm font-bold text-on-surface">
             {currentConversation.counterparty.display_name || t("common:messaging.unknown_user")}
           </h2>
           <div className="flex items-center gap-1 text-xs text-on-surface-variant">
             <span className="truncate">{currentConversation.listing.title}</span>
             <span>·</span>
-            <span className="font-semibold text-primary flex-shrink-0">
+            <span className="shrink-0 font-semibold text-primary">
               {currentConversation.listing.price_ron
                 ? formatPrice(currentConversation.listing.price_ron)
                 : t("common:listings.free")}
@@ -94,7 +94,7 @@ export const ConversationPage: React.FC = () => {
 
         <Link
           to={`/anunturi/${currentConversation.listing.id}`}
-          className="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container rounded-full transition-colors"
+          className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
           title={t("common:messaging.view_listing")}
         >
           <span className="material-symbols-outlined text-xl">info</span>
@@ -102,7 +102,7 @@ export const ConversationPage: React.FC = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col bg-surface-container-low">
+      <div className="flex flex-1 flex-col overflow-y-auto bg-surface-container-low p-4">
         {messages?.map((msg: MessageResponse) => (
           <MessageBubble key={msg.id} message={msg} isMe={msg.sender_id === user?.id} />
         ))}

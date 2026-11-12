@@ -28,17 +28,15 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
   const description = watch("description");
 
   return (
-    <form onSubmit={handleSubmit(onNext)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-black" style={{ fontFamily: "var(--font-headline)" }}>
-          Spune-ne mai multe
-        </h2>
+    <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
+      <div className="space-y-2 text-center">
+        <h2 className="font-headline text-2xl font-black">Spune-ne mai multe</h2>
         <p className="text-on-surface-variant">Un titlu clar și o descriere detaliată te ajută să vinzi mai repede.</p>
       </div>
 
       <div className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="title" className="block font-bold text-sm px-1">
+          <label htmlFor="title" className="block px-1 text-sm font-bold">
             Titlu anunț*
           </label>
           <div className="relative">
@@ -47,7 +45,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               id="title"
               type="text"
               placeholder="Ex: iPhone 13 Pro 128GB Stare Perfectă"
-              className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all ${
+              className={`w-full rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
                 errors.title ? "border-error" : "border-transparent focus:border-primary"
               }`}
             />
@@ -59,11 +57,11 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               {title.length}/200
             </span>
           </div>
-          {errors.title && <p className="text-error text-xs px-1">{errors.title.message}</p>}
+          {errors.title && <p className="px-1 text-xs text-error">{errors.title.message}</p>}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="description" className="block font-bold text-sm px-1">
+          <label htmlFor="description" className="block px-1 text-sm font-bold">
             Descriere*
           </label>
           <div className="relative">
@@ -72,7 +70,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               id="description"
               rows={6}
               placeholder="Descrie produsul tău în detaliu. Menționează starea, defectele (dacă există) și de ce îl vinzi."
-              className={`w-full bg-surface-container-low border-2 rounded-2xl px-5 py-4 outline-none transition-all resize-none ${
+              className={`w-full resize-none rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
                 errors.description ? "border-error" : "border-transparent focus:border-primary"
               }`}
             />
@@ -84,7 +82,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               {description.length}/5000
             </span>
           </div>
-          {errors.description && <p className="text-error text-xs px-1">{errors.description.message}</p>}
+          {errors.description && <p className="px-1 text-xs text-error">{errors.description.message}</p>}
         </div>
       </div>
 
@@ -93,13 +91,13 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 px-8 py-4 rounded-full font-bold border-2 border-outline-variant hover:bg-surface-container-low transition-colors"
+            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>
           <button
             type="submit"
-            className="flex-[2] px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md"
+            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Continuă"}
           </button>
@@ -110,7 +108,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="px-8 py-4 rounded-full font-bold bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container transition-all shadow-md"
+            className="rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Salvează"}
           </button>

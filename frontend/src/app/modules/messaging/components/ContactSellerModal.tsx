@@ -54,9 +54,9 @@ export const ContactSellerModal: React.FC<Props> = ({ listingId, sellerName, isO
           rows={4}
         />
 
-        {error && <p className="text-error text-sm">{error}</p>}
+        {error && <p className="text-sm text-error">{error}</p>}
 
-        <div className="flex gap-3 justify-end">
+        <div className="flex justify-end gap-3">
           <Button type="button" variant="ghost" onClick={onClose} disabled={isSending}>
             {t("common:actions.cancel")}
           </Button>

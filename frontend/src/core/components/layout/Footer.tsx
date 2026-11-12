@@ -12,13 +12,13 @@ export function Footer() {
     { key: "footer.contact", to: "/contact" },
   ];
   return (
-    <footer className="bg-surface-container mt-auto">
-      <div className="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 max-w-screen-2xl mx-auto">
+    <footer className="mt-auto bg-surface-container">
+      <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-8 px-12 py-16 md:flex-row">
         <div className="space-y-4 text-center md:text-left">
-          <div className="font-[Manrope] font-bold text-2xl text-on-surface">
+          <div className="font-[Manrope] text-2xl font-bold text-on-surface">
             Piață<span className="text-secondary">Ro</span>
           </div>
-          <p className="text-on-surface-variant text-sm tracking-wide">
+          <p className="text-sm tracking-wide text-on-surface-variant">
             {t("footer.copyright", { year: new Date().getFullYear() })}
           </p>
         </div>
@@ -28,7 +28,7 @@ export function Footer() {
             <Link
               key={to}
               to={to}
-              className="text-on-surface-variant font-medium hover:text-primary transition-colors no-underline"
+              className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
             >
               {t(key)}
             </Link>
@@ -37,7 +37,7 @@ export function Footer() {
 
         <div className="flex gap-4">
           <button
-            className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
             aria-label="Distribuie"
           >
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
@@ -45,7 +45,7 @@ export function Footer() {
             </span>
           </button>
           <button
-            className="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
             aria-label="Email"
           >
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>

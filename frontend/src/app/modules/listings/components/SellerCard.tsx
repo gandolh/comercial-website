@@ -28,27 +28,27 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
   };
 
   return (
-    <div className="bg-surface-container-low p-8 rounded-2xl space-y-6">
+    <div className="space-y-6 rounded-2xl bg-surface-container-low p-8">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <Link
             to={`/utilizator/${seller.id}`}
-            className="w-14 h-14 rounded-full bg-surface-container-highest overflow-hidden flex-shrink-0 hover:opacity-80 transition-opacity"
+            className="h-14 w-14 shrink-0 overflow-hidden rounded-full bg-surface-container-highest transition-opacity hover:opacity-80"
           >
             {seller.avatarUrl ? (
-              <img src={seller.avatarUrl} alt={sellerName} className="w-full h-full object-cover" />
+              <img src={seller.avatarUrl} alt={sellerName} className="h-full w-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-outline">
+              <div className="flex h-full w-full items-center justify-center text-outline">
                 <span className="material-symbols-outlined">person</span>
               </div>
             )}
           </Link>
           <div>
-            <Link to={`/utilizator/${seller.id}`} className="hover:text-primary transition-colors">
-              <h3 className="font-bold text-lg text-on-surface">{sellerName}</h3>
+            <Link to={`/utilizator/${seller.id}`} className="transition-colors hover:text-primary">
+              <h3 className="text-lg font-bold text-on-surface">{sellerName}</h3>
             </Link>
             {seller.phoneVerified && (
-              <div className="flex items-center gap-1.5 bg-tertiary-container/10 text-tertiary px-2 py-0.5 rounded-full w-fit mt-1">
+              <div className="mt-1 flex w-fit items-center gap-1.5 rounded-full bg-tertiary-container/10 px-2 py-0.5 text-tertiary">
                 <span
                   className="material-symbols-outlined text-[14px]"
                   style={{
@@ -57,12 +57,12 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
                 >
                   verified
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider">Vânzător Verificat</span>
+                <span className="text-[10px] font-bold tracking-wider uppercase">Vânzător Verificat</span>
               </div>
             )}
           </div>
         </div>
-        <Link to={`/utilizator/${seller.id}`} className="text-primary hover:underline font-bold text-sm">
+        <Link to={`/utilizator/${seller.id}`} className="text-sm font-bold text-primary hover:underline">
           Profil
         </Link>
       </div>
@@ -82,7 +82,7 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <span className="text-[10px] text-outline uppercase tracking-widest font-bold">Membru din</span>
+          <span className="text-[10px] font-bold tracking-widest text-outline uppercase">Membru din</span>
           <div className="font-semibold text-on-surface">
             {new Date(seller.memberSince).toLocaleDateString("ro-RO", {
               month: "long",
@@ -91,7 +91,7 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
           </div>
         </div>
         <div className="space-y-1">
-          <span className="text-[10px] text-outline uppercase tracking-widest font-bold">Anunțuri active</span>
+          <span className="text-[10px] font-bold tracking-widest text-outline uppercase">Anunțuri active</span>
           <div className="font-semibold text-on-surface">{seller.activeListingsCount} anunțuri</div>
         </div>
       </div>

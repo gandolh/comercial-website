@@ -17,20 +17,18 @@ export function FavoritesPage() {
 
   if (!isFetching && data && data.listings.length === 0) {
     return (
-      <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto">
-        <div className="max-w-2xl mx-auto text-center py-20 space-y-5">
+      <main className="mx-auto max-w-screen-2xl px-4 pt-28 pb-20 md:px-8">
+        <div className="mx-auto max-w-2xl space-y-5 py-20 text-center">
           <span className="material-symbols-outlined text-primary" style={{ fontSize: "56px" }}>
             favorite
           </span>
-          <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-            Nu ai încă anunțuri salvate
-          </h1>
+          <h1 className="font-headline text-4xl font-black text-on-surface">Nu ai încă anunțuri salvate</h1>
           <p className="text-on-surface-variant">
             Când salvezi anunțuri, le vei găsi aici pentru a reveni rapid la ele.
           </p>
           <Link
             to="/categorii"
-            className="inline-flex items-center justify-center bg-primary text-on-primary px-8 py-3 rounded-full font-bold no-underline"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 font-bold text-on-primary no-underline"
           >
             Explorează categoriile
           </Link>
@@ -40,12 +38,10 @@ export function FavoritesPage() {
   }
 
   return (
-    <main className="pt-28 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto space-y-8">
+    <main className="mx-auto max-w-screen-2xl space-y-8 px-4 pt-28 pb-20 md:px-8">
       <div>
-        <h1 className="text-4xl font-black text-on-surface" style={{ fontFamily: "var(--font-headline)" }}>
-          Favoritele mele
-        </h1>
-        <p className="text-on-surface-variant mt-2">{data?.totalCount ?? 0} anunțuri salvate</p>
+        <h1 className="font-headline text-4xl font-black text-on-surface">Favoritele mele</h1>
+        <p className="mt-2 text-on-surface-variant">{data?.totalCount ?? 0} anunțuri salvate</p>
       </div>
 
       {isError ? (
