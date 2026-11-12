@@ -1,7 +1,9 @@
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import type { RouteRegistrar, AppContext } from "../../context.js";
-import { AppError, newMessageEmail } from "@my-olx/core";
+import type { AppContext } from "../../context.js";
+import { AppError, fixedValidationMessage, newMessageEmail } from "@my-olx/core";
 import { requireUserId } from "@my-olx/core";
+import { conversationSummarySchema, messageSchema, unreadCountSchema } from "./schemas.js";
 
 /**
  * Helper to construct image URL from S3 key.
@@ -26,6 +28,11 @@ const createConversationSchema = z.object({
 const createMessageSchema = z.object({
   body: z.string().min(1).max(2000),
 });
+
+const idParamsSchema = z.object({ id: z.string() });
+
+// Any invalid message body answers this one message.
+const invalidBody = fixedValidationMessage("body must be 1-2000 characters");
 
 /**
  * Fire-and-forget: send an email to the counterparty of a conversation when a
@@ -84,22 +91,20 @@ async function sendNewMessageNotification(
   }
 }
 
-export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
+export const messagingRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   // POST /listings/:id/conversations — start a conversation
-  app.post<{ Params: { id: string }; Body: unknown }>(
+  app.post(
     "/listings/:id/conversations",
-    { preHandler: (app as any).authenticate },
+    {
+      preHandler: app.authenticate,
+      schema: { params: idParamsSchema, body: createConversationSchema, response: { 200: conversationSummarySchema } },
+      schemaErrorFormatter: invalidBody,
+    },
     async (request, reply) => {
       const buyerId = requireUserId(request);
       const listingId = request.params.id;
 
-      // Validate body
-      const bodyResult = createConversationSchema.safeParse(request.body);
-      if (!bodyResult.success) {
-        throw AppError.validation("body must be 1-2000 characters");
-      }
-
-      const { body } = bodyResult.data;
+      const { body } = request.body;
 
       // Fetch the listing
       const listing = await ctx.db
@@ -179,25 +184,29 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // GET /conversations — list conversations for the user
-  app.get("/conversations", { preHandler: (app as any).authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
+  app.get(
+    "/conversations",
+    { preHandler: app.authenticate, schema: { response: { 200: z.array(conversationSummarySchema) } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
 
-    const conversations = await ctx.db
-      .selectFrom("conversations")
-      .select("id")
-      .where((eb) => eb.or([eb("buyer_id", "=", userId), eb("seller_id", "=", userId)]))
-      .orderBy("last_message_at", "desc")
-      .execute();
+      const conversations = await ctx.db
+        .selectFrom("conversations")
+        .select("id")
+        .where((eb) => eb.or([eb("buyer_id", "=", userId), eb("seller_id", "=", userId)]))
+        .orderBy("last_message_at", "desc")
+        .execute();
 
-    const summaries = await Promise.all(conversations.map((c: any) => buildConversationSummary(ctx, c.id, userId)));
+      const summaries = await Promise.all(conversations.map((c) => buildConversationSummary(ctx, c.id, userId)));
 
-    return reply.send(summaries);
-  });
+      return reply.send(summaries);
+    },
+  );
 
   // GET /conversations/:id — get a specific conversation
-  app.get<{ Params: { id: string } }>(
+  app.get(
     "/conversations/:id",
-    { preHandler: (app as any).authenticate },
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: conversationSummarySchema } } },
     async (request, reply) => {
       const userId = requireUserId(request);
       const conversationId = request.params.id;
@@ -224,9 +233,9 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // GET /conversations/:id/messages — get messages in a conversation
-  app.get<{ Params: { id: string } }>(
+  app.get(
     "/conversations/:id/messages",
-    { preHandler: (app as any).authenticate },
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: z.array(messageSchema) } } },
     async (request, reply) => {
       const userId = requireUserId(request);
       const conversationId = request.params.id;
@@ -267,20 +276,18 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // POST /conversations/:id/messages — add a message to a conversation
-  app.post<{ Params: { id: string }; Body: unknown }>(
+  app.post(
     "/conversations/:id/messages",
-    { preHandler: (app as any).authenticate },
+    {
+      preHandler: app.authenticate,
+      schema: { params: idParamsSchema, body: createMessageSchema, response: { 200: messageSchema } },
+      schemaErrorFormatter: invalidBody,
+    },
     async (request, reply) => {
       const userId = requireUserId(request);
       const conversationId = request.params.id;
 
-      // Validate body
-      const bodyResult = createMessageSchema.safeParse(request.body);
-      if (!bodyResult.success) {
-        throw AppError.validation("body must be 1-2000 characters");
-      }
-
-      const { body } = bodyResult.data;
+      const { body } = request.body;
 
       // Check participant
       const conversation = await ctx.db
@@ -341,9 +348,9 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // POST /conversations/:id/read — mark messages as read
-  app.post<{ Params: { id: string } }>(
+  app.post(
     "/conversations/:id/read",
-    { preHandler: (app as any).authenticate },
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: z.object({}) } } },
     async (request, reply) => {
       const userId = requireUserId(request);
       const conversationId = request.params.id;
@@ -377,29 +384,37 @@ export const registerMessagingRoutes: RouteRegistrar = (app, ctx) => {
   );
 
   // GET /me/unread-count — get unread message count for the user
-  app.get("/me/unread-count", { preHandler: (app as any).authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
+  app.get(
+    "/me/unread-count",
+    { preHandler: app.authenticate, schema: { response: { 200: unreadCountSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
 
-    // Count messages in conversations where user is a participant, sender != me, read_at null
-    const result = await ctx.db
-      .selectFrom("messages")
-      .innerJoin("conversations", "messages.conversation_id", "conversations.id")
-      .select(({ fn }) => fn.countAll<number>().as("count"))
-      .where((eb) => eb.or([eb("conversations.buyer_id", "=", userId), eb("conversations.seller_id", "=", userId)]))
-      .where("messages.sender_id", "!=", userId)
-      .where("messages.read_at", "is", null as any)
-      .executeTakeFirst();
+      // Count messages in conversations where user is a participant, sender != me, read_at null
+      const result = await ctx.db
+        .selectFrom("messages")
+        .innerJoin("conversations", "messages.conversation_id", "conversations.id")
+        .select(({ fn }) => fn.countAll<number>().as("count"))
+        .where((eb) => eb.or([eb("conversations.buyer_id", "=", userId), eb("conversations.seller_id", "=", userId)]))
+        .where("messages.sender_id", "!=", userId)
+        .where("messages.read_at", "is", null as any)
+        .executeTakeFirst();
 
-    const count = result?.count || 0;
+      const count = result?.count || 0;
 
-    return reply.send({ count });
-  });
+      return reply.send({ count });
+    },
+  );
 };
 
 /**
  * Helper to build a ConversationSummary.
  */
-async function buildConversationSummary(ctx: AppContext, conversationId: string, userId: string): Promise<any> {
+async function buildConversationSummary(
+  ctx: AppContext,
+  conversationId: string,
+  userId: string,
+): Promise<z.infer<typeof conversationSummarySchema>> {
   const publicBaseUrl = ctx.config.publicBaseUrl;
 
   // Fetch conversation

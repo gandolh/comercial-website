@@ -1,1 +1,1 @@
-export { registerMessagingRoutes } from "./routes.js";
+export { messagingRoutes } from "./routes.js";
