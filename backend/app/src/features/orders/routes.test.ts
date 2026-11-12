@@ -94,3 +94,21 @@ describe("the fake purchase", () => {
     expect(res.statusCode).toBe(404);
   });
 });
+
+describe("the order's schema", () => {
+  it("answers a bad return URL 422 with zod's message, before it asks for a session (validation runs first)", async () => {
+    const t = await startTestApp();
+    for (const headers of [{}, t.bearer("someone")]) {
+      const res = await t.app.inject({
+        method: "POST",
+        url: "/orders",
+        headers,
+        payload: { listing_id: "any", return_url: "not a url" },
+      });
+      expect([res.statusCode, res.json()]).toEqual([422, { error: "Invalid URL" }]);
+    }
+    const signedOut = await t.app.inject({ method: "POST", url: "/orders", payload: { listing_id: "any" } });
+    expect(signedOut.statusCode).toBe(401);
+    await t.app.close();
+  });
+});

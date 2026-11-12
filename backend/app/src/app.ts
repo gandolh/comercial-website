@@ -17,7 +17,7 @@ import { registerAssetsRoutes } from "./features/assets/index.js";
 import { registerMessagingRoutes } from "./features/messaging/index.js";
 import { anafRoutes } from "./features/anaf/index.js";
 import { registerInvoicesRoutes } from "./features/invoices/index.js";
-import { registerOrdersRoutes } from "./features/orders/index.js";
+import { ordersRoutes } from "./features/orders/index.js";
 import { reviewsRoutes } from "./features/reviews/index.js";
 import { bundlesRoutes } from "./features/bundles/index.js";
 import { registerWardRoutes } from "./features/ward/index.js";
@@ -89,7 +89,7 @@ export async function buildApp(
   registerMessagingRoutes(app, ctx);
   await app.register(anafRoutes);
   registerInvoicesRoutes(app, ctx);
-  registerOrdersRoutes(app, ctx);
+  await app.register(ordersRoutes, ctx);
   await app.register(reviewsRoutes, ctx);
   await app.register(bundlesRoutes, ctx);
   await app.register(payoutsRoutes, ctx);
