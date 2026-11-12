@@ -1,60 +1,63 @@
-import type { FastifyInstance } from "fastify";
+import { hasZodFastifySchemaValidationErrors, ResponseSerializationError } from "@fastify/type-provider-zod";
+import type { FastifyPluginAsync } from "fastify";
+import fp from "fastify-plugin";
 import { ZodError } from "zod";
 import { AppError } from "../lib/api-error.js";
 
-/**
- * Check if an error is an AppError instance.
- */
-function isAppError(error: unknown): error is AppError {
-  return error instanceof AppError;
+/** The status a thrown value carries, if it carries one (Fastify's own errors and its plugins' do). */
+function statusOf(error: unknown): number | undefined {
+  if (typeof error !== "object" || error === null || !("statusCode" in error)) return undefined;
+  return typeof error.statusCode === "number" ? error.statusCode : undefined;
 }
 
 /**
- * Check if an error is a Zod validation error.
+ * The one error handler and the 404 handler, in the body the frontend reads: `{ error: "<message>" }`.
+ * Wrapped in fastify-plugin, so they are set on the root and every route inherits them. In order:
+ *
+ * 1. `AppError` answers its status with its public message (a route's fixed validation message included).
+ * 2. A request that fails its route schema answers 422 with the first issue's message.
+ * 3. A `ZodError` thrown in a handler answers 422 the same way.
+ * 4. A reply that doesn't match its response schema is a 500 `internal error`, logged, never shown.
+ * 5. A 4xx that Fastify or a plugin raised (bad JSON, a body too large, an unsupported media type, a
+ *    request that isn't multipart) keeps its status and its message, which were written for clients.
+ * 6. Anything else is a 500 `internal error`, logged with the request. A thrown message never reaches
+ *    the client.
  */
-function isZodError(error: unknown): error is ZodError<unknown> {
-  return error instanceof ZodError;
-}
-
-/**
- * Check if an error is a Fastify validation error.
- */
-function isFastifyValidationError(error: unknown): error is Error & { validation?: unknown } {
-  return error instanceof Error && typeof error === "object" && "validation" in error && error.validation !== undefined;
-}
-
-/**
- * Register the global error handler with Fastify.
- */
-export function registerErrorHandler(app: FastifyInstance): void {
-  app.setErrorHandler(async (error, request, reply) => {
-    // AppError — use its statusCode and publicMessage
-    if (isAppError(error)) {
-      return reply.code(error.statusCode).send({
-        error: error.publicMessage,
-      });
+const errorHandling: FastifyPluginAsync = async (app) => {
+  app.setErrorHandler((error: unknown, request, reply) => {
+    if (error instanceof AppError) {
+      if (error.statusCode >= 500) request.log.error({ err: error.cause ?? error }, error.publicMessage);
+      return reply.code(error.statusCode).send({ error: error.publicMessage });
     }
 
-    // Fastify validation error
-    if (isFastifyValidationError(error)) {
-      const message = error.message || "validation failed";
-      return reply.code(422).send({
-        error: message,
-      });
+    if (hasZodFastifySchemaValidationErrors(error)) {
+      return reply.code(422).send({ error: error.validation[0]?.message ?? "validation failed" });
     }
 
-    // Zod validation error
-    if (isZodError(error)) {
-      const message = error.issues[0]?.message || "validation failed";
-      return reply.code(422).send({
-        error: message,
-      });
+    if (error instanceof ZodError) {
+      return reply.code(422).send({ error: error.issues[0]?.message || "validation failed" });
     }
 
-    // Fallback: log and return 500
-    request.log.error(error);
-    return reply.code(500).send({
-      error: "internal error",
-    });
+    if (error instanceof ResponseSerializationError) {
+      // A handler sent what its response schema doesn't allow: a bug to fix, never the client's fault. The
+      // reply's own values stay out of the log.
+      request.log.error(
+        { code: error.code, method: error.method, url: error.url },
+        "the reply doesn't match its response schema",
+      );
+      return reply.code(500).send({ error: "internal error" });
+    }
+
+    const status = statusOf(error);
+    if (status !== undefined && status >= 400 && status < 500) {
+      return reply.code(status).send({ error: error instanceof Error ? error.message : "bad request" });
+    }
+
+    request.log.error({ err: error }, "unhandled error");
+    return reply.code(500).send({ error: "internal error" });
   });
-}
+
+  app.setNotFoundHandler((_request, reply) => reply.code(404).send({ error: "not found" }));
+};
+
+export const errors = fp(errorHandling, { name: "errors" });

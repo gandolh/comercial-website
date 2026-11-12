@@ -139,9 +139,9 @@ describe("JWT Auth", () => {
 describe("authenticationPreHandler behind the error handler", () => {
   async function appWithGuard() {
     const { default: Fastify } = await import("fastify");
-    const { registerErrorHandler } = await import("../plugins/errors.js");
+    const { errors } = await import("../plugins/errors.js");
     const app = Fastify();
-    registerErrorHandler(app);
+    await app.register(errors);
     app.get(
       "/secret",
       { preHandler: (req, reply) => authenticationPreHandler(req, reply, "test-secret") },

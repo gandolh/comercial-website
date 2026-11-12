@@ -43,3 +43,12 @@ export class AppError extends Error {
     return new AppError(500, "internal error", cause);
   }
 }
+
+/**
+ * A route's `schemaErrorFormatter` for a route that has always answered one fixed message when its input
+ * fails, whichever field it was ("Invalid query parameters"): the error plugin answers it as any AppError,
+ * 422 with that message. Routes without one answer the first issue's message.
+ */
+export function fixedValidationMessage(message: string): () => AppError {
+  return () => AppError.validation(message);
+}

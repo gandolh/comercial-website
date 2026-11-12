@@ -1,13 +1,7 @@
 // Builds the API: the Fastify app, its plugins and every route, on a prepared data folder (prepareStorage).
 // server.ts listens on it; tests build the same app on a temporary database (test-app.ts). It never listens.
-import {
-  createDb,
-  createEmailService,
-  registerAuth,
-  registerErrorHandler,
-  registerHttp,
-  StorageService,
-} from "@my-olx/core";
+import { createDb, createEmailService, registerAuth, errors, registerHttp, StorageService } from "@my-olx/core";
+import { serializerCompiler, validatorCompiler } from "@fastify/type-provider-zod";
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
 import type { Config } from "./config.js";
 import { getCorsOrigins } from "./config.js";
@@ -52,7 +46,13 @@ export async function buildApp(
   options: BuildAppOptions = {},
 ): Promise<{ app: FastifyInstance; ctx: AppContext }> {
   const app = Fastify(options.server);
-  registerErrorHandler(app);
+  // Zod checks every request and encodes every reply, in every plugin registered below.
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  // The error plugin first: it sets the error and 404 handlers on the root, so every plugin after it,
+  // and every route, answers in its body.
+  await app.register(errors);
   await registerHttp(app, { corsOrigins: getCorsOrigins(config.corsAllowedOrigins), uploadsDir: config.uploadsDir });
   registerAuth(app, config.jwtSecret);
 
