@@ -211,3 +211,21 @@ unlayered, with its comment. A Light / Dark / System switch sits in the footer (
 first visit light, kept in `localStorage`). `check-base-ui` went from 2 errors and 1 warning to 0 and runs
 strict. Outcome note, counts and deviations in [brief 12](briefs/done/12-base-ui-by-the-conventions.md).
 
+
+## [2026-11-12] done | Brief 13 — The server in the house code structure
+
+The backend follows the `code-structure` skill. zod 3.24.1 → 4.6.7. `app/src/config.ts` is the one reader of
+the environment (`JWT_SECRET` required, in a container too); `server.ts` listens with close-with-grace,
+`connectionTimeout` 10 s, `keepAliveTimeout` 125 s and no whole-request timeout (the 500 MB uploads);
+`app.ts` builds. `core` is `plugins/` (errors, http, auth, each a `fastify-plugin`), `lib/` and `db/`; the app
+is `features/<name>/`, with the stores several features share in `db/`. Every JSON route declares zod schemas
+with a response schema through `@fastify/type-provider-zod` 1.0.3; two file streams, the invoice PDF and XML
+and the two Ward redirects declare inputs only. `check-structure` went from 116 errors to 0 and runs strict.
+**Before and after:** 927 replies captured through `inject()` on a seeded database, signed out and as three
+users. Every success body is byte-identical, so no field was dropped (no leak found). Status changes: 77
+cells 401 → 422 and 15 cells 403 → 422 on invalid input (validation before `authenticate`, decision 12), and
+Fastify's own 4xx keep their status (bad JSON, an empty JSON body, 415, 413 and a JSON post to an upload route
+answered 500). Error text: zod 4's wording; orders, bundles, invoices and reviews send the first issue's
+message instead of zod's issue list as JSON; an unknown route answers `{ error: "not found" }`. Tests 160 → 187.
+Outcome note, the access matrix and the deviations in
+[brief 13](briefs/done/13-the-server-in-the-code-structure.md).

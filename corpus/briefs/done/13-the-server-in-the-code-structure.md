@@ -302,3 +302,109 @@ Follow `migrating-a-server.md`. One commit per step. After each, `npm run check`
 - Brief 11 turned `erasableSyntaxOnly` on, so the seven classes with parameter properties are already rewritten when this brief moves them.
 - The skills library should hear about this repo's two additions to the estate facts: a shared plugin library with a single consumer, and an error handler that answers 500 to Fastify's own 4xx.
 - The owner's deploy needs nothing: the `CMD`, the port and the data folder do not change. If the owner chooses to fold `core` into `app` (decision 1), the Dockerfile's `COPY backend/core` lines (`infrastructure/Dockerfile:39, 47, 58, 85-86`) go with it, and that is part of this brief.
+
+## Outcome
+
+Built on 2026-11-12 on `main`, local commits `16675a6` to `7223e90`, then this closeout. Ready for deploy.
+
+**The steps, in order.** zod 4.6.7 (`16675a6`). `config.ts`, `app.ts`, `startup/prepare-storage.ts` and
+close-with-grace (`8cd963c`). The error handler's file to `plugins/` (`1f0f606`), `AppError` cut to `lib/`
+(`1365b3b`), the error plugin with the 4xx fix and the provider's compilers (`b74c5b9`). The sign-in code:
+`cbc44fa` is only `git mv` of `auth/index.ts` to `plugins/auth.ts` plus import paths; `0987e6c` cuts the token
+and Argon2 code into `lib/tokens.ts` verbatim (a sorted `comm` of the diff's removed and added lines shows only
+import lines); `21ac845` changes only how the `authenticate` decorator is registered (a `fastify-plugin` with
+`{ secret }`) and moves `requireUserId` beside it; the preHandler's body is unchanged. `58719ee` later moves the
+login route's parsing into its schema. Feature folders (`e79975c`). Schemas, one commit per feature: health and
+anaf, payouts, bundles, reviews, favorites, orders, one listing card schema, messaging, images, assets, users,
+auth, invoices, listings, ward. Strict (`066ed90`), docs (`db187c6`), one more test (`7223e90`).
+
+**check-structure** (strict, for the library's brief 16 table).
+
+| | Errors | Warnings |
+|---|---|---|
+| Before | 116: rule 2 twice, rule 3 22 times, rule 6 92 times | 5 (rule 11) |
+| After | 0 | 5 (rule 11: `db/listings-store.ts`, and the invoices, listings, messaging and users routes) |
+
+`scripts/conventions.json` holds ten structure exceptions, each with its reason: `core` has no `app.ts`
+(decision 1), `config.ts` reads `NODE_ENV` for the dev seed (decision 8), the `authenticate` decorator
+(decision 6), the `startTestApp` name (decision 7), and the six routes with no response schema.
+
+**Acceptance greps.** No `.parse(request.` or `.safeParse(request.`; no `request.query as` in ward;
+`process.env` and `NODE_ENV` only in `config.ts`; `n/no-process-env` is an error; `requestTimeout` appears in
+neither `server.ts` nor `app.ts`. Every JSON route has a `response` schema; the gap is the six exempt routes
+and `POST /auth/register`, which only throws its 403. dependency-cruiser passes, and fails on a deliberate
+import of `features/orders/service.js` from `features/reviews/`.
+
+**The access matrix holds.** 927 replies captured with `inject()` on a seeded database (the dev seed and the
+samples), every call signed out, as a buyer, as a seller and as a third user, including bad input on every
+body and query route, CORS, `/uploads/`, Fastify's own errors and the Ward routes. Captured before any change
+and after every step. No cell became 2xx and none became 500. The only status changes:
+- 77 cells 401 → 422 and 15 cells 403 → 422, all on invalid input: validation runs before `authenticate`
+  and before the handlers' own ownership checks (decision 12). The 403s: a non-buyer or the seller posting a
+  bad review (9), a non-owner patching a listing with a bad body (6). A bad review body on a missing listing
+  would now answer 422, not 404 (not captured).
+- Fastify's own 4xx keep their status: bad JSON and an empty JSON body 400, unsupported media type 415, a
+  body over the limit 413, a JSON post to an upload route 406. All five answered 500.
+
+**The JSON comparison.** Every success body is byte-identical: no field was dropped, so no leak was found by
+the capture. The error bodies that changed: zod 4's default wording (174 bodies at the zod commit); orders,
+bundles, invoices and reviews sent zod's whole issue list as JSON and now send the first issue's message;
+with no body at all the message says "expected object, received null"; an unknown route answers
+`{ error: "not found" }` instead of Fastify's own body. The fixed messages stay ("Invalid query parameters",
+"Invalid request body", "request_id is required", "body must be 1-2000 characters"), through a route-level
+`schemaErrorFormatter`. The frontend shows `.error` only in `BuyButton` and `ReviewsSection`, whose bodies the
+UI builds valid, so no screen shows the new text in normal use. The tests: one column added to a stored row is
+stripped from the reply, and a stored value the schema refuses answers a 500 with no detail.
+
+**Tests.** 187 in 27 files (160 in 18 before), every old assertion unchanged. New: the error plugin (AppError,
+422 messages, a fixed message, bad JSON 400, 415, a thrown error and a bad reply 500, the 404 body),
+`config.ts` (no `JWT_SECRET` in production, `LOG_LEVEL`, the data paths, the owner and dev-seed settings),
+a 422-before-401 test in payouts, bundles, reviews, orders, messaging, images, users, auth, invoices and
+listings, reviews' 204, ward's repeated `link` and error callback, the health check and bad JSON through the
+whole app, and the two reply-schema tests.
+
+**Checks run.** `npm run check` exit 0 at the structural commits and at the end; per feature, the backend
+typecheck, ESLint on the feature, its tests and the whole vitest run. `npm test` in `backend/` with both
+`dist/` folders deleted passes. `npm run build` writes `backend/app/dist/server.js`. The built server on a real
+socket, from a scratch folder with no `.env` and every setting pinned: no `JWT_SECRET` exits 1 printing
+`JWT_SECRET environment variable is required`; `/health` 200; `/orders` signed out 401; bad JSON 400; SIGTERM
+exits 0 in 0.02 s, read from node's own PID.
+
+**Checks skipped.** `docker build -f infrastructure/Dockerfile .` and the container's health check: local
+Docker gives an I/O error on builds. They are owner checks after the deploy. The Dockerfile needs no change:
+the `CMD` is still `app/dist/server.js`, migrations resolve from `app/dist/startup/` to the same folder, and
+its `test-app.*` delete matches `testing/test-app.js`.
+
+**Deviations.**
+- **Four stores live in `app/src/db/`** (`listings-store.ts`, `assets-store.ts`, `reviews-store.ts`,
+  `bundles-store.ts`, with the listings and reviews store tests), not in their feature folders. Listings reads
+  the assets and reviews stores, and assets reads the listings and bundles stores, so feature folders would
+  close import cycles (Q54). Only `features/auth/store.ts` is a feature store.
+- **Six exempt routes, not nine.** The three multipart uploads answer JSON, so they have response schemas.
+- **`requireUserId`** moved from `app/src/auth-user.ts` into `core/src/plugins/auth.ts`: it takes a
+  `FastifyRequest`, which `lib/` may not import.
+- **The 404 handler** answers `{ error: "not found" }` (the skill's rule 8).
+- **`config.ts`** keeps the lenient `PORT` and `JWT_EXPIRY_SECONDS` parse (a bad value falls back to the
+  default), because an existing test pins it. `LOG_LEVEL` is now checked, and `TRUSTED_PROXIES` (default
+  `loopback`) is new; nothing reads `request.ip`, so it only shows in the logs. `migrate` no longer needs
+  `JWT_SECRET`.
+- **The reminder job** returns a stop function (it lost its interval handle before); the app's `onClose`
+  stops it and destroys the database.
+- **`core`'s package `exports`** keep only `"."`.
+- **The test app** runs with no logger.
+
+**For later.** Decision 10's count: 115 `ctx.db` references remain in `features/*/routes.ts` (SQL in the
+handlers, rule 7). Found while writing the schemas, kept as they were: the conversation summary answers the
+other party's `email` and `phone`, and its listing and counterparty flags as stored 0/1 (messaging has its
+own schema for them); the avatar upload's `public_url` has no `/uploads/` segment; the asset upload answers
+the storage key `s3_key`. `toOrderResponse`, `toInvoiceResponse` and `toAssetResponse` take `any`, so their
+schemas were checked against `db/schema.ts` by hand.
+
+**Owner steps.**
+1. `npm ci` in this checkout's `backend/` (zod 4.6.7, the type provider and its peers, `fastify-plugin`,
+   `close-with-grace`).
+2. From the vps-deploy checkout: `node cli.ts piataro server`.
+3. The API container turns healthy, and `docker stop` on it ends at once. Signed in, open Comenzile mele,
+   Facturi, Mesaje, Câștiguri and Setări once: a stored value outside a response schema would answer 500 there
+   while `/health` stays green.
+4. Decision 1 is asked on the board: keep `core` as a package, or fold it into `app`.
