@@ -1,12 +1,13 @@
 import "@fastify/multipart";
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { sql } from "kysely";
+import { z } from "zod";
 import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
-import type { RouteRegistrar, AppContext } from "../../context.js";
+import type { AppContext } from "../../context.js";
 import { AssetsRepository } from "../../db/assets-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 import { hasPaidOrder, isFree } from "../orders/index.js";
 import { BundlesRepository } from "../../db/bundles-store.js";
-import type { FastifyInstance } from "fastify";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
@@ -79,16 +80,41 @@ function toAssetResponse(asset: any): AssetResponse {
   };
 }
 
+const listingParamsSchema = z.object({ id: z.string() });
+const assetParamsSchema = z.object({ id: z.string(), asset_id: z.string() });
+
+// ─── Reply schemas: output only ──────────────────────────────────────────────
+
+/** The uploaded asset, as toAssetResponse builds it. */
+const assetSchema = z.object({
+  id: z.string(),
+  listing_id: z.string(),
+  s3_key: z.string(),
+  original_filename: z.string(),
+  file_size_bytes: z.number(),
+  content_type: z.string(),
+  position: z.number(),
+  created_at: z.string(),
+});
+
+/** An asset's public metadata, as the list answers it. */
+const assetMetadataSchema = z.object({
+  id: z.string(),
+  original_filename: z.string(),
+  file_size_bytes: z.number(),
+  content_type: z.string(),
+  position: z.number(),
+});
+
 function getFileExtension(filename: string): string {
   const parts = filename.split(".");
   return parts.length > 1 ? (parts[parts.length - 1]?.toLowerCase() ?? "") : "";
 }
 
-export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
+export const assetsRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   const assetsRepo = new AssetsRepository(ctx.db);
   const listingsRepo = new ListingsRepository(ctx.db);
   const bundlesRepo = new BundlesRepository(ctx.db);
-  const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
    * Checks whether a user has access to download a listing's assets.
@@ -111,147 +137,162 @@ export const registerAssetsRoutes: RouteRegistrar = (app, ctx) => {
 
   /**
    * POST /listings/:id/assets  (multipart upload)
-   * Upload and register a downloadable asset file.
+   * Upload and register a downloadable asset file. The body is multipart, read by request.file(): no body schema.
    */
-  app.post("/listings/:id/assets", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id: listingId } = request.params as { id: string };
+  app.post(
+    "/listings/:id/assets",
+    { preHandler: app.authenticate, schema: { params: listingParamsSchema, response: { 200: assetSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id: listingId } = request.params;
 
-    const listing = await listingsRepo.getById(listingId);
-    if (!listing) throw AppError.notFound();
-    if (listing.user_id !== userId) throw AppError.forbidden();
+      const listing = await listingsRepo.getById(listingId);
+      if (!listing) throw AppError.notFound();
+      if (listing.user_id !== userId) throw AppError.forbidden();
 
-    const assetCount = await assetsRepo.countAssetsByListingId(listingId);
-    if (assetCount >= 10) throw AppError.validation("Maxim 10 fișiere pe anunț");
+      const assetCount = await assetsRepo.countAssetsByListingId(listingId);
+      if (assetCount >= 10) throw AppError.validation("Maxim 10 fișiere pe anunț");
 
-    const data = await request.file();
-    if (!data) throw AppError.validation("no file provided");
+      const data = await request.file();
+      if (!data) throw AppError.validation("no file provided");
 
-    const originalFilename = data.filename || "file";
-    const contentType = data.mimetype || "application/octet-stream";
-    const key = listingAssetKey(listingId, originalFilename);
-    const dest = path.join(ctx.config.assetsDir, key);
-    await mkdir(path.dirname(dest), { recursive: true });
-    await pipeline(data.file, createWriteStream(dest));
+      const originalFilename = data.filename || "file";
+      const contentType = data.mimetype || "application/octet-stream";
+      const key = listingAssetKey(listingId, originalFilename);
+      const dest = path.join(ctx.config.assetsDir, key);
+      await mkdir(path.dirname(dest), { recursive: true });
+      await pipeline(data.file, createWriteStream(dest));
 
-    const fileStat = await stat(dest);
-    const fileSizeBytes = fileStat.size;
+      const fileStat = await stat(dest);
+      const fileSizeBytes = fileStat.size;
 
-    const maxPos = await assetsRepo.getMaxPositionForListing(listingId);
-    const nextPosition = maxPos + 1;
+      const maxPos = await assetsRepo.getMaxPositionForListing(listingId);
+      const nextPosition = maxPos + 1;
 
-    const asset = await assetsRepo.createAsset(
-      listingId,
-      key,
-      originalFilename,
-      fileSizeBytes,
-      contentType,
-      null,
-      nextPosition,
-    );
+      const asset = await assetsRepo.createAsset(
+        listingId,
+        key,
+        originalFilename,
+        fileSizeBytes,
+        contentType,
+        null,
+        nextPosition,
+      );
 
-    if (nextPosition === 0) {
-      const ext = getFileExtension(originalFilename);
-      await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, ext, fileSizeBytes);
-    }
+      if (nextPosition === 0) {
+        const ext = getFileExtension(originalFilename);
+        await listingsRepo.update(listingId, undefined, undefined, undefined, undefined, ext, fileSizeBytes);
+      }
 
-    return reply.send(toAssetResponse(asset));
-  });
+      return reply.send(toAssetResponse(asset));
+    },
+  );
 
   /**
    * DELETE /listings/:id/assets/:asset_id
    */
-  app.delete("/listings/:id/assets/:asset_id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id: listingId, asset_id: assetId } = request.params as { id: string; asset_id: string };
+  app.delete(
+    "/listings/:id/assets/:asset_id",
+    { preHandler: app.authenticate, schema: { params: assetParamsSchema, response: { 200: z.object({}) } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id: listingId, asset_id: assetId } = request.params;
 
-    const listing = await listingsRepo.getById(listingId);
-    if (!listing) throw AppError.notFound();
-    if (listing.user_id !== userId) throw AppError.forbidden();
+      const listing = await listingsRepo.getById(listingId);
+      if (!listing) throw AppError.notFound();
+      if (listing.user_id !== userId) throw AppError.forbidden();
 
-    const asset = await assetsRepo.getAssetById(assetId);
-    if (!asset || asset.listing_id !== listingId) throw AppError.notFound();
+      const asset = await assetsRepo.getAssetById(assetId);
+      if (!asset || asset.listing_id !== listingId) throw AppError.notFound();
 
-    await ctx.assetStorage.deleteObject(asset.s3_key);
-    await assetsRepo.deleteAsset(assetId);
+      await ctx.assetStorage.deleteObject(asset.s3_key);
+      await assetsRepo.deleteAsset(assetId);
 
-    return reply.send({});
-  });
+      return reply.send({});
+    },
+  );
 
   /**
    * GET /listings/:id/assets  (public — metadata only)
    */
-  app.get("/listings/:id/assets", async (request, reply) => {
-    const { id: listingId } = request.params as { id: string };
+  app.get(
+    "/listings/:id/assets",
+    { schema: { params: listingParamsSchema, response: { 200: z.array(assetMetadataSchema) } } },
+    async (request, reply) => {
+      const { id: listingId } = request.params;
 
-    const listing = await listingsRepo.getById(listingId);
-    if (!listing) throw AppError.notFound();
+      const listing = await listingsRepo.getById(listingId);
+      if (!listing) throw AppError.notFound();
 
-    const assets = await assetsRepo.getAssetsByListingId(listingId);
+      const assets = await assetsRepo.getAssetsByListingId(listingId);
 
-    return reply.send(
-      assets.map((asset) => ({
-        id: asset.id,
-        original_filename: asset.original_filename,
-        file_size_bytes: asset.file_size_bytes,
-        content_type: asset.content_type,
-        position: asset.position,
-      })),
-    );
-  });
+      return reply.send(
+        assets.map((asset) => ({
+          id: asset.id,
+          original_filename: asset.original_filename,
+          file_size_bytes: asset.file_size_bytes,
+          content_type: asset.content_type,
+          position: asset.position,
+        })),
+      );
+    },
+  );
 
   /**
    * GET /listings/:id/download  (protected — streams the primary asset file, legacy)
+   * A stream: its params are declared, and no response schema (one would serialise the file as JSON).
    */
-  app.get("/listings/:id/download", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id: listingId } = request.params as { id: string };
+  app.get(
+    "/listings/:id/download",
+    { preHandler: app.authenticate, schema: { params: listingParamsSchema } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id: listingId } = request.params;
 
-    const listing = await listingsRepo.getById(listingId);
-    if (!listing) throw AppError.notFound();
+      const listing = await listingsRepo.getById(listingId);
+      if (!listing) throw AppError.notFound();
 
-    // Payment gate: paid listings require a completed order or bundle purchase.
-    const allowed = await canDownloadListing(userId, listing);
-    if (!allowed) throw AppError.forbidden();
+      // Payment gate: paid listings require a completed order or bundle purchase.
+      const allowed = await canDownloadListing(userId, listing);
+      if (!allowed) throw AppError.forbidden();
 
-    const asset = await assetsRepo.getPrimaryAsset(listingId);
-    if (!asset) throw AppError.notFound();
+      const asset = await assetsRepo.getPrimaryAsset(listingId);
+      if (!asset) throw AppError.notFound();
 
-    await assetsRepo.recordDownload(listingId, userId, asset.id);
-    const updatedListing = await ctx.db
-      .updateTable("listings")
-      .set({ download_count: sql`download_count + 1` })
-      .where("id", "=", listingId)
-      .returning("download_count")
-      .executeTakeFirst();
+      await assetsRepo.recordDownload(listingId, userId, asset.id);
+      const updatedListing = await ctx.db
+        .updateTable("listings")
+        .set({ download_count: sql`download_count + 1` })
+        .where("id", "=", listingId)
+        .returning("download_count")
+        .executeTakeFirst();
 
-    // Notify owner on first download (fire-and-forget)
-    const newDownloadCount = updatedListing?.download_count ?? 1;
-    void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
+      // Notify owner on first download (fire-and-forget)
+      const newDownloadCount = updatedListing?.download_count ?? 1;
+      void sendFirstDownloadNotification(ctx, listingId, Number(newDownloadCount));
 
-    const filePath = path.join(ctx.config.assetsDir, asset.s3_key);
-    const fileStat = await stat(filePath).catch(() => null);
-    if (!fileStat) throw AppError.notFound();
+      const filePath = path.join(ctx.config.assetsDir, asset.s3_key);
+      const fileStat = await stat(filePath).catch(() => null);
+      if (!fileStat) throw AppError.notFound();
 
-    reply.header("Content-Disposition", `attachment; filename="${asset.original_filename}"`);
-    reply.header("Content-Type", asset.content_type);
-    reply.header("Content-Length", fileStat.size);
+      reply.header("Content-Disposition", `attachment; filename="${asset.original_filename}"`);
+      reply.header("Content-Type", asset.content_type);
+      reply.header("Content-Length", fileStat.size);
 
-    return reply.send(createReadStream(filePath));
-  });
+      return reply.send(createReadStream(filePath));
+    },
+  );
 
   /**
    * GET /listings/:id/assets/:asset_id/download  (protected — streams a specific asset file)
+   * A stream: its params are declared, and no response schema.
    */
   app.get(
     "/listings/:id/assets/:asset_id/download",
-    { preHandler: appWithAuth.authenticate },
+    { preHandler: app.authenticate, schema: { params: assetParamsSchema } },
     async (request, reply) => {
       const userId = requireUserId(request);
-      const { id: listingId, asset_id: assetId } = request.params as {
-        id: string;
-        asset_id: string;
-      };
+      const { id: listingId, asset_id: assetId } = request.params;
 
       const listing = await listingsRepo.getById(listingId);
       if (!listing) throw AppError.notFound();

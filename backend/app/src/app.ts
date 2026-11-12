@@ -13,7 +13,7 @@ import { registerUsersRoutes } from "./features/users/index.js";
 import { favoritesRoutes } from "./features/favorites/index.js";
 import { registerListingsRoutes } from "./features/listings/index.js";
 import { imagesRoutes } from "./features/images/index.js";
-import { registerAssetsRoutes } from "./features/assets/index.js";
+import { assetsRoutes } from "./features/assets/index.js";
 import { messagingRoutes } from "./features/messaging/index.js";
 import { anafRoutes } from "./features/anaf/index.js";
 import { registerInvoicesRoutes } from "./features/invoices/index.js";
@@ -85,7 +85,7 @@ export async function buildApp(
   await app.register(favoritesRoutes, ctx);
   registerListingsRoutes(app, ctx);
   await app.register(imagesRoutes, ctx);
-  registerAssetsRoutes(app, ctx);
+  await app.register(assetsRoutes, ctx);
   await app.register(messagingRoutes, ctx);
   await app.register(anafRoutes);
   registerInvoicesRoutes(app, ctx);
