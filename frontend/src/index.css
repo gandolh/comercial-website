@@ -60,6 +60,9 @@
   --color-inverse-on-surface: #f0f0fb;
   --color-inverse-primary: #b2c5ff;
 
+  /* The dim behind a dialog; its own role so the dark theme can use black */
+  --color-scrim: #2e3038;
+
   /* Typography */
   --font-headline: "Manrope", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -74,6 +77,12 @@
 
   /* Shadow tokens */
   --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.06);
+
+  /* Stacking: the navbar sits under every overlay, a menu or tooltip over a dialog, a toast over all */
+  --z-nav: 40;
+  --z-overlay: 50;
+  --z-popup: 60;
+  --z-toast: 70;
 }
 
 * {

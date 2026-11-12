@@ -45,7 +45,7 @@ export const ContactSellerModal: React.FC<Props> = ({ listingId, sellerName, isO
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <Textarea
-          autoFocus
+          data-autofocus
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t("common:messaging.contact_placeholder")}

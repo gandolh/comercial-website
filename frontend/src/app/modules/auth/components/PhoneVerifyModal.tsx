@@ -93,7 +93,7 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
-            autoFocus
+            data-autofocus
             fullWidth
           />
 
@@ -127,7 +127,7 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
               if (val.length <= 6) setCode(val);
             }}
             required
-            autoFocus
+            data-autofocus
             className="text-center text-2xl tracking-[0.5em] font-mono"
             fullWidth
           />
