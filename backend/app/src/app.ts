@@ -18,7 +18,7 @@ import { registerMessagingRoutes } from "./features/messaging/index.js";
 import { anafRoutes } from "./features/anaf/index.js";
 import { registerInvoicesRoutes } from "./features/invoices/index.js";
 import { registerOrdersRoutes } from "./features/orders/index.js";
-import { registerReviewsRoutes } from "./features/reviews/index.js";
+import { reviewsRoutes } from "./features/reviews/index.js";
 import { bundlesRoutes } from "./features/bundles/index.js";
 import { registerWardRoutes } from "./features/ward/index.js";
 import { payoutsRoutes } from "./features/payouts/index.js";
@@ -90,7 +90,7 @@ export async function buildApp(
   await app.register(anafRoutes);
   registerInvoicesRoutes(app, ctx);
   registerOrdersRoutes(app, ctx);
-  registerReviewsRoutes(app, ctx);
+  await app.register(reviewsRoutes, ctx);
   await app.register(bundlesRoutes, ctx);
   await app.register(payoutsRoutes, ctx);
   const ward = options.ward === undefined ? await wardClientFrom(config.ward) : (options.ward ?? undefined);

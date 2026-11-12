@@ -1,1 +1,1 @@
-export { registerReviewsRoutes } from "./routes.js";
+export { reviewsRoutes } from "./routes.js";
