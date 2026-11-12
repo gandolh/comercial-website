@@ -3,8 +3,8 @@ import Database from "better-sqlite3";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { seedSamples, SAMPLE_EXPIRES_AT } from "./seed-samples.js";
-import { startTestApp } from "./test-app.js";
-import { ListingsRepository } from "./repositories/listings.repo.js";
+import { startTestApp } from "./testing/test-app.js";
+import { ListingsRepository } from "./db/listings-store.js";
 
 type TestApp = Awaited<ReturnType<typeof startTestApp>>;
 

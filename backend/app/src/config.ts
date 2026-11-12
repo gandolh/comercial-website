@@ -8,10 +8,10 @@ import { wardClientOptionsFromEnv } from "../vendor/ward/ward-auth.js";
 import type { WardClientOptions } from "../vendor/ward/ward-auth.js";
 
 /** backend/.env, two levels up from app/src (dev) and from app/dist (a build), never from the working directory. */
-export const ENV_FILE = fileURLToPath(new URL("../../.env", import.meta.url));
+const ENV_FILE = fileURLToPath(new URL("../../.env", import.meta.url));
 
-export const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace", "silent"] as const;
-export type LogLevel = (typeof LOG_LEVELS)[number];
+const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace", "silent"] as const;
+type LogLevel = (typeof LOG_LEVELS)[number];
 
 export interface Config {
   databasePath: string;

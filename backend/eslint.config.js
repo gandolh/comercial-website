@@ -31,7 +31,11 @@ export default [
     // A warning for now (2026-11-11): these helpers run outside a request and the app context carries no
     // logger. When it does, they log through it and this block goes.
     name: "piataro-backend/console-warns",
-    files: ["app/src/jobs/expiry-reminders.ts", "app/src/modules/assets.ts", "app/src/modules/messaging.ts"],
+    files: [
+      "app/src/features/reminders/service.ts",
+      "app/src/features/assets/routes.ts",
+      "app/src/features/messaging/routes.ts",
+    ],
     rules: { "no-console": "warn" },
   },
 ];

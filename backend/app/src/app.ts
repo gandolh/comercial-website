@@ -6,26 +6,27 @@ import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastif
 import type { Config } from "./config.js";
 import { getCorsOrigins } from "./config.js";
 import type { AppContext } from "./context.js";
-import { startExpiryReminderJob } from "./jobs/expiry-reminders.js";
-import { registerAuthRoutes } from "./modules/auth.js";
-import { registerUsersRoutes } from "./modules/users.js";
-import { registerFavoritesRoutes } from "./modules/favorites.js";
-import { registerListingsRoutes } from "./modules/listings.js";
-import { registerImagesRoutes } from "./modules/images.js";
-import { registerAssetsRoutes } from "./modules/assets.js";
-import { registerMessagingRoutes } from "./modules/messaging.js";
-import { registerAnafRoutes } from "./modules/anaf.js";
-import { registerInvoicesRoutes } from "./modules/invoices.js";
-import { registerOrdersRoutes } from "./modules/orders.js";
-import { registerReviewsRoutes } from "./modules/reviews.js";
-import { registerBundlesRoutes } from "./modules/bundles.js";
-import { registerWardRoutes } from "./modules/ward.js";
-import { registerPayoutsRoutes } from "./modules/payouts.js";
-import { wardClientFrom } from "./ward-client.js";
+import { startExpiryReminderJob } from "./features/reminders/index.js";
+import { registerAuthRoutes } from "./features/auth/index.js";
+import { registerHealthRoutes } from "./features/health/index.js";
+import { registerUsersRoutes } from "./features/users/index.js";
+import { registerFavoritesRoutes } from "./features/favorites/index.js";
+import { registerListingsRoutes } from "./features/listings/index.js";
+import { registerImagesRoutes } from "./features/images/index.js";
+import { registerAssetsRoutes } from "./features/assets/index.js";
+import { registerMessagingRoutes } from "./features/messaging/index.js";
+import { registerAnafRoutes } from "./features/anaf/index.js";
+import { registerInvoicesRoutes } from "./features/invoices/index.js";
+import { registerOrdersRoutes } from "./features/orders/index.js";
+import { registerReviewsRoutes } from "./features/reviews/index.js";
+import { registerBundlesRoutes } from "./features/bundles/index.js";
+import { registerWardRoutes } from "./features/ward/index.js";
+import { registerPayoutsRoutes } from "./features/payouts/index.js";
+import { wardClientFrom } from "./features/ward/index.js";
 import type { WardClient } from "../vendor/ward/ward-auth.js";
 
 /** Fastify's options that belong to the process. server.ts sets them; a test leaves them out. */
-export type ServerOptions = Pick<
+type ServerOptions = Pick<
   FastifyServerOptions,
   "logger" | "trustProxy" | "connectionTimeout" | "requestTimeout" | "keepAliveTimeout"
 >;
@@ -76,7 +77,7 @@ export async function buildApp(
     await ctx.db.destroy();
   });
 
-  app.get("/health", async () => ({ status: "ok" }));
+  registerHealthRoutes(app);
 
   registerAuthRoutes(app, ctx);
   registerUsersRoutes(app, ctx);

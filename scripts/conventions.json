@@ -37,6 +37,33 @@
       "rule": 13,
       "path": "frontend/src/core/components/ui/CookieConsent.tsx",
       "reason": "A non-modal banner with role=dialog and aria-modal=false. Base UI has no banner part, and a modal Dialog would be wrong: the page behind it stays usable until the visitor answers."
+    },
+    {
+      "check": "structure",
+      "rule": 2,
+      "path": "backend/core/src",
+      "reason": "@my-olx/core is the plugin library the app registers (plugins/, lib/, db/), not a server: buildApp lives in backend/app/src/app.ts, its one consumer (brief 13, decision 1)."
+    },
+    {
+      "check": "structure",
+      "rule": 3,
+      "path": "backend/app/src/config.ts",
+      "match": "NODE_ENV",
+      "reason": "loadDevSeedConfig() guards seed:dev, which makes accounts with a known password, by NODE_ENV=development; config.ts is the one place allowed to read it (brief 13, decision 8)."
+    },
+    {
+      "check": "structure",
+      "rule": 4,
+      "path": "backend/core/src/plugins/auth.ts",
+      "match": "authenticate",
+      "reason": "The one decorator: app.authenticate, the preHandler protected routes name. It is not a test seam; tests sign real tokens (Q56, brief 13 decision 6)."
+    },
+    {
+      "check": "structure",
+      "rule": 9,
+      "path": "backend/app/src/testing/test-app.ts",
+      "match": "startTestApp",
+      "reason": "The test helper keeps its name, startTestApp, rather than the skill's buildTestApp: renaming touches every test that imports it for nothing (brief 13, decision 7)."
     }
   ]
 }
