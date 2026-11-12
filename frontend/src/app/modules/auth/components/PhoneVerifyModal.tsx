@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { usePhoneVerify } from "../hooks/usePhoneVerify";
 import { Modal, Input, Button } from "@core/components/ui";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 
 interface PhoneVerifyModalProps {
   open: boolean;

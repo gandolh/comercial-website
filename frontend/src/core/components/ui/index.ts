@@ -11,7 +11,7 @@ export { Card, CardHeader } from "./Card";
 export { Avatar } from "./Avatar";
 export { Chip } from "./Chip";
 export { Modal } from "./Modal";
-export { Toast, AuthRequiredToast } from "./Toast";
+export { Toaster, toast, AuthRequiredToast } from "./Toast";
 export { PriceInput } from "./PriceInput";
 export { EmptyState } from "./EmptyState";
 export { Divider } from "./Divider";

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 import { addFavorite, removeFavorite } from "../services/favorites";
 
 interface ToggleFavoriteInput {

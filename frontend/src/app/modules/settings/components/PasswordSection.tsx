@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useChangePassword } from "../hooks/useProfile";
-import { Input, Button } from "@core/components/ui";
+import { Input, Button, toast } from "@core/components/ui";
 
 export function PasswordSection() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -26,7 +26,7 @@ export function PasswordSection() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      alert("Parola a fost schimbată cu succes!");
+      toast.success("Parola a fost schimbată cu succes!");
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
       setError(error.response?.data?.message || "A apărut o eroare la schimbarea parolei");

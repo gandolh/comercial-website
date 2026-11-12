@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@core/lib/queryClient";
 import { router } from "@app/routes";
 import { useAuth } from "@core/lib/auth";
-import { Toaster } from "sonner";
+import { Toaster } from "@core/components/ui";
 
 export function App() {
   const hydrate = useAuth((state) => state.hydrate);
@@ -16,7 +16,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster position="top-center" richColors />
+      <Toaster />
     </QueryClientProvider>
   );
 }

@@ -12,17 +12,10 @@ export function AuthRequiredToast({
   const loginHref = next ? `/autentificare?next=${encodeURIComponent(next)}` : "/autentificare";
 
   return (
-    <div
-      style={{
-        background: "var(--color-inverse-surface)",
-        color: "var(--color-inverse-on-surface)",
-        boxShadow: "var(--shadow-ambient)",
-      }}
-      className="flex items-center gap-3 px-4 py-3 rounded-xl w-full max-w-sm font-[Inter]"
-    >
+    <div className="flex w-full max-w-sm items-center gap-3 rounded-xl bg-inverse-surface px-4 py-3 text-inverse-on-surface shadow-ambient">
       <span
-        className="material-symbols-outlined shrink-0"
-        style={{ fontSize: "20px", color: "var(--color-inverse-primary)" }}
+        className="material-symbols-outlined shrink-0 text-inverse-primary"
+        style={{ fontSize: "20px" }}
         aria-hidden="true"
       >
         lock
@@ -30,8 +23,7 @@ export function AuthRequiredToast({
       <span className="text-sm leading-snug flex-1">{message}</span>
       <a
         href={loginHref}
-        style={{ color: "var(--color-inverse-primary)" }}
-        className="font-[Manrope] text-sm font-semibold shrink-0 hover:underline focus-visible:outline-none rounded whitespace-nowrap"
+        className="shrink-0 rounded font-headline text-sm font-semibold whitespace-nowrap text-inverse-primary hover:underline focus-visible:outline-none"
       >
         {loginLabel}
       </a>

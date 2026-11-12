@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "@core/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 import { fetchListingDetail } from "@app/modules/listings/services/listings";
 import { useListingMutations } from "@app/modules/listings/hooks/useListingMutations";
 import { DetailsStep } from "@app/modules/create-listing/steps/DetailsStep";

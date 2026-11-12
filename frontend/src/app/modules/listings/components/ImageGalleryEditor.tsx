@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 import type { ListingImage } from "@app/types/listing";
 
 import { useListingImagesMutations } from "../hooks/useListingImages";

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation } from "@core/lib/router";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 import { useAuth } from "@core/lib/auth";
 import { AuthRequiredToast } from "@core/components/ui";
 import { useFavoriteIds } from "../hooks/useFavoriteIds";

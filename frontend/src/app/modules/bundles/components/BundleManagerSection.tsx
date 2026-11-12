@@ -1,6 +1,6 @@
 import { useId, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { toast } from "@core/components/ui";
 import { useBundleItems, useSetBundleItems } from "../hooks/useBundleItems";
 import { useMyListings } from "@app/modules/dashboard/hooks/useMyListings";
 import type { ListingCard } from "@app/types/listing";
