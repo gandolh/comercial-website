@@ -8,7 +8,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./db": "./dist/db/index.js",
-    "./errors": "./dist/errors/index.js",
+    "./errors": "./dist/plugins/errors.js",
     "./auth": "./dist/auth/index.js",
     "./http": "./dist/http/index.js",
     "./storage": "./dist/storage/index.js",

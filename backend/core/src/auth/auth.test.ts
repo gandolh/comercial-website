@@ -139,7 +139,7 @@ describe("JWT Auth", () => {
 describe("authenticationPreHandler behind the error handler", () => {
   async function appWithGuard() {
     const { default: Fastify } = await import("fastify");
-    const { registerErrorHandler } = await import("../errors/index.js");
+    const { registerErrorHandler } = await import("../plugins/errors.js");
     const app = Fastify();
     registerErrorHandler(app);
     app.get(

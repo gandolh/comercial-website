@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { AppError } from "./index.js";
+import { AppError } from "./errors.js";
 
 describe("AppError", () => {
   describe("factories", () => {

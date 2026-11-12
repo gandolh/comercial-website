@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { hash, verify } from "argon2";
-import { AppError } from "../errors/index.js";
+import { AppError } from "../plugins/errors.js";
 
 /**
  * Encodes a Buffer as base64url (RFC 4648 §5)
