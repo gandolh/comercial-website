@@ -9,6 +9,7 @@
 
 import { describe, it, expect } from "vitest";
 import { buildUblXml, validateUblInvoice } from "./routes.js";
+import { startTestApp } from "../../testing/test-app.js";
 import type { InvoiceResponse } from "./routes.js";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -361,5 +362,23 @@ describe("buildUblXml", () => {
   it("omits PaymentMeans when seller_iban is null", () => {
     const xml = buildUblXml(makeValidInvoice({ seller_iban: null }));
     expect(xml).not.toContain("<cac:PaymentMeans>");
+  });
+});
+
+describe("the invoice body's schema", () => {
+  it("answers a malformed invoice 422 with its first issue's message, before it asks for a session", async () => {
+    const t = await startTestApp();
+    const payload = { issue_date: "2026-11-01", seller_name: "Firma", buyer_name: "Client", line_items: [] };
+    for (const headers of [{}, t.bearer("someone")]) {
+      const res = await t.app.inject({ method: "POST", url: "/invoices", headers, payload });
+      expect([res.statusCode, res.json()]).toEqual([422, { error: "Too small: expected array to have >=1 items" }]);
+    }
+    const signedOut = await t.app.inject({
+      method: "POST",
+      url: "/invoices",
+      payload: { ...payload, line_items: [{ description: "Pachet", qty: 1, unit_price: 10, vat_rate: 19 }] },
+    });
+    expect(signedOut.statusCode).toBe(401);
+    await t.app.close();
   });
 });

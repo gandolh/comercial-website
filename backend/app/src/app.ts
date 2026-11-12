@@ -16,7 +16,7 @@ import { imagesRoutes } from "./features/images/index.js";
 import { assetsRoutes } from "./features/assets/index.js";
 import { messagingRoutes } from "./features/messaging/index.js";
 import { anafRoutes } from "./features/anaf/index.js";
-import { registerInvoicesRoutes } from "./features/invoices/index.js";
+import { invoicesRoutes } from "./features/invoices/index.js";
 import { ordersRoutes } from "./features/orders/index.js";
 import { reviewsRoutes } from "./features/reviews/index.js";
 import { bundlesRoutes } from "./features/bundles/index.js";
@@ -88,7 +88,7 @@ export async function buildApp(
   await app.register(assetsRoutes, ctx);
   await app.register(messagingRoutes, ctx);
   await app.register(anafRoutes);
-  registerInvoicesRoutes(app, ctx);
+  await app.register(invoicesRoutes, ctx);
   await app.register(ordersRoutes, ctx);
   await app.register(reviewsRoutes, ctx);
   await app.register(bundlesRoutes, ctx);

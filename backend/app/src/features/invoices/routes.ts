@@ -1,8 +1,9 @@
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
-import type { RouteRegistrar } from "../../context.js";
-import type { FastifyInstance } from "fastify";
+import type { AppContext } from "../../context.js";
 import { requireUserId } from "@my-olx/core";
+import { invoiceProfileSchema, invoiceSchema } from "./schemas.js";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -602,224 +603,251 @@ function toInvoiceResponse(row: any): InvoiceResponse {
 
 // ─── Route registrar ─────────────────────────────────────────────────────────
 
-export const registerInvoicesRoutes: RouteRegistrar = (app, ctx) => {
-  const appWithAuth = app as FastifyInstance & { authenticate: any };
+const idParamsSchema = z.object({ id: z.string() });
 
+export const invoicesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   /**
    * GET /invoices/profile
    * Return the authenticated user's invoice issuer profile.
    */
-  app.get("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const profile = await ctx.db
-      .selectFrom("user_invoice_profiles")
-      .selectAll()
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-    return reply.send(profile ?? null);
-  });
+  app.get(
+    "/invoices/profile",
+    { preHandler: app.authenticate, schema: { response: { 200: invoiceProfileSchema.nullable() } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const profile = await ctx.db
+        .selectFrom("user_invoice_profiles")
+        .selectAll()
+        .where("user_id", "=", userId)
+        .executeTakeFirst();
+      return reply.send(profile ?? null);
+    },
+  );
 
   /**
    * PUT /invoices/profile
    * Upsert the authenticated user's invoice issuer profile.
    */
-  app.put("/invoices/profile", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const parsed = ProfileUpsertSchema.safeParse(request.body);
-    if (!parsed.success) throw AppError.validation(parsed.error.message);
-
-    const data = parsed.data;
-    const existing = await ctx.db
-      .selectFrom("user_invoice_profiles")
-      .select("user_id")
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-
-    if (existing) {
-      await ctx.db
-        .updateTable("user_invoice_profiles")
-        .set({
-          company_name: data.company_name ?? null,
-          cui: data.cui ?? null,
-          reg_com: data.reg_com ?? null,
-          address: data.address ?? null,
-          iban: data.iban ?? null,
-          bank_name: data.bank_name ?? null,
-          email: data.email ?? null,
-          phone: data.phone ?? null,
-          updated_at: new Date().toISOString(),
-        })
+  app.put(
+    "/invoices/profile",
+    {
+      preHandler: app.authenticate,
+      schema: { body: ProfileUpsertSchema, response: { 200: invoiceProfileSchema } },
+    },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const data = request.body;
+      const existing = await ctx.db
+        .selectFrom("user_invoice_profiles")
+        .select("user_id")
         .where("user_id", "=", userId)
-        .execute();
-    } else {
-      await ctx.db
-        .insertInto("user_invoice_profiles")
-        .values({
-          user_id: userId,
-          company_name: data.company_name ?? null,
-          cui: data.cui ?? null,
-          reg_com: data.reg_com ?? null,
-          address: data.address ?? null,
-          iban: data.iban ?? null,
-          bank_name: data.bank_name ?? null,
-          email: data.email ?? null,
-          phone: data.phone ?? null,
-        })
-        .execute();
-    }
+        .executeTakeFirst();
 
-    const profile = await ctx.db
-      .selectFrom("user_invoice_profiles")
-      .selectAll()
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-    return reply.send(profile);
-  });
+      if (existing) {
+        await ctx.db
+          .updateTable("user_invoice_profiles")
+          .set({
+            company_name: data.company_name ?? null,
+            cui: data.cui ?? null,
+            reg_com: data.reg_com ?? null,
+            address: data.address ?? null,
+            iban: data.iban ?? null,
+            bank_name: data.bank_name ?? null,
+            email: data.email ?? null,
+            phone: data.phone ?? null,
+            updated_at: new Date().toISOString(),
+          })
+          .where("user_id", "=", userId)
+          .execute();
+      } else {
+        await ctx.db
+          .insertInto("user_invoice_profiles")
+          .values({
+            user_id: userId,
+            company_name: data.company_name ?? null,
+            cui: data.cui ?? null,
+            reg_com: data.reg_com ?? null,
+            address: data.address ?? null,
+            iban: data.iban ?? null,
+            bank_name: data.bank_name ?? null,
+            email: data.email ?? null,
+            phone: data.phone ?? null,
+          })
+          .execute();
+      }
+
+      const profile = await ctx.db
+        .selectFrom("user_invoice_profiles")
+        .selectAll()
+        .where("user_id", "=", userId)
+        .executeTakeFirstOrThrow(); // written just above
+      return reply.send(profile);
+    },
+  );
 
   /**
    * GET /invoices
    * List invoices for the authenticated user (most recent first).
    */
-  app.get("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const rows = await ctx.db
-      .selectFrom("invoices")
-      .selectAll()
-      .where("user_id", "=", userId)
-      .orderBy("created_at", "desc")
-      .execute();
-    return reply.send(rows.map(toInvoiceResponse));
-  });
+  app.get(
+    "/invoices",
+    { preHandler: app.authenticate, schema: { response: { 200: z.array(invoiceSchema) } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const rows = await ctx.db
+        .selectFrom("invoices")
+        .selectAll()
+        .where("user_id", "=", userId)
+        .orderBy("created_at", "desc")
+        .execute();
+      return reply.send(rows.map(toInvoiceResponse));
+    },
+  );
 
   /**
    * POST /invoices
    * Create a new invoice record.
    */
-  app.post("/invoices", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const parsed = CreateInvoiceSchema.safeParse(request.body);
-    if (!parsed.success) throw AppError.validation(parsed.error.message);
+  app.post(
+    "/invoices",
+    { preHandler: app.authenticate, schema: { body: CreateInvoiceSchema, response: { 201: invoiceSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const body = request.body;
 
-    const body = parsed.data;
+      // Auto-increment number per user+series
+      const maxRow = await ctx.db
+        .selectFrom("invoices")
+        .select(ctx.db.fn.max("number").as("max_number"))
+        .where("user_id", "=", userId)
+        .where("series", "=", body.series)
+        .executeTakeFirst();
 
-    // Auto-increment number per user+series
-    const maxRow = await ctx.db
-      .selectFrom("invoices")
-      .select(ctx.db.fn.max("number").as("max_number"))
-      .where("user_id", "=", userId)
-      .where("series", "=", body.series)
-      .executeTakeFirst();
+      const nextNumber = ((maxRow?.max_number as number | null) ?? 0) + 1;
 
-    const nextNumber = ((maxRow?.max_number as number | null) ?? 0) + 1;
+      const { subtotal, vat_amount, total } = calculateTotals(body.line_items);
 
-    const { subtotal, vat_amount, total } = calculateTotals(body.line_items);
+      const insertResult = await ctx.db
+        .insertInto("invoices")
+        .values({
+          user_id: userId,
+          series: body.series,
+          number: nextNumber,
+          issue_date: body.issue_date,
+          due_date: body.due_date ?? null,
+          seller_name: body.seller_name,
+          seller_cui: body.seller_cui ?? null,
+          seller_reg_com: body.seller_reg_com ?? null,
+          seller_address: body.seller_address ?? null,
+          seller_iban: body.seller_iban ?? null,
+          seller_bank: body.seller_bank ?? null,
+          seller_email: body.seller_email ?? null,
+          buyer_name: body.buyer_name,
+          buyer_cui: body.buyer_cui ?? null,
+          buyer_address: body.buyer_address ?? null,
+          line_items: JSON.stringify(body.line_items),
+          currency: body.currency,
+          subtotal,
+          vat_amount,
+          total,
+          order_id: null,
+        })
+        .returning("id")
+        .executeTakeFirst();
 
-    const insertResult = await ctx.db
-      .insertInto("invoices")
-      .values({
-        user_id: userId,
-        series: body.series,
-        number: nextNumber,
-        issue_date: body.issue_date,
-        due_date: body.due_date ?? null,
-        seller_name: body.seller_name,
-        seller_cui: body.seller_cui ?? null,
-        seller_reg_com: body.seller_reg_com ?? null,
-        seller_address: body.seller_address ?? null,
-        seller_iban: body.seller_iban ?? null,
-        seller_bank: body.seller_bank ?? null,
-        seller_email: body.seller_email ?? null,
-        buyer_name: body.buyer_name,
-        buyer_cui: body.buyer_cui ?? null,
-        buyer_address: body.buyer_address ?? null,
-        line_items: JSON.stringify(body.line_items),
-        currency: body.currency,
-        subtotal,
-        vat_amount,
-        total,
-        order_id: null,
-      })
-      .returning("id")
-      .executeTakeFirst();
+      if (!insertResult?.id) throw AppError.internal();
 
-    if (!insertResult?.id) throw AppError.internal();
+      const row = await ctx.db.selectFrom("invoices").selectAll().where("id", "=", insertResult.id).executeTakeFirst();
 
-    const row = await ctx.db.selectFrom("invoices").selectAll().where("id", "=", insertResult.id).executeTakeFirst();
-
-    return reply.status(201).send(toInvoiceResponse(row));
-  });
+      return reply.status(201).send(toInvoiceResponse(row));
+    },
+  );
 
   /**
    * GET /invoices/:id
    * Get a single invoice by ID.
    */
-  app.get("/invoices/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
-    const row = await ctx.db
-      .selectFrom("invoices")
-      .selectAll()
-      .where("id", "=", id)
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-    if (!row) throw AppError.notFound();
-    return reply.send(toInvoiceResponse(row));
-  });
+  app.get(
+    "/invoices/:id",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: invoiceSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
+      const row = await ctx.db
+        .selectFrom("invoices")
+        .selectAll()
+        .where("id", "=", id)
+        .where("user_id", "=", userId)
+        .executeTakeFirst();
+      if (!row) throw AppError.notFound();
+      return reply.send(toInvoiceResponse(row));
+    },
+  );
 
   /**
    * GET /invoices/:id/pdf
    * Download the invoice as a PDF file.
    */
-  app.get("/invoices/:id/pdf", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
-    const row = await ctx.db
-      .selectFrom("invoices")
-      .selectAll()
-      .where("id", "=", id)
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-    if (!row) throw AppError.notFound();
+  // A file download: its inputs only, no response schema.
+  app.get(
+    "/invoices/:id/pdf",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
+      const row = await ctx.db
+        .selectFrom("invoices")
+        .selectAll()
+        .where("id", "=", id)
+        .where("user_id", "=", userId)
+        .executeTakeFirst();
+      if (!row) throw AppError.notFound();
 
-    const inv = toInvoiceResponse(row);
-    const pdfBuffer = buildPdf(inv);
-    const filename = `factura-${inv.series}-${inv.number}.pdf`;
+      const inv = toInvoiceResponse(row);
+      const pdfBuffer = buildPdf(inv);
+      const filename = `factura-${inv.series}-${inv.number}.pdf`;
 
-    reply.header("Content-Type", "application/pdf");
-    reply.header("Content-Disposition", `attachment; filename="${filename}"`);
-    reply.header("Content-Length", pdfBuffer.length);
-    return reply.send(pdfBuffer);
-  });
+      reply.header("Content-Type", "application/pdf");
+      reply.header("Content-Disposition", `attachment; filename="${filename}"`);
+      reply.header("Content-Length", pdfBuffer.length);
+      return reply.send(pdfBuffer);
+    },
+  );
 
   /**
    * GET /invoices/:id/xml
    * Download the invoice as a UBL 2.1 XML (e-Factura RO_CIUS).
    */
-  app.get("/invoices/:id/xml", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
-    const row = await ctx.db
-      .selectFrom("invoices")
-      .selectAll()
-      .where("id", "=", id)
-      .where("user_id", "=", userId)
-      .executeTakeFirst();
-    if (!row) throw AppError.notFound();
+  // A file download: its inputs only, no response schema.
+  app.get(
+    "/invoices/:id/xml",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
+      const row = await ctx.db
+        .selectFrom("invoices")
+        .selectAll()
+        .where("id", "=", id)
+        .where("user_id", "=", userId)
+        .executeTakeFirst();
+      if (!row) throw AppError.notFound();
 
-    const inv = toInvoiceResponse(row);
+      const inv = toInvoiceResponse(row);
 
-    // Fail loudly if the invoice cannot produce structurally valid e-Factura XML
-    const validationErrors = validateUblInvoice(inv);
-    if (validationErrors.length > 0) {
-      const details = validationErrors.map((e) => `${e.field}: ${e.message}`).join("; ");
-      throw AppError.validation(`Factura nu poate fi exportată ca e-Factura: ${details}`);
-    }
+      // Fail loudly if the invoice cannot produce structurally valid e-Factura XML
+      const validationErrors = validateUblInvoice(inv);
+      if (validationErrors.length > 0) {
+        const details = validationErrors.map((e) => `${e.field}: ${e.message}`).join("; ");
+        throw AppError.validation(`Factura nu poate fi exportată ca e-Factura: ${details}`);
+      }
 
-    const xml = buildUblXml(inv);
-    const filename = `efactura-${inv.series}-${inv.number}.xml`;
+      const xml = buildUblXml(inv);
+      const filename = `efactura-${inv.series}-${inv.number}.xml`;
 
-    reply.header("Content-Type", "application/xml; charset=utf-8");
-    reply.header("Content-Disposition", `attachment; filename="${filename}"`);
-    return reply.send(xml);
-  });
+      reply.header("Content-Type", "application/xml; charset=utf-8");
+      reply.header("Content-Disposition", `attachment; filename="${filename}"`);
+      return reply.send(xml);
+    },
+  );
 };
