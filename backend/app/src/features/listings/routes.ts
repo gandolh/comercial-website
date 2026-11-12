@@ -1,6 +1,7 @@
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { verifyToken } from "@my-olx/core";
-import type { RouteRegistrar } from "../../context.js";
+import { fixedValidationMessage, verifyToken } from "@my-olx/core";
+import type { AppContext } from "../../context.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 import { AssetsRepository } from "../../db/assets-store.js";
 import { ReviewsRepository } from "../../db/reviews-store.js";
@@ -14,8 +15,14 @@ import {
   type AssetResponse,
 } from "./helpers.js";
 import { AppError } from "@my-olx/core";
-import type { FastifyInstance } from "fastify";
 import { requireUserId } from "@my-olx/core";
+import {
+  listingCardSchema,
+  listingDetailSchema,
+  listingSchema,
+  listingsPageSchema,
+  sellerPhoneSchema,
+} from "./schemas.js";
 
 /**
  * Helper: Extract optional user ID from Authorization header
@@ -97,472 +104,528 @@ const SuggestQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).default(20),
 });
 
-export const registerListingsRoutes: RouteRegistrar = (app, ctx) => {
+/** GET /me/listings query: active, expired, page, per_page. */
+const MyListingsQuerySchema = z.object({
+  active: z
+    .enum(["true", "false"])
+    .transform((v) => v === "true")
+    .optional(),
+  expired: z
+    .enum(["true", "false"])
+    .transform((v) => v === "true")
+    .optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  per_page: z.coerce.number().int().min(1).max(50).default(12),
+});
+
+const idParamsSchema = z.object({ id: z.string() });
+
+// Any invalid query answers this one message; so does any invalid create or update body.
+const invalidQuery = fixedValidationMessage("Invalid query parameters");
+const invalidBody = fixedValidationMessage("Invalid request body");
+
+export const listingsRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
   const repo = new ListingsRepository(ctx.db);
   const assetsRepo = new AssetsRepository(ctx.db);
   const reviewsRepo = new ReviewsRepository(ctx.db);
-  const appWithAuth = app as FastifyInstance & { authenticate: any };
 
   /**
    * GET /listings — List listings with search/filter
    * Optional auth for personalized results
    */
-  app.get("/listings", async (request, reply) => {
-    const parsed = ListingFiltersSchema.safeParse(request.query);
-    if (!parsed.success) {
-      throw AppError.validation("Invalid query parameters");
-    }
+  app.get(
+    "/listings",
+    {
+      schema: { querystring: ListingFiltersSchema, response: { 200: listingsPageSchema } },
+      schemaErrorFormatter: invalidQuery,
+    },
+    async (request, reply) => {
+      const query = request.query;
 
-    const query = parsed.data;
+      const { listings, total } = await repo.search(
+        query.q,
+        query.category,
+        query.price_min,
+        query.price_max,
+        query.date,
+        query.verified,
+        query.sort,
+        query.page,
+        query.per_page,
+        query.user_id,
+        query.active,
+      );
 
-    const { listings, total } = await repo.search(
-      query.q,
-      query.category,
-      query.price_min,
-      query.price_max,
-      query.date,
-      query.verified,
-      query.sort,
-      query.page,
-      query.per_page,
-      query.user_id,
-      query.active,
-    );
-
-    const cards: ListingCardResponse[] = [];
-    for (const listing of listings) {
-      const images = await repo.getImages(listing.id);
-      const seller = await repo.getSeller(listing.user_id);
-      if (seller) {
-        const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
-        cards.push(card);
+      const cards: ListingCardResponse[] = [];
+      for (const listing of listings) {
+        const images = await repo.getImages(listing.id);
+        const seller = await repo.getSeller(listing.user_id);
+        if (seller) {
+          const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
+          cards.push(card);
+        }
       }
-    }
 
-    const totalPages = Math.ceil(total / query.per_page);
-    const response: ListingsPageResponse = {
-      listings: cards,
-      total_count: total,
-      total_pages: totalPages,
-      page: query.page,
-    };
+      const totalPages = Math.ceil(total / query.per_page);
+      const response: ListingsPageResponse = {
+        listings: cards,
+        total_count: total,
+        total_pages: totalPages,
+        page: query.page,
+      };
 
-    return reply.send(response);
-  });
+      return reply.send(response);
+    },
+  );
 
   /**
    * GET /me/listings — the signed-in user's own listings ("Anunțurile mele"), as listing cards
    * in the same page shape as GET /listings. Query: active, expired, page, per_page.
    */
-  const MyListingsQuerySchema = z.object({
-    active: z
-      .enum(["true", "false"])
-      .transform((v) => v === "true")
-      .optional(),
-    expired: z
-      .enum(["true", "false"])
-      .transform((v) => v === "true")
-      .optional(),
-    page: z.coerce.number().int().min(1).default(1),
-    per_page: z.coerce.number().int().min(1).max(50).default(12),
-  });
-  app.get("/me/listings", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const parsed = MyListingsQuerySchema.safeParse(request.query);
-    if (!parsed.success) {
-      throw AppError.validation("Invalid query parameters");
-    }
-    const query = parsed.data;
-    const userId = requireUserId(request);
-    const { listings, total } = await repo.listByOwner(
-      userId,
-      {
-        ...(query.active !== undefined ? { active: query.active } : {}),
-        ...(query.expired !== undefined ? { expired: query.expired } : {}),
-      },
-      query.page,
-      query.per_page,
-    );
-    const seller = await repo.getSeller(userId);
-    const cards: ListingCardResponse[] = [];
-    for (const listing of listings) {
-      const images = await repo.getImages(listing.id);
-      cards.push(toListingCardResponse(listing, images, Boolean(seller?.phone_verified), ctx.config));
-    }
-    const response: ListingsPageResponse = {
-      listings: cards,
-      total_count: total,
-      total_pages: Math.ceil(total / query.per_page),
-      page: query.page,
-    };
-    return reply.send(response);
-  });
+  app.get(
+    "/me/listings",
+    {
+      preHandler: app.authenticate,
+      schema: { querystring: MyListingsQuerySchema, response: { 200: listingsPageSchema } },
+      schemaErrorFormatter: invalidQuery,
+    },
+    async (request, reply) => {
+      const query = request.query;
+      const userId = requireUserId(request);
+      const { listings, total } = await repo.listByOwner(
+        userId,
+        {
+          ...(query.active !== undefined ? { active: query.active } : {}),
+          ...(query.expired !== undefined ? { expired: query.expired } : {}),
+        },
+        query.page,
+        query.per_page,
+      );
+      const seller = await repo.getSeller(userId);
+      const cards: ListingCardResponse[] = [];
+      for (const listing of listings) {
+        const images = await repo.getImages(listing.id);
+        cards.push(toListingCardResponse(listing, images, Boolean(seller?.phone_verified), ctx.config));
+      }
+      const response: ListingsPageResponse = {
+        listings: cards,
+        total_count: total,
+        total_pages: Math.ceil(total / query.per_page),
+        page: query.page,
+      };
+      return reply.send(response);
+    },
+  );
 
   /**
    * POST /listings — Create a new listing (protected)
    */
-  app.post("/listings", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
+  app.post(
+    "/listings",
+    {
+      preHandler: app.authenticate,
+      schema: { body: CreateListingRequestSchema, response: { 200: listingSchema } },
+      schemaErrorFormatter: invalidBody,
+    },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const body = request.body;
 
-    const parsed = CreateListingRequestSchema.safeParse(request.body);
-    if (!parsed.success) {
-      throw AppError.validation("Invalid request body");
-    }
+      // Get user
+      const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
 
-    const body = parsed.data;
+      if (!user) throw AppError.notFound();
 
-    // Get user
-    const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
-
-    if (!user) throw AppError.notFound();
-
-    // User must be email verified
-    if (!user.email_verified) {
-      throw AppError.forbidden();
-    }
-
-    // Check weekly limit (5 per week) if active
-    if (body.active) {
-      const weeklyCount = await repo.countWeeklyListings(userId);
-      if (weeklyCount >= 5) {
-        throw AppError.rateLimit();
+      // User must be email verified
+      if (!user.email_verified) {
+        throw AppError.forbidden();
       }
-    }
 
-    const listing = await repo.create(
-      userId,
-      body.title,
-      body.description,
-      body.price_ron ?? null,
-      body.category,
-      body.active,
-    );
+      // Check weekly limit (5 per week) if active
+      if (body.active) {
+        const weeklyCount = await repo.countWeeklyListings(userId);
+        if (weeklyCount >= 5) {
+          throw AppError.rateLimit();
+        }
+      }
 
-    return reply.send(toListingResponse(listing));
-  });
+      const listing = await repo.create(
+        userId,
+        body.title,
+        body.description,
+        body.price_ron ?? null,
+        body.category,
+        body.active,
+      );
+
+      return reply.send(toListingResponse(listing));
+    },
+  );
 
   /**
    * GET /listings/featured — Featured listings (8, seller_verified desc, created_at desc)
    */
-  app.get("/listings/featured", async (request, reply) => {
-    const listings = await repo.getFeatured();
+  app.get(
+    "/listings/featured",
+    { schema: { response: { 200: z.array(listingCardSchema) } } },
+    async (request, reply) => {
+      const listings = await repo.getFeatured();
 
-    const cards: ListingCardResponse[] = [];
-    for (const listing of listings) {
-      const images = await repo.getImages(listing.id);
-      const seller = await repo.getSeller(listing.user_id);
-      if (seller) {
-        const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
-        cards.push(card);
+      const cards: ListingCardResponse[] = [];
+      for (const listing of listings) {
+        const images = await repo.getImages(listing.id);
+        const seller = await repo.getSeller(listing.user_id);
+        if (seller) {
+          const card = toListingCardResponse(listing, images, Boolean(seller.phone_verified), ctx.config);
+          cards.push(card);
+        }
       }
-    }
 
-    return reply.send(cards);
-  });
+      return reply.send(cards);
+    },
+  );
 
   /**
    * GET /listings/suggest — Suggest titles
    */
-  app.get("/listings/suggest", async (request, reply) => {
-    const parsed = SuggestQuerySchema.safeParse(request.query);
-    if (!parsed.success) {
-      throw AppError.validation("Invalid query parameters");
-    }
+  app.get(
+    "/listings/suggest",
+    {
+      schema: { querystring: SuggestQuerySchema, response: { 200: z.array(z.string()) } },
+      schemaErrorFormatter: invalidQuery,
+    },
+    async (request, reply) => {
+      const { q, limit } = request.query;
+      const suggestions = await repo.getSuggestTitles(q, limit);
 
-    const { q, limit } = parsed.data;
-    const suggestions = await repo.getSuggestTitles(q, limit);
-
-    return reply.send(suggestions);
-  });
+      return reply.send(suggestions);
+    },
+  );
 
   /**
    * GET /listings/:id — Get listing detail (optional auth)
    */
-  app.get("/listings/:id", async (request, reply) => {
-    const { id } = request.params as { id: string };
-    const optionalUserId = extractOptionalUserId(request.headers.authorization, ctx.config.jwtSecret);
+  app.get(
+    "/listings/:id",
+    { schema: { params: idParamsSchema, response: { 200: listingDetailSchema } } },
+    async (request, reply) => {
+      const { id } = request.params;
+      const optionalUserId = extractOptionalUserId(request.headers.authorization, ctx.config.jwtSecret);
 
-    const listing = await repo.getById(id);
-    if (!listing) {
-      throw AppError.notFound();
-    }
-
-    // Non-owner cannot see inactive/expired
-    if (optionalUserId !== listing.user_id) {
-      const expiresAt = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
-      if (!listing.active || expiresAt <= new Date()) {
+      const listing = await repo.getById(id);
+      if (!listing) {
         throw AppError.notFound();
       }
-    }
 
-    // Increment view count
-    await repo.incrementViewCount(id);
+      // Non-owner cannot see inactive/expired
+      if (optionalUserId !== listing.user_id) {
+        const expiresAt = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
+        if (!listing.active || expiresAt <= new Date()) {
+          throw AppError.notFound();
+        }
+      }
 
-    // Get images
-    const images = await repo.getImages(id);
+      // Increment view count
+      await repo.incrementViewCount(id);
 
-    // Get assets
-    const assets = await assetsRepo.getAssetsByListingId(id);
-    const assetResponses: AssetResponse[] = assets.map((asset) => ({
-      id: asset.id,
-      original_filename: asset.original_filename,
-      file_size_bytes: asset.file_size_bytes,
-      content_type: asset.content_type,
-      position: asset.position,
-    }));
+      // Get images
+      const images = await repo.getImages(id);
 
-    // Get seller info
-    const seller = await repo.getSeller(listing.user_id);
-    if (!seller) throw AppError.notFound();
+      // Get assets
+      const assets = await assetsRepo.getAssetsByListingId(id);
+      const assetResponses: AssetResponse[] = assets.map((asset) => ({
+        id: asset.id,
+        original_filename: asset.original_filename,
+        file_size_bytes: asset.file_size_bytes,
+        content_type: asset.content_type,
+        position: asset.position,
+      }));
 
-    const [activeListingsCount, totalDownloads] = await Promise.all([
-      repo.countActiveListings(listing.user_id),
-      repo.getTotalDownloadsForUser(listing.user_id),
-    ]);
-    const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config, totalDownloads);
+      // Get seller info
+      const seller = await repo.getSeller(listing.user_id);
+      if (!seller) throw AppError.notFound();
 
-    // Get review aggregate
-    const reviewAggregate = await reviewsRepo.getAggregate(id);
+      const [activeListingsCount, totalDownloads] = await Promise.all([
+        repo.countActiveListings(listing.user_id),
+        repo.getTotalDownloadsForUser(listing.user_id),
+      ]);
+      const sellerSummary = toSellerSummary(seller, activeListingsCount, ctx.config, totalDownloads);
 
-    const detail = toListingDetailResponse(
-      listing,
-      images,
-      sellerSummary,
-      ctx.config,
-      assetResponses,
-      reviewAggregate.rating_avg,
-      reviewAggregate.rating_count,
-    );
+      // Get review aggregate
+      const reviewAggregate = await reviewsRepo.getAggregate(id);
 
-    return reply.send(detail);
-  });
+      const detail = toListingDetailResponse(
+        listing,
+        images,
+        sellerSummary,
+        ctx.config,
+        assetResponses,
+        reviewAggregate.rating_avg,
+        reviewAggregate.rating_count,
+      );
+
+      return reply.send(detail);
+    },
+  );
 
   /**
    * PATCH /listings/:id — Update listing (protected, owner only)
    */
-  app.patch("/listings/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.patch(
+    "/listings/:id",
+    {
+      preHandler: app.authenticate,
+      schema: { params: idParamsSchema, body: UpdateListingRequestSchema, response: { 200: listingSchema } },
+      schemaErrorFormatter: invalidBody,
+    },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    // Owner only
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      // Owner only
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    const parsed = UpdateListingRequestSchema.safeParse(request.body);
-    if (!parsed.success) {
-      throw AppError.validation("Invalid request body");
-    }
+      const body = request.body;
 
-    const body = parsed.data;
+      const updated = await repo.update(id, body.title, body.description, body.price_ron, body.category);
 
-    const updated = await repo.update(id, body.title, body.description, body.price_ron, body.category);
-
-    return reply.send(toListingResponse(updated));
-  });
+      return reply.send(toListingResponse(updated));
+    },
+  );
 
   /**
    * DELETE /listings/:id — Delete listing (protected, owner only)
    */
-  app.delete("/listings/:id", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.delete(
+    "/listings/:id",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: z.object({}) } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    await repo.delete(id);
+      await repo.delete(id);
 
-    return reply.send({});
-  });
+      return reply.send({});
+    },
+  );
 
   /**
    * POST /listings/:id/publish — Publish listing (protected, owner only)
    * Rules: email_verified, ≥1 asset (downloadable file), weekly limit 5, then set active=true
    */
-  app.post("/listings/:id/publish", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.post(
+    "/listings/:id/publish",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: listingSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    // Check email verified
-    const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
+      // Check email verified
+      const user = await ctx.db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst();
 
-    if (!user || !user.email_verified) {
-      throw AppError.forbidden();
-    }
+      if (!user || !user.email_verified) {
+        throw AppError.forbidden();
+      }
 
-    // Validate title, description, category
-    if (
-      listing.title.length < 5 ||
-      listing.title.length > 200 ||
-      listing.description.length < 10 ||
-      !listing.category
-    ) {
-      throw AppError.validation("Invalid listing data");
-    }
+      // Validate title, description, category
+      if (
+        listing.title.length < 5 ||
+        listing.title.length > 200 ||
+        listing.description.length < 10 ||
+        !listing.category
+      ) {
+        throw AppError.validation("Invalid listing data");
+      }
 
-    // Check ≥1 asset (downloadable file)
-    const assets = await ctx.db.selectFrom("listing_assets").selectAll().where("listing_id", "=", id).execute();
-    if (assets.length === 0) {
-      throw AppError.validation("cel puțin un fișier descărcabil este necesar pentru publicare");
-    }
+      // Check ≥1 asset (downloadable file)
+      const assets = await ctx.db.selectFrom("listing_assets").selectAll().where("listing_id", "=", id).execute();
+      if (assets.length === 0) {
+        throw AppError.validation("cel puțin un fișier descărcabil este necesar pentru publicare");
+      }
 
-    // Check weekly limit (5)
-    const weeklyCount = await repo.countWeeklyListings(userId);
-    if (weeklyCount >= 5) {
-      throw AppError.rateLimit();
-    }
+      // Check weekly limit (5)
+      const weeklyCount = await repo.countWeeklyListings(userId);
+      if (weeklyCount >= 5) {
+        throw AppError.rateLimit();
+      }
 
-    // Set active=true
-    const updated = await repo.setActive(id, true);
+      // Set active=true
+      const updated = await repo.setActive(id, true);
 
-    return reply.send(toListingResponse(updated));
-  });
+      return reply.send(toListingResponse(updated));
+    },
+  );
 
   /**
    * POST /listings/:id/renew — Renew listing (protected, owner only, 1/hour rate limit)
    */
-  app.post("/listings/:id/renew", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.post(
+    "/listings/:id/renew",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: listingSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    // Check rate limit: if last_renewal > now-1h → 429
-    // last_renewal = expires_at - 30 days
-    const expiresAtDate = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
-    const lastRenewalTime = new Date(expiresAtDate);
-    lastRenewalTime.setDate(lastRenewalTime.getDate() - 30);
+      // Check rate limit: if last_renewal > now-1h → 429
+      // last_renewal = expires_at - 30 days
+      const expiresAtDate = typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
+      const lastRenewalTime = new Date(expiresAtDate);
+      lastRenewalTime.setDate(lastRenewalTime.getDate() - 30);
 
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    if (lastRenewalTime > oneHourAgo) {
-      throw AppError.rateLimit();
-    }
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      if (lastRenewalTime > oneHourAgo) {
+        throw AppError.rateLimit();
+      }
 
-    // Set expires_at = now + 30 days
-    const newExpiresAt = new Date();
-    newExpiresAt.setDate(newExpiresAt.getDate() + 30);
+      // Set expires_at = now + 30 days
+      const newExpiresAt = new Date();
+      newExpiresAt.setDate(newExpiresAt.getDate() + 30);
 
-    const updated = await repo.setExpiry(id, newExpiresAt);
+      const updated = await repo.setExpiry(id, newExpiresAt);
 
-    return reply.send(toListingResponse(updated));
-  });
+      return reply.send(toListingResponse(updated));
+    },
+  );
 
   /**
    * POST /listings/:id/deactivate — Deactivate listing (protected, owner only)
    */
-  app.post("/listings/:id/deactivate", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.post(
+    "/listings/:id/deactivate",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: listingSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    const updated = await repo.setActive(id, false);
+      const updated = await repo.setActive(id, false);
 
-    return reply.send(toListingResponse(updated));
-  });
+      return reply.send(toListingResponse(updated));
+    },
+  );
 
   /**
    * POST /listings/:id/activate — Activate listing (protected, owner only, 409 if expired)
    */
-  app.post("/listings/:id/activate", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.post(
+    "/listings/:id/activate",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: listingSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    if (listing.user_id !== userId) {
-      throw AppError.forbidden();
-    }
+      if (listing.user_id !== userId) {
+        throw AppError.forbidden();
+      }
 
-    // 409 if expired
-    const expiresAtForActivate =
-      typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
-    if (expiresAtForActivate <= new Date()) {
-      throw AppError.conflict("listing has expired");
-    }
+      // 409 if expired
+      const expiresAtForActivate =
+        typeof listing.expires_at === "string" ? new Date(listing.expires_at) : listing.expires_at;
+      if (expiresAtForActivate <= new Date()) {
+        throw AppError.conflict("listing has expired");
+      }
 
-    const updated = await repo.setActive(id, true);
+      const updated = await repo.setActive(id, true);
 
-    return reply.send(toListingResponse(updated));
-  });
+      return reply.send(toListingResponse(updated));
+    },
+  );
 
   /**
    * GET /listings/:id/related — Get related listings (4, same category, exclude self, active & not expired)
    */
-  app.get("/listings/:id/related", async (request, reply) => {
-    const { id } = request.params as { id: string };
+  app.get(
+    "/listings/:id/related",
+    { schema: { params: idParamsSchema, response: { 200: z.array(listingCardSchema) } } },
+    async (request, reply) => {
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) {
-      throw AppError.notFound();
-    }
-
-    const related = await repo.getRelated(id, listing.category);
-
-    const cards: ListingCardResponse[] = [];
-    for (const item of related) {
-      const images = await repo.getImages(item.id);
-      const seller = await repo.getSeller(item.user_id);
-      if (seller) {
-        const card = toListingCardResponse(item, images, Boolean(seller.phone_verified), ctx.config);
-        cards.push(card);
+      const listing = await repo.getById(id);
+      if (!listing) {
+        throw AppError.notFound();
       }
-    }
 
-    return reply.send(cards);
-  });
+      const related = await repo.getRelated(id, listing.category);
+
+      const cards: ListingCardResponse[] = [];
+      for (const item of related) {
+        const images = await repo.getImages(item.id);
+        const seller = await repo.getSeller(item.user_id);
+        if (seller) {
+          const card = toListingCardResponse(item, images, Boolean(seller.phone_verified), ctx.config);
+          cards.push(card);
+        }
+      }
+
+      return reply.send(cards);
+    },
+  );
 
   /**
    * GET /listings/:id/seller-phone — Get seller phone (protected, 403 if viewer is owner, 404 if no phone)
    */
-  app.get("/listings/:id/seller-phone", { preHandler: appWithAuth.authenticate }, async (request, reply) => {
-    const userId = requireUserId(request);
-    const { id } = request.params as { id: string };
+  app.get(
+    "/listings/:id/seller-phone",
+    { preHandler: app.authenticate, schema: { params: idParamsSchema, response: { 200: sellerPhoneSchema } } },
+    async (request, reply) => {
+      const userId = requireUserId(request);
+      const { id } = request.params;
 
-    const listing = await repo.getById(id);
-    if (!listing) throw AppError.notFound();
+      const listing = await repo.getById(id);
+      if (!listing) throw AppError.notFound();
 
-    // 403 if viewer is owner
-    if (listing.user_id === userId) {
-      throw AppError.forbidden();
-    }
+      // 403 if viewer is owner
+      if (listing.user_id === userId) {
+        throw AppError.forbidden();
+      }
 
-    // Get seller phone
-    const seller = await ctx.db
-      .selectFrom("users")
-      .select("phone")
-      .where("id", "=", listing.user_id)
-      .executeTakeFirst();
+      // Get seller phone
+      const seller = await ctx.db
+        .selectFrom("users")
+        .select("phone")
+        .where("id", "=", listing.user_id)
+        .executeTakeFirst();
 
-    if (!seller || !seller.phone) {
-      throw AppError.notFound();
-    }
+      if (!seller || !seller.phone) {
+        throw AppError.notFound();
+      }
 
-    return reply.send({ phone: seller.phone });
-  });
+      return reply.send({ phone: seller.phone });
+    },
+  );
 };
