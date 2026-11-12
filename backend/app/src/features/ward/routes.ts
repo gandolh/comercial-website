@@ -17,8 +17,9 @@
  * in-flight sign-in start again.
  */
 import { randomBytes } from "node:crypto";
+import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
+import { z } from "zod";
 import { AppError, signToken } from "@my-olx/core";
-import type { FastifyInstance } from "fastify";
 import type { AppContext } from "../../context.js";
 import type { WardClient } from "../../../vendor/ward/ward-auth.js";
 import { requireUserId } from "@my-olx/core";
@@ -37,8 +38,24 @@ function readCookie(header: string | undefined, name: string): string | undefine
   return undefined;
 }
 
-export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client: WardClient | undefined): void {
-  const authed = app as FastifyInstance & { authenticate: any };
+/** The context, and the Ward client app.ts chose (undefined: local login only). */
+export type WardRoutesOptions = AppContext & { ward: WardClient | undefined };
+
+// GET /auth/ward/start: `link` is a string, or a list when repeated (which no ticket matches).
+const startQuerySchema = z.object({ link: z.union([z.string(), z.array(z.string())]).optional() });
+// GET /auth/ward/callback takes whatever Ward sends (code, state, error, …): the handler hands the
+// raw query string to the client, so the schema reads nothing and refuses nothing.
+const callbackQuerySchema = z.looseObject({});
+
+const statusSchema = z.object({
+  enabled: z.boolean(),
+});
+const linkTicketSchema = z.object({
+  ticket: z.string(),
+});
+
+export const wardRoutes: FastifyPluginAsyncZod<WardRoutesOptions> = async (app, options) => {
+  const { ward: client, ...ctx } = options;
   const flows = new Map<string, { flow: Flow; userId?: string; expires: number }>();
   const tickets = new Map<string, { userId: string; expires: number }>();
   const appUrl = (pathAndQuery: string) => `${ctx.config.frontendBaseUrl.replace(/\/$/, "")}${pathAndQuery}`;
@@ -48,24 +65,31 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
     for (const [k, v] of tickets) if (v.expires < now) tickets.delete(k);
   };
 
-  app.get("/auth/ward/status", async () => ({ enabled: client !== undefined }));
+  app.get("/auth/ward/status", { schema: { response: { 200: statusSchema } } }, async () => ({
+    enabled: client !== undefined,
+  }));
 
-  app.post("/auth/ward/link-ticket", { preHandler: authed.authenticate }, async (request) => {
-    if (!client) throw AppError.notFound();
-    const ticket = randomBytes(24).toString("base64url");
-    tickets.set(ticket, { userId: requireUserId(request), expires: Date.now() + TICKET_TTL_MS });
-    return { ticket };
-  });
+  app.post(
+    "/auth/ward/link-ticket",
+    { preHandler: app.authenticate, schema: { response: { 200: linkTicketSchema } } },
+    async (request) => {
+      if (!client) throw AppError.notFound();
+      const ticket = randomBytes(24).toString("base64url");
+      tickets.set(ticket, { userId: requireUserId(request), expires: Date.now() + TICKET_TTL_MS });
+      return { ticket };
+    },
+  );
 
-  app.get("/auth/ward/start", async (request, reply) => {
+  // Redirects: their inputs only, no response schema.
+  app.get("/auth/ward/start", { schema: { querystring: startQuerySchema } }, async (request, reply) => {
     if (!client) throw AppError.notFound();
     const now = Date.now();
     sweep(now);
-    const { link } = request.query as { link?: string };
+    const { link } = request.query;
     let userId: string | undefined;
     if (link !== undefined) {
-      const t = tickets.get(link);
-      tickets.delete(link);
+      const t = typeof link === "string" ? tickets.get(link) : undefined;
+      if (typeof link === "string") tickets.delete(link);
       if (!t || t.expires < now) return reply.redirect(appUrl("/cont/setari?ward_error=expired_link"));
       userId = t.userId;
     }
@@ -79,7 +103,7 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
     return reply.redirect(url);
   });
 
-  app.get("/auth/ward/callback", async (request, reply) => {
+  app.get("/auth/ward/callback", { schema: { querystring: callbackQuerySchema } }, async (request, reply) => {
     if (!client) throw AppError.notFound();
     const flowId = readCookie(request.headers.cookie, FLOW_COOKIE);
     const entry = flowId ? flows.get(flowId) : undefined;
@@ -112,4 +136,4 @@ export function registerWardRoutes(app: FastifyInstance, ctx: AppContext, client
     const token = signToken(owner.id, ctx.config.jwtSecret, ctx.config.jwtExpirySeconds);
     return reply.redirect(appUrl(`/autentificare/ward#token=${encodeURIComponent(token)}`));
   });
-}
+};

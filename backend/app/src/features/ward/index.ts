@@ -1,2 +1,2 @@
-export { registerWardRoutes } from "./routes.js";
+export { wardRoutes } from "./routes.js";
 export { wardClientFrom } from "./client.js";

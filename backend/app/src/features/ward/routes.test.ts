@@ -119,6 +119,19 @@ describe("sign-in for the owner only", () => {
     const reused = await t.app.inject({ method: "GET", url: `/auth/ward/start?link=${ticket}` });
     expect(reused.headers.location).toBe("http://localhost:5173/cont/setari?ward_error=expired_link");
   });
+
+  it("lets its query schemas refuse nothing: a repeated link and Ward's error callback still redirect", async () => {
+    t = await startTestApp({}, fakeWard);
+    const repeated = await t.app.inject({ method: "GET", url: "/auth/ward/start?link=a&link=b" });
+    expect(repeated.headers.location).toBe("http://localhost:5173/cont/setari?ward_error=expired_link");
+    const start = await t.app.inject({ method: "GET", url: "/auth/ward/start" });
+    const denied = await t.app.inject({
+      method: "GET",
+      url: "/auth/ward/callback?error=access_denied&state=s1&state=s2",
+      headers: { cookie: cookieOf(start) },
+    });
+    expect(denied.headers.location).toBe("http://localhost:5173/autentificare?ward_error=invalid_response");
+  });
 });
 
 describe("createOwner", () => {
