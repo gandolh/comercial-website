@@ -16,7 +16,7 @@ import { AppError } from "@my-olx/core";
 import type { AppContext } from "../../context.js";
 import { BundlesRepository } from "../../db/bundles-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
-import { toListingCardResponse } from "../listings/index.js";
+import { listingCardSchema, toListingCardResponse } from "../listings/index.js";
 import { requireUserId } from "@my-olx/core";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
@@ -35,19 +35,6 @@ const bundleParamsSchema = z.object({ id: z.string() });
 const bundleItemsReplySchema = z.object({
   bundle_listing_id: z.string(),
   child_listing_ids: z.array(z.string()),
-});
-
-/** A child listing as a card (the shape listings' toListingCardResponse builds). */
-const listingCardSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  price_ron: z.number().nullable(),
-  category: z.string(),
-  cover_url: z.string().nullable(),
-  seller_verified: z.boolean(),
-  posted_at: z.string(),
-  active: z.boolean(),
-  expires_at: z.string(),
 });
 
 // ─── Route plugin ────────────────────────────────────────────────────────────

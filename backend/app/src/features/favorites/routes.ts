@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import type { AppContext } from "../../context.js";
+import { listingCardSchema } from "../listings/index.js";
 import { requireUserId } from "@my-olx/core";
 
 interface ListingCardResponse {
@@ -37,17 +38,6 @@ const favoriteParamsSchema = z.object({ listing_id: z.string() });
 
 // ─── Reply schemas ────────────────────────────────────────────────────────────
 
-const listingCardSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  price_ron: z.number().nullable(),
-  category: z.string(),
-  cover_url: z.string().nullable(),
-  seller_verified: z.boolean(),
-  posted_at: z.string(),
-  active: z.boolean(),
-  expires_at: z.string(),
-});
 const favoriteIdsSchema = z.object({ ids: z.array(z.string()) });
 
 export const favoritesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) => {
