@@ -18,8 +18,8 @@ export function Card({ children, interactive = false, padding = "md", className 
     <div
       {...props}
       className={[
-        "bg-surface-container-lowest rounded-xl",
-        interactive ? "cursor-pointer transition-all duration-200 hover:bg-surface-bright hover:shadow-ambient" : "",
+        "bg-surface-container-lowest rounded-xl border border-outline-variant shadow-card",
+        interactive ? "cursor-pointer transition-shadow duration-200 hover:shadow-band" : "",
         paddingClasses[padding],
         className,
       ]

@@ -24,8 +24,8 @@ interface DropdownProps {
 
 const itemClass = (variant?: "default" | "danger") =>
   cn(
-    "flex w-full cursor-default items-center gap-2 px-4 py-2 text-sm font-medium transition-colors",
-    "outline-none data-highlighted:bg-surface-container",
+    "flex h-11 w-full cursor-default items-center gap-3 rounded-lg px-3 text-control transition-colors",
+    "outline-none data-highlighted:bg-primary-fixed data-highlighted:text-on-primary-fixed",
     variant === "danger" ? "text-error" : "text-on-surface",
   );
 
@@ -39,7 +39,7 @@ export function Dropdown({ trigger, items, align = "end" }: DropdownProps) {
       <Menu.Trigger render={trigger} />
       <Menu.Portal>
         <Menu.Positioner side="bottom" align={align} sideOffset={8} className="z-popup outline-none">
-          <Menu.Popup className="min-w-48 rounded-xl bg-surface-container-lowest py-1.5 shadow-ambient outline-none">
+          <Menu.Popup className="min-w-56 rounded-xl border border-outline-variant bg-surface-container-lowest p-1.5 shadow-popup outline-none">
             {items.map((item, idx) => {
               if (item.key === "__separator__") {
                 return <Menu.Separator key={`sep-${idx}`} className="mx-2 my-1 border-t border-outline-variant" />;

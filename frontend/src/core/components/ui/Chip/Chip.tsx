@@ -25,11 +25,11 @@ export function Chip({
       aria-pressed={selected}
       {...props}
       className={[
-        "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200",
+        "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-control font-semibold transition-colors duration-200",
         "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         selected
-          ? "bg-primary text-on-primary"
-          : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest",
+          ? "bg-primary-fixed text-on-primary-fixed ring-1 ring-primary ring-inset"
+          : "bg-surface-container-low text-on-surface-variant ring-1 ring-outline-variant ring-inset hover:bg-surface-container-high",
         className,
       ]
         .filter(Boolean)

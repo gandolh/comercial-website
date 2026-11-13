@@ -31,12 +31,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={inputId}
             {...props}
             className={[
-              "w-full appearance-none rounded-xl bg-surface-container-high text-on-surface",
-              "px-4 py-3 pr-10 leading-relaxed",
+              "w-full appearance-none rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
+              "h-12 pr-10 pl-3.5 text-body",
               "outline-none transition-all duration-200 cursor-pointer",
-              "focus:bg-surface-container-lowest focus:shadow-focus",
+              "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              error ? "shadow-focus-error" : "",
+              error ? "ring-2 ring-error" : "",
               className,
             ]
               .filter(Boolean)

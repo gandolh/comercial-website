@@ -18,7 +18,7 @@ export function Toaster() {
   return (
     <Toast.Provider toastManager={toastManager} limit={1}>
       <Toast.Portal>
-        <Toast.Viewport className="fixed top-24 left-1/2 z-toast flex w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 flex-col gap-2 outline-none">
+        <Toast.Viewport className="fixed top-20 left-1/2 z-toast flex w-[min(24rem,calc(100vw-2rem))] -translate-x-1/2 flex-col gap-2 outline-none">
           <ToastList />
         </Toast.Viewport>
       </Toast.Portal>
@@ -40,7 +40,7 @@ function ToastList() {
           <Toast.Content>{item.data.render()}</Toast.Content>
         ) : (
           <Toast.Content
-            className={cn("flex items-center gap-3 rounded-xl px-4 py-3 shadow-ambient", variant?.classes)}
+            className={cn("flex min-h-14 items-center gap-3 rounded-control px-4 py-2 shadow-popup", variant?.classes)}
           >
             <span className="material-symbols-outlined shrink-0" style={{ fontSize: "20px" }} aria-hidden="true">
               {variant?.icon}

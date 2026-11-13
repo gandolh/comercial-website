@@ -40,7 +40,7 @@ export function Modal({ open, onClose, title, children, size = "md", className }
       disablePointerDismissal
     >
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-overlay bg-scrim/40 backdrop-blur-sm data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
+        <Dialog.Backdrop className="fixed inset-0 z-overlay bg-scrim/55 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
         <Dialog.Popup
           ref={popupRef}
           initialFocus={() =>
@@ -50,7 +50,7 @@ export function Modal({ open, onClose, title, children, size = "md", className }
           }
           className={cn(
             "fixed top-1/2 left-1/2 z-overlay flex max-h-[90vh] w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col",
-            "rounded-2xl bg-surface-container-lowest/80 shadow-ambient backdrop-blur-xl outline-none",
+            "rounded-2xl border border-outline-variant bg-surface-container-lowest shadow-popup outline-none",
             "motion-safe:transition-[opacity,scale] motion-safe:duration-150",
             "data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
             sizeClasses[size],

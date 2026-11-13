@@ -3,13 +3,13 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@core/lib/cn";
 
 const SIZES = {
-  md: { track: "h-6 w-11", thumb: "size-5 data-checked:translate-x-5" },
-  lg: { track: "h-7 w-12", thumb: "size-6 data-checked:translate-x-5" },
+  md: { track: "h-6.5 w-11", thumb: "size-3.5 data-checked:size-[18px] data-checked:translate-x-4" },
+  lg: { track: "h-7 w-12", thumb: "size-4 data-checked:size-5 data-checked:translate-x-5" },
 } as const;
 
 const TONES = {
-  primary: "data-checked:bg-primary",
-  tertiary: "data-checked:bg-tertiary-container",
+  primary: "data-checked:bg-primary data-checked:ring-primary",
+  tertiary: "data-checked:bg-tertiary-container data-checked:ring-tertiary",
 } as const;
 
 interface SwitchProps extends Omit<ComponentProps<typeof BaseSwitch.Root>, "className" | "children"> {
@@ -28,7 +28,7 @@ export function Switch({ label, labelFirst = false, size = "md", tone = "primary
     <BaseSwitch.Root
       {...props}
       className={cn(
-        "relative inline-flex shrink-0 cursor-pointer items-center rounded-full bg-surface-container-highest p-0.5 outline-none motion-safe:transition-colors",
+        "relative inline-flex shrink-0 cursor-pointer items-center rounded-full bg-surface-container-low px-1.5 ring-2 ring-outline outline-none ring-inset motion-safe:transition-colors",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         "data-disabled:cursor-not-allowed data-disabled:opacity-50",
         SIZES[size].track,
@@ -37,7 +37,7 @@ export function Switch({ label, labelFirst = false, size = "md", tone = "primary
     >
       <BaseSwitch.Thumb
         className={cn(
-          "block rounded-full border border-outline-variant bg-surface-container-lowest data-checked:border-surface-container-lowest motion-safe:transition-transform",
+          "block rounded-full bg-outline data-checked:bg-on-fill motion-safe:transition-transform",
           SIZES[size].thumb,
         )}
       />

@@ -18,7 +18,7 @@ const variantClasses: Record<Variant, string> = {
   primary:
     "bg-primary text-on-primary hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   secondary:
-    "bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2",
+    "bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   tertiary:
     "bg-tertiary-container text-on-tertiary-container hover:bg-tertiary-fixed-dim focus-visible:ring-2 focus-visible:ring-tertiary focus-visible:ring-offset-2",
   ghost:
@@ -28,9 +28,9 @@ const variantClasses: Record<Variant, string> = {
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-4 py-1.5 text-sm gap-1.5",
-  md: "px-6 py-2.5 text-base gap-2",
-  lg: "px-8 py-3.5 text-lg gap-2.5",
+  sm: "h-10 px-4 text-control gap-1.5",
+  md: "h-12 px-5 text-body gap-2.5",
+  lg: "h-14 px-8 text-body gap-2.5",
 };
 
 const iconSizes: Record<Size, string> = {
@@ -57,7 +57,7 @@ export function Button({
       {...props}
       disabled={isDisabled}
       className={cn(
-        "inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200",
+        "inline-flex items-center justify-center rounded-control font-semibold transition-colors duration-200 active:brightness-90",
         "disabled:cursor-not-allowed disabled:opacity-50",
         "outline-none",
         variantClasses[variant],

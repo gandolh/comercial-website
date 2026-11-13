@@ -39,10 +39,10 @@ export function ConfirmDialog({
       }}
     >
       <AlertDialog.Portal>
-        <AlertDialog.Backdrop className="fixed inset-0 z-overlay bg-scrim/40 backdrop-blur-sm data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
+        <AlertDialog.Backdrop className="fixed inset-0 z-overlay bg-scrim/55 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:transition-opacity motion-safe:duration-150" />
         <AlertDialog.Popup
           initialFocus={cancelRef}
-          className="fixed top-1/2 left-1/2 z-overlay w-full max-w-sm -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-2xl bg-surface-container-lowest/90 p-6 shadow-ambient backdrop-blur-xl outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 motion-safe:transition-[opacity,scale] motion-safe:duration-150"
+          className="fixed top-1/2 left-1/2 z-overlay w-full max-w-sm -translate-x-1/2 -translate-y-1/2 space-y-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-popup outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 motion-safe:transition-[opacity,scale] motion-safe:duration-150"
         >
           <AlertDialog.Title className="font-headline text-xl leading-tight font-bold text-on-surface">
             {title}

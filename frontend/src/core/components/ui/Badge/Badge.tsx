@@ -21,7 +21,7 @@ export function Badge({ variant = "surface", icon, children, className = "" }: B
   return (
     <span
       className={[
-        "inline-flex items-center gap-1 rounded-full px-3 py-0.5 text-xs font-semibold uppercase tracking-wide",
+        "inline-flex h-6 items-center gap-1 rounded-xl px-2.5 text-label font-semibold",
         variantClasses[variant],
         className,
       ].join(" ")}

@@ -34,13 +34,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             {...props}
             className={[
-              "w-full rounded-xl bg-surface-container-high text-on-surface",
-              "px-4 py-3 leading-relaxed",
+              "w-full rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
+              "h-12 px-3.5 text-body",
               "outline-none transition-all duration-200",
-              "placeholder:text-on-surface-variant/60",
-              "focus:bg-surface-container-lowest focus:shadow-focus",
+              "placeholder:text-on-surface-variant",
+              "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              error ? "shadow-focus-error" : "",
+              error ? "ring-2 ring-error" : "",
               iconLeft ? "pl-10" : "",
               iconRight ? "pr-10" : "",
               className,
