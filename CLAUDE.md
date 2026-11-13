@@ -43,8 +43,8 @@ cd backend
 npm install
 cp .env.example .env          # then set JWT_SECRET; the API reads backend/.env when it exists
 npm run dev                   # tsx watch on port 8080; migrations run at start
-npm run build                 # core, then app
-npm test                      # builds core and app first (pretest), then vitest
+npm run build                 # tsc -b for the app, then its static data
+npm test                      # builds the app first (pretest), then vitest
 ```
 
 Data defaults to `backend/app/data/` (the SQLite file and uploads; gitignored), relative to the folder
@@ -68,8 +68,7 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 
 - Three `package.json` files, three lockfiles: `backend/`, `frontend/`, and the root for the tools. None is a
   workspace of another.
-- The app imports `@my-olx/core` from `core/dist/`: after changing `core/`, rebuild it (`npm test` and
-  `npm run dev` do).
+- `backend/` is a workspace of one package, `@my-olx/app` (`core/` was folded into `app/src` on 2026-11-13).
 - The frontend has two vitest files (the `cn()` merge, and the stylesheet read as text: dark-theme contrast, the
   browser-bar colours); flows are checked in Playwright. Its gate is typecheck, lint, those tests and build.
 - `vendor/house-style/` is a generated copy: never edit it, `npm run house-style:sync` refreshes it.

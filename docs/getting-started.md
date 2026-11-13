@@ -157,7 +157,7 @@ removed on 2026-11-03).
 ## Test, typecheck, lint, build
 
 ```bash
-cd backend && npm test && npm run typecheck   # vitest; tsc over core and app
+cd backend && npm test && npm run typecheck   # vitest; tsc over the app
 cd frontend && npm run lint && npm run build  # eslint; tsc + vite build
 ```
 
@@ -167,8 +167,6 @@ frontend built, and `npm run lint` reported 9 errors that predate the demo work
 
 ## Common problems
 
-- **`ERR_MODULE_NOT_FOUND` for `@my-olx/core/dist/index.js`.** Run
-  `npm run build` in `backend/` first.
 - **`JWT_SECRET environment variable is required`.** Set it in `backend/.env`
   (copied from `.env.example`), which the API reads when it exists.
 - **`ENOSPC: System limit for number of file watchers reached`.** Something
