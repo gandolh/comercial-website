@@ -42,3 +42,13 @@ Migrations, other features' routes, `backend/core`, `backend/app/vendor/`, `vend
 - A dev seed on a scratch database still runs.
 - The outcome note says what each dropped field did in the frontend (nothing).
 - Owner step: deploy with vps-deploy's `piataro` stack, phase `server` (briefs 10 to 14 also wait for the owner's deploy).
+
+## Outcome (2026-11-13)
+
+Built as written. Commit 1898ce7.
+
+- The conversation summary's counterparty is `id`, `display_name`, `avatar_url`; `email`, `phone`, `email_verified`, `phone_verified` and `created_at` are no longer selected or sent. The listing's `seller_verified` and `active` are booleans.
+- The asset upload no longer answers `s3_key`. The avatar upload's `public_url` goes through `imageUrl` (`/uploads/avatars/...`); its `s3_key` stays, because the avatar form sends it back in `PATCH /users/me`.
+- Frontend: nothing read a dropped field except `RecentConversations`, which fell back to the counterparty's email local part for a missing name; it shows the "unknown user" text now, as the messaging screens do. `UserSummary` and `ListingAsset.s3Key` lost the dead fields. The avatar's `public_url` was never read, so the wrong URL never showed.
+- Tests: three new ones (summary, asset reply, avatar URL served); all three fail on the old code. `npm run check`, `corpus/lint.sh` and `seed:dev` on a scratch database exit 0.
+- Owner step: deploy phase `server` (briefs 10 to 14 also wait).

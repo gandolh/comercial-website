@@ -245,3 +245,6 @@ the apply-at-once filters changed ([decisions.md](wiki/decisions.md), [carpathia
 Contrast is tested over both themes and Playwright covers focus rings, reduced motion, 390 px overflow and the theme.
 `Mai multe filtre` is not built until a category has a fourth facet. Outcome note, measurements and the comp
 comparison in [brief 14](briefs/done/14-a-redesign-with-hallmark-on-the-estate-board.md).
+
+## 2026-11-13: brief 15 done (replies that say less)
+The conversation summary stops sending the other party's email and phone, the asset upload its storage key; the avatar URL gets /uploads/; the summary's flags are booleans. Todo replies-that-say-too-much promoted and built. Ready for deploy.
