@@ -1,5 +1,7 @@
 # Replies that say too much, and one wrong URL
 
+> Promoted to [brief 15](../briefs/todo/15-replies-that-say-less.md) on 2026-11-13.
+
 Found by brief 13 (2026-11-12) while writing the response schemas. The schemas kept every field as it was (the
 brief's rule: no reply changes but leaks the comparison shows), so these are still sent.
 
