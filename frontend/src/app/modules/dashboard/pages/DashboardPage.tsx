@@ -21,10 +21,10 @@ export function DashboardPage() {
   if (statsLoading) {
     return (
       <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-8">
-        <div className="h-12 w-64 animate-pulse rounded-xl bg-surface-container-low" />
+        <div className="h-12 w-64 rounded-xl bg-surface-container-low motion-safe:animate-pulse" />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse rounded-2xl bg-surface-container-low" />
+            <div key={i} className="h-32 rounded-2xl bg-surface-container-low motion-safe:animate-pulse" />
           ))}
         </div>
       </main>

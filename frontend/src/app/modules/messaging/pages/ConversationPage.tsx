@@ -46,7 +46,7 @@ export const ConversationPage: React.FC = () => {
   if (isLoading || !currentConversation) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
+        <div className="h-8 w-8 rounded-full border-b-2 border-primary motion-safe:animate-spin" />
       </div>
     );
   }

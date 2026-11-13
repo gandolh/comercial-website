@@ -36,7 +36,7 @@ export function EmailVerifyPage() {
     return (
       <AuthCardShell title="Verificare email">
         <div className="py-8 text-center">
-          <svg className="mx-auto mb-4 h-12 w-12 animate-spin text-primary" viewBox="0 0 24 24">
+          <svg className="mx-auto mb-4 h-12 w-12 text-primary motion-safe:animate-spin" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path
               className="opacity-75"

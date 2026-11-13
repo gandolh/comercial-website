@@ -178,7 +178,9 @@ export function AssetUploadStep({
 
         {isUploading && (
           <div className="space-y-4 rounded-3xl border-2 border-dashed border-primary bg-surface-container-low p-12 text-center">
-            <span className="material-symbols-outlined animate-spin text-5xl text-primary">progress_activity</span>
+            <span className="material-symbols-outlined text-5xl text-primary motion-safe:animate-spin">
+              progress_activity
+            </span>
             <p className="text-sm text-on-surface-variant">Se încarcă fișierele...</p>
           </div>
         )}

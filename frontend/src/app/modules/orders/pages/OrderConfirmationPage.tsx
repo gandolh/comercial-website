@@ -62,7 +62,7 @@ export function OrderConfirmationPage() {
   if (loading) {
     return (
       <main className="flex min-h-[50vh] flex-col items-center justify-center px-4 pt-10 pb-20">
-        <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <div className="mb-4 h-12 w-12 rounded-full border-4 border-primary border-t-transparent motion-safe:animate-spin" />
         <p className="text-on-surface-variant">{t("orders.confirmation.loading")}</p>
       </main>
     );

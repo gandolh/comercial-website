@@ -8,7 +8,7 @@ function LoadingScreen() {
   return (
     <main className="mt-8 flex-1">
       <div className="mx-auto max-w-2xl space-y-4 px-6 py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-primary" style={{ fontSize: "48px" }}>
+        <span className="material-symbols-outlined text-primary motion-safe:animate-spin" style={{ fontSize: "48px" }}>
           progress_activity
         </span>
         <p className="text-on-surface-variant">Se încarcă wizard-ul de creare...</p>

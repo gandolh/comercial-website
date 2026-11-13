@@ -23,7 +23,7 @@
     "ctaHowItWorks": "Cum funcționează?"
   },
   "listing": {
-    "verified": "VERIFICAT",
+    "verified": "Verificat",
     "status": {
       "active": "Activ",
       "paused": "Pauzat",
@@ -47,7 +47,8 @@
       "downloads_one": "1 descărcare",
       "downloads_few": "{{count}} descărcări",
       "downloads_other": "{{count}} descărcări"
-    }
+    },
+    "noPreview": "Fără previzualizare"
   },
   "edit": {
     "title": "Editează anunțul",
@@ -182,7 +183,9 @@
       "mp4": "MP4",
       "wav": "WAV",
       "otf": "OTF"
-    }
+    },
+    "title": "Filtre",
+    "apply": "Aplică filtrele"
   },
   "dashboard": {
     "greeting": "Bună",

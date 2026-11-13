@@ -23,7 +23,7 @@ export function FavoriteToggle({ listingId, className = "", size = "md" }: Favor
     [favoriteIdsQuery.data, listingId],
   );
 
-  const dimension = size === "sm" ? "w-10 h-10" : "w-12 h-12";
+  const dimension = size === "sm" ? "size-11" : "size-12";
   const iconSize = size === "sm" ? "20px" : "24px";
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,7 +45,7 @@ export function FavoriteToggle({ listingId, className = "", size = "md" }: Favor
       type="button"
       onClick={handleClick}
       disabled={toggleFavorite.isPending}
-      className={`${dimension} flex items-center justify-center rounded-full bg-surface-container-lowest/80 shadow-sm backdrop-blur-md transition-all hover:bg-surface-container-lowest ${className}`}
+      className={`${dimension} flex items-center justify-center rounded-full bg-surface-container-lowest shadow-card transition-colors hover:bg-surface-container-low ${className}`}
       aria-label={isFavorited ? "Elimină de la favorite" : "Adaugă la favorite"}
     >
       <span

@@ -31,7 +31,7 @@ export const ConversationsPage: React.FC = () => {
           <div className="flex-1 overflow-y-auto">
             {isLoading ? (
               <div className="flex h-32 items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
+                <div className="h-8 w-8 rounded-full border-b-2 border-primary motion-safe:animate-spin" />
               </div>
             ) : conversations && conversations.length > 0 ? (
               conversations.map((conv: ConversationSummary) => (

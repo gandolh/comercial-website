@@ -41,7 +41,9 @@ export function EditListingPage() {
   if (isLoading) {
     return (
       <div className="mx-auto max-w-2xl py-24 text-center">
-        <span className="material-symbols-outlined animate-spin text-5xl text-primary">progress_activity</span>
+        <span className="material-symbols-outlined text-5xl text-primary motion-safe:animate-spin">
+          progress_activity
+        </span>
       </div>
     );
   }

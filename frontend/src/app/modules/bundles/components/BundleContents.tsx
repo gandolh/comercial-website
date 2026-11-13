@@ -55,7 +55,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
         <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
         <div className="divide-y divide-surface-container-high overflow-hidden rounded-xl border border-surface-container-high">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-16 animate-pulse bg-surface-container" />
+            <div key={i} className="h-16 bg-surface-container motion-safe:animate-pulse" />
           ))}
         </div>
       </section>

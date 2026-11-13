@@ -1,6 +1,8 @@
 import { Link } from "@core/lib/router";
+import { Button } from "@core/components/ui";
 import { CardSkeleton } from "@core/components/ui/Skeleton";
 import { ListingCard } from "@app/modules/home/components/ListingCard";
+import { PreviewImage } from "@app/modules/listings/components/PreviewImage";
 import { FavoriteToggle } from "@app/modules/favorites/components/FavoriteToggle";
 import type { ListingCard as ListingCardItem } from "@app/types/listing";
 
@@ -25,7 +27,11 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
   if (isLoading) {
     return (
       <div
-        className={viewMode === "grid" ? "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3" : "flex flex-col gap-6"}
+        className={
+          viewMode === "grid"
+            ? "grid list-none grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4 p-0 md:gap-6"
+            : "flex flex-col gap-4"
+        }
       >
         {Array.from({ length: 6 }).map((_, i) => (
           <CardSkeleton key={i} />
@@ -36,18 +42,21 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
 
   if (listings.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
-        <span className="material-symbols-outlined text-outline" style={{ fontSize: "48px" }}>
+      <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
+        <span
+          className="material-symbols-outlined text-on-surface-variant"
+          style={{ fontSize: "48px" }}
+          aria-hidden="true"
+        >
           search_off
         </span>
-        <p className="text-lg font-bold text-on-surface">Niciun anunț găsit</p>
-        <p className="text-sm text-on-surface-variant">Încearcă să modifici filtrele pentru mai multe rezultate.</p>
-        <button
-          onClick={onReset}
-          className="mt-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-on-primary transition-all hover:opacity-90 active:scale-95"
-        >
+        <p className="text-price font-extrabold text-on-surface">Niciun anunț găsit</p>
+        <p className="text-control text-on-surface-variant">
+          Încearcă să modifici filtrele pentru mai multe rezultate.
+        </p>
+        <Button className="mt-2" onClick={onReset}>
           Resetează Filtrele
-        </button>
+        </Button>
       </div>
     );
   }
@@ -59,30 +68,24 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
           <Link
             key={l.id}
             to={`/anunturi/${l.id}`}
-            className="relative flex cursor-pointer gap-4 overflow-hidden rounded-xl bg-surface-container-lowest no-underline transition-all duration-300 hover:shadow-ambient"
+            className="relative flex overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface no-underline shadow-card transition-shadow hover:shadow-band"
           >
-            {l.coverUrl ? (
-              <img src={l.coverUrl} alt={l.title} className="h-32 w-40 shrink-0 object-cover" />
-            ) : (
-              <div className="flex h-32 w-40 shrink-0 items-center justify-center bg-surface-container text-outline">
-                <span className="material-symbols-outlined">image</span>
-              </div>
-            )}
-            <div className="flex flex-col justify-center gap-1 p-4">
-              <span className="text-xl font-black text-primary">
+            <div className="h-32 w-30 shrink-0 overflow-hidden md:w-40">
+              <PreviewImage src={l.coverUrl} alt={l.title} category={l.category} iconSize={32} />
+            </div>
+            <div className="flex min-w-0 flex-col justify-center gap-1 p-4 pr-14">
+              <span className="text-price font-extrabold text-primary tabular-nums">
                 {l.priceRon !== null ? `${l.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
               </span>
-              <h3 className="font-bold text-on-surface">{l.title}</h3>
-              <p className="text-xs font-medium tracking-wider text-outline uppercase">
-                {formatRelativeTime(l.postedAt)}
-              </p>
+              <h3 className="text-card-title text-on-surface">{l.title}</h3>
+              <p className="text-control text-on-surface-variant">{formatRelativeTime(l.postedAt)}</p>
               {l.sellerVerified && (
-                <span className="self-start rounded-full bg-tertiary-container px-2 py-0.5 text-xs font-bold text-on-fill">
+                <span className="inline-flex h-6 items-center gap-1 self-start rounded-xl bg-tertiary-container px-2.5 text-label font-semibold text-on-fill">
                   Verificat
                 </span>
               )}
             </div>
-            <FavoriteToggle listingId={l.id} className="absolute top-4 right-4" size="sm" />
+            <FavoriteToggle listingId={l.id} className="absolute top-2 right-2" size="sm" />
           </Link>
         ))}
       </div>
@@ -90,7 +93,7 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
   }
 
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid list-none grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4 p-0 md:gap-6">
       {listings.map((l) => (
         <ListingCard key={l.id} listing={l} />
       ))}

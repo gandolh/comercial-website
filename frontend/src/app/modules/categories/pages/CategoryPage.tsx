@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useParams, useSearchParams, Navigate } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useCategoryListings } from "../hooks/useCategoryListings";
-import { FilterSidebar } from "../components/FilterSidebar";
-import { CategoryHeader } from "../components/CategoryHeader";
-import { SortBar } from "../components/SortBar";
+import { ResultsBand } from "../components/ResultsBand";
+import { Skeleton } from "@core/components/ui/Skeleton";
 import { ListingGrid } from "../components/ListingGrid";
 import { Pagination } from "../components/Pagination";
 import { CATEGORY_LABELS } from "../types";
@@ -33,15 +32,18 @@ export function CategoryPage() {
 
   const { data, isFetching, isError, refetch } = useCategoryListings(slug, filters, undefined, isKnownSlug);
 
-  function setFilter(key: keyof FilterState, value: FilterState[keyof FilterState]) {
+  /** Sets the given filters in one change; any change but a page change goes back to the first page. */
+  function setFilters(patch: Partial<FilterState>) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
-        next.delete(key);
-      } else {
-        next.set(key, String(value === true ? "1" : value));
+      for (const [key, value] of Object.entries(patch)) {
+        if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
+          next.delete(key);
+        } else {
+          next.set(key, String(value === true ? "1" : value));
+        }
+        if (key !== "pagina") next.delete("pagina");
       }
-      if (key !== "pagina") next.delete("pagina");
       return next;
     });
   }
@@ -62,21 +64,21 @@ export function CategoryPage() {
     return <Navigate to="/categorii" replace />;
   }
 
+  const label = CATEGORY_LABELS[slug] ?? slug;
+
   return (
-    <main className="mx-auto mt-24 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
-      <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
+    <>
+      <ResultsBand
+        title={label}
+        count={isFetching ? <Skeleton className="mt-1 h-5 w-48" /> : `${data?.totalCount ?? 0} de anunțuri găsite`}
+        filters={filters}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        onChange={setFilters}
+        onReset={resetFilters}
+      />
 
-      <section className="min-w-0 grow">
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <CategoryHeader slug={slug} totalCount={data?.totalCount} isLoading={isFetching} />
-          <SortBar
-            sortare={filters.sortare}
-            viewMode={viewMode}
-            onSortChange={(v) => setFilter("sortare", v)}
-            onViewModeChange={setViewMode}
-          />
-        </div>
-
+      <main className="mx-auto w-full max-w-310 grow px-4 pt-5 pb-9 md:px-6 md:pt-6 md:pb-16">
         {isError ? (
           <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => refetch()} />
         ) : (
@@ -94,7 +96,7 @@ export function CategoryPage() {
             />
           </>
         )}
-      </section>
-    </main>
+      </main>
+    </>
   );
 }

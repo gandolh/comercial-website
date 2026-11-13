@@ -11,7 +11,7 @@ export function RecentConversations() {
 
   const recent = conversations?.slice(0, 3) || [];
 
-  if (isLoading) return <div className="h-48 animate-pulse rounded-2xl bg-surface-container-low" />;
+  if (isLoading) return <div className="h-48 rounded-2xl bg-surface-container-low motion-safe:animate-pulse" />;
 
   if (recent.length === 0)
     return (

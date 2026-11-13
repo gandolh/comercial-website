@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useSearchParams } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useCategoryListings } from "@app/modules/categories/hooks/useCategoryListings";
-import { FilterSidebar } from "@app/modules/categories/components/FilterSidebar";
-import { SortBar } from "@app/modules/categories/components/SortBar";
+import { ResultsBand } from "@app/modules/categories/components/ResultsBand";
 import { ListingGrid } from "@app/modules/categories/components/ListingGrid";
 import { Pagination } from "@app/modules/categories/components/Pagination";
 import type { FilterState } from "@app/modules/categories/types";
@@ -30,15 +29,18 @@ export function SearchResultsPage() {
 
   const { data, isFetching, isError, refetch } = useCategoryListings(undefined, filters, q);
 
-  function setFilter(key: keyof FilterState, value: FilterState[keyof FilterState]) {
+  /** Sets the given filters in one change; any change but a page change goes back to the first page. */
+  function setFilters(patch: Partial<FilterState>) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
-      if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
-        next.delete(key);
-      } else {
-        next.set(key, String(value === true ? "1" : value));
+      for (const [key, value] of Object.entries(patch)) {
+        if (value === null || value === false || value === "" || value === "oricand" || value === "noi") {
+          next.delete(key);
+        } else {
+          next.set(key, String(value === true ? "1" : value));
+        }
+        if (key !== "pagina") next.delete("pagina");
       }
-      if (key !== "pagina") next.delete("pagina");
       return next;
     });
   }
@@ -56,27 +58,18 @@ export function SearchResultsPage() {
   }
 
   return (
-    <main className="mx-auto mt-8 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
-      <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
+    <>
+      <ResultsBand
+        title={q ? `Rezultate pentru "${q}"` : "Toate anunțurile"}
+        count={isFetching ? "Se încarcă..." : `${data?.totalCount || 0} anunțuri găsite`}
+        filters={filters}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        onChange={setFilters}
+        onReset={resetFilters}
+      />
 
-      <section className="min-w-0 grow">
-        <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-          <div className="space-y-1">
-            <h1 className="font-headline text-2xl font-black text-on-surface">
-              {q ? `Rezultate pentru "${q}"` : "Toate anunțurile"}
-            </h1>
-            <p className="text-sm text-on-surface-variant">
-              {isFetching ? "Se încarcă..." : `${data?.totalCount || 0} anunțuri găsite`}
-            </p>
-          </div>
-          <SortBar
-            sortare={filters.sortare}
-            viewMode={viewMode}
-            onSortChange={(v) => setFilter("sortare", v)}
-            onViewModeChange={setViewMode}
-          />
-        </div>
-
+      <main className="mx-auto w-full max-w-310 grow px-4 pt-5 pb-9 md:px-6 md:pt-6 md:pb-16">
         {isError ? (
           <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => refetch()} />
         ) : (
@@ -94,7 +87,7 @@ export function SearchResultsPage() {
             />
           </>
         )}
-      </section>
-    </main>
+      </main>
+    </>
   );
 }

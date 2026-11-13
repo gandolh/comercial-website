@@ -27,7 +27,7 @@ export function PublicProfilePage() {
   if (isProfileLoading) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="mb-12 animate-pulse rounded-3xl bg-surface-container-low p-8">
+        <div className="mb-12 rounded-3xl bg-surface-container-low p-8 motion-safe:animate-pulse">
           <div className="flex flex-col items-center gap-8 md:flex-row">
             <div className="h-32 w-32 rounded-full bg-surface-container-high" />
             <div className="flex-1 space-y-4">
@@ -177,7 +177,7 @@ export function PublicProfilePage() {
       {isListingsLoading ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-80 animate-pulse rounded-2xl bg-surface-container-low" />
+            <div key={i} className="h-80 rounded-2xl bg-surface-container-low motion-safe:animate-pulse" />
           ))}
         </div>
       ) : listingsPage?.items && listingsPage.items.length > 0 ? (

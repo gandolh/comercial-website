@@ -36,7 +36,7 @@ export function Chip({
         .join(" ")}
     >
       {icon && (
-        <span className="material-symbols-outlined text-base leading-none" aria-hidden="true">
+        <span className="material-symbols-outlined leading-none" style={{ fontSize: "18px" }} aria-hidden="true">
           {icon}
         </span>
       )}
@@ -51,7 +51,7 @@ export function Chip({
           aria-label={`Elimină ${label}`}
           className="ml-0.5 rounded-full transition-opacity hover:opacity-70"
         >
-          <span className="material-symbols-outlined text-base leading-none" aria-hidden="true">
+          <span className="material-symbols-outlined leading-none" style={{ fontSize: "18px" }} aria-hidden="true">
             close
           </span>
         </button>

@@ -137,7 +137,7 @@ export function MyListingsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse rounded-2xl bg-surface-container-low" />
+            <div key={i} className="h-32 rounded-2xl bg-surface-container-low motion-safe:animate-pulse" />
           ))}
         </div>
       ) : isError ? (

@@ -1,5 +1,6 @@
 import { Link } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
+import { cn } from "@core/lib/cn";
 import { useAuth } from "@core/lib/auth";
 import { useLogoutMutation } from "@app/modules/auth/hooks/useLogoutMutation";
 import { useFavoriteIds } from "@app/modules/favorites/hooks/useFavoriteIds";
@@ -99,7 +100,7 @@ export function Navbar() {
             <>
               <button
                 type="button"
-                className={`${navButton} hidden w-11 border-transparent px-0 min-[360px]:inline-flex`}
+                className={cn(navButton, "hidden w-11 border-transparent px-0 min-[360px]:inline-flex")}
                 aria-label="Notificări"
               >
                 <span className="material-symbols-outlined" aria-hidden="true">
@@ -111,7 +112,7 @@ export function Navbar() {
                   trigger={
                     <button
                       type="button"
-                      className={`${navButton} max-[1100px]:w-11 max-[1100px]:border-transparent max-[1100px]:px-0`}
+                      className={cn(navButton, "max-[1100px]:w-11 max-[1100px]:border-transparent max-[1100px]:px-0")}
                       aria-label="Profil"
                     >
                       <span className="material-symbols-outlined" aria-hidden="true">
@@ -130,13 +131,16 @@ export function Navbar() {
               </span>
               <Link
                 to="/adauga-anunt"
-                className={`${navButton} border-on-nav-band bg-on-nav-band px-3.5 font-semibold text-nav-band hover:bg-on-nav-band/90 md:px-4.5`}
+                className={cn(
+                  navButton,
+                  "border-on-nav-band bg-on-nav-band px-3.5 font-semibold text-nav-band hover:bg-on-nav-band/90 md:px-4.5",
+                )}
               >
                 {t("nav.addListing")}
               </Link>
             </>
           ) : (
-            <Link to="/autentificare" className={`${navButton} hidden md:inline-flex`}>
+            <Link to="/autentificare" className={cn(navButton, "max-md:hidden")}>
               Conectare
             </Link>
           )}

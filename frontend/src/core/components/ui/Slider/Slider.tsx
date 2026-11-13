@@ -10,6 +10,8 @@ interface SliderProps {
   onChange: (value: [number, number]) => void;
   formatValue?: (value: number) => string;
   debounceMs?: number;
+  /** The label, the range and the figures on one line (the filter band). */
+  inline?: boolean;
 }
 
 export function Slider({
@@ -21,6 +23,7 @@ export function Slider({
   onChange,
   formatValue = (v) => String(v),
   debounceMs = 300,
+  inline = false,
 }: SliderProps) {
   const [local, setLocal] = useState<[number, number]>(value);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -44,15 +47,21 @@ export function Slider({
     onChange(v);
   }
 
+  const thumb =
+    "size-5 cursor-grab rounded-full border-2 border-primary bg-surface-container-lowest shadow-card focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:cursor-grabbing";
+
   return (
-    <div className="space-y-3">
+    <div className={inline ? "flex flex-wrap items-center gap-x-3.5 gap-y-1" : "space-y-2"}>
       {label && (
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold tracking-widest text-outline uppercase">{label}</span>
-          <span className="text-xs font-medium text-on-surface-variant">
-            {formatValue(local[0])} – {formatValue(local[1])}
-          </span>
-        </div>
+        <span
+          className={
+            inline
+              ? "text-control whitespace-nowrap text-on-surface-variant"
+              : "block text-control text-on-surface-variant"
+          }
+        >
+          {label}
+        </span>
       )}
       <BaseSlider.Root
         value={local}
@@ -61,22 +70,21 @@ export function Slider({
         min={min}
         max={max}
         step={step}
-        className="flex w-full touch-none flex-col select-none"
+        className={inline ? "flex w-65 touch-none flex-col select-none" : "flex w-full touch-none flex-col select-none"}
       >
-        <BaseSlider.Control className="flex w-full items-center py-1">
-          <BaseSlider.Track className="relative h-1.5 w-full rounded-full bg-surface-container-highest">
-            <BaseSlider.Indicator className="absolute h-full rounded-full bg-primary" />
-            <BaseSlider.Thumb
-              className="size-4 cursor-grab rounded-full border-2 border-primary bg-surface-container-lowest shadow-md transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary active:cursor-grabbing"
-              aria-label="Preț minim"
-            />
-            <BaseSlider.Thumb
-              className="size-4 cursor-grab rounded-full border-2 border-primary bg-surface-container-lowest shadow-md transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-primary active:cursor-grabbing"
-              aria-label="Preț maxim"
-            />
+        <BaseSlider.Control className="flex h-10 w-full items-center">
+          <BaseSlider.Track className="relative h-1 w-full rounded-sm bg-outline-variant">
+            <BaseSlider.Indicator className="absolute h-full rounded-sm bg-primary" />
+            <BaseSlider.Thumb className={thumb} aria-label="Preț minim" />
+            <BaseSlider.Thumb className={thumb} aria-label="Preț maxim" />
           </BaseSlider.Track>
         </BaseSlider.Control>
       </BaseSlider.Root>
+      {label && (
+        <output className="text-control font-semibold whitespace-nowrap text-on-surface">
+          {formatValue(local[0])} – {formatValue(local[1])}
+        </output>
+      )}
     </div>
   );
 }

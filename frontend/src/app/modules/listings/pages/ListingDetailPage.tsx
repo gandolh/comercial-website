@@ -130,7 +130,7 @@ function PageLoader() {
     <main className="mx-auto max-w-screen-2xl px-4 pt-28 pb-20 md:px-8">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="space-y-8 lg:col-span-8">
-          <div className="aspect-[4/3] w-full animate-pulse rounded-xl bg-surface-container" />
+          <div className="aspect-[4/3] w-full rounded-xl bg-surface-container motion-safe:animate-pulse" />
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <CardSkeleton key={i} />
@@ -138,8 +138,8 @@ function PageLoader() {
           </div>
         </div>
         <div className="space-y-6 lg:col-span-4">
-          <div className="h-64 animate-pulse rounded-2xl bg-surface-container" />
-          <div className="h-48 animate-pulse rounded-2xl bg-surface-container" />
+          <div className="h-64 rounded-2xl bg-surface-container motion-safe:animate-pulse" />
+          <div className="h-48 rounded-2xl bg-surface-container motion-safe:animate-pulse" />
         </div>
       </div>
     </main>

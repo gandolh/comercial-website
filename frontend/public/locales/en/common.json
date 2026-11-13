@@ -23,7 +23,8 @@
     "ctaHowItWorks": "How does it work?"
   },
   "listing": {
-    "verified": "VERIFIED"
+    "verified": "Verified",
+    "noPreview": "No preview"
   },
   "footer": {
     "copyright": "© {{year}} PiațăRo. All rights reserved.",
@@ -408,5 +409,9 @@
       "saveError": "Could not save the bundle. Please try again.",
       "saveButton": "Save bundle"
     }
+  },
+  "filters": {
+    "title": "Filters",
+    "apply": "Apply filters"
   }
 }

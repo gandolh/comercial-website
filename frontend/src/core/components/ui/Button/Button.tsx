@@ -66,7 +66,7 @@ export function Button({
       )}
     >
       {loading ? (
-        <span className={`material-symbols-outlined animate-spin ${iconSizes[size]}`} aria-hidden="true">
+        <span className={`material-symbols-outlined motion-safe:animate-spin ${iconSizes[size]}`} aria-hidden="true">
           progress_activity
         </span>
       ) : iconLeft ? (

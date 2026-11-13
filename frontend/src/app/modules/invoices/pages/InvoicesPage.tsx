@@ -74,7 +74,7 @@ export function InvoicesPage() {
             {invoicesLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-16 animate-pulse rounded-xl bg-surface-container-low" />
+                  <div key={i} className="h-16 rounded-xl bg-surface-container-low motion-safe:animate-pulse" />
                 ))}
               </div>
             )}
@@ -93,7 +93,9 @@ export function InvoicesPage() {
           <section>
             <h2 className="mb-4 text-xl font-bold text-on-surface">{t("invoices.create.heading", "Factură nouă")}</h2>
             {!profileLoading && <CreateInvoiceForm profile={profile} onCreated={() => setView("list")} />}
-            {profileLoading && <div className="h-8 w-48 animate-pulse rounded-sm bg-surface-container-low" />}
+            {profileLoading && (
+              <div className="h-8 w-48 rounded-sm bg-surface-container-low motion-safe:animate-pulse" />
+            )}
           </section>
         )}
 
@@ -112,7 +114,7 @@ export function InvoicesPage() {
             {profileLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-10 animate-pulse rounded-xl bg-surface-container-low" />
+                  <div key={i} className="h-10 rounded-xl bg-surface-container-low motion-safe:animate-pulse" />
                 ))}
               </div>
             )}

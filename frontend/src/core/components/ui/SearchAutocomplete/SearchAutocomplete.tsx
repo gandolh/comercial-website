@@ -65,7 +65,10 @@ export function SearchAutocomplete({
     >
       <Autocomplete.InputGroup className={`relative flex items-center gap-2 ${className}`}>
         {isFetching ? (
-          <span className="material-symbols-outlined shrink-0 animate-spin text-outline" style={{ fontSize: "20px" }}>
+          <span
+            className="material-symbols-outlined shrink-0 text-outline motion-safe:animate-spin"
+            style={{ fontSize: "20px" }}
+          >
             progress_activity
           </span>
         ) : (

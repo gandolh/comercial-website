@@ -223,7 +223,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
           >
             {isPublishing ? (
               <>
-                <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                <span className="material-symbols-outlined motion-safe:animate-spin">progress_activity</span>
                 {t("createListing.preview.publishing")}
               </>
             ) : (

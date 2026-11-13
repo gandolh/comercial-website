@@ -224,7 +224,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
 
       {/* Aggregate summary */}
       {isLoading ? (
-        <div className="h-10 animate-pulse rounded-xl bg-surface-container" />
+        <div className="h-10 rounded-xl bg-surface-container motion-safe:animate-pulse" />
       ) : (
         <AggregateSummary ratingAvg={data?.rating_avg ?? null} ratingCount={data?.rating_count ?? 0} />
       )}
@@ -275,7 +275,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
       {isLoading ? (
         <div className="space-y-3">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-20 animate-pulse rounded-xl bg-surface-container" />
+            <div key={i} className="h-20 rounded-xl bg-surface-container motion-safe:animate-pulse" />
           ))}
         </div>
       ) : !data || data.reviews.length === 0 ? (

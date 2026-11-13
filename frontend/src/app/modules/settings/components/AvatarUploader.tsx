@@ -45,7 +45,7 @@ export function AvatarUploader() {
         </div>
         {uploadMutation.isPending && (
           <div className="absolute inset-0 flex items-center justify-center rounded-full bg-scrim/20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <div className="h-8 w-8 rounded-full border-4 border-primary border-t-transparent motion-safe:animate-spin" />
           </div>
         )}
       </div>

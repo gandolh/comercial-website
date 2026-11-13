@@ -135,7 +135,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           {pickListLoading || childrenLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-14 animate-pulse rounded-xl bg-surface-container-low" />
+                <div key={i} className="h-14 rounded-xl bg-surface-container-low motion-safe:animate-pulse" />
               ))}
             </div>
           ) : candidateListings.length === 0 ? (
@@ -222,7 +222,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {setItems.isPending && (
-            <span className="material-symbols-outlined animate-spin text-xl" aria-hidden="true">
+            <span className="material-symbols-outlined text-xl motion-safe:animate-spin" aria-hidden="true">
               progress_activity
             </span>
           )}

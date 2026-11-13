@@ -43,7 +43,7 @@ export function StepFooter({
               className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 font-semibold text-on-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isNextLoading ? (
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: "20px" }}>
+                <span className="material-symbols-outlined motion-safe:animate-spin" style={{ fontSize: "20px" }}>
                   progress_activity
                 </span>
               ) : null}

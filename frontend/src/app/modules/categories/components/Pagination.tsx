@@ -19,11 +19,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   }
 
   return (
-    <div className="mt-16 flex items-center justify-center gap-4">
+    <div className="mt-10 flex items-center justify-center gap-4">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-surface-container-highest text-outline transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Pagina anterioară"
       >
         <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
@@ -34,14 +34,14 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       <div className="flex items-center gap-2">
         {pages.map((p, i) =>
           p === "..." ? (
-            <span key={`ellipsis-${i}`} className="px-2 text-outline">
+            <span key={`ellipsis-${i}`} className="px-2 text-on-surface-variant">
               ...
             </span>
           ) : (
             <button
               key={p}
               onClick={() => onPageChange(p)}
-              className={`h-12 w-12 rounded-full font-bold transition-colors ${
+              className={`h-12 w-12 rounded-full font-semibold transition-colors ${
                 p === currentPage ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container"
               }`}
             >
@@ -54,7 +54,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-surface-container-highest text-outline transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Pagina următoare"
       >
         <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
