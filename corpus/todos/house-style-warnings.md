@@ -1,5 +1,7 @@
 # House-style warnings still held
 
+> Promoted to [brief 17](../briefs/todo/17-the-house-style-warnings.md) on 2026-11-13.
+
 Brief 11 left these rules as dated warnings, each in the project's `eslint.config.js`. Each wants a brief
 of its own, or goes with the brief that already covers it.
 

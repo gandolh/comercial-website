@@ -1,5 +1,7 @@
 # The change-password form is not on the Settings page
 
+> Promoted to [brief 16](../briefs/todo/16-wire-the-password-form-and-delete-the-dead-files.md) on 2026-11-13.
+
 Found by brief 12 (2026-11-12). `frontend/src/app/modules/settings/components/PasswordSection.tsx` is a complete
 change-password form, but nothing renders it: `SettingsPage.tsx` mounts the profile, avatar and Ward sections only,
 and `frontend/knip.config.js` lists the file in `ignore` as unused. So its success toast (brief 12 replaced an
