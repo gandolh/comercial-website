@@ -1,7 +1,12 @@
-@import "@fontsource-variable/schibsted-grotesk";
+/* The layer order, fixed by the first statement: the self-hosted font sits in `vendor`, after `base`. */
+@layer theme, base, vendor, components, utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 
 @import "tailwindcss";
+
+/* The face: one self-hosted variable file from @fontsource (registers "Schibsted Grotesk Variable"). */
+@import "@fontsource-variable/schibsted-grotesk/wght.css" layer(vendor);
 
 @theme {
   /* PiațăRo, "The filter band" (2026-11-13). Light */
