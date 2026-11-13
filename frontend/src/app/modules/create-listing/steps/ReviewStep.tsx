@@ -151,7 +151,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="space-y-8 lg:col-span-2">
-              <ListingGallery images={draft.images} title={draft.title} fileFormat={draft.fileFormat} />
+              <ListingGallery images={draft.images} title={draft.title} />
               <ListingDescription id={draft.id} description={draft.description} features={[]} />
               {draft.assets && draft.assets.length > 0 && (
                 <div className="space-y-4">

@@ -1,69 +1,56 @@
 import { useState } from "react";
+import { cn } from "@core/lib/cn";
 import type { ListingImage } from "@app/types/listing";
+import { Panel } from "./Panel";
+import { PreviewImage } from "./PreviewImage";
 
 interface ListingGalleryProps {
   images: ListingImage[];
   title: string;
-  fileFormat?: string;
+  category?: string;
+  className?: string;
 }
 
-export function ListingGallery({ images, title, fileFormat }: ListingGalleryProps) {
+export function ListingGallery({ images, title, category, className }: ListingGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const activeImage = images[activeIndex]?.url;
   const hasImages = images.length > 0;
 
-  const getFileIcon = (format?: string) => {
-    if (!format) return "file_download";
-    const lower = format.toLowerCase();
-    if (lower === "pdf") return "picture_as_pdf";
-    if (lower === "zip") return "folder_zip";
-    if (["jpg", "jpeg", "png", "gif", "webp"].includes(lower)) return "image";
-    if (["doc", "docx"].includes(lower)) return "description";
-    if (["xls", "xlsx"].includes(lower)) return "table_chart";
-    return "file_download";
-  };
-
   return (
-    <section className="group relative">
-      <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-surface-container">
-        {activeImage ? (
-          <img src={activeImage} alt={title} className="h-full w-full object-cover transition-opacity duration-300" />
-        ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-outline">
-            <span className="material-symbols-outlined" style={{ fontSize: "72px" }}>
-              {getFileIcon(fileFormat)}
-            </span>
-            <span className="text-sm font-medium">{fileFormat ? fileFormat.toUpperCase() : "ASSET DIGITAL"}</span>
-          </div>
-        )}
+    <Panel aria-label="Galerie" className={cn("gap-0 p-3 md:p-3", className)}>
+      <div className="relative aspect-16/10 overflow-hidden rounded-lg">
+        <PreviewImage src={activeImage} alt={title} category={category} showLabel iconSize={56} />
+        <button
+          type="button"
+          className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-surface-container-lowest text-on-surface shadow-card transition-colors hover:bg-surface-container-low"
+          aria-label="Distribuie anunțul"
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">
+            share
+          </span>
+        </button>
       </div>
 
       {hasImages && (
-        <div className="mt-4 flex gap-4 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pt-3">
           {images.map((image, i) => (
             <button
               key={image.id}
+              type="button"
               onClick={() => setActiveIndex(i)}
-              className={`h-24 w-24 shrink-0 overflow-hidden rounded-lg transition-opacity ${
-                i === activeIndex ? "border-2 border-primary" : "hover:opacity-80"
-              }`}
+              aria-pressed={i === activeIndex}
+              className={cn(
+                "h-16 w-22 shrink-0 overflow-hidden rounded-lg transition-opacity",
+                i === activeIndex ? "ring-2 ring-primary ring-inset" : "hover:opacity-80",
+              )}
               aria-label={`Imagine ${i + 1}`}
             >
-              <img src={image.url} alt={`${title} — imagine ${i + 1}`} className="h-full w-full object-cover" />
+              <PreviewImage src={image.url} alt={`${title} — imagine ${i + 1}`} category={category} iconSize={24} />
             </button>
           ))}
         </div>
       )}
-
-      <div className="absolute top-4 right-4 flex flex-col gap-3">
-        <button
-          className="rounded-full bg-surface-bright/90 p-3 shadow-lg backdrop-blur-md transition-colors hover:bg-surface-container-lowest"
-          aria-label="Distribuie anunțul"
-        >
-          <span className="material-symbols-outlined text-on-surface-variant">share</span>
-        </button>
-      </div>
-    </section>
+    </Panel>
   );
 }

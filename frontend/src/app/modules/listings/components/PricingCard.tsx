@@ -5,6 +5,8 @@ import { useAuth } from "@core/lib/auth";
 import { useNavigate } from "@core/lib/router";
 import { useState } from "react";
 import { downloadAsset } from "@app/modules/listings/services/listings";
+import { Button } from "@core/components/ui";
+import { Panel } from "./Panel";
 import { ContactSellerModal } from "@app/modules/messaging/components/ContactSellerModal";
 
 interface PricingCardProps {
@@ -59,65 +61,48 @@ export function PricingCard({
     }
   };
 
-  return (
-    <div className="space-y-8 rounded-2xl bg-surface-container-lowest p-8 shadow-card">
-      <div className="flex justify-end">
-        <FavoriteToggle listingId={listingId} />
-      </div>
-      <div className="hidden lg:block">
-        <h1 className="mb-2 font-headline text-2xl font-extrabold tracking-tight text-on-surface">{title}</h1>
-        <div className="text-4xl font-black text-primary">{formattedPrice}</div>
-      </div>
+  const contact = () => {
+    if (!user) {
+      navigate("/autentificare");
+      return;
+    }
+    setIsContactModalOpen(true);
+  };
 
-      <div className="space-y-4">
+  return (
+    <Panel aria-label="Preț" className="gap-4">
+      <div className="flex items-start justify-between gap-3">
+        <h1 className="font-headline text-2xl leading-[1.875rem] font-extrabold tracking-tight text-on-surface md:text-title">
+          {title}
+        </h1>
+        <FavoriteToggle listingId={listingId} className="flex-none bg-surface-container-low shadow-none" />
+      </div>
+      <p className="text-3xl leading-9 font-extrabold text-primary tabular-nums">{formattedPrice}</p>
+
+      <div className="flex flex-col gap-3">
         {isOwner ? (
           <Link
             to={`/anunturi/${listingId}/editeaza`}
-            className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary no-underline transition-all hover:opacity-90 active:scale-95"
+            className="inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-control bg-primary px-5 text-body font-semibold text-on-primary no-underline transition-colors hover:bg-primary-container active:brightness-90"
           >
-            <span className="material-symbols-outlined">edit</span>
+            <span className="material-symbols-outlined" aria-hidden="true">
+              edit
+            </span>
             {t("listing.actions.edit")}
           </Link>
         ) : isDigitalAsset ? (
           <>
-            <button
-              onClick={handleDownload}
-              disabled={isDownloading}
-              className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
-            >
-              <span className="material-symbols-outlined">download</span>
+            <Button onClick={handleDownload} disabled={isDownloading} iconLeft="download" className="w-full">
               {isDownloading ? "Se descarcă..." : t("listing.download.button")}
-            </button>
-            <button
-              onClick={() => {
-                if (!user) {
-                  navigate("/autentificare");
-                  return;
-                }
-                setIsContactModalOpen(true);
-              }}
-              className="flex w-full items-center justify-center gap-3 rounded-full bg-secondary-container py-4 text-lg font-bold text-on-secondary-container transition-all hover:opacity-90 active:scale-95"
-            >
-              <span className="material-symbols-outlined">mail</span>
+            </Button>
+            <Button variant="secondary" onClick={contact} iconLeft="mail" className="w-full">
               {t("listing.download.contactAuthor")}
-            </button>
+            </Button>
           </>
         ) : (
-          <>
-            <button
-              onClick={() => {
-                if (!user) {
-                  navigate("/autentificare");
-                  return;
-                }
-                setIsContactModalOpen(true);
-              }}
-              className="flex w-full items-center justify-center gap-3 rounded-full bg-primary py-4 text-lg font-bold text-on-primary transition-all hover:opacity-90 active:scale-95"
-            >
-              <span className="material-symbols-outlined">chat</span>
-              Trimite Mesaj
-            </button>
-          </>
+          <Button onClick={contact} iconLeft="chat" className="w-full">
+            Trimite Mesaj
+          </Button>
         )}
       </div>
 
@@ -128,18 +113,22 @@ export function PricingCard({
         onClose={() => setIsContactModalOpen(false)}
       />
 
-      <div className="flex items-center justify-between border-t border-surface-container-high pt-4">
+      <div className="flex justify-between gap-3 border-t border-outline-variant pt-4 text-control text-on-surface-variant">
         {isDigitalAsset && (
-          <div className="flex items-center gap-2 text-sm text-outline">
-            <span className="material-symbols-outlined text-[18px]">download</span>
+          <span className="inline-flex items-center gap-2">
+            <span className="material-symbols-outlined" style={{ fontSize: "18px" }} aria-hidden="true">
+              download
+            </span>
             {t("listing.specs.downloads", { count: downloadCount })}
-          </div>
+          </span>
         )}
-        <div className="ml-auto flex items-center gap-2 text-sm text-outline">
-          <span className="material-symbols-outlined text-[18px]">visibility</span>
+        <span className="ml-auto inline-flex items-center gap-2">
+          <span className="material-symbols-outlined" style={{ fontSize: "18px" }} aria-hidden="true">
+            visibility
+          </span>
           {viewCount} vizualizări
-        </div>
+        </span>
       </div>
-    </div>
+    </Panel>
   );
 }

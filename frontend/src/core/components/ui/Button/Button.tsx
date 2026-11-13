@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@core/lib/cn";
 
-type Variant = "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "outline" | "tertiary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 // ComponentProps carries `ref` (React 19), so a Base UI trigger can render this button through `render`.
@@ -19,6 +19,8 @@ const variantClasses: Record<Variant, string> = {
     "bg-primary text-on-primary hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   secondary:
     "bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+  outline:
+    "border border-outline bg-transparent text-on-surface hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   tertiary:
     "bg-tertiary-container text-on-tertiary-container hover:bg-tertiary-fixed-dim focus-visible:ring-2 focus-visible:ring-tertiary focus-visible:ring-offset-2",
   ghost:
