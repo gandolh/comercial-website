@@ -23,5 +23,5 @@
     /* The tests run in node and read the stylesheet as text */
     "paths": { "@core/*": ["./src/core/*"] }
   },
-  "include": ["vite.config.ts", "src/**/*.test.ts"]
+  "include": ["vite.config.ts", "playwright.config.ts", "e2e", "src/**/*.test.ts"]
 }

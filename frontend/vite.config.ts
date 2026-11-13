@@ -10,7 +10,7 @@ export default defineConfig({
   base,
   plugins: [react(), tailwindcss()],
   // The frontend's tests run in node: the cn() merge and the stylesheet, read as text. Flows are checked in Playwright.
-  test: { environment: "node" },
+  test: { environment: "node", include: ["src/**/*.test.ts"] },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "./src"),
