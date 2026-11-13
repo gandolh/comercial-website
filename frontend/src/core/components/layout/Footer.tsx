@@ -1,6 +1,10 @@
 import { Link } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
 import { ThemeSwitch } from "@core/components/ui";
+import { Wordmark } from "./Navbar";
+
+const iconButton =
+  "grid size-11 place-items-center rounded-control border border-outline bg-surface-container-lowest text-on-surface transition-colors hover:bg-surface-container-low";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -13,45 +17,38 @@ export function Footer() {
     { key: "footer.contact", to: "/contact" },
   ];
   return (
-    <footer className="mt-auto bg-surface-container">
-      <div className="mx-auto flex max-w-screen-2xl flex-col items-center justify-between gap-8 px-12 py-16 md:flex-row">
-        <div className="space-y-4 text-center md:text-left">
-          <div className="font-[Manrope] text-2xl font-bold text-on-surface">
-            Piață<span className="text-secondary">Ro</span>
-          </div>
-          <p className="text-sm tracking-wide text-on-surface-variant">
+    <footer className="mt-auto border-t border-outline-variant bg-surface-container">
+      <div className="mx-auto grid w-full max-w-310 gap-5 px-4 py-6 md:px-6 md:pt-7 md:pb-8">
+        <div className="flex flex-wrap items-center justify-between gap-6">
+          <Wordmark className="text-on-surface [--wordmark-accent:var(--color-secondary)]" />
+          <small className="text-control text-on-surface-variant">
             {t("footer.copyright", { year: new Date().getFullYear() })}
-          </p>
+          </small>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-x-8 gap-y-4">
+        <ul className="flex flex-wrap gap-x-6 gap-y-1 p-0">
           {links.map(({ key, to }) => (
-            <Link
-              key={to}
-              to={to}
-              className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
-            >
-              {t(key)}
-            </Link>
+            <li key={to} className="list-none">
+              <Link
+                to={to}
+                className="inline-flex min-h-8 items-center text-control text-on-surface-variant underline decoration-outline-variant underline-offset-3 transition-colors hover:text-primary"
+              >
+                {t(key)}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-5">
           <ThemeSwitch />
-          <div className="flex gap-4">
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
-              aria-label="Distribuie"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
+          <div className="flex gap-2">
+            <button type="button" className={iconButton} aria-label="Distribuie">
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }} aria-hidden="true">
                 share
               </span>
             </button>
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant text-on-surface-variant transition-all hover:border-primary hover:text-primary"
-              aria-label="Email"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
+            <button type="button" className={iconButton} aria-label="Email">
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }} aria-hidden="true">
                 mail
               </span>
             </button>

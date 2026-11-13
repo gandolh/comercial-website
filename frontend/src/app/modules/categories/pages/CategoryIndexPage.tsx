@@ -22,7 +22,7 @@ export function CategoryIndexPage() {
   const { t } = useTranslation();
 
   return (
-    <main className="min-h-screen pt-24">
+    <main className="min-h-screen pt-8">
       <section className="bg-surface-container-low px-8 py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl text-center">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-on-surface md:text-5xl">

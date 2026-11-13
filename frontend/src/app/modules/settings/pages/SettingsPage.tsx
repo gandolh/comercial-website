@@ -10,7 +10,7 @@ export function SettingsPage() {
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
 
   return (
-    <main className="mt-24 pb-24">
+    <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl px-6">
         <h1 className="mb-8 font-headline text-3xl font-black">Setările contului</h1>
 

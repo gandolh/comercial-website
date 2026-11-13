@@ -65,8 +65,8 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       </div>
 
       {/* Preview mode banner */}
-      <div className="flex items-center gap-3 rounded-2xl border border-secondary/20 bg-secondary-container/40 px-5 py-3">
-        <span className="material-symbols-outlined text-xl text-secondary">visibility</span>
+      <div className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-secondary-container/40 px-5 py-3">
+        <span className="material-symbols-outlined text-xl text-primary">visibility</span>
         <span className="text-sm font-semibold text-on-secondary-container">
           {t("createListing.preview.previewBanner")}
         </span>
@@ -133,9 +133,9 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       {/* Full listing preview card */}
       <div className="overflow-hidden rounded-[2rem] border border-outline-variant bg-surface-container-low shadow-sm">
         {/* Preview label overlay at top of card */}
-        <div className="flex items-center gap-2 border-b border-secondary/20 bg-secondary/10 px-6 py-2">
-          <span className="material-symbols-outlined text-base text-secondary">preview</span>
-          <span className="text-xs font-bold tracking-widest text-secondary uppercase">
+        <div className="flex items-center gap-2 border-b border-primary/20 bg-primary-fixed px-6 py-2">
+          <span className="material-symbols-outlined text-base text-primary">preview</span>
+          <span className="text-xs font-bold tracking-widest text-primary uppercase">
             {t("createListing.preview.cardLabel")}
           </span>
         </div>

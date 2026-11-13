@@ -6,7 +6,7 @@ import { useDraft } from "../hooks/useDraft";
 
 function LoadingScreen() {
   return (
-    <main className="mt-24 flex-1">
+    <main className="mt-8 flex-1">
       <div className="mx-auto max-w-2xl space-y-4 px-6 py-24 text-center">
         <span className="material-symbols-outlined animate-spin text-primary" style={{ fontSize: "48px" }}>
           progress_activity
@@ -41,7 +41,7 @@ export function CreateListingPage() {
 
   if (user && !user.email_verified) {
     return (
-      <main className="mt-24 flex-1">
+      <main className="mt-8 flex-1">
         <div className="mx-auto max-w-2xl space-y-6 px-6 py-16 text-center">
           <h1 className="font-headline text-3xl font-black">Verifică-ți emailul</h1>
           <p className="text-on-surface-variant">

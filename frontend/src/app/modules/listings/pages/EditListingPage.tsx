@@ -80,7 +80,7 @@ export function EditListingPage() {
   };
 
   return (
-    <main className="mt-24 pb-24">
+    <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl space-y-12 px-6">
         <button
           onClick={() => navigate(`/anunturi/${listing.id}`)}

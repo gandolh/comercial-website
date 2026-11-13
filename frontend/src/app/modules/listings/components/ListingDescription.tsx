@@ -31,7 +31,7 @@ export function ListingDescription({ id, description, features, digitalSpecs = [
           <ul className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
             {allSpecs.map((f, i) => (
               <li key={i} className="flex items-center gap-3 rounded-xl bg-surface-container-low p-4">
-                <span className="material-symbols-outlined text-secondary">{f.icon}</span>
+                <span className="material-symbols-outlined text-primary">{f.icon}</span>
                 <div>
                   <span className="block text-[10px] tracking-wider text-outline uppercase">{f.label}</span>
                   <span className="font-bold text-on-surface">{f.value}</span>

@@ -1,6 +1,6 @@
 export function CookiesPage() {
   return (
-    <main className="mx-auto max-w-screen-xl px-4 pt-28 pb-20 md:px-8">
+    <main className="mx-auto max-w-screen-xl px-4 pt-10 pb-20 md:px-8">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
           <h1 className="font-headline text-4xl font-black text-on-surface">Politică de Cookies</h1>

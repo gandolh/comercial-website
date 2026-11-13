@@ -17,7 +17,7 @@ export const ConversationsPage: React.FC = () => {
   const conversationId = pathname.startsWith("/mesaje/") ? pathname.replace("/mesaje/", "") : undefined;
 
   return (
-    <div className="flex h-screen flex-col pt-24">
+    <div className="flex h-[calc(100svh-4rem)] flex-col pt-8">
       <div className="mx-auto flex min-h-0 w-full max-w-screen-xl flex-1 gap-4 px-4 pb-6">
         {/* Sidebar */}
         <aside

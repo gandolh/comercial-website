@@ -88,7 +88,7 @@ export function MyListingsPage() {
   ];
 
   return (
-    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-8 px-8 py-12 pt-24">
+    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-8 px-8 py-12 pt-8">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="font-headline text-3xl font-black text-on-surface">

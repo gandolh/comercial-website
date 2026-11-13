@@ -142,7 +142,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
   }
 
   return (
-    <main className="mt-24 pb-24">
+    <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl px-6">
         {/* Progress indicator */}
         <div className="mb-12 flex items-center justify-between gap-4 overflow-x-auto px-4">

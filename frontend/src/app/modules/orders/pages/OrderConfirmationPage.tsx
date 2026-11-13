@@ -61,7 +61,7 @@ export function OrderConfirmationPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-[50vh] flex-col items-center justify-center px-4 pt-28 pb-20">
+      <main className="flex min-h-[50vh] flex-col items-center justify-center px-4 pt-10 pb-20">
         <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
         <p className="text-on-surface-variant">{t("orders.confirmation.loading")}</p>
       </main>
@@ -70,7 +70,7 @@ export function OrderConfirmationPage() {
 
   if (error || !order) {
     return (
-      <main className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 px-4 pt-28 pb-20">
+      <main className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 px-4 pt-10 pb-20">
         <span className="material-symbols-outlined text-[64px] text-error">error</span>
         <h1 className="text-2xl font-bold text-on-surface">{t("orders.confirmation.errorTitle")}</h1>
         <p className="text-on-surface-variant">{error ?? t("orders.confirmation.loadError")}</p>
@@ -85,7 +85,7 @@ export function OrderConfirmationPage() {
   const listingHref = `/anunturi/${order.listing_id}`;
 
   return (
-    <main className="mx-auto max-w-lg space-y-8 px-4 pt-28 pb-20">
+    <main className="mx-auto max-w-lg space-y-8 px-4 pt-10 pb-20">
       {isPaid ? (
         <div className="flex flex-col items-center space-y-4 text-center">
           <span className="material-symbols-outlined text-[72px] text-primary">check_circle</span>

@@ -21,7 +21,7 @@ const variantConfig: Record<AlertVariant, { icon: string; classes: string }> = {
   },
   warning: {
     icon: "warning",
-    classes: "bg-secondary-container/40 text-on-secondary-container border border-secondary/20",
+    classes: "bg-secondary-container/40 text-on-secondary-container border border-primary/20",
   },
   error: {
     icon: "error",

@@ -2,7 +2,7 @@ import { Link } from "@core/lib/router";
 
 export function DesprePage() {
   return (
-    <main className="mx-auto max-w-screen-xl px-4 pt-28 pb-20 md:px-8">
+    <main className="mx-auto max-w-screen-xl px-4 pt-10 pb-20 md:px-8">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-4">
           <h1 className="font-headline text-4xl font-black text-on-surface">Despre my-olx</h1>
@@ -65,7 +65,7 @@ export function DesprePage() {
               },
             ].map(({ icon, title, desc }) => (
               <li key={title} className="flex items-start gap-4">
-                <span className="material-symbols-outlined mt-0.5 text-secondary" style={{ fontSize: "22px" }}>
+                <span className="material-symbols-outlined mt-0.5 text-primary" style={{ fontSize: "22px" }}>
                   {icon}
                 </span>
                 <div>

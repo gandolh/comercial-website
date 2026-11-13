@@ -20,7 +20,7 @@ export function DashboardPage() {
 
   if (statsLoading) {
     return (
-      <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-24">
+      <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-8">
         <div className="h-12 w-64 animate-pulse rounded-xl bg-surface-container-low" />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -33,7 +33,7 @@ export function DashboardPage() {
 
   if (statsError) {
     return (
-      <main className="mx-auto min-h-screen max-w-screen-2xl px-8 py-12 pt-24">
+      <main className="mx-auto min-h-screen max-w-screen-2xl px-8 py-12 pt-8">
         <ErrorCard
           message={t("dashboard.error", "Nu am putut încărca datele panoului de control.")}
           onRetry={refetchStats}
@@ -54,7 +54,7 @@ export function DashboardPage() {
   const expiringSoonCount = stats?.listings.expiringSoon ?? 0;
 
   return (
-    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-24">
+    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-12 px-8 py-12 pt-8">
       {/* Header */}
       <header className="space-y-2">
         <h1 className="font-headline text-4xl font-black text-on-surface">

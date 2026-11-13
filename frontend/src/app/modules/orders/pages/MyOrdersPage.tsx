@@ -46,7 +46,7 @@ export function MyOrdersPage() {
   }, [user, navigate, t]);
 
   return (
-    <main className="mx-auto max-w-screen-md space-y-8 px-4 pt-28 pb-20 md:px-8">
+    <main className="mx-auto max-w-screen-md space-y-8 px-4 pt-10 pb-20 md:px-8">
       <div className="flex items-center justify-between">
         <h1 className="font-headline text-3xl font-extrabold tracking-tight text-on-surface">
           {t("orders.list.title")}

@@ -14,21 +14,26 @@ export function ThemeSwitch() {
   const setTheme = useTheme((state) => state.setTheme);
 
   return (
-    <RadioGroup
-      aria-label={t("footer.theme.label")}
-      value={theme}
-      onValueChange={(next) => setTheme(next as Theme)}
-      className="inline-flex rounded-full border border-outline p-0.5"
-    >
-      {THEMES.map((value) => (
-        <Radio
-          key={value}
-          value={value}
-          className="rounded-full px-3 py-1 text-xs font-medium text-on-surface-variant transition-colors hover:text-on-surface focus-visible:ring-inset data-checked:bg-primary data-checked:text-on-primary"
-        >
-          {t(`footer.theme.${value}`)}
-        </Radio>
-      ))}
-    </RadioGroup>
+    <div className="flex items-center gap-3">
+      <span id="theme-switch-label" className="text-control text-on-surface-variant">
+        {t("footer.theme.label")}
+      </span>
+      <RadioGroup
+        aria-labelledby="theme-switch-label"
+        value={theme}
+        onValueChange={(next) => setTheme(next as Theme)}
+        className="inline-flex gap-0.5 rounded-xl bg-surface-container-lowest p-1 ring-1 ring-outline-variant ring-inset"
+      >
+        {THEMES.map((value) => (
+          <Radio
+            key={value}
+            value={value}
+            className="flex h-8 items-center rounded-lg px-3 text-control whitespace-nowrap text-on-surface-variant transition-colors hover:text-on-surface focus-visible:ring-inset data-checked:bg-primary-fixed data-checked:font-semibold data-checked:text-on-primary-fixed data-checked:shadow-[inset_0_0_0_1px_var(--color-primary)]"
+          >
+            {t(`footer.theme.${value}`)}
+          </Radio>
+        ))}
+      </RadioGroup>
+    </div>
   );
 }

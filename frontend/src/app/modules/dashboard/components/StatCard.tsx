@@ -12,7 +12,7 @@ interface StatCardProps {
 export function StatCard({ title, value, label, icon, to, color = "primary" }: StatCardProps) {
   const colorClasses = {
     primary: "text-primary bg-primary/10",
-    secondary: "text-secondary bg-secondary/10",
+    secondary: "text-primary bg-primary-fixed",
     error: "text-error bg-error/10",
     info: "text-info bg-info/10",
   };

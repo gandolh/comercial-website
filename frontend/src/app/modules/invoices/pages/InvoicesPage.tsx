@@ -29,7 +29,7 @@ export function InvoicesPage() {
   } = useInvoices();
 
   return (
-    <main className="mt-24 pb-24">
+    <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl px-6">
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

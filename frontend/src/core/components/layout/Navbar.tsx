@@ -8,6 +8,25 @@ import { useNavigate } from "@core/lib/router";
 import { Dropdown, dropdownSeparator } from "@core/components/ui";
 import type { DropdownItem } from "@core/components/ui";
 
+/** The wordmark: the second half takes the band's accent colour (the footer sets its own). */
+export function Wordmark({ className }: { className?: string }) {
+  return (
+    <Link
+      to="/"
+      aria-label="PiațăRo, acasă"
+      className={`inline-flex rounded-md text-price font-extrabold tracking-tight whitespace-nowrap no-underline ${className ?? ""}`}
+    >
+      Piață<b className="font-extrabold text-(--wordmark-accent)">Ro</b>
+    </Link>
+  );
+}
+
+const placeClass =
+  "relative flex h-full items-center gap-2 px-4 text-body text-on-nav-band no-underline transition-colors hover:text-on-nav-band-variant data-[status=active]:font-semibold data-[status=active]:after:absolute data-[status=active]:after:right-3 data-[status=active]:after:bottom-0 data-[status=active]:after:left-3 data-[status=active]:after:h-[3px] data-[status=active]:after:rounded-t-[3px] data-[status=active]:after:bg-on-nav-band";
+
+const navButton =
+  "inline-flex h-11 items-center justify-center gap-2 rounded-control border border-on-nav-band-variant bg-transparent px-4.5 text-body whitespace-nowrap text-on-nav-band no-underline transition-colors hover:bg-on-nav-band/10 active:brightness-90";
+
 export function Navbar() {
   const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
@@ -45,61 +64,61 @@ export function Navbar() {
     },
   ];
 
-  return (
-    <nav className="fixed top-0 z-nav w-full bg-surface-container-lowest/80 shadow-ambient backdrop-blur-xl">
-      <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-8 py-4">
-        <Link to="/" className="font-[Manrope] text-2xl font-black tracking-tight text-primary no-underline">
-          Piață<span className="text-secondary">Ro</span>
-        </Link>
+  const favoriteCount = isAuthenticated ? (favoriteIds.data?.length ?? 0) : 0;
+  const unread = isAuthenticated ? (unreadCount.data ?? 0) : 0;
 
-        <div className="hidden items-center space-x-8 md:flex">
-          <Link
-            to="/categorii"
-            className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
-          >
+  return (
+    <header className="sticky top-0 z-nav h-14 bg-nav-band text-on-nav-band md:h-16">
+      <div className="mx-auto flex h-full w-full max-w-310 items-center gap-3 px-4 min-[1101px]:gap-10 md:gap-6 md:px-6">
+        <Wordmark className="text-on-nav-band [--wordmark-accent:var(--color-on-nav-band-variant)]" />
+
+        <nav aria-label="Principal" className="hidden h-full flex-1 gap-1 md:flex">
+          <Link to="/categorii" className={placeClass}>
             {t("nav.categories")}
           </Link>
-          <Link
-            to="/favorite"
-            className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
-          >
+          <Link to="/favorite" className={placeClass}>
             {t("nav.favorites")}
-            {isAuthenticated && (favoriteIds.data?.length ?? 0) > 0 && (
-              <span className="ml-1 font-bold text-primary">({favoriteIds.data?.length})</span>
-            )}
-          </Link>
-          <Link
-            to="/mesaje"
-            className="flex items-center gap-1 font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
-          >
-            {t("nav.messages")}
-            {isAuthenticated && (unreadCount.data ?? 0) > 0 && (
-              <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-on-primary">
-                {unreadCount.data}
+            {favoriteCount > 0 && (
+              <span className="inline-grid h-6 min-w-6 place-items-center rounded-xl bg-on-nav-band px-1.5 text-control font-semibold text-nav-band">
+                {favoriteCount}
               </span>
             )}
           </Link>
-        </div>
+          <Link to="/mesaje" className={placeClass}>
+            {t("nav.messages")}
+            {unread > 0 && (
+              <span className="inline-grid h-6 min-w-6 place-items-center rounded-xl bg-on-nav-band px-1.5 text-control font-semibold text-nav-band">
+                {unread}
+              </span>
+            )}
+          </Link>
+        </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="ml-auto flex items-center gap-2">
           {isAuthenticated ? (
             <>
-              <div className="flex gap-2">
-                <button
-                  className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high"
-                  aria-label="Notificări"
-                >
-                  <span className="material-symbols-outlined">notifications</span>
-                </button>
+              <button
+                type="button"
+                className={`${navButton} hidden w-11 border-transparent px-0 min-[360px]:inline-flex`}
+                aria-label="Notificări"
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  notifications
+                </span>
+              </button>
+              <span className="hidden md:inline-flex">
                 <Dropdown
                   trigger={
                     <button
-                      className="flex items-center gap-2 rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high"
+                      type="button"
+                      className={`${navButton} max-[1100px]:w-11 max-[1100px]:border-transparent max-[1100px]:px-0`}
                       aria-label="Profil"
                     >
-                      <span className="material-symbols-outlined">person</span>
+                      <span className="material-symbols-outlined" aria-hidden="true">
+                        person
+                      </span>
                       {user?.email && (
-                        <span className="hidden text-sm font-medium text-on-surface md:inline">
+                        <span className="hidden min-[1101px]:inline">
                           {user.display_name || user.email.split("@")[0]}
                         </span>
                       )}
@@ -108,26 +127,21 @@ export function Navbar() {
                   items={userMenuItems}
                   align="end"
                 />
-              </div>
+              </span>
               <Link
                 to="/adauga-anunt"
-                className="rounded-full bg-primary px-6 py-2.5 font-bold text-on-primary no-underline shadow-lg transition-all duration-150 hover:scale-105 active:scale-95"
+                className={`${navButton} border-on-nav-band bg-on-nav-band px-3.5 font-semibold text-nav-band hover:bg-on-nav-band/90 md:px-4.5`}
               >
                 {t("nav.addListing")}
               </Link>
             </>
           ) : (
-            <>
-              <Link
-                to="/autentificare"
-                className="font-medium text-on-surface-variant no-underline transition-colors hover:text-primary"
-              >
-                Conectare
-              </Link>
-            </>
+            <Link to="/autentificare" className={`${navButton} hidden md:inline-flex`}>
+              Conectare
+            </Link>
           )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

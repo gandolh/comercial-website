@@ -56,7 +56,7 @@ export function SearchResultsPage() {
   }
 
   return (
-    <main className="mx-auto mt-24 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
+    <main className="mx-auto mt-8 flex w-full max-w-screen-2xl grow gap-8 px-8 pb-16">
       <FilterSidebar filters={filters} onChange={setFilter} onReset={resetFilters} />
 
       <section className="min-w-0 grow">
