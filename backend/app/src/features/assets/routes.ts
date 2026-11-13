@@ -1,8 +1,10 @@
 import "@fastify/multipart";
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { sql } from "kysely";
+import type { Selectable } from "kysely";
 import { z } from "zod";
 import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
+import type { ListingAssetsTable } from "@my-olx/core";
 import type { AppContext } from "../../context.js";
 import { AssetsRepository } from "../../db/assets-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
@@ -51,7 +53,7 @@ async function sendFirstDownloadNotification(ctx: AppContext, listingId: string,
 
     await ctx.email.send(msg);
   } catch (err) {
-    console.error("[assets] failed to send first-download notification:", err);
+    ctx.log.error({ err }, "failed to send the first-download notification");
   }
 }
 
@@ -65,7 +67,9 @@ interface AssetResponse {
   created_at: string;
 }
 
-function toAssetResponse(asset: any): AssetResponse {
+function toAssetResponse(
+  asset: Omit<Selectable<ListingAssetsTable>, "created_at"> & { created_at: string | Date },
+): AssetResponse {
   const createdAt = typeof asset.created_at === "string" ? asset.created_at : asset.created_at.toISOString();
   return {
     id: asset.id,

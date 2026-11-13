@@ -82,7 +82,7 @@ export function ImageUploader({ existingCount, onUploadFiles }: ImageUploaderPro
         accept="image/jpeg,image/png,image/webp"
         multiple
         className="hidden"
-        onChange={(event) => handleFiles(event.target.files)}
+        onChange={(event) => void handleFiles(event.target.files)}
       />
 
       {error ? <p className="text-sm text-error">{error}</p> : null}

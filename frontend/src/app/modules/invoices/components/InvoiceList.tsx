@@ -74,7 +74,7 @@ export function InvoiceList({ invoices }: Props) {
               type="button"
               variant="secondary"
               size="sm"
-              onClick={() => handleDownloadPdf(inv)}
+              onClick={() => void handleDownloadPdf(inv)}
               disabled={downloading === `pdf-${inv.id}`}
               iconLeft="picture_as_pdf"
             >
@@ -84,7 +84,7 @@ export function InvoiceList({ invoices }: Props) {
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => handleDownloadXml(inv)}
+              onClick={() => void handleDownloadXml(inv)}
               disabled={downloading === `xml-${inv.id}`}
               iconLeft="code"
             >

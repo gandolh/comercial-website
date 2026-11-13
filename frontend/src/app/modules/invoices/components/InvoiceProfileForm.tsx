@@ -87,7 +87,7 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className="space-y-4">
       {/* CUI row with auto-fill */}
       <div className="flex items-end gap-2">
         <div className="flex-1">
@@ -97,7 +97,7 @@ export function InvoiceProfileForm({ initial, onSaved }: Props) {
           <Input id="profile-cui" {...register("cui")} placeholder="RO12345678" />
           {errors.cui && <p className="mt-1 text-sm text-error">{errors.cui.message}</p>}
         </div>
-        <Button type="button" variant="ghost" size="sm" onClick={autofillFromCui} disabled={cuiLoading}>
+        <Button type="button" variant="ghost" size="sm" onClick={() => void autofillFromCui()} disabled={cuiLoading}>
           {cuiLoading
             ? t("invoices.profile.loading", "Se încarcă...")
             : t("invoices.profile.autofill", "Auto-completare ANAF")}

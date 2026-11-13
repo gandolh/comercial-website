@@ -123,7 +123,7 @@ async function seedListing(db: Kysely<AppDatabase>, userId: string): Promise<str
     })
     .returning("id")
     .executeTakeFirstOrThrow();
-  return (result as any).id;
+  return result.id;
 }
 
 async function seedPaidOrder(

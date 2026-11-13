@@ -128,7 +128,7 @@ export function HomePage() {
           {featuredListings.isError ? (
             <ErrorCard
               message="Nu am putut încărca anunțurile recomandate."
-              onRetry={() => featuredListings.refetch()}
+              onRetry={() => void featuredListings.refetch()}
             />
           ) : (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4 md:gap-6">

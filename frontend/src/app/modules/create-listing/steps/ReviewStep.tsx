@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
@@ -34,12 +34,12 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
   const {
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<ReviewStepInput>({
     resolver: zodResolver(reviewStepSchema),
   });
-  const acceptsTerms = watch("acceptsTerms");
+  const acceptsTerms = useWatch({ control, name: "acceptsTerms" });
 
   const totalSizeBytes = draft.assets.reduce((sum, a) => sum + a.fileSizeBytes, 0);
   const fileCount = draft.assets.length;
@@ -179,7 +179,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       </div>
 
       {/* Terms + publish form */}
-      <form onSubmit={handleSubmit(onPublish)} className="space-y-6">
+      <form onSubmit={(e) => void handleSubmit(onPublish)(e)} className="space-y-6">
         <div className="space-y-3 px-4">
           <Checkbox
             size="lg"

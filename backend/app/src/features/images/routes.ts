@@ -1,4 +1,5 @@
 import "@fastify/multipart";
+import type { MultipartValue } from "@fastify/multipart";
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError, listingImageKey } from "@my-olx/core";
@@ -99,8 +100,8 @@ export const imagesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) 
           listing_id: listingId,
           s3_key: key,
           position: nextPosition,
-          width: data.fields?.width ? Number((data.fields.width as any).value) : undefined,
-          height: data.fields?.height ? Number((data.fields.height as any).value) : undefined,
+          width: data.fields?.width ? Number((data.fields.width as MultipartValue).value) : undefined,
+          height: data.fields?.height ? Number((data.fields.height as MultipartValue).value) : undefined,
         })
         .returningAll()
         .executeTakeFirstOrThrow();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useEffectEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { usePhoneVerify } from "../hooks/usePhoneVerify";
 import { Modal, Input, Button } from "@core/components/ui";
@@ -54,10 +54,12 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
     }
   };
 
+  // The effect reads the latest handler without re-running when the handler is rebuilt each render.
+  const submitCode = useEffectEvent(() => {
+    void handleVerifyCode({ preventDefault: () => {} } as React.FormEvent);
+  });
   useEffect(() => {
-    if (code.length === 6 && step === "code") {
-      void handleVerifyCode({ preventDefault: () => {} } as React.FormEvent);
-    }
+    if (code.length === 6 && step === "code") submitCode();
   }, [code, step]);
 
   const isDev = import.meta.env.DEV;
@@ -74,7 +76,7 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
       )}
 
       {step === "phone" ? (
-        <form onSubmit={handleRequestCode} className="space-y-4">
+        <form onSubmit={(e) => void handleRequestCode(e)} className="space-y-4">
           <div className="mb-2 flex flex-col items-center text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <span className="material-symbols-outlined text-2xl text-primary" aria-hidden="true">
@@ -102,7 +104,7 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
           </Button>
         </form>
       ) : (
-        <form onSubmit={handleVerifyCode} className="space-y-4">
+        <form onSubmit={(e) => void handleVerifyCode(e)} className="space-y-4">
           <div className="mb-2 flex flex-col items-center text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-tertiary/10">
               <span className="material-symbols-outlined text-2xl text-tertiary" aria-hidden="true">
@@ -140,10 +142,12 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
             type="button"
             variant="ghost"
             onClick={() =>
-              resendCountdown === 0 &&
-              handleRequestCode({
-                preventDefault: () => {},
-              } as React.FormEvent)
+              void (
+                resendCountdown === 0 &&
+                handleRequestCode({
+                  preventDefault: () => {},
+                } as React.FormEvent)
+              )
             }
             disabled={resendCountdown > 0 || request.isPending}
             className="w-full"

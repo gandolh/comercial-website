@@ -161,7 +161,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
   const isEditing = !!existingReview;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
       <div className="space-y-2">
         <p className="text-sm font-medium text-on-surface-variant">{t("reviews.form.ratingLabel")}</p>
         <StarRating value={rating} interactive onChange={setRating} />
@@ -243,7 +243,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={handleDelete}
+                  onClick={() => void handleDelete()}
                   loading={deleteMutation.isPending}
                   iconLeft="delete"
                 >

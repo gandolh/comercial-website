@@ -61,6 +61,7 @@ export async function buildApp(
     storage: new StorageService({ uploadsDir: config.uploadsDir, publicBaseUrl: config.publicBaseUrl }),
     assetStorage: new StorageService({ uploadsDir: config.assetsDir, publicBaseUrl: config.publicBaseUrl }),
     email: createEmailService({}),
+    log: app.log,
   };
 
   let stopReminders: (() => void) | undefined;

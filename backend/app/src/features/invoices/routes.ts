@@ -1,6 +1,8 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
+import type { InvoicesTable } from "@my-olx/core";
+import type { Selectable } from "kysely";
 import type { AppContext } from "../../context.js";
 import { requireUserId } from "@my-olx/core";
 import { invoiceProfileSchema, invoiceSchema } from "./schemas.js";
@@ -573,7 +575,7 @@ function calculateTotals(items: LineItem[]): {
 
 // ─── Row mapper ───────────────────────────────────────────────────────────────
 
-function toInvoiceResponse(row: any): InvoiceResponse {
+function toInvoiceResponse(row: Selectable<InvoicesTable>): InvoiceResponse {
   return {
     id: row.id,
     user_id: row.user_id,
@@ -757,7 +759,11 @@ export const invoicesRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx
 
       if (!insertResult?.id) throw AppError.internal();
 
-      const row = await ctx.db.selectFrom("invoices").selectAll().where("id", "=", insertResult.id).executeTakeFirst();
+      const row = await ctx.db
+        .selectFrom("invoices")
+        .selectAll()
+        .where("id", "=", insertResult.id)
+        .executeTakeFirstOrThrow();
 
       return reply.status(201).send(toInvoiceResponse(row));
     },

@@ -28,13 +28,13 @@ async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
   try {
     due = await repo.getDueExpiryReminders();
   } catch (err) {
-    console.error("[expiry-reminders] Failed to query due reminders:", err);
+    ctx.log.error({ err }, "expiry reminders: failed to query the due ones");
     return;
   }
 
   if (due.length === 0) return;
 
-  console.log(`[expiry-reminders] Processing ${due.length} reminder(s)`);
+  ctx.log.info(`expiry reminders: processing ${due.length}`);
 
   for (const row of due) {
     try {
@@ -57,11 +57,9 @@ async function runExpiryReminderJob(ctx: AppContext): Promise<void> {
         await repo.markReminderExpirySent(row.listing_id);
       }
 
-      console.log(
-        `[expiry-reminders] Sent ${row.reminder_type} reminder for listing ${row.listing_id} to ${row.owner_email}`,
-      );
+      ctx.log.info({ listingId: row.listing_id, reminder: row.reminder_type }, "expiry reminders: sent");
     } catch (err) {
-      console.error(`[expiry-reminders] Failed to send reminder for listing ${row.listing_id}:`, err);
+      ctx.log.error({ err, listingId: row.listing_id }, "expiry reminders: failed to send");
     }
   }
 }

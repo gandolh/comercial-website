@@ -219,7 +219,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
       <div className="flex justify-end">
         <button
           type="button"
-          onClick={handleSave}
+          onClick={() => void handleSave()}
           disabled={setItems.isPending}
           className="inline-flex items-center gap-2 rounded-control bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >

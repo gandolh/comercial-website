@@ -3,15 +3,17 @@ import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { randomUUID } from "crypto";
 import { z } from "zod";
 import { sql } from "kysely";
-import type { SqlBool } from "kysely";
+import type { Selectable, SqlBool, Updateable } from "kysely";
 import type { AppContext } from "../../context.js";
+import type { Config } from "../../config.js";
 import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
+import type { UsersTable } from "@my-olx/core";
 import { requireUserId } from "@my-olx/core";
 import { listingCardSchema } from "../listings/index.js";
 import { avatarSchema, myStatsSchema, publicUserSchema, userSummarySchema } from "./schemas.js";
 // Helpers
-function imageUrl(s3Key: string, config: any): string {
-  if (!s3Key) return null as any;
+function imageUrl(s3Key: string, config: Config): string | null {
+  if (!s3Key) return null;
   if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) {
     return s3Key;
   }
@@ -20,13 +22,33 @@ function imageUrl(s3Key: string, config: any): string {
   return `${base}/uploads/${key}`;
 }
 
-function toDate(val: any): Date {
+function toDate(val: string | Date): Date {
   return val instanceof Date ? val : new Date(val);
 }
 
-function toISOString(val: any): string {
+function toISOString(val: string | Date): string {
   return toDate(val).toISOString();
 }
+
+/** The columns the user summary reads. */
+type SummaryRow = Pick<
+  Selectable<UsersTable>,
+  | "id"
+  | "email"
+  | "display_name"
+  | "avatar_url"
+  | "email_verified"
+  | "phone"
+  | "phone_verified"
+  | "email_notifications"
+  | "bio"
+  | "website"
+  | "social_twitter"
+  | "social_instagram"
+  | "social_github"
+  | "created_at"
+  | "ward_subject"
+>;
 
 // The reply types, from their schemas.
 type UserSummary = z.infer<typeof userSummarySchema>;
@@ -105,11 +127,11 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
         phone: user.phone,
         phone_verified: Boolean(user.phone_verified),
         email_notifications: Boolean(user.email_notifications),
-        bio: (user as any).bio ?? null,
-        website: (user as any).website ?? null,
-        social_twitter: (user as any).social_twitter ?? null,
-        social_instagram: (user as any).social_instagram ?? null,
-        social_github: (user as any).social_github ?? null,
+        bio: user.bio ?? null,
+        website: user.website ?? null,
+        social_twitter: user.social_twitter ?? null,
+        social_instagram: user.social_instagram ?? null,
+        social_github: user.social_github ?? null,
         created_at: toISOString(user.created_at),
         ward_linked: user.ward_subject !== null,
       };
@@ -126,7 +148,7 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
       const body = request.body;
 
       const userId = requireUserId(request);
-      const updates: any = {};
+      const updates: Updateable<UsersTable> = {};
 
       if (body.display_name !== undefined) {
         updates.display_name = body.display_name;
@@ -146,7 +168,7 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
       if ("social_instagram" in body) updates.social_instagram = body.social_instagram ?? null;
       if ("social_github" in body) updates.social_github = body.social_github ?? null;
 
-      const buildSummary = (u: any): UserSummary => ({
+      const buildSummary = (u: SummaryRow): UserSummary => ({
         id: u.id,
         email: u.email,
         display_name: u.display_name,
@@ -409,7 +431,7 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
           .executeTakeFirst(),
         ctx.db
           .selectFrom("listings")
-          .select(sql`COALESCE(SUM(download_count), 0)`.as("total"))
+          .select(sql<number | string>`COALESCE(SUM(download_count), 0)`.as("total"))
           .where("user_id", "=", id)
           .where(sql<SqlBool>`active = 1`)
           .where(sql<SqlBool>`expires_at > datetime('now')`)
@@ -417,7 +439,7 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
       ]);
 
       const active_listings_count = listingsResult ? parseInt(String(listingsResult.count)) : 0;
-      const total_downloads = downloadsResult ? parseInt(String((downloadsResult as any).total)) : 0;
+      const total_downloads = downloadsResult ? parseInt(String(downloadsResult.total)) : 0;
 
       const response: PublicUserResponse = {
         id: user.id,
@@ -427,11 +449,11 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
         member_since: toISOString(user.created_at),
         active_listings_count,
         total_downloads,
-        bio: (user as any).bio ?? null,
-        website: (user as any).website ?? null,
-        social_twitter: (user as any).social_twitter ?? null,
-        social_instagram: (user as any).social_instagram ?? null,
-        social_github: (user as any).social_github ?? null,
+        bio: user.bio ?? null,
+        website: user.website ?? null,
+        social_twitter: user.social_twitter ?? null,
+        social_instagram: user.social_instagram ?? null,
+        social_github: user.social_github ?? null,
       };
 
       return reply.send(response);

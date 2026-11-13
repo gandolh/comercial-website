@@ -93,7 +93,7 @@ export const RenewButton: React.FC<RenewButtonProps> = ({
       size="sm"
       iconLeft="refresh"
       loading={isPending}
-      onClick={handleRenew}
+      onClick={(e) => void handleRenew(e)}
       className={`border-2 border-primary text-primary hover:bg-primary-container ${className}`}
     >
       {isExpired

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ListingImage } from "@app/types/listing";
 
@@ -70,24 +70,13 @@ export function useListingImagesMutations(listingId: string) {
 
   const isUploading = commitMutation.isPending;
 
-  return useMemo(
-    () => ({
-      uploadFiles,
-      reorderImages: reorderMutation.mutateAsync,
-      deleteImage: deleteMutation.mutateAsync,
-      isUploading,
-      isReordering: reorderMutation.isPending,
-      isDeleting: deleteMutation.isPending,
-      progressByFile,
-    }),
-    [
-      deleteMutation.isPending,
-      deleteMutation.mutateAsync,
-      isUploading,
-      progressByFile,
-      reorderMutation.isPending,
-      reorderMutation.mutateAsync,
-      uploadFiles,
-    ],
-  );
+  return {
+    uploadFiles,
+    reorderImages: reorderMutation.mutateAsync,
+    deleteImage: deleteMutation.mutateAsync,
+    isUploading,
+    isReordering: reorderMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    progressByFile,
+  };
 }

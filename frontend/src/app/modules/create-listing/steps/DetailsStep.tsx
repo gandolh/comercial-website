@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { detailsStepSchema, type DetailsStepInput } from "../schemas";
 
@@ -14,7 +14,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm<DetailsStepInput>({
     resolver: zodResolver(detailsStepSchema),
@@ -24,11 +24,11 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
     },
   });
 
-  const title = watch("title");
-  const description = watch("description");
+  const title = useWatch({ control, name: "title" });
+  const description = useWatch({ control, name: "description" });
 
   return (
-    <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
+    <form onSubmit={(e) => void handleSubmit(onNext)(e)} className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
         <h2 className="font-headline text-2xl font-extrabold">Spune-ne mai multe</h2>
         <p className="text-on-surface-variant">Un titlu clar și o descriere detaliată te ajută să vinzi mai repede.</p>

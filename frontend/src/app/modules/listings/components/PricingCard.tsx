@@ -92,7 +92,12 @@ export function PricingCard({
           </Link>
         ) : isDigitalAsset ? (
           <>
-            <Button onClick={handleDownload} disabled={isDownloading} iconLeft="download" className="w-full">
+            <Button
+              onClick={() => void handleDownload()}
+              disabled={isDownloading}
+              iconLeft="download"
+              className="w-full"
+            >
               {isDownloading ? "Se descarcă..." : t("listing.download.button")}
             </Button>
             <Button variant="secondary" onClick={contact} iconLeft="mail" className="w-full">

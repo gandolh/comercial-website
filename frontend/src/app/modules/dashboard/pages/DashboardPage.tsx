@@ -36,7 +36,7 @@ export function DashboardPage() {
       <main className="mx-auto min-h-screen w-full max-w-310 px-4 py-12 pt-8 md:px-6">
         <ErrorCard
           message={t("dashboard.error", "Nu am putut încărca datele panoului de control.")}
-          onRetry={refetchStats}
+          onRetry={() => void refetchStats()}
         />
       </main>
     );

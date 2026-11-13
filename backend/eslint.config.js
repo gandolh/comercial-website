@@ -19,23 +19,4 @@ export default [
     env: ["app/src/config.ts"],
     ignores: ["app/vendor/**", "app/data/**", "data/**"],
   }),
-  {
-    // A warning for now (2026-11-11): the rows and request bodies of these modules are typed `any`, from
-    // before the Kysely row types were used (the count is in the corpus log). When the modules take their
-    // types from the repositories, this block goes and the rule is an error again.
-    name: "piataro-backend/any-warns",
-    files: ["app/src/**"],
-    rules: { "@typescript-eslint/no-explicit-any": "warn" },
-  },
-  {
-    // A warning for now (2026-11-11): these helpers run outside a request and the app context carries no
-    // logger. When it does, they log through it and this block goes.
-    name: "piataro-backend/console-warns",
-    files: [
-      "app/src/features/reminders/service.ts",
-      "app/src/features/assets/routes.ts",
-      "app/src/features/messaging/routes.ts",
-    ],
-    rules: { "no-console": "warn" },
-  },
 ];

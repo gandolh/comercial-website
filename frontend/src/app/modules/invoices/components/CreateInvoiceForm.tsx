@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
@@ -67,7 +67,6 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -93,7 +92,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
     name: "line_items",
   });
 
-  const lineItems = watch("line_items");
+  const lineItems = useWatch({ control, name: "line_items" });
   const subtotal = lineItems.reduce((acc, item) => acc + (Number(item.qty) || 0) * (Number(item.unit_price) || 0), 0);
   const vatAmount = lineItems.reduce(
     (acc, item) =>
@@ -145,7 +144,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className="space-y-8">
       {/* Header info */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
@@ -223,7 +222,13 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
             </label>
             <Input id="buyer-cui" {...register("buyer_cui")} placeholder="RO87654321" />
           </div>
-          <Button type="button" variant="ghost" size="sm" onClick={autofillBuyerFromCui} disabled={cuiLoading}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => void autofillBuyerFromCui()}
+            disabled={cuiLoading}
+          >
             {cuiLoading
               ? t("invoices.create.loading", "Se încarcă...")
               : t("invoices.create.autofill", "Auto-completare ANAF")}

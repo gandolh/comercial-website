@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Switch } from "@core/components/ui";
 import { priceStepSchema, type PriceStepInput } from "../schemas";
@@ -15,7 +15,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
   const {
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<PriceStepInput>({
     resolver: zodResolver(priceStepSchema),
@@ -25,7 +25,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
     },
   });
 
-  const isFree = watch("isFree");
+  const isFree = useWatch({ control, name: "isFree" });
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
@@ -33,7 +33,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
   };
 
   return (
-    <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
+    <form onSubmit={(e) => void handleSubmit(onNext)(e)} className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
         <h2 className="font-headline text-2xl font-extrabold">Stabilește prețul</h2>
         <p className="text-on-surface-variant">Cât costă produsul tău?</p>

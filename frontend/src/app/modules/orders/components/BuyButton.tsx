@@ -66,7 +66,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
   return (
     <div className="space-y-2">
       <button
-        onClick={handleBuy}
+        onClick={() => void handleBuy()}
         disabled={loading}
         className="flex w-full items-center justify-center gap-2 rounded-control bg-primary px-6 py-3 text-base font-bold text-on-primary transition-all hover:opacity-90 disabled:opacity-60"
         aria-label={t("orders.buyButton.ariaLabel", { price: priceRon })}

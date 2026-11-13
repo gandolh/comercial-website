@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import type { AppContext } from "../../context.js";
+import type { Config } from "../../config.js";
 import { listingCardSchema } from "../listings/index.js";
 import { requireUserId } from "@my-olx/core";
 
@@ -16,8 +17,8 @@ interface ListingCardResponse {
   expires_at: string;
 }
 
-function imageUrl(s3Key: string, config: any): string {
-  if (!s3Key) return null as any;
+function imageUrl(s3Key: string, config: Config): string | null {
+  if (!s3Key) return null;
   if (s3Key.startsWith("http://") || s3Key.startsWith("https://")) {
     return s3Key;
   }
@@ -26,11 +27,11 @@ function imageUrl(s3Key: string, config: any): string {
   return `${base}/uploads/${key}`;
 }
 
-function toDate(val: any): Date {
+function toDate(val: string | Date): Date {
   return val instanceof Date ? val : new Date(val);
 }
 
-function toISOString(val: any): string {
+function toISOString(val: string | Date): string {
   return toDate(val).toISOString();
 }
 

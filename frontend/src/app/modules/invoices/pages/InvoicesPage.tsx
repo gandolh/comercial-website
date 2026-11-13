@@ -83,7 +83,7 @@ export function InvoicesPage() {
             {invoicesError && (
               <ErrorCard
                 message={t("invoices.list.error", "Nu am putut încărca facturile.")}
-                onRetry={refetchInvoices}
+                onRetry={() => void refetchInvoices()}
               />
             )}
             {!invoicesLoading && !invoicesError && invoices && <InvoiceList invoices={invoices} />}
@@ -123,7 +123,7 @@ export function InvoicesPage() {
             {profileError && (
               <ErrorCard
                 message={t("invoices.profile.loadError", "Nu am putut încărca profilul de facturare.")}
-                onRetry={refetchProfile}
+                onRetry={() => void refetchProfile()}
               />
             )}
             {!profileLoading && !profileError && (

@@ -201,7 +201,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
               listingId={draftId}
               assets={draft?.assets || []}
               onAssetsChange={() =>
-                queryClient.invalidateQueries({
+                void queryClient.invalidateQueries({
                   queryKey: ["listing", draftId],
                 })
               }
@@ -214,7 +214,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
               listingId={draftId}
               images={draft?.images || []}
               onImagesChange={() =>
-                queryClient.invalidateQueries({
+                void queryClient.invalidateQueries({
                   queryKey: ["listing", draftId],
                 })
               }

@@ -43,7 +43,7 @@ export const ContactSellerModal: React.FC<Props> = ({ listingId, sellerName, isO
       title={t("common:messaging.contact_seller_title", { name: sellerName })}
       size="md"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
         <Textarea
           data-autofocus
           value={message}

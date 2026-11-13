@@ -42,7 +42,7 @@ export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => void handleSubmit(e)}
       className="flex items-end gap-2 border-t border-surface-container-low bg-surface-container-lowest p-4"
     >
       <textarea

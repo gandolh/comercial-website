@@ -1,6 +1,6 @@
 import { test, expect, SCREENS, openScreen } from "./fixtures";
 
-const settings = SCREENS.find((screen) => screen.name === "settings")!;
+const settings = SCREENS.find((screen) => screen.name === "settings") ?? SCREENS[0];
 
 /** The account settings' "Securitate" form. The success case stubs the API: a real change would leave the dev account on a new password for the other specs. */
 test.describe("the change-password form on the account settings", () => {

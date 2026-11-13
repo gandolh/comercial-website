@@ -90,7 +90,7 @@ export function ProfileSection() {
     <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
       <h3 className="mb-6 text-xl font-semibold">{t("settings.profile.title")}</h3>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
         <Input
           label="Nume afișat"
           id="display_name"

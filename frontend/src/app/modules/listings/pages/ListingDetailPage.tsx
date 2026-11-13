@@ -115,7 +115,7 @@ function AssetFileList({ listingId, assets, isPaidListing = false, canDownload =
               ) : (
                 <Button
                   size="sm"
-                  onClick={() => handleDownload(asset.id, asset.originalFilename)}
+                  onClick={() => void handleDownload(asset.id, asset.originalFilename)}
                   disabled={isDownloading}
                   iconLeft="download"
                   className="whitespace-nowrap"
@@ -148,6 +148,12 @@ function PageLoader() {
     </main>
   );
 }
+
+const LICENSE_LABELS: Record<string, string> = {
+  personal: "Personală",
+  commercial: "Comercială",
+  extended: "Extinsă",
+};
 
 export function ListingDetailPage() {
   const { id = "" } = useParams<{ id: string }>();
@@ -199,12 +205,6 @@ export function ListingDetailPage() {
     return hasPaidOrder;
   }, [isPaidListing, user?.id, data?.seller?.id, hasPaidOrder]);
 
-  const licenseLabels: Record<string, string> = {
-    personal: "Personală",
-    commercial: "Comercială",
-    extended: "Extinsă",
-  };
-
   const digitalSpecs = useMemo(() => {
     if (!isDigitalAsset || !data) return [];
     const specs = [];
@@ -226,7 +226,7 @@ export function ListingDetailPage() {
       specs.push({
         icon: "verified",
         label: t("listing.specs.license"),
-        value: licenseLabels[data.licenseType] || data.licenseType,
+        value: LICENSE_LABELS[data.licenseType] || data.licenseType,
       });
     }
     return specs;
@@ -237,7 +237,7 @@ export function ListingDetailPage() {
   if (isError || !data) {
     return (
       <main className="mx-auto flex min-h-[50vh] w-full max-w-310 grow flex-col items-center justify-center space-y-6 px-4 py-10 md:px-6">
-        <ErrorCard message="Anunțul nu a fost găsit sau a fost dezactivat." onRetry={() => refetch()} />
+        <ErrorCard message="Anunțul nu a fost găsit sau a fost dezactivat." onRetry={() => void refetch()} />
         <Link to="/" className="flex items-center gap-2 font-semibold text-primary underline underline-offset-3">
           <span className="material-symbols-outlined">arrow_back</span>
           Înapoi la pagina principală

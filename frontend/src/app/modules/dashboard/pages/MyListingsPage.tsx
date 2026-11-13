@@ -141,7 +141,10 @@ export function MyListingsPage() {
           ))}
         </div>
       ) : isError ? (
-        <ErrorCard message={t("dashboard.listings.error", "Nu am putut încărca anunțurile.")} onRetry={refetch} />
+        <ErrorCard
+          message={t("dashboard.listings.error", "Nu am putut încărca anunțurile.")}
+          onRetry={() => void refetch()}
+        />
       ) : data?.listings?.length === 0 ? (
         <div className="space-y-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-12 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant">
@@ -228,7 +231,7 @@ export function MyListingsPage() {
 
                   {activeTab === "active" && (
                     <button
-                      onClick={() => handleAction(() => deactivate.mutateAsync(listing.id))}
+                      onClick={() => void handleAction(() => deactivate.mutateAsync(listing.id))}
                       className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-surface-container-low px-4 py-2 font-bold text-on-surface transition-colors hover:bg-surface-container-high md:flex-none"
                     >
                       <span className="material-symbols-outlined text-sm">pause</span>
@@ -238,7 +241,7 @@ export function MyListingsPage() {
 
                   {activeTab === "inactive" && (
                     <button
-                      onClick={() => handleAction(() => activate.mutateAsync(listing.id))}
+                      onClick={() => void handleAction(() => activate.mutateAsync(listing.id))}
                       className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-bold text-on-primary transition-colors hover:opacity-90 md:flex-none"
                     >
                       <span className="material-symbols-outlined text-sm">play_arrow</span>

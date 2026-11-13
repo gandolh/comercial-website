@@ -155,7 +155,7 @@ export function AssetUploadStep({
                   </div>
                   <button
                     type="button"
-                    onClick={() => handleDeleteAsset(asset.id)}
+                    onClick={() => void handleDeleteAsset(asset.id)}
                     disabled={isUploading}
                     className="shrink-0 rounded-full p-2 text-error transition-colors hover:bg-error/10 disabled:opacity-50"
                   >

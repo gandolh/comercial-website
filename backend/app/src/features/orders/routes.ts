@@ -9,6 +9,8 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError } from "@my-olx/core";
+import type { OrdersTable } from "@my-olx/core";
+import type { Selectable } from "kysely";
 import { splitOrderAmount } from "../../lib/payout-fee.js";
 import type { AppContext } from "../../context.js";
 import { FakePaymentProvider, isFree } from "./service.js";
@@ -51,7 +53,7 @@ const markPaidReplySchema = z.object({ message: z.string(), order: orderSchema }
 
 // ─── Response mapper ─────────────────────────────────────────────────────────
 
-function toOrderResponse(row: any) {
+function toOrderResponse(row: Selectable<OrdersTable>) {
   return {
     id: row.id,
     buyer_user_id: row.buyer_user_id,
@@ -170,7 +172,7 @@ export const ordersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) 
         .where("id", "=", orderId)
         .execute();
 
-      const order = await ctx.db.selectFrom("orders").selectAll().where("id", "=", orderId).executeTakeFirst();
+      const order = await ctx.db.selectFrom("orders").selectAll().where("id", "=", orderId).executeTakeFirstOrThrow();
 
       return reply.status(201).send({
         order: toOrderResponse(order),
@@ -259,7 +261,7 @@ export const ordersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) 
           .where("id", "=", id)
           .execute();
 
-        const updated = await ctx.db.selectFrom("orders").selectAll().where("id", "=", id).executeTakeFirst();
+        const updated = await ctx.db.selectFrom("orders").selectAll().where("id", "=", id).executeTakeFirstOrThrow();
 
         return reply.send({ message: "Marked as paid", order: toOrderResponse(updated) });
       },

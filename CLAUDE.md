@@ -76,8 +76,8 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
   `backend/app/vendor/` is Ward's generated library: never edit that either.
 - `backend/tsconfig.base.json` writes the house flags out instead of extending the vendored base, because the
   Docker build copies only `backend/`. Change it by hand when the house base changes.
-- Several lint rules are warnings for now, each with a dated note in the project's `eslint.config.js`:
-  `no-explicit-any` and `no-console` in the backend, `no-misused-promises` in the frontend.
+- Two lint rules are still warnings, each with a reason: `no-non-null-assertion` in 19 backend test lines, and the
+  house preset's unused-export notes from knip. `corpus/todos/house-style-warnings.md` says what was cleared.
 
 ## Hard rules
 

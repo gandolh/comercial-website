@@ -45,7 +45,7 @@ export function FavoritesPage() {
       </div>
 
       {isError ? (
-        <ErrorCard message="Nu am putut încărca favoritele." onRetry={() => refetch()} />
+        <ErrorCard message="Nu am putut încărca favoritele." onRetry={() => void refetch()} />
       ) : (
         <>
           <ListingGrid

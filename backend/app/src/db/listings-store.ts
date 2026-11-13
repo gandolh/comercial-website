@@ -1,6 +1,6 @@
-import { sql, type SqlBool } from "kysely";
+import { sql, type SelectQueryBuilder, type SqlBool, type Updateable } from "kysely";
 import { CompiledQuery } from "kysely";
-import type { Db } from "@my-olx/core";
+import type { Database, Db, ListingsTable } from "@my-olx/core";
 
 export interface ListingRow {
   id: string;
@@ -102,7 +102,7 @@ export class ListingsRepository {
     fileFormat?: string,
     fileSizeBytes?: number,
   ): Promise<ListingRow> {
-    const updates: any = {};
+    const updates: Updateable<ListingsTable> = {};
     if (title !== undefined) updates.title = title;
     if (description !== undefined) updates.description = description;
     if (priceRon !== undefined) updates.price_ron = priceRon;
@@ -270,7 +270,9 @@ export class ListingsRepository {
           ? query.orderBy("price_ron", "desc")
           : query.orderBy("created_at", "desc");
 
-    let countQuery: any = this.db.selectFrom("listings").select(sql`count(*)`.as("count"));
+    let countQuery: SelectQueryBuilder<Database, "listings", { count: number | string }> = this.db
+      .selectFrom("listings")
+      .select(sql<number | string>`count(*)`.as("count"));
 
     if (userId) {
       countQuery = countQuery.where("user_id", "=", userId);
@@ -294,14 +296,13 @@ export class ListingsRepository {
         countQuery = countQuery.where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`);
       }
     }
-    if (verified) {
-      countQuery = countQuery
-        .leftJoin("users", "listings.user_id", "users.id")
-        .where(sql<SqlBool>`users.phone_verified = 1`);
-    }
+    // `$if` keeps the builder's type: the join is only for this filter.
+    countQuery = countQuery.$if(Boolean(verified), (qb) =>
+      qb.leftJoin("users", "listings.user_id", "users.id").where(sql<SqlBool>`users.phone_verified = 1`),
+    );
 
     const countResult = await countQuery.executeTakeFirst();
-    const total = parseInt(countResult?.count ?? "0", 10);
+    const total = parseInt(String(countResult?.count ?? "0"), 10);
 
     const listings = (await sortedQuery.limit(perPageClamped).offset(offset).execute()) as unknown as ListingRow[];
 
@@ -417,7 +418,8 @@ export class ListingsRepository {
     ]);
 
     const listings = (dataResult.rows ?? []) as ListingRow[];
-    const total = parseInt((countResult.rows?.[0] as any)?.count ?? "0", 10);
+    const countRow = countResult.rows?.[0] as { count?: number | string } | undefined;
+    const total = parseInt(String(countRow?.count ?? "0"), 10);
 
     return { listings, total };
   }
@@ -449,36 +451,36 @@ export class ListingsRepository {
   async countActiveListings(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
-      .select(sql`count(*)`.as("count"))
+      .select(sql<number | string>`count(*)`.as("count"))
       .where("user_id", "=", userId)
       .where(sql<SqlBool>`active = 1`)
       .where(sql<SqlBool>`expires_at > datetime('now')`)
       .executeTakeFirst();
 
-    return parseInt((result as any)?.count ?? "0", 10);
+    return parseInt(String(result?.count ?? "0"), 10);
   }
 
   async getTotalDownloadsForUser(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
-      .select(sql`COALESCE(SUM(download_count), 0)`.as("total"))
+      .select(sql<number | string>`COALESCE(SUM(download_count), 0)`.as("total"))
       .where("user_id", "=", userId)
       .where(sql<SqlBool>`active = 1`)
       .where(sql<SqlBool>`expires_at > datetime('now')`)
       .executeTakeFirst();
 
-    return parseInt((result as any)?.total ?? "0", 10);
+    return parseInt(String(result?.total ?? "0"), 10);
   }
 
   async countWeeklyListings(userId: string): Promise<number> {
     const result = await this.db
       .selectFrom("listings")
-      .select(sql`count(*)`.as("count"))
+      .select(sql<number | string>`count(*)`.as("count"))
       .where("user_id", "=", userId)
       .where(sql<SqlBool>`created_at >= datetime('now', '-7 days')`)
       .executeTakeFirst();
 
-    return parseInt((result as any)?.count ?? "0", 10);
+    return parseInt(String(result?.count ?? "0"), 10);
   }
 
   async getOldestWeeklyListing(userId: string): Promise<Date | null> {

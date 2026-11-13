@@ -103,10 +103,10 @@ export function ImageGalleryEditor({ listingId, images, onImagesChange }: ImageG
             image={image}
             index={index}
             isCover={index === 0}
-            onDelete={handleDelete}
-            onSetAsCover={setAsCover}
+            onDelete={(id) => void handleDelete(id)}
+            onSetAsCover={(id) => void setAsCover(id)}
             onDragStart={setDraggingId}
-            onDropOn={handleReorder}
+            onDropOn={(id) => void handleReorder(id)}
           />
         ))}
       </div>

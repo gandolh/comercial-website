@@ -87,7 +87,7 @@ async function sendNewMessageNotification(
 
     await ctx.email.send(msg);
   } catch (err) {
-    console.error("[messaging] failed to send new-message notification:", err);
+    ctx.log.error({ err }, "failed to send the new-message notification");
   }
 }
 
@@ -397,7 +397,7 @@ export const messagingRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ct
         .select(({ fn }) => fn.countAll<number>().as("count"))
         .where((eb) => eb.or([eb("conversations.buyer_id", "=", userId), eb("conversations.seller_id", "=", userId)]))
         .where("messages.sender_id", "!=", userId)
-        .where("messages.read_at", "is", null as any)
+        .where("messages.read_at", "is", null)
         .executeTakeFirst();
 
       const count = result?.count || 0;
@@ -493,7 +493,7 @@ async function buildConversationSummary(
 
   const unreadCount = unreadResult?.count || 0;
 
-  const toISOString = (val: any): string => {
+  const toISOString = (val: string | Date): string => {
     if (val instanceof Date) return val.toISOString();
     return String(val);
   };

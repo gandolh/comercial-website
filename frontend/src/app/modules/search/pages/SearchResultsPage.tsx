@@ -71,7 +71,7 @@ export function SearchResultsPage() {
 
       <main className="mx-auto w-full max-w-310 grow px-4 pt-5 pb-9 md:px-6 md:pt-6 md:pb-16">
         {isError ? (
-          <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => refetch()} />
+          <ErrorCard message="Nu am putut încărca anunțurile." onRetry={() => void refetch()} />
         ) : (
           <>
             <ListingGrid

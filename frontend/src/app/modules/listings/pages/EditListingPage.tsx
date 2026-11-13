@@ -97,7 +97,7 @@ export function EditListingPage() {
           <div className="flex items-center gap-3">
             <RenewButton listingId={listing.id} expiresAt={listing.expiresAt} />
             <button
-              onClick={toggleActive}
+              onClick={() => void toggleActive()}
               className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-colors ${
                 listing.active
                   ? "border-outline text-on-surface hover:bg-surface-container"
@@ -118,7 +118,7 @@ export function EditListingPage() {
                 description: listing.description,
               }}
               onNext={(data) =>
-                handleUpdate({
+                void handleUpdate({
                   title: data.title,
                   description: data.description,
                 })
@@ -130,7 +130,12 @@ export function EditListingPage() {
 
           <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
             <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.photos")}</h2>
-            <PhotosStep listingId={listing.id} images={listing.images} onImagesChange={refetch} hideFooter />
+            <PhotosStep
+              listingId={listing.id}
+              images={listing.images}
+              onImagesChange={() => void refetch()}
+              hideFooter
+            />
           </section>
 
           <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
@@ -141,7 +146,7 @@ export function EditListingPage() {
                 isFree: listing.priceRon === 0,
               }}
               onNext={(data) =>
-                handleUpdate({
+                void handleUpdate({
                   price_ron: data.isFree ? 0 : data.priceRon,
                 })
               }
@@ -154,7 +159,7 @@ export function EditListingPage() {
             listingId={listing.id}
             isBundle={listing.isBundle ?? false}
             priceRon={listing.priceRon}
-            onSaved={refetch}
+            onSaved={() => void refetch()}
           />
         </div>
       </div>

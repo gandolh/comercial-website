@@ -10,11 +10,12 @@ export function EmailVerifyPage() {
 
   const verifyMutation = useVerifyEmailMutation();
 
+  const verify = verifyMutation.mutate; // stable between renders
   useEffect(() => {
     if (token) {
-      verifyMutation.mutate(token);
+      verify(token);
     }
-  }, [token]);
+  }, [token, verify]);
 
   if (!token) {
     return (
