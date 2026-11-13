@@ -123,8 +123,11 @@ are the API contract. `.claude/rules/server.md` has the rules.
 
 ### Design system: Carpathian Clear
 
-Tokens in `design/design-system/carpathian-clear.json` (Material Design 3 conventions): primary
-`#0056D2`, secondary `#008B8B`, tertiary `#2E7D32`; Manrope headlines, Inter body.
+Tokens in `design/design-system/carpathian-clear.json` (Material Design 3 conventions) and
+`frontend/src/index.css`: primary `#1a5f9e`, secondary `#375a7f`, tertiary `#2a6a2f` in light;
+Schibsted Grotesk throughout (since the 2026-11-13 redesign). What shipped is
+[corpus/wiki/carpathian-clear.md](corpus/wiki/carpathian-clear.md); `design/design-system/carpathian-clear.md`
+is the original concept document.
 
 ### Key business rules
 
