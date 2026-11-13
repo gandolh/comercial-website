@@ -1,6 +1,6 @@
 export function ContactPage() {
   return (
-    <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
+    <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
           <h1 className="font-headline text-4xl font-extrabold text-on-surface">Contact</h1>

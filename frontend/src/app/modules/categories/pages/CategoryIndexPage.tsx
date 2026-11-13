@@ -24,7 +24,7 @@ export function CategoryIndexPage() {
     <main className="flex-1">
       <section className="relative z-raised border-b border-outline-variant bg-surface-container-lowest shadow-band">
         <div className="mx-auto w-full max-w-310 px-4 py-7 md:px-6 md:py-10">
-          <h1 className="font-headline text-3xl leading-9 font-extrabold tracking-tight text-on-surface md:text-hero">
+          <h1 className="font-headline font-extrabold tracking-[-0.01em] text-on-surface max-md:text-3xl max-md:leading-9 md:text-hero">
             {t("categories.browseTitle", "Răsfoiește toate categoriile")}
           </h1>
           <p className="mt-3 max-w-[60ch] text-body text-on-surface-variant">

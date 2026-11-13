@@ -133,7 +133,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
         <div className="space-y-8 p-4 md:p-8">
           {/* Mobile title + price */}
           <div className="block space-y-1 lg:hidden">
-            <h1 className="font-headline text-xl font-extrabold tracking-tight text-on-surface">
+            <h1 className="font-headline text-xl font-extrabold tracking-[-0.01em] text-on-surface">
               {draft.title || t("createListing.preview.untitledPlaceholder")}
             </h1>
             <p className="text-2xl font-extrabold text-primary">{priceDisplay}</p>
@@ -202,7 +202,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
             type="button"
             onClick={onBack}
             disabled={isPublishing}
-            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low disabled:opacity-50"
+            className="flex-1 rounded-control border border-outline px-5 py-3 font-semibold transition-colors hover:bg-surface-container-low disabled:opacity-50"
           >
             {t("createListing.preview.backButton")}
           </button>

@@ -72,7 +72,7 @@ export function PricingCard({
   return (
     <Panel aria-label="Preț" className="gap-4">
       <div className="flex items-start justify-between gap-3">
-        <h1 className="font-headline text-2xl leading-[1.875rem] font-extrabold tracking-tight text-on-surface md:text-title">
+        <h1 className="font-headline font-extrabold tracking-[-0.01em] text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title">
           {title}
         </h1>
         <FavoriteToggle listingId={listingId} className="flex-none bg-surface-container-low shadow-none" />

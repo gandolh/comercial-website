@@ -43,7 +43,7 @@ export function HomePage() {
       {/* Hero */}
       <section className="relative z-raised border-b border-outline-variant bg-surface-container-lowest shadow-band">
         <div className="mx-auto flex w-full max-w-310 flex-col items-start gap-4 px-4 py-7 md:px-6 md:py-10">
-          <h1 className="font-headline text-3xl leading-9 font-extrabold tracking-tight text-balance text-on-surface md:text-hero">
+          <h1 className="font-headline font-extrabold tracking-[-0.01em] text-balance text-on-surface max-md:text-3xl max-md:leading-9 md:text-hero">
             {t("home.heroTitle")} {t("home.heroTitleHighlight")}
           </h1>
           <p className="max-w-[60ch] text-body text-on-surface-variant">{t("home.heroSubtitle")}</p>
@@ -154,7 +154,10 @@ export function HomePage() {
           aria-labelledby="cta-title"
           className="mt-10 mb-10 flex flex-col items-start gap-5 rounded-2xl bg-nav-band px-5 py-7 text-on-nav-band shadow-band md:mt-14 md:mb-16 md:px-8 md:py-12"
         >
-          <h2 id="cta-title" className="font-headline text-2xl leading-[1.875rem] font-extrabold md:text-title">
+          <h2
+            id="cta-title"
+            className="font-headline font-extrabold max-md:text-2xl max-md:leading-[1.875rem] md:text-title"
+          >
             {t("home.ctaTitle")}
           </h2>
           <p className="max-w-[56ch] text-body">{t("home.ctaSubtitle")}</p>

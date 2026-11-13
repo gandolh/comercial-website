@@ -9,6 +9,10 @@ backend/data/
 # The container's /data in a local `docker compose up` (infrastructure/docker-compose.yml)
 /data/
 
+# Playwright output (the redesign specs)
+frontend/test-results/
+frontend/playwright-report/
+
 # Node
 node_modules
 dist

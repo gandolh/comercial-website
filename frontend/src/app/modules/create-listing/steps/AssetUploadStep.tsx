@@ -114,7 +114,7 @@ export function AssetUploadStep({
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className="group cursor-pointer space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center transition-colors hover:border-primary hover:bg-primary/5"
+          className="group cursor-pointer space-y-4 rounded-2xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center transition-colors hover:border-primary hover:bg-primary/5"
         >
           <label htmlFor="file-input" className="block cursor-pointer">
             <span className="material-symbols-outlined mb-4 block text-5xl text-on-surface-variant transition-colors group-hover:text-primary">
@@ -168,7 +168,7 @@ export function AssetUploadStep({
         )}
 
         {!hasAssets && !isUploading && (
-          <div className="space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
+          <div className="space-y-4 rounded-2xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
             <span className="material-symbols-outlined text-5xl text-on-surface-variant">download_for_offline</span>
             <p className="mx-auto max-w-xs text-sm text-on-surface-variant">
               Încarcă cel puțin un fișier pentru a putea publica anunțul.
@@ -177,7 +177,7 @@ export function AssetUploadStep({
         )}
 
         {isUploading && (
-          <div className="space-y-4 rounded-3xl border-2 border-dashed border-primary bg-surface-container-low p-12 text-center">
+          <div className="space-y-4 rounded-2xl border-2 border-dashed border-primary bg-surface-container-low p-12 text-center">
             <span className="material-symbols-outlined text-5xl text-primary motion-safe:animate-spin">
               progress_activity
             </span>
@@ -192,7 +192,7 @@ export function AssetUploadStep({
             type="button"
             onClick={onBack}
             disabled={isUploading}
-            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low disabled:opacity-50"
+            className="flex-1 rounded-control border border-outline px-5 py-3 font-semibold transition-colors hover:bg-surface-container-low disabled:opacity-50"
           >
             Înapoi
           </button>

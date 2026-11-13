@@ -17,7 +17,7 @@ export function FavoritesPage() {
 
   if (!isFetching && data && data.listings.length === 0) {
     return (
-      <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
+      <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
         <div className="mx-auto max-w-2xl space-y-5 py-20 text-center">
           <span className="material-symbols-outlined text-primary" style={{ fontSize: "56px" }}>
             favorite
@@ -38,7 +38,7 @@ export function FavoritesPage() {
   }
 
   return (
-    <main className="mx-auto max-w-310 space-y-8 px-4 pt-10 pb-20 md:px-6">
+    <main className="mx-auto w-full max-w-310 space-y-8 px-4 pt-10 pb-20 md:px-6">
       <div>
         <h1 className="font-headline text-4xl font-extrabold text-on-surface">Favoritele mele</h1>
         <p className="mt-2 text-on-surface-variant">{data?.totalCount ?? 0} anunțuri salvate</p>

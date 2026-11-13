@@ -85,7 +85,7 @@ export function OrderConfirmationPage() {
   const listingHref = `/anunturi/${order.listing_id}`;
 
   return (
-    <main className="mx-auto max-w-lg space-y-8 px-4 pt-10 pb-20">
+    <main className="mx-auto w-full max-w-lg space-y-8 px-4 pt-10 pb-20">
       {isPaid ? (
         <div className="flex flex-col items-center space-y-4 text-center">
           <span className="material-symbols-outlined text-[72px] text-primary">check_circle</span>

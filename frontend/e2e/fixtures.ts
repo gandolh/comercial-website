@@ -20,7 +20,7 @@ export const SCREENS: Screen[] = [
   { name: "categories", path: "/categorii" },
   { name: "category", path: "/categorii/grafica" },
   { name: "search", path: "/anunturi?q=Pachet" },
-  { name: "detail", path: `/anunturi/${IDS.listing}` },
+  { name: "detail", path: `/anunturi/${IDS.listing}`, signedIn: true },
   { name: "profile", path: `/utilizator/${IDS.seller}` },
   { name: "signin", path: "/autentificare" },
   { name: "ward-return", path: "/autentificare/ward" },

@@ -41,14 +41,14 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
             disabled={negotiable}
             {...props}
             className={[
-              "w-full rounded-xl bg-surface-container-high text-on-surface",
-              "pl-4 pr-20 py-3 leading-relaxed",
+              "w-full rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
+              "h-12 pr-20 pl-3.5 text-body",
               "outline-none transition-all duration-200",
-              "placeholder:text-on-surface-variant/60",
+              "placeholder:text-on-surface-variant",
               "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-              "focus:bg-surface-container-lowest focus:shadow-focus",
+              "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              error ? "shadow-focus-error" : "",
+              error ? "ring-2 ring-error" : "",
               className,
             ]
               .filter(Boolean)

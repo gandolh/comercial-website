@@ -88,7 +88,7 @@ export function MyListingsPage() {
   ];
 
   return (
-    <main className="mx-auto min-h-screen max-w-310 space-y-8 px-4 py-12 pt-8 md:px-6">
+    <main className="mx-auto min-h-screen w-full max-w-310 space-y-8 px-4 py-12 pt-8 md:px-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="font-headline text-3xl font-extrabold text-on-surface">
@@ -163,7 +163,7 @@ export function MyListingsPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-4">
           {data?.listings.map((listing: ListingCardType) => {
             const expiryDate = new Date(listing.expiresAt);
             const isExpired = expiryDate <= new Date();

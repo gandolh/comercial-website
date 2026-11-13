@@ -266,7 +266,7 @@ export function ResultsBand({
       <div className="mx-auto w-full max-w-310 px-4 md:px-6">
         <div className="pt-4 md:flex md:items-center md:justify-between md:gap-6 md:pb-3.5">
           <div className="min-w-0 md:flex md:flex-wrap md:items-baseline md:gap-4">
-            <h1 className="font-headline font-extrabold tracking-tight text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title">
+            <h1 className="font-headline font-extrabold tracking-[-0.01em] text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title">
               {title}
             </h1>
             <p className="mt-0.5 text-body text-on-surface-variant md:mt-0 md:text-control">{count}</p>

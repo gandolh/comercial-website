@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useLocation } from "@core/lib/router";
 import { toast } from "@core/components/ui";
 import { useAuth } from "@core/lib/auth";
+import { cn } from "@core/lib/cn";
 import { AuthRequiredToast } from "@core/components/ui";
 import { useFavoriteIds } from "../hooks/useFavoriteIds";
 import { useToggleFavorite } from "../hooks/useToggleFavorite";
@@ -45,7 +46,11 @@ export function FavoriteToggle({ listingId, className = "", size = "md" }: Favor
       type="button"
       onClick={handleClick}
       disabled={toggleFavorite.isPending}
-      className={`${dimension} flex items-center justify-center rounded-full bg-surface-container-lowest shadow-card transition-colors hover:bg-surface-container-low ${className}`}
+      className={cn(
+        dimension,
+        "flex items-center justify-center rounded-full bg-surface-container-lowest shadow-card transition-colors hover:bg-surface-container-low",
+        className,
+      )}
       aria-label={isFavorited ? "Elimină de la favorite" : "Adaugă la favorite"}
     >
       <span

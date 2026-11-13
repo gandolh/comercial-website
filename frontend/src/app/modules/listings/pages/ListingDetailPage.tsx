@@ -347,17 +347,21 @@ export function ListingDetailPage() {
           </div>
 
           <div className="flex min-w-0 flex-col gap-4 max-[1000px]:contents min-[1001px]:gap-6">
-            <PricingCard
-              listingId={data.id}
-              sellerId={data.seller.id}
-              sellerName={data.seller.displayName ?? ""}
-              title={data.title}
-              priceRon={data.priceRon}
-              viewCount={data.viewCount}
-              downloadCount={data.downloadCount}
-              isDigitalAsset={isDigitalAsset}
-            />
-            <SellerCard seller={data.seller} listingId={data.id} isDigitalAsset={isDigitalAsset} />
+            <div className="min-w-0 max-[1000px]:order-2">
+              <PricingCard
+                listingId={data.id}
+                sellerId={data.seller.id}
+                sellerName={data.seller.displayName ?? ""}
+                title={data.title}
+                priceRon={data.priceRon}
+                viewCount={data.viewCount}
+                downloadCount={data.downloadCount}
+                isDigitalAsset={isDigitalAsset}
+              />
+            </div>
+            <div className="min-w-0 max-[1000px]:order-3">
+              <SellerCard seller={data.seller} listingId={data.id} isDigitalAsset={isDigitalAsset} />
+            </div>
 
             <div className="flex min-w-0 flex-col gap-4 max-[1000px]:order-5 min-[1001px]:gap-6">
               <Panel aria-label="Recenzii">

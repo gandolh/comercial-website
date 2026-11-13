@@ -45,8 +45,8 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               id="title"
               type="text"
               placeholder="Ex: iPhone 13 Pro 128GB Stare Perfectă"
-              className={`w-full rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
-                errors.title ? "border-error" : "border-transparent focus:border-primary"
+              className={`w-full rounded-control bg-surface-container-low px-3.5 py-3 text-body ring-1 ring-outline outline-none ring-inset ${
+                errors.title ? "ring-2 ring-error" : "focus:ring-2 focus:ring-primary"
               }`}
             />
             <span
@@ -70,8 +70,8 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
               id="description"
               rows={6}
               placeholder="Descrie produsul tău în detaliu. Menționează starea, defectele (dacă există) și de ce îl vinzi."
-              className={`w-full resize-none rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
-                errors.description ? "border-error" : "border-transparent focus:border-primary"
+              className={`w-full resize-none rounded-control bg-surface-container-low px-3.5 py-3 text-body ring-1 ring-outline outline-none ring-inset ${
+                errors.description ? "ring-2 ring-error" : "focus:ring-2 focus:ring-primary"
               }`}
             />
             <span
@@ -91,7 +91,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
+            className="flex-1 rounded-control border border-outline px-5 py-3 font-semibold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>

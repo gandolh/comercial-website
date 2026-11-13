@@ -46,7 +46,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
         )}
 
         {!hasImages && !isUploading && (
-          <div className="space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
+          <div className="space-y-4 rounded-2xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
             <span className="material-symbols-outlined text-5xl text-on-surface-variant">add_a_photo</span>
             <p className="mx-auto max-w-xs text-sm text-on-surface-variant">
               Adaugă imagini opționale pentru a face anunțul mai atractiv.
@@ -60,7 +60,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
+            className="flex-1 rounded-control border border-outline px-5 py-3 font-semibold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>

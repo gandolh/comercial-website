@@ -15,7 +15,7 @@ export function Wordmark({ className }: { className?: string }) {
     <Link
       to="/"
       aria-label="PiațăRo, acasă"
-      className={`inline-flex rounded-md text-price font-extrabold tracking-tight whitespace-nowrap no-underline ${className ?? ""}`}
+      className={`inline-flex rounded-md text-price font-extrabold tracking-[-0.01em] whitespace-nowrap no-underline ${className ?? ""}`}
     >
       Piață<b className="font-extrabold text-(--wordmark-accent)">Ro</b>
     </Link>
@@ -70,7 +70,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-nav h-14 bg-nav-band text-on-nav-band md:h-16">
-      <div className="mx-auto flex h-full w-full max-w-310 items-center gap-3 px-4 min-[1101px]:gap-10 md:gap-6 md:px-6">
+      <div className="mx-auto flex h-full w-full max-w-310 items-center gap-3 px-4 md:gap-6 md:px-6 xl:gap-10">
         <Wordmark className="text-on-nav-band [--wordmark-accent:var(--color-on-nav-band-variant)]" />
 
         <nav aria-label="Principal" className="hidden h-full flex-1 gap-1 md:flex">

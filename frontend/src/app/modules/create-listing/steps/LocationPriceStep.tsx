@@ -59,8 +59,8 @@ export function LocationPriceStep({
                 placeholder="Ex: 150"
                 defaultValue={initialData?.priceRon ?? ""}
                 onChange={handlePriceChange}
-                className={`w-full rounded-2xl border-2 bg-surface-container-low px-5 py-4 transition-all outline-none ${
-                  errors.priceRon ? "border-error" : "border-transparent focus:border-primary"
+                className={`w-full rounded-control bg-surface-container-low px-3.5 py-3 text-body ring-1 ring-outline outline-none ring-inset ${
+                  errors.priceRon ? "ring-2 ring-error" : "focus:ring-2 focus:ring-primary"
                 } ${isFree ? "opacity-50 grayscale" : ""}`}
               />
               <span className="absolute top-1/2 right-5 -translate-y-1/2 font-bold text-on-surface-variant">RON</span>
@@ -83,7 +83,7 @@ export function LocationPriceStep({
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 rounded-full border-2 border-outline-variant px-8 py-4 font-bold transition-colors hover:bg-surface-container-low"
+            className="flex-1 rounded-control border border-outline px-5 py-3 font-semibold transition-colors hover:bg-surface-container-low"
           >
             Înapoi
           </button>
