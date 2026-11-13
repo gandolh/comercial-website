@@ -35,3 +35,15 @@ Migrations, `backend/app/vendor/`, `vendor/`, the frontend, deploy files other t
 - `grep -rn "@my-olx/core\|backend/core"` outside node_modules, dist, `corpus/briefs/done` and `log.md` is empty.
 - No docker build (the owner's step).
 - Owner step: deploy with vps-deploy's `piataro` stack; briefs 10 to 17 also wait for phase `all`, which ships this too.
+
+## Outcome (2026-11-13)
+
+Built. Commit 6e6c09f. `npm run check` before and after: 193 backend and 107 frontend tests, exit 0 both times.
+
+- `core/src` moved with `git mv` into `app/src/plugins/` (new), `lib/` and `db/` (merged; no name clashed). The barrel `index.ts` is gone. 35 files' `@my-olx/core` imports became relative `.js` imports (by a script keyed on each export's file); a few files now have two imports from one module.
+- Core's 11 dependencies and its devDependency moved into `app/package.json` at the same versions; `@my-olx/core` is gone from the lockfile, which changed only by the workspace entries (`npm install` in `backend/`). `backend/package.json` has one workspace, no core build prefixes, `typecheck` is `tsc -b app`.
+- `infrastructure/Dockerfile`: the core manifest copies, the core copy and the `core/dist` copy are gone; the `find ./app/dist` strip stays. `.dockerignore`, `backend/eslint.config.js`, `knip.config.js` (the `@fastify/multipart` note went, since app lists it now; `pino` moved to the app block), `scripts/conventions.json` (the rule-2 exception for core went), `package.json`'s depcruise call, the docs, `.claude/rules/server.md` and the wiki follow.
+- `no-non-null-assertion` warnings (19) and rule-11 size warnings (6) are the same as before.
+- Not run: a docker build (the owner's step with the deploy), a browser walk (nothing visible changes).
+- The grep for `@my-olx/core` and `backend/core` finds only this brief's predecessor todo, which describes the change.
+- Owner step: deploy `piataro`, phase `server` for this alone; briefs 10 to 17 still wait for phase `all`, which ships this too.

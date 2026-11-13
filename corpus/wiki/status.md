@@ -28,6 +28,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 15 (done, ready for deploy): replies that say less: the conversation summary's counterparty is id, display name and avatar only, its flags booleans; the asset upload has no `s3_key`; the avatar upload's `public_url` carries `/uploads/`. [Brief 15](../briefs/done/15-replies-that-say-less.md).
 - 16 (done, ready for deploy): the change-password form is on the account settings page (`Securitate`), the new password at least 12 characters, errors in Romanian; eleven never-wired frontend files deleted, knip's ignore list gone. [Brief 16](../briefs/done/16-wire-the-password-form-and-delete-the-dead-files.md).
 - 17 (done, ready for deploy): the held house-style warnings cleared: `no-misused-promises`, `no-explicit-any`, `no-console` are errors again, the hook warnings fixed, `AppContext.log` added. Left: 19 test non-null assertions, knip's three dependency notes. [Brief 17](../briefs/done/17-the-house-style-warnings.md).
+- 18 (done, ready for deploy): `backend/core` folded into `backend/app` (`plugins/`, `lib/`, `db/` beside `features/`; one package, one `tsc -b`, Dockerfile without the core stage). [Brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md).
 
 ## Owed by the owner
 

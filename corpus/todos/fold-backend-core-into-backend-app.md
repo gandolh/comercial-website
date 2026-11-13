@@ -1,6 +1,6 @@
 # Fold backend/core into backend/app
 
-> Promoted to [brief 18](../briefs/todo/18-fold-backend-core-into-backend-app.md) on 2026-11-13.
+> Promoted to [brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md) on 2026-11-13.
 
 The owner's answer to brief 13's board question (2026-11-13): fold the separate
 `@my-olx/core` package into `@my-olx/app`. That matches the estate's other
