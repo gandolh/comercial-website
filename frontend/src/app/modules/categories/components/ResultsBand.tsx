@@ -300,7 +300,7 @@ export function ResultsBand({
           <ul aria-label="Filtre active" className="hidden flex-wrap gap-2 pb-3.5 md:flex">
             {active.map((f) => (
               <li key={f.key} className="list-none">
-                <Chip selected label={f.value} onRemove={() => onChange(f.clear)} aria-pressed={undefined} />
+                <Chip selected label={f.value} onRemove={() => onChange(f.clear)} />
               </li>
             ))}
           </ul>
