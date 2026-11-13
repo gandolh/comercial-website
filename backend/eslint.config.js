@@ -5,7 +5,7 @@ import { houseStyle } from "../vendor/house-style/eslint.config.js";
 export default [
   ...houseStyle({
     root: import.meta.dirname,
-    server: ["app/src", "core/src"],
+    server: ["app/src"],
     // The seed and owner commands and the migrator talk to the person running them, and the log email
     // service prints by design. The server entry logs through Fastify's logger.
     console: [
@@ -13,7 +13,7 @@ export default [
       "app/src/seed-samples.ts",
       "app/src/create-owner.ts",
       "app/src/migrate.ts",
-      "core/src/lib/email.ts",
+      "app/src/lib/email.ts",
     ],
     // The env reader: the one place that says what the app needs.
     env: ["app/src/config.ts"],

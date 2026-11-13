@@ -2,13 +2,14 @@ import "@fastify/multipart";
 import type { MultipartValue } from "@fastify/multipart";
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError, listingImageKey } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import { listingImageKey } from "../../lib/storage.js";
 import type { AppContext } from "../../context.js";
 import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 interface ImageResponse {
   id: string;

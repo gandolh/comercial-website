@@ -8,14 +8,14 @@
 
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError } from "@my-olx/core";
-import type { OrdersTable } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import type { OrdersTable } from "../../db/schema.js";
 import type { Selectable } from "kysely";
 import { splitOrderAmount } from "../../lib/payout-fee.js";
 import type { AppContext } from "../../context.js";
 import { FakePaymentProvider, isFree } from "./service.js";
 import type { CheckoutResult, PaymentProvider } from "./service.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 const psp: PaymentProvider = new FakePaymentProvider();
 

@@ -1,6 +1,7 @@
 import { sql, type SelectQueryBuilder, type SqlBool, type Updateable } from "kysely";
 import { CompiledQuery } from "kysely";
-import type { Database, Db, ListingsTable } from "@my-olx/core";
+import type { Database, ListingsTable } from "./schema.js";
+import type { Db } from "./index.js";
 
 export interface ListingRow {
   id: string;

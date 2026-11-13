@@ -13,8 +13,8 @@
 
 import { describe, it, expect, vi } from "vitest";
 import type { ExpiryReminderRow } from "../../db/listings-store.js";
-import type { EmailMessage, EmailService } from "@my-olx/core";
-import { expiryReminderEmail } from "@my-olx/core";
+import type { EmailMessage, EmailService } from "../../lib/email.js";
+import { expiryReminderEmail } from "../../lib/email.js";
 
 // ---------------------------------------------------------------------------
 // Minimal mock helpers

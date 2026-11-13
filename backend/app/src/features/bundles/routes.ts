@@ -12,12 +12,12 @@
 
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
 import type { AppContext } from "../../context.js";
 import { BundlesRepository } from "../../db/bundles-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 import { listingCardSchema, toListingCardResponse } from "../listings/index.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 

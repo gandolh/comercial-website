@@ -1,10 +1,10 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError } from "@my-olx/core";
-import type { InvoicesTable } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import type { InvoicesTable } from "../../db/schema.js";
 import type { Selectable } from "kysely";
 import type { AppContext } from "../../context.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 import { invoiceProfileSchema, invoiceSchema } from "./schemas.js";
 
 // ─── Types ───────────────────────────────────────────────────────────────────

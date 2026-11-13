@@ -7,6 +7,5 @@
     // dist/ up to date.
     "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
   },
-  "references": [{ "path": "../core" }],
   "include": ["src/**/*"]
 }

@@ -14,7 +14,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { crc32 } from "node:zlib";
-import { runMigrations } from "@my-olx/core";
+import { runMigrations } from "./db/migrator.js";
 import { splitOrderAmount } from "./lib/payout-fee.js";
 import { loadEnvFile, resolveDataPaths } from "./config.js";
 

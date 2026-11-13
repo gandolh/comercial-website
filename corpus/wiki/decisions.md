@@ -88,8 +88,8 @@ control is a `RadioGroup` in the footer, reachable signed out. Rejected: followi
 and a toggle in the profile menu.
 
 ## The server in the house code structure
-_2026-11-10, built 2026-11-12 (brief 13)_ — The backend follows the `code-structure` skill. `backend/core` stays
-a separate package (decision 1's default), now the skill's `plugins/` (errors, http, auth: each a
+_2026-11-10, built 2026-11-12 (brief 13)_ — The backend follows the `code-structure` skill. The separate `core` package was folded
+into `backend/app` on 2026-11-13 (brief 18, the owner's answer): its code is now `app/src/`'s `plugins/` (errors, http, auth: each a
 `fastify-plugin` with typed options, registered by name) and `lib/` (no Fastify) plus `db/`; it reads no
 environment. `backend/app/src` has `server.ts` (listens), `app.ts` (`buildApp`), `config.ts` (the one reader
 of the environment, `JWT_SECRET` required everywhere) and `features/<name>/`, with the stores several

@@ -9,15 +9,10 @@ export default {
   ignoreBinaries: ["eslint", "knip"],
   workspaces: {
     ".": { entry: ["eslint.config.js"] },
-    core: {
-      // An exception for now (2026-11-11): nothing imports pino (Fastify builds its own logger). When the
-      // dependency is dropped from core's package.json, this goes.
-      ignoreDependencies: ["pino"],
-    },
     app: {
-      // An exception for now (2026-11-11): two modules import "@fastify/multipart" for its request types,
-      // and only core lists it. When app lists it too, this goes.
-      ignoreDependencies: ["@fastify/multipart"],
+      // An exception for now (2026-11-11): nothing imports pino (Fastify builds its own logger). When the
+      // dependency is dropped from app's package.json, this goes.
+      ignoreDependencies: ["pino"],
     },
   },
 };

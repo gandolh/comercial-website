@@ -17,7 +17,7 @@ Transactional emails fire on two events; users can opt out. Originated from todo
 - **Opt-out:** `email_notifications` boolean column on users (migration
   `20260610020000_email_notifications_pref.sql`, default on). Toggled via `PATCH /users/me`; respected
   before every send. Settings UI strings under i18n `settings.notifications.*`.
-- **Transport:** when SMTP is unconfigured (dev/CI), `core/src/lib/email.ts` uses a `LogEmailService` that
+- **Transport:** when SMTP is unconfigured (dev/CI), `app/src/lib/email.ts` uses a `LogEmailService` that
   logs instead of sending — no crash, no config needed. Romanian copy with correct diacritics.
 
 ## Open questions

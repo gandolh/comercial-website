@@ -11,7 +11,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import Database from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
-import type { Database as AppDatabase } from "@my-olx/core";
+import type { Database as AppDatabase } from "./schema.js";
 import { ReviewsRepository } from "./reviews-store.js";
 
 // ─── Minimal in-memory DB setup ───────────────────────────────────────────────

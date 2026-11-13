@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { AppContext } from "../../context.js";
 import type { Config } from "../../config.js";
 import { listingCardSchema } from "../listings/index.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 interface ListingCardResponse {
   id: string;

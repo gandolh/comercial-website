@@ -3,7 +3,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
-import { runMigrations } from "@my-olx/core";
+import { runMigrations } from "./db/migrator.js";
 import { loadEnvFile, resolveDataPaths } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));

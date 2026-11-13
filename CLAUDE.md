@@ -15,7 +15,7 @@ goods, no shipping. Since 2026-11-03 it is being turned into a **deployed demo w
 that only the owner signs into (`corpus/wiki/decisions.md`).
 
 Two npm projects with their own lockfiles: `backend/` (Node + TypeScript + Fastify, a workspace of
-`@my-olx/core` and `@my-olx/app`, Kysely over SQLite with `better-sqlite3`, files on disk) and
+`@my-olx/app`, Kysely over SQLite with `better-sqlite3`, files on disk) and
 `frontend/` (React + Vite + TanStack Router + React Query + Tailwind v4). Exact-pinned dependencies.
 The root `package.json` holds the house-style tools and scripts that call into the two (vps-deploy needs
 one at the checkout's root).
@@ -42,7 +42,7 @@ From the repo root:
 cd backend
 npm install
 cp .env.example .env          # then set JWT_SECRET; the API reads backend/.env when it exists
-npm run dev                   # builds @my-olx/core, then tsx watch on port 8080; migrations run at start
+npm run dev                   # tsx watch on port 8080; migrations run at start
 npm run build                 # core, then app
 npm test                      # builds core and app first (pretest), then vitest
 ```
@@ -94,15 +94,14 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 
 ```
 backend/
-  core/src/       @my-olx/core, the plugin library: plugins/ (errors, http: CORS, compression,
-                  multipart, /uploads/; auth: the authenticate preHandler; each a fastify-plugin),
-                  lib/ (AppError, JWT + Argon2 tokens, email, disk storage; no Fastify), db/ (Kysely,
-                  SQLite, the migrator). It reads no environment.
   app/src/        @my-olx/app: server.ts (the entry: listens), app.ts (buildApp), config.ts (the one
                   reader of the environment), features/<name>/ (routes.ts, schemas.ts, service.ts,
                   store.ts, index.ts: auth, users, favorites, listings, images, assets, bundles,
                   messaging, orders, reviews, payouts, invoices, anaf, ward, health, reminders),
-                  db/ (the stores several features share), lib/, startup/ (prepareStorage: folders,
+                  plugins/ (errors, http: CORS, compression, multipart, /uploads/; auth: the authenticate
+                  preHandler; each a fastify-plugin; they read no environment), lib/ (AppError, JWT +
+                  Argon2 tokens, email, disk storage; no Fastify), db/ (Kysely, SQLite, the migrator,
+                  the stores several features share), startup/ (prepareStorage: folders,
                   migrations, the asset move), testing/ (startTestApp)
   migrations/     raw .sql files, applied at start
 ```

@@ -1,4 +1,4 @@
-import type { Db } from "@my-olx/core";
+import type { Db } from "./index.js";
 import type { ListingRow } from "./listings-store.js";
 
 export interface BundleItemRow {

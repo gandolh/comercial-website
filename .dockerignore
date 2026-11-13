@@ -1,5 +1,5 @@
 # What the image build never needs. The Dockerfile copies only backend/:
-# its manifests and tsconfig.base.json, core/, app/, migrations/ and
+# its manifests and tsconfig.base.json, app/, migrations/ and
 # seed/samples/.
 #
 # Compiled output and build state are left out so the build always compiles

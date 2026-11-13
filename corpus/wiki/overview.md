@@ -25,7 +25,7 @@ See [decisions.md](decisions.md) and [status.md](status.md).
 
 | Layer | Tech |
 |---|---|
-| Backend | Node.js + TypeScript + Fastify; npm workspace (`@my-olx/core` + `@my-olx/app`) |
+| Backend | Node.js + TypeScript + Fastify; npm workspace (`@my-olx/app`) |
 | DB | SQLite (`better-sqlite3`) + Kysely; migrations auto-run at startup |
 | Auth | JWT + Argon2 |
 | Storage | Disk (`data/uploads/`); served via `@fastify/static` at `/uploads/<key>` |

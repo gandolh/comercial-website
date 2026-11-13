@@ -1,5 +1,5 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
-import { AppError } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
 import { z } from "zod";
 
 // ─── Types ───────────────────────────────────────────────────────────────────

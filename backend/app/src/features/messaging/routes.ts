@@ -1,8 +1,9 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import type { AppContext } from "../../context.js";
-import { AppError, fixedValidationMessage, newMessageEmail } from "@my-olx/core";
-import { requireUserId } from "@my-olx/core";
+import { AppError, fixedValidationMessage } from "../../lib/api-error.js";
+import { newMessageEmail } from "../../lib/email.js";
+import { requireUserId } from "../../plugins/auth.js";
 import { conversationSummarySchema, messageSchema, unreadCountSchema } from "./schemas.js";
 
 /**

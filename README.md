@@ -65,8 +65,7 @@ Then open <http://localhost:5173/>. A new database is empty; `NODE_ENV=developme
 
 | Path | What lives there |
 |---|---|
-| `backend/core/` | `@my-olx/core`: database, auth, storage, email, config, the Fastify factory |
-| `backend/app/` | `@my-olx/app`: the marketplace routes and repositories |
+| `backend/app/` | `@my-olx/app`: the server: plugins, lib, db, and the marketplace features |
 | `backend/migrations/` | SQL migrations, applied at start-up |
 | `backend/seed/dev/` | The demo data for local work (`npm run seed:dev`, development only) |
 | `frontend/` | The React app |

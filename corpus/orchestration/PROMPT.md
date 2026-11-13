@@ -84,7 +84,7 @@ Use a TodoWrite list to track the 5 waves and report progress to me after each m
 | Agent | Todo | Owns (files) | Migration ts | i18n ns |
 |---|---|---|---|---|
 | A1a | `search-improvements.md` | `backend/app/src/repositories/listings.repo.ts` (search method only), new FTS migration, `backend/app/src/modules/listings.ts` (search route wiring) | `20260610010000_listings_fts.sql` | — |
-| A1b | `email-notifications.md` | `backend/core/src/email/index.ts`, `backend/app/src/modules/messaging.ts`, `backend/app/src/modules/assets.ts`, `backend/core/src/db/schema.ts` (+`email_notifications` col on users), `backend/app/src/modules/users.ts` (opt-out setting) | `20260610020000_email_notifications_pref.sql` | `settings.*` |
+| A1b | `email-notifications.md` | `core/src/email/index.ts`, `backend/app/src/modules/messaging.ts`, `backend/app/src/modules/assets.ts`, `core/src/db/schema.ts` (+`email_notifications` col on users), `backend/app/src/modules/users.ts` (opt-out setting) | `20260610020000_email_notifications_pref.sql` | `settings.*` |
 | A1c | `cui-lookup.md` | new `backend/app/src/modules/anaf.ts`, `backend/app/src/server.ts` (add route) | — | — |
 | A1d | `password-reset-ui.md` | `frontend .../auth/pages/ForgotPasswordPage.tsx`, `.../auth/pages/ResetPasswordPage.tsx`, `.../auth/services/auth.ts`, `.../auth/hooks/useForgotPasswordMutation.ts`, `useResetPasswordMutation.ts` | — | `auth.*` |
 
@@ -95,7 +95,7 @@ Use a TodoWrite list to track the 5 waves and report progress to me after each m
 | Agent | Todo | Owns | Migration ts | i18n ns |
 |---|---|---|---|---|
 | A2a | `download-all-assets.md` | `backend/app/src/modules/assets.ts`, `backend/app/src/repositories/assets.repo.ts`, `frontend .../listings/pages/ListingDetailPage.tsx`, `.../listings/services/listings.ts` | — | `listing.files.*` |
-| A2b | `seller-profile.md` | `backend/core/src/db/schema.ts` (bio/website/social cols), `backend/app/src/modules/users.ts`, `backend/app/src/repositories/users-auth.repo.ts`, `frontend .../public-profile/pages/PublicProfilePage.tsx`, `.../settings/components/ProfileSection.tsx`, `.../settings/pages/SettingsPage.tsx` | `20260615010000_user_profile_fields.sql` | `seller.*`, `settings.profile.*` |
+| A2b | `seller-profile.md` | `core/src/db/schema.ts` (bio/website/social cols), `backend/app/src/modules/users.ts`, `backend/app/src/repositories/users-auth.repo.ts`, `frontend .../public-profile/pages/PublicProfilePage.tsx`, `.../settings/components/ProfileSection.tsx`, `.../settings/pages/SettingsPage.tsx` | `20260615010000_user_profile_fields.sql` | `seller.*`, `settings.profile.*` |
 | A2c | `listing-renewal-and-expiry-ui.md` | `frontend .../dashboard/pages/MyListingsPage.tsx`, `DashboardPage.tsx`, `.../dashboard/components/ExpiringSection.tsx`, `.../listings/components/RenewButton.tsx`, `.../dashboard/services/dashboard.ts` | — | `dashboard.*` |
 | A2d | `gdpr-cookie-consent.md` | new `frontend .../core/components/ui/CookieConsent.tsx`, `frontend .../core/components/layout/MainLayout.tsx` (mount it) | — | `cookies.*` |
 
@@ -116,8 +116,8 @@ Use a TodoWrite list to track the 5 waves and report progress to me after each m
 ### Wave 4 — Heavy features (sequential: A4a, then A4b)
 | Agent | Todo | Owns | Migration ts |
 |---|---|---|---|
-| A4a | `invoice-generator.md` (v1: PDF+XML download, no ANAF OAuth) | new `backend/app/src/modules/invoices.ts`, `backend/core/src/db/schema.ts` (invoices + user_invoice_profiles tables), `backend/app/src/server.ts` (routes), new `frontend .../app/modules/invoices/` (page `/facturi` + history + routes), uses A1c's `/anaf/company/:cui` | `20260620010000_invoices.sql` |
-| A4b | `payment-processing.md` (Netopia test mode OR Stripe test mode — pick Stripe for DX, gate downloads) | new `backend/app/src/modules/orders.ts`, `backend/core/src/db/schema.ts` (orders table), `backend/app/src/server.ts` (routes + webhook), `backend/app/src/modules/assets.ts` (gate download behind paid order), `frontend .../listings/pages/ListingDetailPage.tsx` (Buy button), new `frontend .../app/modules/orders/` | `20260620020000_orders.sql` |
+| A4a | `invoice-generator.md` (v1: PDF+XML download, no ANAF OAuth) | new `backend/app/src/modules/invoices.ts`, `core/src/db/schema.ts` (invoices + user_invoice_profiles tables), `backend/app/src/server.ts` (routes), new `frontend .../app/modules/invoices/` (page `/facturi` + history + routes), uses A1c's `/anaf/company/:cui` | `20260620010000_invoices.sql` |
+| A4b | `payment-processing.md` (Netopia test mode OR Stripe test mode — pick Stripe for DX, gate downloads) | new `backend/app/src/modules/orders.ts`, `core/src/db/schema.ts` (orders table), `backend/app/src/server.ts` (routes + webhook), `backend/app/src/modules/assets.ts` (gate download behind paid order), `frontend .../listings/pages/ListingDetailPage.tsx` (Buy button), new `frontend .../app/modules/orders/` | `20260620020000_orders.sql` |
 
 > A4a and A4b both touch `schema.ts` + `server.ts` → run **sequentially**: A4a → merge → A4b branches
 > from updated `main`. Do NOT run them in parallel.

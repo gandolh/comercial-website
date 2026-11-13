@@ -16,7 +16,7 @@ twice. This closes the deferred follow-up that [notifications](notifications.md)
   owners get nothing.
 - Romanian copy with correct comma-below diacritics ș ț; same unsubscribe URL pattern as other emails
   (`/setari/notificari?unsubscribe={userId}`). Template `expiryReminderEmail(...)` lives next to the
-  existing templates in `core/src/lib/email.ts`; the links take the config's `frontendBaseUrl`.
+  existing templates in `app/src/lib/email.ts`; the links take the config's `frontendBaseUrl`.
 
 ## Mechanism (the project's first scheduler)
 

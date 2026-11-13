@@ -1,6 +1,11 @@
 // Builds the API: the Fastify app, its plugins and every route, on a prepared data folder (prepareStorage).
 // server.ts listens on it; tests build the same app on a temporary database (test-app.ts). It never listens.
-import { auth, createDb, createEmailService, errors, http, StorageService } from "@my-olx/core";
+import { auth } from "./plugins/auth.js";
+import { createDb } from "./db/index.js";
+import { createEmailService } from "./lib/email.js";
+import { errors } from "./plugins/errors.js";
+import { http } from "./plugins/http.js";
+import { StorageService } from "./lib/storage.js";
 import { serializerCompiler, validatorCompiler } from "@fastify/type-provider-zod";
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from "fastify";
 import type { Config } from "./config.js";

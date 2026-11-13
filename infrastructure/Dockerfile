@@ -8,7 +8,7 @@
 #
 #   docker compose -f infrastructure/docker-compose.yml up -d piataro-api
 #
-# The image's /app is backend/: core/ and app/ beside migrations/ and
+# The image's /app is backend/: app/ beside migrations/ and
 # seed/samples/, because the built code finds those by relative path from
 # app/dist (../../migrations, ../../seed/samples/previews) and the vendored
 # ward-auth library at ../vendor/ward/. Migrations run when the server starts.
@@ -26,25 +26,23 @@
 # the service could not write its own database.
 
 # ---------------------------------------------------------------------------
-# deps — full workspace install, with the toolchain native modules need
+# deps — full install, with the toolchain native modules need
 # ---------------------------------------------------------------------------
 FROM node:24-alpine AS deps
 # better-sqlite3 11.7.0 has no prebuild for Node 24, so it compiles here.
 # argon2 ships a musl prebuild and needs none of this.
 RUN apk add --no-cache python3 make g++
 WORKDIR /app
-# Manifests first, for layer caching. Both workspace manifests are needed:
+# Manifests first, for layer caching. The workspace manifest is needed:
 # `npm ci` checks the lockfile against every workspace the root declares.
 COPY backend/package.json backend/package-lock.json backend/tsconfig.base.json ./
-COPY backend/core/package.json ./core/
 COPY backend/app/package.json ./app/
 RUN npm ci
 
 # ---------------------------------------------------------------------------
-# builder — compile core, then app (tsc -b → core/dist, app/dist)
+# builder — compile app (tsc -b → app/dist)
 # ---------------------------------------------------------------------------
 FROM deps AS builder
-COPY backend/core ./core
 COPY backend/app ./app
 RUN npm run build
 
@@ -55,10 +53,9 @@ FROM node:24-alpine AS proddeps
 RUN apk add --no-cache python3 make g++
 WORKDIR /app
 COPY backend/package.json backend/package-lock.json ./
-COPY backend/core/package.json ./core/
 COPY backend/app/package.json ./app/
-# The root holds only dev tools (tsc, tsx, vitest), so this is core's and
-# app's dependencies.
+# The root holds only dev tools (tsc, tsx, vitest), so this is app's
+# dependencies.
 RUN npm ci --omit=dev
 # Drop native build intermediates and the prebuilds for operating systems this
 # image can never be. A BLACKLIST of foreign platforms on purpose: argon2
@@ -80,10 +77,6 @@ LABEL org.opencontainers.image.title="piataro" \
 WORKDIR /app
 COPY --from=proddeps /app/node_modules ./node_modules
 COPY backend/package.json ./
-# node_modules/@my-olx/core is a symlink to ../core, so core must sit at
-# /app/core with its manifest and compiled output.
-COPY backend/core/package.json ./core/
-COPY --from=builder /app/core/dist ./core/dist
 COPY backend/app/package.json ./app/
 COPY --from=builder /app/app/dist ./app/dist
 COPY backend/app/vendor ./app/vendor
@@ -93,7 +86,7 @@ COPY backend/seed/samples ./seed/samples
 # tsc compiles src/**/*, the test helpers and the dev seed with it. The dev
 # seed reads backend/seed/dev, which is not in the image, and refuses to run
 # outside development anyway.
-RUN find ./app/dist ./core/dist \( -name '*.test.*' -o -name 'test-app.*' -o -name 'seed-dev.*' \) -delete
+RUN find ./app/dist \( -name '*.test.*' -o -name 'test-app.*' -o -name 'seed-dev.*' \) -delete
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=8807 \

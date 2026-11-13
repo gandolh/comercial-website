@@ -20,10 +20,8 @@ cp .env.example .env    # then set JWT_SECRET, e.g. to the output of: openssl ra
 npm run dev
 ```
 
-`npm run dev` builds `@my-olx/core` first (the app imports it from
-`core/dist/`), then runs the app under `tsx watch`, applies any new migrations
-from `backend/migrations/`, and listens on port 8080 on every interface. After
-changing `core/`, restart it.
+`npm run dev` runs the app under `tsx watch`, applies any new migrations
+from `backend/migrations/`, and listens on port 8080 on every interface.
 
 A `JWT_SECRET` that changes signs everyone out; the one in `.env` stays put.
 

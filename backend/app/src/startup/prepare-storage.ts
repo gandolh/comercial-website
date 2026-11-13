@@ -5,7 +5,7 @@ import Database from "better-sqlite3";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { runMigrations } from "@my-olx/core";
+import { runMigrations } from "../db/migrator.js";
 import type { Config } from "../config.js";
 import { moveAssetsOutOfUploads } from "./move-assets.js";
 

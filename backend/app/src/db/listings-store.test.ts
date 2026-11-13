@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import Database from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
-import type { Database as DbSchema } from "@my-olx/core";
+import type { Database as DbSchema } from "./schema.js";
 import { ListingsRepository } from "./listings-store.js";
 
 function createInMemoryDb(): Kysely<DbSchema> {

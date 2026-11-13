@@ -6,9 +6,10 @@ import { sql } from "kysely";
 import type { Selectable, SqlBool, Updateable } from "kysely";
 import type { AppContext } from "../../context.js";
 import type { Config } from "../../config.js";
-import { AppError, verifyPassword, hashPassword } from "@my-olx/core";
-import type { UsersTable } from "@my-olx/core";
-import { requireUserId } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import { verifyPassword, hashPassword } from "../../lib/tokens.js";
+import type { UsersTable } from "../../db/schema.js";
+import { requireUserId } from "../../plugins/auth.js";
 import { listingCardSchema } from "../listings/index.js";
 import { avatarSchema, myStatsSchema, publicUserSchema, userSummarySchema } from "./schemas.js";
 // Helpers

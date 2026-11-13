@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { hashPassword } from "@my-olx/core";
+import { hashPassword } from "../../lib/tokens.js";
 import { startTestApp } from "../../testing/test-app.js";
 
 function multipart(filename: string, mime: string, content: string) {

@@ -1,5 +1,5 @@
 import { sql } from "kysely";
-import type { Db } from "@my-olx/core";
+import type { Db } from "./index.js";
 
 export interface ReviewRow {
   id: string;

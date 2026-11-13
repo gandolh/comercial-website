@@ -9,7 +9,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { runMigrations } from "@my-olx/core";
+import { runMigrations } from "./db/migrator.js";
 import { ConfigError, loadDevSeedConfig, loadEnvFile } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));

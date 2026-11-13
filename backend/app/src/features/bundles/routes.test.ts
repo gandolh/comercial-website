@@ -13,10 +13,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import Database from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
-import { runMigrations } from "@my-olx/core";
+import { runMigrations } from "../../db/migrator.js";
 import { BundlesRepository } from "../../db/bundles-store.js";
 import { startTestApp } from "../../testing/test-app.js";
-import type { Database as DbSchema } from "@my-olx/core";
+import type { Database as DbSchema } from "../../db/schema.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 

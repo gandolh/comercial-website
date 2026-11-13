@@ -19,10 +19,11 @@
 import { randomBytes } from "node:crypto";
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError, signToken } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import { signToken } from "../../lib/tokens.js";
 import type { AppContext } from "../../context.js";
 import type { WardClient } from "../../../vendor/ward/ward-auth.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 type Flow = Awaited<ReturnType<WardClient["startAuthorization"]>>["flow"];
 

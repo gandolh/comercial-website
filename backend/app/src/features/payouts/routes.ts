@@ -11,12 +11,12 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { sql } from "kysely";
-import { AppError, fixedValidationMessage } from "@my-olx/core";
+import { AppError, fixedValidationMessage } from "../../lib/api-error.js";
 import type { Kysely } from "kysely";
-import type { Database } from "@my-olx/core";
+import type { Database } from "../../db/schema.js";
 import type { AppContext } from "../../context.js";
 import { PLATFORM_FEE_RATE } from "../../lib/payout-fee.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 const PayoutRequestSchema = z.object({ request_id: z.string().min(8).max(100) });
 

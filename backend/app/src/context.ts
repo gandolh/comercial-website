@@ -1,8 +1,9 @@
 // Shared application context: the wired dependencies every route module receives.
 // app.ts builds this once and registers each feature plugin with it as the plugin's options.
 import type { FastifyBaseLogger } from "fastify";
-import type { Db } from "@my-olx/core";
-import type { EmailService, StorageService } from "@my-olx/core";
+import type { Db } from "./db/index.js";
+import type { EmailService } from "./lib/email.js";
+import type { StorageService } from "./lib/storage.js";
 import type { Config } from "./config.js";
 
 export interface AppContext {

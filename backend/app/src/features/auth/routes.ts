@@ -1,9 +1,10 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError, verifyPassword, signToken } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import { verifyPassword, signToken } from "../../lib/tokens.js";
 import type { AppContext } from "../../context.js";
 import { UsersAuthRepository } from "./store.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 /**
  * Type-safe UserSummary response object.

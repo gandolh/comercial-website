@@ -1,6 +1,6 @@
 import { randomBytes, createHash } from "node:crypto";
 import { sql, type SqlBool } from "kysely";
-import type { Db } from "@my-olx/core";
+import type { Db } from "../../db/index.js";
 
 export interface CreateUserParams {
   email: string;

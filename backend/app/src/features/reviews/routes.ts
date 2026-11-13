@@ -12,11 +12,11 @@
 
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { AppError } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
 import type { AppContext } from "../../context.js";
 import { ReviewsRepository } from "../../db/reviews-store.js";
 import { hasPaidOrder } from "../orders/index.js";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 // ─── Validation schemas ───────────────────────────────────────────────────────
 

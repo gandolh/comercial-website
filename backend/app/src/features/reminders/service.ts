@@ -14,7 +14,7 @@
  * column is stamped with `datetime('now')` to prevent duplicates.
  */
 
-import { expiryReminderEmail } from "@my-olx/core";
+import { expiryReminderEmail } from "../../lib/email.js";
 import type { AppContext } from "../../context.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 

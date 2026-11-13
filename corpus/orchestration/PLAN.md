@@ -15,7 +15,7 @@ merged to `main` before the next wave starts (so the next wave branches from up-
 | File | Todos that touch it |
 |---|---|
 | `backend/app/src/listings-helpers.ts` (CATEGORY_LABELS + DTO builders w/ `city`/`is_negotiable`) | categories-update, remove-physical-goods, download-all-assets, seller-profile |
-| `backend/core/src/db/schema.ts` (Kysely table interfaces) | seller-profile, invoice-generator, payment-processing, email-notifications |
+| `core/src/db/schema.ts` (Kysely table interfaces) | seller-profile, invoice-generator, payment-processing, email-notifications |
 | `backend/app/src/server.ts` (route registration) | cui-lookup, invoice-generator, payment-processing, download-all-assets, remove-physical-goods |
 | `backend/app/src/modules/listings.ts` + `listings.repo.ts` | remove-physical-goods, search-improvements, download-all-assets, payment-processing |
 | `backend/app/src/modules/assets.ts` | download-all-assets, payment-processing |

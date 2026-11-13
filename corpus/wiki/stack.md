@@ -14,8 +14,7 @@ updated: 2026-11-12
 **Workspace:**
 ```
 backend/
-  core/        ← @my-olx/core — the plugin library: plugins/ (errors, http, auth), lib/, db/
-  app/         ← @my-olx/app  — server.ts, app.ts, config.ts, features/<name>/, db/ (shared stores)
+  app/         ← @my-olx/app  — server.ts, app.ts, config.ts, features/<name>/, plugins/ (errors, http, auth), lib/, db/ (Kysely, migrator, shared stores)
   migrations/  ← raw .sql files (SQLite); auto-applied at startup
 ```
 
@@ -39,7 +38,7 @@ plugins; `close-with-grace` 2.5.0 ends the process on SIGTERM.
 
 **Auth:** JWT + Argon2. `core/auth/`. Token carries `user_id`.
 
-**Storage:** Disk-based (`core/src/lib/storage.ts`). Listing images go to `UPLOADS_DIR` (default `data/uploads/`), served by `@fastify/static` at `/uploads/<key>`. Files for sale go to `ASSETS_DIR` (default `data/assets/`), which is not served: they leave only through the download routes, which check the order (since 2026-11-03). Upload via `@fastify/multipart` direct POST — no presigned URLs.
+**Storage:** Disk-based (`app/src/lib/storage.ts`). Listing images go to `UPLOADS_DIR` (default `data/uploads/`), served by `@fastify/static` at `/uploads/<key>`. Files for sale go to `ASSETS_DIR` (default `data/assets/`), which is not served: they leave only through the download routes, which check the order (since 2026-11-03). Upload via `@fastify/multipart` direct POST — no presigned URLs.
 
 **Email:** `LogEmailService` (console log) in dev; `SmtpEmailService` for prod — swap via `createEmailService({host: ...})`.
 

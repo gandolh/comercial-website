@@ -1,7 +1,7 @@
 {
   "$schema": "../vendor/house-style/conventions.schema.json",
   "web": ["frontend/src"],
-  "server": ["backend/app/src", "backend/core/src"],
+  "server": ["backend/app/src"],
   "shared": [],
   "stylesheet": "index.css",
   "exceptions": [
@@ -40,12 +40,6 @@
     },
     {
       "check": "structure",
-      "rule": 2,
-      "path": "backend/core/src",
-      "reason": "@my-olx/core is the plugin library the app registers (plugins/, lib/, db/), not a server: buildApp lives in backend/app/src/app.ts, its one consumer (brief 13, decision 1)."
-    },
-    {
-      "check": "structure",
       "rule": 3,
       "path": "backend/app/src/config.ts",
       "match": "NODE_ENV",
@@ -54,7 +48,7 @@
     {
       "check": "structure",
       "rule": 4,
-      "path": "backend/core/src/plugins/auth.ts",
+      "path": "backend/app/src/plugins/auth.ts",
       "match": "authenticate",
       "reason": "The one decorator: app.authenticate, the preHandler protected routes name. It is not a test seam; tests sign real tokens (Q56, brief 13 decision 6)."
     },

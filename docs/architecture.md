@@ -1,10 +1,11 @@
 # Architecture
 
-PiațăRo is two npm projects. `backend/` is an npm workspace with two packages.
-`@my-olx/core` is the engine: a Kysely instance over SQLite (better-sqlite3)
-with a small migrator, JWT and Argon2 for sign-in, disk storage for uploads,
-the email service and a Fastify factory with CORS, compression, multipart and
-static files. `@my-olx/app` is the marketplace on top: one module per area
+PiațăRo is two npm projects. `backend/` is an npm workspace with one package, `@my-olx/app`. Its
+`db/`, `lib/` and `plugins/` folders are the engine: a Kysely instance over
+SQLite (better-sqlite3) with a small migrator, JWT and Argon2 for sign-in,
+disk storage for uploads, the email service and Fastify plugins for errors,
+CORS, compression, multipart and static files. Its `features/` are the
+marketplace on top: one module per area
 (auth, users, listings, images, assets, orders, reviews, bundles, invoices,
 favorites, messaging, the ANAF lookup), each registering its own routes. At
 start-up it applies every new SQL file in `backend/migrations/`. `frontend/`
@@ -19,8 +20,8 @@ flowchart LR
     web["frontend/<br/>React + Vite"]
   end
   subgraph api["backend/"]
-    app["@my-olx/app<br/>route modules"]
-    core["@my-olx/core<br/>db, auth, storage, email"]
+    app["@my-olx/app<br/>features/"]
+    core["db/, lib/, plugins/<br/>db, auth, storage, email"]
   end
   db[("SQLite")]
   disk[("uploads/ public previews<br/>assets/ private paid files")]
@@ -63,7 +64,7 @@ files of every listing it groups.
 - [corpus/wiki/business-rules.md](../corpus/wiki/business-rules.md):
   the limits and rules the code enforces
 - Code: [backend/app/src/features/](../backend/app/src/features/),
-  [backend/core/src/](../backend/core/src/),
+  [backend/app/src/plugins/](../backend/app/src/plugins/),
   [frontend/src/app/modules/](../frontend/src/app/modules/)
 - There is no API contract file: the route schemas in `backend/app/src/features/*/routes.ts` are the contract
   (`backend/app/CONTRACT.md`, the pre-pivot API, was removed on 2026-11-03).

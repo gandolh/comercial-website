@@ -1,5 +1,5 @@
 // The one reader of the environment. The server, the seed commands, the owner command and the migrator take
-// their settings from here; nothing else in backend/app/src or backend/core/src reads process.env.
+// their settings from here; nothing else in backend/app/src reads process.env.
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

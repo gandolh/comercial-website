@@ -3,7 +3,7 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { signToken } from "@my-olx/core";
+import { signToken } from "../lib/tokens.js";
 import { buildApp } from "../app.js";
 import type { Config } from "../config.js";
 import { prepareStorage } from "../startup/prepare-storage.js";

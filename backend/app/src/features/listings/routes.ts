@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
-import { fixedValidationMessage, verifyToken } from "@my-olx/core";
+import { fixedValidationMessage } from "../../lib/api-error.js";
+import { verifyToken } from "../../lib/tokens.js";
 import type { AppContext } from "../../context.js";
 import { ListingsRepository } from "../../db/listings-store.js";
 import { AssetsRepository } from "../../db/assets-store.js";
@@ -14,8 +15,8 @@ import {
   type ListingsPageResponse,
   type AssetResponse,
 } from "./helpers.js";
-import { AppError } from "@my-olx/core";
-import { requireUserId } from "@my-olx/core";
+import { AppError } from "../../lib/api-error.js";
+import { requireUserId } from "../../plugins/auth.js";
 import {
   listingCardSchema,
   listingDetailSchema,

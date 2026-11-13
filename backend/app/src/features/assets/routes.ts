@@ -3,8 +3,10 @@ import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { sql } from "kysely";
 import type { Selectable } from "kysely";
 import { z } from "zod";
-import { listingAssetKey, AppError, firstDownloadEmail } from "@my-olx/core";
-import type { ListingAssetsTable } from "@my-olx/core";
+import { listingAssetKey } from "../../lib/storage.js";
+import { AppError } from "../../lib/api-error.js";
+import { firstDownloadEmail } from "../../lib/email.js";
+import type { ListingAssetsTable } from "../../db/schema.js";
 import type { AppContext } from "../../context.js";
 import { AssetsRepository } from "../../db/assets-store.js";
 import { ListingsRepository } from "../../db/listings-store.js";
@@ -14,7 +16,7 @@ import { pipeline } from "node:stream/promises";
 import { createWriteStream, createReadStream } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
-import { requireUserId } from "@my-olx/core";
+import { requireUserId } from "../../plugins/auth.js";
 
 /**
  * Fire-and-forget: notify the listing owner when their asset reaches 1 download.

@@ -11,7 +11,8 @@ import Database from "better-sqlite3";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { hashPassword, runMigrations } from "@my-olx/core";
+import { hashPassword } from "./lib/tokens.js";
+import { runMigrations } from "./db/migrator.js";
 import { ConfigError, loadEnvFile, loadOwnerConfig } from "./config.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
