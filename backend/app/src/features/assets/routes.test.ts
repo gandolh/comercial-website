@@ -5,6 +5,12 @@ import { startTestApp } from "../../testing/test-app.js";
 
 type TestApp = Awaited<ReturnType<typeof startTestApp>>;
 
+function multipart(filename: string, mime: string, content: string) {
+  const boundary = "----piataro-test";
+  const payload = `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${mime}\r\n\r\n${content}\r\n--${boundary}--\r\n`;
+  return { payload, contentType: `multipart/form-data; boundary=${boundary}` };
+}
+
 async function paidListingWithAsset(t: TestApp) {
   const db = t.ctx.db;
   await db
@@ -79,5 +85,23 @@ describe("paid files", () => {
     const served = await t.app.inject({ method: "GET", url: "/listings/paid/download", headers: t.bearer("buyer") });
     expect(served.statusCode).toBe(200);
     expect(served.body).toBe("paid");
+  });
+});
+
+describe("the asset upload's reply", () => {
+  it("has no storage key", async () => {
+    const t = await startTestApp();
+    await paidListingWithAsset(t);
+    const { payload, contentType } = multipart("extra.zip", "application/zip", "data");
+    const res = await t.app.inject({
+      method: "POST",
+      url: "/listings/paid/assets",
+      headers: { ...t.bearer("seller"), "content-type": contentType },
+      payload,
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).not.toHaveProperty("s3_key");
+    expect(res.json()).toMatchObject({ listing_id: "paid", original_filename: "extra.zip" });
+    await t.app.close();
   });
 });

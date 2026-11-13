@@ -40,12 +40,12 @@ export function RecentConversations() {
             className="group flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4 transition-colors hover:bg-surface-container-low"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
-              {conv.counterparty?.display_name?.[0]?.toUpperCase() || conv.counterparty?.email?.[0]?.toUpperCase()}
+              {(conv.counterparty?.display_name || "U").charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
               <div className="mb-0.5 flex items-start justify-between">
                 <p className="truncate font-bold text-on-surface">
-                  {conv.counterparty?.display_name || conv.counterparty?.email?.split("@")[0]}
+                  {conv.counterparty?.display_name || t("common:messaging.unknown_user")}
                 </p>
                 <span className="text-xs text-on-surface-variant">
                   {formatDistanceToNow(new Date(conv.last_message_at), {

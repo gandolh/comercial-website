@@ -4,9 +4,6 @@ export interface UserSummary {
   id: string;
   display_name: string | null;
   avatar_url: string | null;
-  phone_verified: boolean;
-  created_at: string;
-  email?: string;
 }
 
 export interface ListingCardResponse {

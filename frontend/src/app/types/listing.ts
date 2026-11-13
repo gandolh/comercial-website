@@ -30,7 +30,6 @@ export interface ListingAsset {
   contentType: string;
   position: number;
   // Present when freshly uploaded via the create-listing wizard.
-  s3Key?: string;
   publicUrl?: string;
 }
 

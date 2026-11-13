@@ -362,7 +362,7 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
       await mkdirFs(pathMod.dirname(dest), { recursive: true });
       await pipe(data.file, cws(dest));
 
-      const publicUrl = ctx.storage.publicUrl(s3Key);
+      const publicUrl = imageUrl(s3Key, ctx.config) ?? "";
 
       await ctx.db.updateTable("users").set({ avatar_url: s3Key }).where("id", "=", userId).execute();
 

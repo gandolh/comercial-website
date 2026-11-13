@@ -58,7 +58,6 @@ async function sendFirstDownloadNotification(ctx: AppContext, listingId: string,
 interface AssetResponse {
   id: string;
   listing_id: string;
-  s3_key: string;
   original_filename: string;
   file_size_bytes: number;
   content_type: string;
@@ -71,7 +70,6 @@ function toAssetResponse(asset: any): AssetResponse {
   return {
     id: asset.id,
     listing_id: asset.listing_id,
-    s3_key: asset.s3_key,
     original_filename: asset.original_filename,
     file_size_bytes: asset.file_size_bytes,
     content_type: asset.content_type,
@@ -89,7 +87,6 @@ const assetParamsSchema = z.object({ id: z.string(), asset_id: z.string() });
 const assetSchema = z.object({
   id: z.string(),
   listing_id: z.string(),
-  s3_key: z.string(),
   original_filename: z.string(),
   file_size_bytes: z.number(),
   content_type: z.string(),

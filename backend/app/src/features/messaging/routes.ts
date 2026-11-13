@@ -465,7 +465,7 @@ async function buildConversationSummary(
   // Fetch counterparty user
   const counterparty = await ctx.db
     .selectFrom("users")
-    .select(["id", "email", "display_name", "avatar_url", "email_verified", "phone", "phone_verified", "created_at"])
+    .select(["id", "display_name", "avatar_url"])
     .where("id", "=", counterpartyId)
     .executeTakeFirst();
 
@@ -506,20 +506,15 @@ async function buildConversationSummary(
       price_ron: listing.price_ron,
       category: listing.category,
       cover_url: coverUrl,
-      seller_verified: listing.phone_verified,
+      seller_verified: Boolean(listing.phone_verified),
       posted_at: toISOString(listing.created_at),
-      active: listing.active,
+      active: Boolean(listing.active),
       expires_at: toISOString(listing.expires_at),
     },
     counterparty: {
       id: counterparty.id,
-      email: counterparty.email,
       display_name: counterparty.display_name,
       avatar_url: imageUrl(counterparty.avatar_url, publicBaseUrl),
-      email_verified: counterparty.email_verified,
-      phone: counterparty.phone,
-      phone_verified: counterparty.phone_verified,
-      created_at: toISOString(counterparty.created_at),
     },
     last_message: lastMessage
       ? {

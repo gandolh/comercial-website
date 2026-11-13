@@ -6,7 +6,6 @@ export type { ListingAsset };
 interface ListingAssetApi {
   id: string;
   listing_id: string;
-  s3_key: string;
   original_filename: string;
   file_size_bytes: number;
   content_type: string;
@@ -26,7 +25,7 @@ export interface PutFileOptions {
 /**
  * Upload a downloadable asset file for a listing via multipart/form-data (single-step).
  * Backend: POST /listings/:id/assets
- * Response: { id, listing_id, s3_key, original_filename, file_size_bytes, content_type, position, created_at }
+ * Response: { id, listing_id, original_filename, file_size_bytes, content_type, position, created_at }
  */
 export async function uploadAsset(listingId: string, file: File, options?: UploadAssetOptions): Promise<ListingAsset> {
   const form = new FormData();
@@ -105,7 +104,6 @@ function mapAsset(asset: ListingAssetApi): ListingAsset {
     fileSizeBytes: asset.file_size_bytes,
     contentType: asset.content_type,
     position: asset.position,
-    s3Key: asset.s3_key,
     publicUrl: undefined,
   };
 }
