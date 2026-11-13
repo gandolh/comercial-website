@@ -1,4 +1,5 @@
 import { useId, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Chip, RadioGroup, Radio, Select, Sheet, Switch } from "@core/components/ui";
 import { Slider } from "@core/components/ui/Slider";
 import { cn } from "@core/lib/cn";
@@ -247,6 +248,7 @@ export function ResultsBand({
   onChange,
   onReset,
 }: ResultsBandProps) {
+  const { t } = useTranslation();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [draft, setDraft] = useState<FilterValues>(() => pickValues(filters));
   const values = pickValues(filters);
@@ -308,7 +310,7 @@ export function ResultsBand({
 
         <div className="mt-3.5 flex items-center gap-2 md:hidden">
           <Button onClick={openSheet} iconLeft="tune" className="relative flex-none px-3.5">
-            Filtre
+            {t("filters.title")}
             <CountBadge
               count={active.length}
               className="absolute -top-2 -right-2 ring-2 ring-surface-container-lowest"
@@ -373,7 +375,7 @@ export function ResultsBand({
       <Sheet
         open={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        title="Filtre"
+        title={t("filters.title")}
         footer={
           <>
             <Button variant="secondary" className="flex-1" onClick={() => setDraft(EMPTY_VALUES)}>
@@ -386,7 +388,7 @@ export function ResultsBand({
                 setSheetOpen(false);
               }}
             >
-              Aplică filtrele
+              {t("filters.apply")}
             </Button>
           </>
         }

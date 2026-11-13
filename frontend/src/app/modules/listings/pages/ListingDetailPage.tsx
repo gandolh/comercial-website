@@ -188,7 +188,6 @@ export function ListingDetailPage() {
     return !!data?.fileFormat;
   }, [data?.fileFormat]);
 
-  // A listing is "paid" if price_ron is set and > 0.
   const isPaidListing = useMemo(() => {
     return data?.priceRon != null && data.priceRon > 0;
   }, [data?.priceRon]);
@@ -296,7 +295,6 @@ export function ListingDetailPage() {
         )}
 
         <div className="grid grid-cols-1 items-start gap-4 min-[1001px]:grid-cols-[minmax(0,1fr)_380px] min-[1001px]:gap-6">
-          {/* Below 1000 px the two columns dissolve: the gallery, the price, the author, then the rest. */}
           <div className="flex min-w-0 flex-col gap-4 max-[1000px]:contents min-[1001px]:gap-6">
             <ListingGallery
               images={data.images}
@@ -368,7 +366,6 @@ export function ListingDetailPage() {
                 <ReviewsSection listingId={data.id} canReview={hasPaidOrder && user?.id !== data.seller.id} />
               </Panel>
 
-              {/* Safety tip */}
               <div className="flex items-start gap-4 px-2">
                 <span className="material-symbols-outlined mt-0.5 text-error" aria-hidden="true">
                   shield
@@ -380,7 +377,6 @@ export function ListingDetailPage() {
                 </p>
               </div>
 
-              {/* Report button */}
               <div className="flex justify-center">
                 <button
                   type="button"
