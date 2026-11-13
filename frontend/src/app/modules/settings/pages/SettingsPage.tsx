@@ -3,6 +3,7 @@ import { useAuth } from "@core/lib/auth";
 import { Button } from "@core/components/ui";
 import { PhoneVerifyModal } from "../../auth/components/PhoneVerifyModal";
 import { ProfileSection } from "../components/ProfileSection";
+import { PasswordSection } from "../components/PasswordSection";
 import { WardSection } from "../components/WardSection";
 
 export function SettingsPage() {
@@ -53,6 +54,8 @@ export function SettingsPage() {
             </section>
 
             <WardSection />
+
+            <PasswordSection />
 
             {/* Section: Seller Profile (bio, website, social) */}
             <ProfileSection />

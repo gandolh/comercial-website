@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { hashPassword } from "@my-olx/core";
 import { startTestApp } from "../../testing/test-app.js";
 
 function multipart(filename: string, mime: string, content: string) {
@@ -15,19 +16,68 @@ describe("the password change's schema", () => {
         method: "PATCH",
         url: "/users/me/password",
         headers,
-        payload: { current_password: "short", new_password: "long-enough" },
+        payload: { current_password: "anything", new_password: "short-pass" },
       });
       expect([res.statusCode, res.json()]).toEqual([
         422,
-        { error: "Too small: expected string to have >=8 characters" },
+        { error: "Too small: expected string to have >=12 characters" },
       ]);
     }
     const signedOut = await t.app.inject({
       method: "PATCH",
       url: "/users/me/password",
-      payload: { current_password: "long-enough", new_password: "long-enough" },
+      payload: { current_password: "long-enough", new_password: "long-enough-new" },
     });
     expect(signedOut.statusCode).toBe(401);
+    await t.app.close();
+  });
+});
+
+describe("the password change", () => {
+  const oldPassword = "the-old-password";
+  const newPassword = "the-new-password-1";
+
+  async function withUser() {
+    const t = await startTestApp();
+    await t.ctx.db
+      .insertInto("users")
+      .values({ id: "u1", email: "u1@test.ro", password_hash: await hashPassword(oldPassword) })
+      .execute();
+    const change = (current_password: string, new_password: string) =>
+      t.app.inject({
+        method: "PATCH",
+        url: "/users/me/password",
+        headers: t.bearer("u1"),
+        payload: { current_password, new_password },
+      });
+    const login = (password: string) =>
+      t.app.inject({ method: "POST", url: "/auth/login", payload: { email: "u1@test.ro", password } });
+    return { t, change, login };
+  }
+
+  it("answers 403 for a wrong current password and keeps the old one", async () => {
+    const { t, change, login } = await withUser();
+    const res = await change("not-the-password", newPassword);
+    expect([res.statusCode, res.json()]).toEqual([403, { error: "current password is incorrect" }]);
+    expect((await login(oldPassword)).statusCode).toBe(200);
+    expect((await login(newPassword)).statusCode).toBe(401);
+    await t.app.close();
+  });
+
+  it("answers 422 for a new password under 12 characters and changes nothing", async () => {
+    const { t, change, login } = await withUser();
+    const res = await change(oldPassword, "eleven-char");
+    expect(res.statusCode).toBe(422);
+    expect((await login(oldPassword)).statusCode).toBe(200);
+    await t.app.close();
+  });
+
+  it("changes the password: the old one stops signing in and the new one signs in", async () => {
+    const { t, change, login } = await withUser();
+    const res = await change(oldPassword, newPassword);
+    expect([res.statusCode, res.json()]).toEqual([200, {}]);
+    expect((await login(oldPassword)).statusCode).toBe(401);
+    expect((await login(newPassword)).statusCode).toBe(200);
     await t.app.close();
   });
 });

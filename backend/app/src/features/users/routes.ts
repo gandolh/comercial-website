@@ -52,8 +52,8 @@ const updateMeSchema = z.object({
 });
 
 const changePasswordSchema = z.object({
-  current_password: z.string().min(8),
-  new_password: z.string().min(8),
+  current_password: z.string().min(1),
+  new_password: z.string().min(12),
 });
 
 const userParamsSchema = z.object({ id: z.string() });
