@@ -101,3 +101,23 @@ Rejected: `@fastify/autoload` (registration by name keeps the order and the opti
 (zod was already the repo's validator, and the skill's provider is zod), the layer split
 (`routes/`/`services/`/`repositories/`, which spreads one domain over four folders), and folding `core` into
 `app` (the owner's to call: it is asked on the board).
+
+## The filter band redesign: a new identity, a bottom bar and one staged apply
+_2026-11-13, built the same day (brief 14); the owner approved "The filter band" on the estate redesign board with every question standing as proposed_ — Three decisions of earlier pages changed:
+
+- **The Carpathian Clear identity** (reopened). Before: Manrope headlines, Inter body, primary `#0056D2`,
+  secondary `#008B8B` teal, 8px radius. Now: one face, Schibsted Grotesk; primary `#1a5f9e` (Voroneț azure) with a
+  navy `nav-band` shell; teal leaves the UI (`secondary` is a slate blue used only in the footer wordmark); radii 10
+  for controls, 12 for cards and tracks, 16 for the call-to-action and sheets. The Material 3 role names, both
+  languages and the marketplace's structure stand. Rejected: the runner-up "Carpathian Clear, settled" (the same
+  identity with the old blue), because a settled look still left the phone with no filter and no navigation.
+- **Phone navigation** (brief 14, step 5, which proposed a `Drawer`). Now a bottom bar of five places (Acasă,
+  Categorii, Favorite, Mesaje, Conectare or Contul meu); Adaugă Anunț stays in the top bar when signed in. Rejected:
+  the Drawer, since the estate's default for phones is a bar and three places plus the account fit it.
+- **Filters apply at once** (the old behaviour). On a phone the `Filtre` sheet now holds several picks and applies
+  them together from `Aplică filtrele`, with the same query the band sets. The band on a wider screen still applies
+  each pick at once. The owner's controller approved this as a behaviour change.
+
+Copy: sentence case for `Verificat` / `Verified` and `Vânzător verificat`; new strings `Filtre`, `Aplică filtrele`
+and `Fără previzualizare` (both locales). A free listing keeps printing `0 RON`.
+
