@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "@core/lib/router";
+import { Link, useNavigate } from "@core/lib/router";
+import { Button } from "@core/components/ui";
 import { useTranslation } from "react-i18next";
 import { CardSkeleton } from "@core/components/ui/Skeleton";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
@@ -38,94 +39,90 @@ export function HomePage() {
   };
 
   return (
-    <main className="pt-24">
+    <main className="flex-1">
       {/* Hero */}
-      <section className="bg-surface-container-low px-8 py-16 md:py-24">
-        <div className="mx-auto max-w-screen-xl space-y-12 text-center">
-          <div className="space-y-4">
-            <h1 className="text-5xl font-extrabold tracking-tight text-on-surface md:text-7xl">
-              {t("home.heroTitle")} <span className="text-primary">{t("home.heroTitleHighlight")}</span>
-            </h1>
-            <p className="mx-auto max-w-2xl text-lg text-on-surface-variant">{t("home.heroSubtitle")}</p>
-          </div>
+      <section className="relative z-raised border-b border-outline-variant bg-surface-container-lowest shadow-band">
+        <div className="mx-auto flex w-full max-w-310 flex-col items-start gap-4 px-4 py-7 md:px-6 md:py-10">
+          <h1 className="font-headline text-3xl leading-9 font-extrabold tracking-tight text-balance text-on-surface md:text-hero">
+            {t("home.heroTitle")} {t("home.heroTitleHighlight")}
+          </h1>
+          <p className="max-w-[60ch] text-body text-on-surface-variant">{t("home.heroSubtitle")}</p>
 
           <form
             onSubmit={handleSearch}
-            className="mx-auto flex max-w-4xl items-center gap-2 rounded-full bg-surface-container-lowest p-2 shadow-search"
+            role="search"
+            className="flex h-14 w-full items-center gap-2 rounded-[14px] bg-surface-container-lowest pr-1 pl-3 shadow-card ring-1 ring-outline ring-inset focus-within:ring-2 focus-within:ring-primary md:pl-4"
           >
-            <div className="flex flex-1 items-center px-6">
-              <SearchAutocomplete
-                value={search}
-                onChange={setSearch}
-                onSelect={(val) => {
-                  const params = new URLSearchParams();
-                  if (val) params.set("q", val);
-                  navigate(`/anunturi?${params.toString()}`);
-                }}
-                placeholder={t("home.searchPlaceholder")}
-                className="w-full"
-              />
-            </div>
-            <button
-              type="submit"
-              className="rounded-full bg-primary px-10 py-4 text-lg font-bold text-on-primary transition-colors hover:bg-primary-container"
-            >
+            <SearchAutocomplete
+              value={search}
+              onChange={setSearch}
+              onSelect={(val) => {
+                const params = new URLSearchParams();
+                if (val) params.set("q", val);
+                navigate(`/anunturi?${params.toString()}`);
+              }}
+              placeholder={t("home.searchPlaceholder")}
+              className="min-w-0 flex-1"
+            />
+            <Button type="submit" className="max-md:px-4">
               {t("home.searchButton")}
-            </button>
+            </Button>
           </form>
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="mx-auto max-w-screen-2xl px-8 py-20">
-        <div className="mb-12 flex items-end justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">{t("home.popularCategories")}</h2>
-          <button
-            onClick={() => navigate("/categorii")}
-            className="cursor-pointer border-none bg-transparent font-bold text-primary hover:underline"
-          >
-            {t("home.viewAllCategories")}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
-          {CATEGORIES.map(({ icon, label, slug }) => (
-            <button
-              key={slug}
-              onClick={() => navigate(`/categorii/${slug}`)}
-              className="group flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl bg-surface-container-lowest p-8 text-center transition-all hover:shadow-xl"
+      <div className="mx-auto w-full max-w-310 px-4 md:px-6">
+        {/* Categories */}
+        <section className="pt-8 md:pt-12" aria-labelledby="popular-categories">
+          <div className="mb-5 flex flex-wrap items-baseline justify-between gap-4">
+            <h2 id="popular-categories" className="text-price font-extrabold text-on-surface">
+              {t("home.popularCategories")}
+            </h2>
+            <Link
+              to="/categorii"
+              className="hidden py-3 text-control font-semibold text-primary underline underline-offset-3 sm:inline"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary">
-                <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>
-                  {icon}
+              {t("home.viewAllCategories")}
+            </Link>
+          </div>
+
+          <ul className="grid list-none grid-cols-2 gap-3 p-0 md:grid-cols-[repeat(auto-fill,minmax(min(230px,100%),1fr))]">
+            {CATEGORIES.map(({ icon, label, slug }) => (
+              <li key={slug}>
+                <Link
+                  to={`/categorii/${slug}`}
+                  className="flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest px-2 py-3.5 text-center text-control font-semibold text-on-surface no-underline shadow-card transition-shadow hover:shadow-band md:min-h-16 md:flex-row md:justify-start md:gap-3 md:py-2 md:pr-3.5 md:pl-2.5 md:text-left"
+                >
+                  <span className="grid size-11 flex-none place-items-center rounded-full bg-primary-fixed text-on-primary-fixed">
+                    <span className="material-symbols-outlined" aria-hidden="true">
+                      {icon}
+                    </span>
+                  </span>
+                  {label}
+                </Link>
+              </li>
+            ))}
+            <li className="col-span-2 md:col-span-1">
+              <Link
+                to="/categorii"
+                className="flex min-h-16 items-center justify-center gap-3 rounded-xl border border-dashed border-outline-variant px-3.5 text-control font-semibold text-primary no-underline transition-colors hover:bg-primary-fixed md:justify-between"
+              >
+                {t("home.viewAllCategories")}
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  arrow_forward
                 </span>
-              </div>
-              <span className="text-sm leading-tight font-bold text-on-surface">{label}</span>
-            </button>
-          ))}
+              </Link>
+            </li>
+          </ul>
+        </section>
 
-          <button
-            onClick={() => navigate("/categorii")}
-            className="group flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low p-8 text-center transition-colors hover:border-primary"
-          >
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-lowest text-outline transition-colors group-hover:text-primary">
-              <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>
-                grid_view
-              </span>
-            </div>
-            <span className="text-sm font-bold text-on-surface">{t("home.viewAllCategories")}</span>
-          </button>
-        </div>
-      </section>
-
-      {/* Featured Listings */}
-      <section className="bg-surface-container-low px-8 py-20">
-        <div className="mx-auto max-w-screen-2xl">
-          <div className="mb-12 flex items-end justify-between">
-            <div>
-              <h2 className="mb-2 text-3xl font-bold tracking-tight">{t("home.featuredListings")}</h2>
-              <p className="text-on-surface-variant">{t("home.featuredSubtitle")}</p>
-            </div>
+        {/* Featured Listings */}
+        <section className="pt-8 md:pt-12" aria-labelledby="featured-listings">
+          <div className="mb-5">
+            <h2 id="featured-listings" className="text-price font-extrabold text-on-surface">
+              {t("home.featuredListings")}
+            </h2>
+            <p className="mt-1 text-control text-on-surface-variant">{t("home.featuredSubtitle")}</p>
           </div>
 
           {featuredListings.isError ? (
@@ -134,45 +131,50 @@ export function HomePage() {
               onRetry={() => featuredListings.refetch()}
             />
           ) : (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4 md:gap-6">
               {featuredListings.isFetching
                 ? Array.from({ length: 4 }).map((_, index) => <CardSkeleton key={index} />)
                 : featuredListings.data?.map((listing) => <ListingCard key={listing.id} listing={listing} />)}
             </div>
           )}
 
-          <div className="mt-16 text-center">
+          <div className="flex justify-center pt-7">
             <button
+              type="button"
               onClick={() => navigate("/anunturi")}
-              className="rounded-full border border-outline-variant bg-surface-container-lowest px-8 py-4 font-bold shadow-sm transition-colors hover:bg-surface"
+              className="inline-flex h-12 items-center justify-center rounded-control border border-outline px-5 text-body font-semibold text-on-surface transition-colors hover:bg-surface-container-low active:brightness-90"
             >
               {t("home.loadMore")}
             </button>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Banner */}
-      <section className="mx-auto max-w-screen-xl px-8 py-24">
-        <div className="relative space-y-8 overflow-hidden rounded-[2rem] bg-primary-container p-12 text-center md:p-20">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,var(--color-on-primary)_1px,transparent_0)] bg-[length:40px_40px] opacity-10" />
-          <div className="relative z-raised space-y-4">
-            <h2 className="text-4xl font-black text-on-primary md:text-5xl">{t("home.ctaTitle")}</h2>
-            <p className="mx-auto max-w-xl text-lg text-on-primary-container">{t("home.ctaSubtitle")}</p>
-          </div>
-          <div className="relative z-raised flex flex-col items-center justify-center gap-4 md:flex-row">
+        {/* CTA Banner */}
+        <section
+          aria-labelledby="cta-title"
+          className="mt-10 mb-10 flex flex-col items-start gap-5 rounded-2xl bg-nav-band px-5 py-7 text-on-nav-band shadow-band md:mt-14 md:mb-16 md:px-8 md:py-12"
+        >
+          <h2 id="cta-title" className="font-headline text-2xl leading-[1.875rem] font-extrabold md:text-title">
+            {t("home.ctaTitle")}
+          </h2>
+          <p className="max-w-[56ch] text-body">{t("home.ctaSubtitle")}</p>
+          <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">
             <button
+              type="button"
               onClick={() => navigate("/adauga-anunt")}
-              className="rounded-full bg-surface-container-lowest px-10 py-4 text-lg font-bold text-primary shadow-xl transition-transform hover:scale-105"
+              className="inline-flex h-12 items-center justify-center rounded-control border border-on-nav-band bg-on-nav-band px-6 text-body font-semibold text-nav-band transition-colors hover:bg-on-nav-band/90 active:brightness-90"
             >
               {t("home.ctaButton")}
             </button>
-            <button className="rounded-full border border-on-primary/30 px-10 py-4 text-lg font-bold text-on-primary transition-colors hover:bg-on-primary/10">
+            <button
+              type="button"
+              className="inline-flex h-12 items-center justify-center rounded-control border border-on-nav-band-variant px-6 text-body text-on-nav-band transition-colors hover:bg-on-nav-band/10 active:brightness-90"
+            >
               {t("home.ctaHowItWorks")}
             </button>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

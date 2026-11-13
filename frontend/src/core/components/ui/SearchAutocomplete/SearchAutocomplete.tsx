@@ -75,7 +75,7 @@ export function SearchAutocomplete({
           <span className="material-symbols-outlined shrink-0 text-outline">search</span>
         )}
         <Autocomplete.Input
-          className="w-full border-none bg-transparent py-3 text-lg text-on-surface outline-none placeholder:text-outline"
+          className="h-12 w-full border-none bg-transparent text-body text-on-surface outline-none placeholder:text-on-surface-variant"
           placeholder={placeholder}
           aria-label="Caută anunțuri"
           onChange={(e) => handleChange(e.target.value)}
@@ -94,7 +94,7 @@ export function SearchAutocomplete({
 
       <Autocomplete.Portal>
         <Autocomplete.Positioner sideOffset={8} align="start">
-          <Autocomplete.Popup className="max-h-72 min-w-[320px] overflow-hidden overflow-y-auto rounded-xl bg-surface-container-lowest shadow-popup outline-none">
+          <Autocomplete.Popup className="max-h-72 min-w-[320px] overflow-hidden overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest p-1.5 shadow-popup outline-none">
             <Autocomplete.Empty className="px-4 py-3 text-sm text-on-surface-variant">
               {isFetching ? "Se caută..." : "Niciun rezultat"}
             </Autocomplete.Empty>
@@ -103,12 +103,12 @@ export function SearchAutocomplete({
                 <Autocomplete.Item
                   key={title}
                   value={title}
-                  className="flex cursor-pointer items-center gap-3 px-4 py-2.5 text-sm text-on-surface transition-colors hover:bg-surface-container-low data-[highlighted]:bg-surface-container-low"
+                  className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 text-control text-on-surface transition-colors hover:bg-primary-fixed data-[highlighted]:bg-primary-fixed"
                 >
                   <span className="material-symbols-outlined text-outline" style={{ fontSize: "16px" }}>
                     search
                   </span>
-                  <span className="font-medium">{title}</span>
+                  <span>{title}</span>
                 </Autocomplete.Item>
               ))}
             </Autocomplete.List>
