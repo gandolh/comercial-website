@@ -35,7 +35,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">Stabilește prețul</h2>
+        <h2 className="font-headline text-2xl font-extrabold">Stabilește prețul</h2>
         <p className="text-on-surface-variant">Cât costă produsul tău?</p>
       </div>
 
@@ -57,7 +57,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
                   errors.priceRon ? "border-error" : "border-transparent focus:border-primary"
                 } ${isFree ? "opacity-50 grayscale" : ""}`}
               />
-              <span className="absolute top-1/2 right-5 -translate-y-1/2 font-bold text-outline">RON</span>
+              <span className="absolute top-1/2 right-5 -translate-y-1/2 font-bold text-on-surface-variant">RON</span>
             </div>
             {errors.priceRon && <p className="px-1 text-xs text-error">{errors.priceRon.message}</p>}
           </div>
@@ -83,7 +83,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
           </button>
           <button
             type="submit"
-            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="flex-[2] rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Continuă"}
           </button>
@@ -94,7 +94,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Salvează"}
           </button>

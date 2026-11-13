@@ -12,7 +12,7 @@ export function SettingsPage() {
   return (
     <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl px-6">
-        <h1 className="mb-8 font-headline text-3xl font-black">Setările contului</h1>
+        <h1 className="mb-8 font-headline text-3xl font-extrabold">Setările contului</h1>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
@@ -38,12 +38,12 @@ export function SettingsPage() {
                 <div>
                   <label className="mb-1 block text-sm font-medium text-on-surface-variant">Adresa de email</label>
                   <div className="flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container px-4 py-3 text-on-surface">
-                    <span className="material-symbols-outlined text-base text-outline" aria-hidden="true">
+                    <span className="material-symbols-outlined text-base text-on-surface-variant" aria-hidden="true">
                       mail
                     </span>
                     <span>{user?.email}</span>
                     {user?.email_verified && (
-                      <span className="ml-auto rounded-full bg-tertiary-container px-2 py-0.5 text-[10px] font-bold text-on-tertiary-container uppercase">
+                      <span className="ml-auto rounded-full bg-tertiary-container px-2 py-0.5 text-label font-bold text-on-tertiary-container">
                         Verificat
                       </span>
                     )}
@@ -73,11 +73,11 @@ export function SettingsPage() {
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-on-surface">{user?.phone || "Niciun număr adăugat"}</span>
                     {user?.phone_verified ? (
-                      <span className="rounded-full bg-tertiary-container px-2 py-0.5 text-[10px] font-bold text-on-tertiary-container uppercase">
+                      <span className="rounded-full bg-tertiary-container px-2 py-0.5 text-label font-bold text-on-tertiary-container">
                         Verificat
                       </span>
                     ) : (
-                      <span className="rounded-full bg-secondary-container px-2 py-0.5 text-[10px] font-bold text-on-secondary-container uppercase">
+                      <span className="rounded-full bg-secondary-container px-2 py-0.5 text-label font-bold text-on-secondary-container">
                         Neverificat
                       </span>
                     )}

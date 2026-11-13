@@ -36,7 +36,7 @@ export function EarningsSection() {
           </p>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-black text-on-surface">{ron(e.balance_ron)}</div>
+          <div className="text-2xl font-extrabold text-on-surface">{ron(e.balance_ron)}</div>
           <div className="text-xs text-on-surface-variant">disponibil</div>
         </div>
       </div>

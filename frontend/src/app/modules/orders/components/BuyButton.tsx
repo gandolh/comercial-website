@@ -68,7 +68,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
       <button
         onClick={handleBuy}
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-bold text-on-primary transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-control bg-primary px-6 py-3 text-base font-bold text-on-primary transition-all hover:opacity-90 disabled:opacity-60"
         aria-label={t("orders.buyButton.ariaLabel", { price: priceRon })}
       >
         <span className="material-symbols-outlined text-[20px]">{loading ? "hourglass_empty" : "shopping_cart"}</span>

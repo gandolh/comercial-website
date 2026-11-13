@@ -60,7 +60,7 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
                         })}
                   </Badge>
                 ) : (
-                  <div className="rounded-sm bg-surface-container-high px-2 py-1 text-xs font-bold text-on-surface-variant shadow-lg">
+                  <div className="rounded-sm bg-surface-container-high px-2 py-1 text-xs font-bold text-on-surface-variant shadow-popup">
                     {t("dashboard.expiringSoon.expiresIn", "Expiră în")}{" "}
                     {formatDistanceToNow(expiresAt, { locale: ro })}
                   </div>

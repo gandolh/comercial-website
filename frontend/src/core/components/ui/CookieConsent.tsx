@@ -26,9 +26,9 @@ export function CookieConsent() {
       role="dialog"
       aria-modal="false"
       aria-label={t("cookies.bannerLabel")}
-      className="fixed right-0 bottom-0 left-0 z-overlay border-t border-outline-variant bg-surface shadow-lg max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))]"
+      className="fixed right-0 bottom-0 left-0 z-overlay border-t border-outline-variant bg-surface shadow-popup max-md:bottom-[calc(4rem+env(safe-area-inset-bottom))]"
     >
-      <div className="mx-auto flex max-w-screen-2xl flex-col items-start gap-4 px-4 py-4 sm:flex-row sm:items-center sm:px-8 sm:py-5">
+      <div className="mx-auto flex max-w-310 flex-col items-start gap-4 px-4 py-4 sm:flex-row sm:items-center sm:px-8 sm:py-5">
         {/* Text */}
         <div className="flex-1 text-sm text-on-surface-variant">
           <p>

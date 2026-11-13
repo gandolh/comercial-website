@@ -23,7 +23,7 @@ export function CategoryStep({ onSelect, selectedCategory }: CategoryStepProps) 
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">Ce vinzi astăzi?</h2>
+        <h2 className="font-headline text-2xl font-extrabold">Ce vinzi astăzi?</h2>
         <p className="text-on-surface-variant">Alege categoria care se potrivește cel mai bine anunțului tău.</p>
       </div>
 
@@ -35,7 +35,7 @@ export function CategoryStep({ onSelect, selectedCategory }: CategoryStepProps) 
             className={`group flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 p-6 text-center transition-all ${
               selectedCategory === slug
                 ? "border-primary bg-primary-container text-on-primary-container shadow-md"
-                : "border-transparent bg-surface-container-low hover:border-outline-variant hover:shadow-lg"
+                : "border-transparent bg-surface-container-low hover:border-outline-variant hover:shadow-band"
             }`}
           >
             <div

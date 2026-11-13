@@ -16,7 +16,7 @@ export function RecentConversations() {
   if (recent.length === 0)
     return (
       <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-8 text-center">
-        <span className="material-symbols-outlined mb-2 text-4xl text-outline">forum</span>
+        <span className="material-symbols-outlined mb-2 text-4xl text-on-surface-variant">forum</span>
         <p className="text-on-surface-variant">{t("dashboard.messages.noRecent", "Nu ai conversații recente")}</p>
       </div>
     );
@@ -56,7 +56,7 @@ export function RecentConversations() {
               </div>
               <p className="truncate text-sm text-on-surface-variant">{conv.listing?.title}</p>
             </div>
-            <span className="material-symbols-outlined text-outline opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="material-symbols-outlined text-on-surface-variant opacity-0 transition-opacity group-hover:opacity-100">
               chevron_right
             </span>
           </Link>

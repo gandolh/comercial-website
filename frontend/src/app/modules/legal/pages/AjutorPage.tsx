@@ -89,10 +89,10 @@ export function AjutorPage() {
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   return (
-    <main className="mx-auto max-w-screen-xl px-4 pt-10 pb-20 md:px-8">
+    <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-black text-on-surface">Ajutor & Întrebări Frecvente</h1>
+          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Ajutor & Întrebări Frecvente</h1>
           <p className="text-lg text-on-surface-variant">Găsești răspunsuri rapide la cele mai comune întrebări.</p>
         </header>
 
@@ -131,7 +131,7 @@ export function AjutorPage() {
           </p>
           <a
             href="mailto:suport@my-olx.ro"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-on-primary no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-control bg-primary px-6 py-2.5 text-sm font-semibold text-on-primary no-underline transition-opacity hover:opacity-90"
           >
             Trimite un email
           </a>

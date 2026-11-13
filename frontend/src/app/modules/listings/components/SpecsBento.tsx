@@ -14,7 +14,7 @@ export function SpecsBento({ specs }: SpecsBentoProps) {
       {specs.map((spec, i) => (
         <div key={i} className="flex flex-col items-center rounded-2xl bg-surface-container-low p-6 text-center">
           <span className="material-symbols-outlined mb-2 text-primary">{spec.icon}</span>
-          <span className="mb-1 text-xs text-outline">{spec.label}</span>
+          <span className="mb-1 text-xs text-on-surface-variant">{spec.label}</span>
           <span className="font-bold text-on-surface">{spec.value}</span>
         </div>
       ))}

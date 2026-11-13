@@ -87,7 +87,7 @@ function ReviewCard({ review }: { review: Review }) {
           </div>
           <div>
             <p className="text-sm font-semibold text-on-surface">{name}</p>
-            <p className="text-xs text-outline">{dateStr}</p>
+            <p className="text-xs text-on-surface-variant">{dateStr}</p>
           </div>
         </div>
         <StarRating value={review.rating} size="sm" />
@@ -108,17 +108,17 @@ function AggregateSummary({ ratingAvg, ratingCount }: AggregateSummaryProps) {
   const { t } = useTranslation();
 
   if (ratingCount === 0) {
-    return <p className="text-sm text-outline">{t("reviews.noReviewsYet")}</p>;
+    return <p className="text-sm text-on-surface-variant">{t("reviews.noReviewsYet")}</p>;
   }
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-3xl font-black text-on-surface" aria-label={`${ratingAvg?.toFixed(1)} din 5`}>
+      <span className="text-3xl font-extrabold text-on-surface" aria-label={`${ratingAvg?.toFixed(1)} din 5`}>
         {ratingAvg?.toFixed(1)}
       </span>
       <div className="space-y-1">
         <StarRating value={Math.round(ratingAvg ?? 0)} />
-        <p className="text-xs text-outline">{t("reviews.reviewCount", { count: ratingCount })}</p>
+        <p className="text-xs text-on-surface-variant">{t("reviews.reviewCount", { count: ratingCount })}</p>
       </div>
     </div>
   );
@@ -261,7 +261,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="text-xs text-outline transition-colors hover:text-on-surface"
+                  className="text-xs text-on-surface-variant transition-colors hover:text-on-surface"
                 >
                   {t("reviews.form.cancelEdit")}
                 </button>
@@ -279,7 +279,7 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
           ))}
         </div>
       ) : !data || data.reviews.length === 0 ? (
-        <p className="py-4 text-sm text-outline">{t("reviews.noReviewsYet")}</p>
+        <p className="py-4 text-sm text-on-surface-variant">{t("reviews.noReviewsYet")}</p>
       ) : (
         <ul className="space-y-3" aria-label={t("reviews.title")}>
           {data.reviews.map((review) => (

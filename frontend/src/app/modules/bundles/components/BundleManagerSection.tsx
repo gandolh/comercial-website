@@ -139,7 +139,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
               ))}
             </div>
           ) : candidateListings.length === 0 ? (
-            <p className="text-sm text-outline italic">{t("bundles.edit.noOtherListings")}</p>
+            <p className="text-sm text-on-surface-variant italic">{t("bundles.edit.noOtherListings")}</p>
           ) : (
             <ul className="max-h-80 divide-y divide-outline-variant overflow-hidden overflow-y-auto rounded-xl border border-outline-variant">
               {candidateListings.map((listing) => {
@@ -168,12 +168,12 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
                         />
                       ) : (
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-container">
-                          <span className="material-symbols-outlined text-[18px] text-outline">draft</span>
+                          <span className="material-symbols-outlined text-[18px] text-on-surface-variant">draft</span>
                         </div>
                       )}
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-semibold text-on-surface">{listing.title}</p>
-                        <p className="mt-0.5 text-xs text-outline capitalize">{listing.category}</p>
+                        <p className="mt-0.5 text-xs text-on-surface-variant capitalize">{listing.category}</p>
                       </div>
                       <span className="text-sm font-bold whitespace-nowrap text-primary">{priceLabel}</span>
                     </label>
@@ -209,7 +209,9 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
             </div>
           )}
 
-          <p className="text-xs text-outline">{t("bundles.edit.selectedCount", { count: selectedSet.size })}</p>
+          <p className="text-xs text-on-surface-variant">
+            {t("bundles.edit.selectedCount", { count: selectedSet.size })}
+          </p>
         </div>
       )}
 
@@ -219,7 +221,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           type="button"
           onClick={handleSave}
           disabled={setItems.isPending}
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-control bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {setItems.isPending && (
             <span className="material-symbols-outlined text-xl motion-safe:animate-spin" aria-hidden="true">

@@ -99,7 +99,7 @@ export function AssetUploadStep({
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">Adaugă fișierele de descărcare</h2>
+        <h2 className="font-headline text-2xl font-extrabold">Adaugă fișierele de descărcare</h2>
         <p className="text-on-surface-variant">
           Aceasta este cea mai importantă parte - anunțurile cu fișiere clare primesc mai multe descărcări.
         </p>
@@ -117,7 +117,7 @@ export function AssetUploadStep({
           className="group cursor-pointer space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center transition-colors hover:border-primary hover:bg-primary/5"
         >
           <label htmlFor="file-input" className="block cursor-pointer">
-            <span className="material-symbols-outlined mb-4 block text-5xl text-outline transition-colors group-hover:text-primary">
+            <span className="material-symbols-outlined mb-4 block text-5xl text-on-surface-variant transition-colors group-hover:text-primary">
               cloud_upload
             </span>
             <p className="mb-1 font-semibold text-on-surface">Trage fișierele aici</p>
@@ -169,7 +169,7 @@ export function AssetUploadStep({
 
         {!hasAssets && !isUploading && (
           <div className="space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
-            <span className="material-symbols-outlined text-5xl text-outline">download_for_offline</span>
+            <span className="material-symbols-outlined text-5xl text-on-surface-variant">download_for_offline</span>
             <p className="mx-auto max-w-xs text-sm text-on-surface-variant">
               Încarcă cel puțin un fișier pentru a putea publica anunțul.
             </p>
@@ -203,7 +203,7 @@ export function AssetUploadStep({
             className={`flex-[2] rounded-full px-8 py-4 font-bold shadow-md transition-all ${
               hasAssets && !isUploading
                 ? "bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container"
-                : "cursor-not-allowed bg-surface-container-highest text-outline shadow-none"
+                : "cursor-not-allowed bg-surface-container-highest text-on-surface-variant shadow-none"
             }`}
           >
             {isUploading ? "Se încarcă..." : "Continuă"}

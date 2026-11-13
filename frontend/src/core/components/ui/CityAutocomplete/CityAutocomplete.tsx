@@ -59,23 +59,23 @@ export function CityAutocomplete({
       <Autocomplete.InputGroup className={`relative flex items-center gap-2 ${className}`}>
         {isFetching ? (
           <span
-            className="material-symbols-outlined shrink-0 text-outline motion-safe:animate-spin"
+            className="material-symbols-outlined shrink-0 text-on-surface-variant motion-safe:animate-spin"
             style={{ fontSize: "20px" }}
           >
             progress_activity
           </span>
         ) : (
-          <span className="material-symbols-outlined shrink-0 text-outline">location_on</span>
+          <span className="material-symbols-outlined shrink-0 text-on-surface-variant">location_on</span>
         )}
         <Autocomplete.Input
-          className="w-40 border-none bg-transparent py-3 text-lg text-on-surface outline-none placeholder:text-outline"
+          className="w-40 border-none bg-transparent py-3 text-lg text-on-surface outline-none placeholder:text-on-surface-variant"
           placeholder={placeholder}
           aria-label="Selectează orașul"
         />
         {inputValue && (
           <Autocomplete.Clear
             aria-label="Șterge locația"
-            className="flex cursor-pointer items-center justify-center text-outline transition-colors hover:text-on-surface"
+            className="flex cursor-pointer items-center justify-center text-on-surface-variant transition-colors hover:text-on-surface"
           >
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
               close

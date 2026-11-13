@@ -17,18 +17,18 @@ export function FavoritesPage() {
 
   if (!isFetching && data && data.listings.length === 0) {
     return (
-      <main className="mx-auto max-w-screen-2xl px-4 pt-10 pb-20 md:px-8">
+      <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
         <div className="mx-auto max-w-2xl space-y-5 py-20 text-center">
           <span className="material-symbols-outlined text-primary" style={{ fontSize: "56px" }}>
             favorite
           </span>
-          <h1 className="font-headline text-4xl font-black text-on-surface">Nu ai încă anunțuri salvate</h1>
+          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Nu ai încă anunțuri salvate</h1>
           <p className="text-on-surface-variant">
             Când salvezi anunțuri, le vei găsi aici pentru a reveni rapid la ele.
           </p>
           <Link
             to="/categorii"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 font-bold text-on-primary no-underline"
+            className="inline-flex items-center justify-center rounded-control bg-primary px-8 py-3 font-bold text-on-primary no-underline"
           >
             Explorează categoriile
           </Link>
@@ -38,9 +38,9 @@ export function FavoritesPage() {
   }
 
   return (
-    <main className="mx-auto max-w-screen-2xl space-y-8 px-4 pt-10 pb-20 md:px-8">
+    <main className="mx-auto max-w-310 space-y-8 px-4 pt-10 pb-20 md:px-6">
       <div>
-        <h1 className="font-headline text-4xl font-black text-on-surface">Favoritele mele</h1>
+        <h1 className="font-headline text-4xl font-extrabold text-on-surface">Favoritele mele</h1>
         <p className="mt-2 text-on-surface-variant">{data?.totalCount ?? 0} anunțuri salvate</p>
       </div>
 

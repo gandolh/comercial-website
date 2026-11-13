@@ -20,7 +20,7 @@ export function StepFooter({
   rightSlot,
 }: StepFooterProps) {
   return (
-    <div className="sticky bottom-0 mt-10 border-t border-outline/30 bg-surface-container-low pt-6 backdrop-blur-sm">
+    <div className="sticky bottom-0 mt-10 border-t border-outline/30 bg-surface-container-low pt-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           {onBack ? (
@@ -40,7 +40,7 @@ export function StepFooter({
               type="button"
               onClick={onNext}
               disabled={isNextDisabled || isNextLoading}
-              className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 font-semibold text-on-primary disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-control bg-primary px-6 py-2.5 font-semibold text-on-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isNextLoading ? (
                 <span className="material-symbols-outlined motion-safe:animate-spin" style={{ fontSize: "20px" }}>

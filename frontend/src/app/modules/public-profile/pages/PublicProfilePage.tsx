@@ -43,7 +43,7 @@ export function PublicProfilePage() {
   if (!profile) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-24 text-center">
-        <h1 className="mb-4 text-4xl font-black">{t("seller.notFound")}</h1>
+        <h1 className="mb-4 text-4xl font-extrabold">{t("seller.notFound")}</h1>
         <p className="text-on-surface-variant">{t("seller.notFoundDesc")}</p>
       </div>
     );
@@ -72,9 +72,9 @@ export function PublicProfilePage() {
 
           <div className="flex-1 text-center md:text-left">
             <div className="mb-2 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-              <h1 className="text-3xl font-black">{profile.display_name || "Utilizator"}</h1>
+              <h1 className="text-3xl font-extrabold">{profile.display_name || "Utilizator"}</h1>
               {profile.phone_verified && (
-                <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold tracking-wider text-primary uppercase">
+                <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                   <ShieldCheck className="h-4 w-4" />
                   <span>{t("seller.verifiedSeller")}</span>
                 </div>
@@ -172,7 +172,7 @@ export function PublicProfilePage() {
       </div>
 
       {/* Listings Grid */}
-      <h2 className="mb-8 text-2xl font-black">{t("seller.listingsTitle")}</h2>
+      <h2 className="mb-8 text-2xl font-extrabold">{t("seller.listingsTitle")}</h2>
 
       {isListingsLoading ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

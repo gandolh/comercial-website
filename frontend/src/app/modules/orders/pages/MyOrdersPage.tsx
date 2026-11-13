@@ -63,11 +63,11 @@ export function MyOrdersPage() {
 
       {!loading && !error && orders.length === 0 && (
         <div className="flex flex-col items-center space-y-4 py-16 text-center">
-          <span className="material-symbols-outlined text-[64px] text-outline">receipt_long</span>
+          <span className="material-symbols-outlined text-[64px] text-on-surface-variant">receipt_long</span>
           <p className="text-on-surface-variant">{t("orders.list.empty")}</p>
           <Link
             to="/"
-            className="rounded-full bg-primary px-6 py-2 font-semibold text-on-primary transition-opacity hover:opacity-90"
+            className="rounded-control bg-primary px-6 py-2 font-semibold text-on-primary transition-opacity hover:opacity-90"
           >
             {t("orders.list.browse")}
           </Link>
@@ -86,7 +86,7 @@ export function MyOrdersPage() {
                   >
                     {t("orders.list.listingLink")} {order.listing_id}
                   </Link>
-                  <p className="text-xs text-outline">
+                  <p className="text-xs text-on-surface-variant">
                     {new Date(order.created_at).toLocaleDateString("ro-RO", {
                       year: "numeric",
                       month: "long",

@@ -34,7 +34,9 @@ export function InvoicesPage() {
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="font-headline text-3xl font-black text-on-surface">{t("invoices.page.title", "Facturi")}</h1>
+            <h1 className="font-headline text-3xl font-extrabold text-on-surface">
+              {t("invoices.page.title", "Facturi")}
+            </h1>
             <p className="mt-1 text-sm text-on-surface-variant">
               {t("invoices.page.subtitle", "Generează și descarcă facturi PDF și e-Factura XML.")}
             </p>

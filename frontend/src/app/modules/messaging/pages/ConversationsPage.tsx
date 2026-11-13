@@ -18,7 +18,7 @@ export const ConversationsPage: React.FC = () => {
 
   return (
     <div className="flex h-[calc(100svh-4rem)] flex-col pt-8">
-      <div className="mx-auto flex min-h-0 w-full max-w-screen-xl flex-1 gap-4 px-4 pb-6">
+      <div className="mx-auto flex min-h-0 w-full max-w-310 flex-1 gap-4 px-4 pb-6">
         {/* Sidebar */}
         <aside
           className={`flex w-full shrink-0 flex-col overflow-hidden rounded-xl bg-surface-container-lowest shadow-ambient md:w-80 ${

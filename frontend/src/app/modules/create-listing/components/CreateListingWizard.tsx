@@ -169,7 +169,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
                       ? "bg-primary text-on-primary"
                       : isCompleted
                         ? "bg-primary-container text-on-primary-container"
-                        : "bg-surface-container-high text-outline"
+                        : "bg-surface-container-high text-on-surface-variant"
                   }`}
                 >
                   {isCompleted ? <span className="material-symbols-outlined text-sm">check</span> : idx + 1}

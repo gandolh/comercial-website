@@ -16,7 +16,7 @@ export function SubmitButton({ isLoading, children, disabled, ...props }: Submit
         ${
           disabled || isLoading
             ? "cursor-not-allowed bg-surface-variant text-on-surface-variant"
-            : "bg-primary hover:bg-primary-container hover:shadow-lg active:scale-[0.98]"
+            : "bg-primary hover:bg-primary-container hover:shadow-band"
         }
       `}
       {...props}

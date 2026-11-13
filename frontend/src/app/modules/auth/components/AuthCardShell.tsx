@@ -8,13 +8,13 @@ interface AuthCardShellProps {
 
 export function AuthCardShell({ title, description, children }: AuthCardShellProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-16">
+    <main className="flex items-center justify-center bg-background px-4 py-4">
       <div className="w-full max-w-md">
-        <div className="rounded-lg bg-surface-container-lowest p-8 shadow-lg">
+        <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-card md:p-8">
           <div className="mb-8 text-center">
-            <h1 className="mb-2 font-headline text-3xl font-bold text-primary">PiațăRo</h1>
-            <h2 className="mb-2 text-2xl font-semibold text-on-surface">{title}</h2>
-            {description && <p className="text-sm text-on-surface-variant">{description}</p>}
+            <h1 className="mb-2 font-headline text-price font-extrabold text-primary">PiațăRo</h1>
+            <h2 className="mb-2 text-price font-extrabold text-on-surface">{title}</h2>
+            {description && <p className="text-control text-on-surface-variant">{description}</p>}
           </div>
           {children}
         </div>

@@ -35,7 +35,7 @@ export const ConversationListItem: React.FC<Props> = ({ conversation, isActive, 
           )}
         </div>
         {conversation.unread_count > 0 && (
-          <div className="absolute -top-1 -right-1 rounded-full bg-error px-1.5 py-0.5 text-[10px] font-bold text-on-error">
+          <div className="absolute -top-1 -right-1 rounded-full bg-error px-1.5 py-0.5 text-label font-bold text-on-error">
             {conversation.unread_count}
           </div>
         )}

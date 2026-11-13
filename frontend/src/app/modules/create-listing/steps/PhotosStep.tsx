@@ -24,7 +24,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">Imagini de previzualizare</h2>
+        <h2 className="font-headline text-2xl font-extrabold">Imagini de previzualizare</h2>
         <p className="text-on-surface-variant">Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).</p>
       </div>
 
@@ -47,7 +47,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
 
         {!hasImages && !isUploading && (
           <div className="space-y-4 rounded-3xl border-2 border-dashed border-outline-variant bg-surface-container-low p-12 text-center">
-            <span className="material-symbols-outlined text-5xl text-outline">add_a_photo</span>
+            <span className="material-symbols-outlined text-5xl text-on-surface-variant">add_a_photo</span>
             <p className="mx-auto max-w-xs text-sm text-on-surface-variant">
               Adaugă imagini opționale pentru a face anunțul mai atractiv.
             </p>
@@ -68,7 +68,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
             type="button"
             disabled={isUploading}
             onClick={onNext}
-            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
+            className="flex-[2] rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
           >
             {isUploading ? "Se încarcă..." : "Continuă"}
           </button>

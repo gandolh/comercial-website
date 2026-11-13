@@ -66,13 +66,13 @@ export function SearchAutocomplete({
       <Autocomplete.InputGroup className={`relative flex items-center gap-2 ${className}`}>
         {isFetching ? (
           <span
-            className="material-symbols-outlined shrink-0 text-outline motion-safe:animate-spin"
+            className="material-symbols-outlined shrink-0 text-on-surface-variant motion-safe:animate-spin"
             style={{ fontSize: "20px" }}
           >
             progress_activity
           </span>
         ) : (
-          <span className="material-symbols-outlined shrink-0 text-outline">search</span>
+          <span className="material-symbols-outlined shrink-0 text-on-surface-variant">search</span>
         )}
         <Autocomplete.Input
           className="h-12 w-full border-none bg-transparent text-body text-on-surface outline-none placeholder:text-on-surface-variant"
@@ -83,7 +83,7 @@ export function SearchAutocomplete({
         {inputValue && (
           <Autocomplete.Clear
             aria-label="Șterge căutarea"
-            className="flex cursor-pointer items-center justify-center text-outline transition-colors hover:text-on-surface"
+            className="flex cursor-pointer items-center justify-center text-on-surface-variant transition-colors hover:text-on-surface"
           >
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
               close
@@ -105,7 +105,7 @@ export function SearchAutocomplete({
                   value={title}
                   className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 text-control text-on-surface transition-colors hover:bg-primary-fixed data-[highlighted]:bg-primary-fixed"
                 >
-                  <span className="material-symbols-outlined text-outline" style={{ fontSize: "16px" }}>
+                  <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: "16px" }}>
                     search
                   </span>
                   <span>{title}</span>

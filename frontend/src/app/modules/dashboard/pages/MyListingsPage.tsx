@@ -88,10 +88,10 @@ export function MyListingsPage() {
   ];
 
   return (
-    <main className="mx-auto min-h-screen max-w-screen-2xl space-y-8 px-8 py-12 pt-8">
+    <main className="mx-auto min-h-screen max-w-310 space-y-8 px-4 py-12 pt-8 md:px-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="font-headline text-3xl font-black text-on-surface">
+          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
             {t("dashboard.listings.title", "Anunțurile mele")}
           </h1>
           <p className="text-on-surface-variant">
@@ -144,7 +144,7 @@ export function MyListingsPage() {
         <ErrorCard message={t("dashboard.listings.error", "Nu am putut încărca anunțurile.")} onRetry={refetch} />
       ) : data?.listings?.length === 0 ? (
         <div className="space-y-4 rounded-2xl border border-outline-variant bg-surface-container-lowest p-12 text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-outline">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant">
             <span className="material-symbols-outlined text-4xl">inventory</span>
           </div>
           <div className="space-y-2">
@@ -157,7 +157,7 @@ export function MyListingsPage() {
           </div>
           <Link
             to="/adauga-anunt"
-            className="inline-block rounded-xl bg-primary px-8 py-3 font-bold text-on-primary transition-all hover:shadow-lg"
+            className="inline-block rounded-xl bg-primary px-8 py-3 font-bold text-on-primary transition-all hover:shadow-band"
           >
             {t("nav.addListing")}
           </Link>
@@ -187,7 +187,7 @@ export function MyListingsPage() {
                   {listing.coverUrl ? (
                     <img src={listing.coverUrl} alt={listing.title} className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-outline">
+                    <div className="flex h-full w-full items-center justify-center text-on-surface-variant">
                       <span className="material-symbols-outlined text-4xl">image</span>
                     </div>
                   )}
@@ -197,12 +197,10 @@ export function MyListingsPage() {
                 <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-on-surface-variant">
-                      <span className="rounded-sm bg-surface-container-high px-2 py-0.5 uppercase">
-                        {listing.category}
-                      </span>
+                      <span className="rounded-sm bg-surface-container-high px-2 py-0.5">{listing.category}</span>
                     </div>
                     <h3 className="truncate text-lg font-bold text-on-surface">{listing.title}</h3>
-                    <div className="text-xl font-black text-primary">
+                    <div className="text-xl font-extrabold text-primary">
                       {listing.priceRon ? `${listing.priceRon} RON` : "Preț negociabil"}
                     </div>
                   </div>

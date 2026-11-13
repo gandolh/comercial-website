@@ -65,7 +65,7 @@ export function LoginPage() {
         {ward.data?.enabled && (
           <a
             href={wardStartUrl()}
-            className="block w-full rounded-full border-2 border-outline-variant px-6 py-3 text-center font-semibold text-on-surface no-underline transition-colors hover:bg-surface-container-low"
+            className="inline-flex h-12 w-full items-center justify-center rounded-control border border-outline px-5 text-center font-semibold text-on-surface no-underline transition-colors hover:bg-surface-container-low"
           >
             Intră cu Ward
           </a>

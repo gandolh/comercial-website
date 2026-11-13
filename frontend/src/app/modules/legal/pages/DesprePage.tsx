@@ -2,10 +2,10 @@ import { Link } from "@core/lib/router";
 
 export function DesprePage() {
   return (
-    <main className="mx-auto max-w-screen-xl px-4 pt-10 pb-20 md:px-8">
+    <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-4">
-          <h1 className="font-headline text-4xl font-black text-on-surface">Despre my-olx</h1>
+          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Despre my-olx</h1>
           <p className="text-xl leading-relaxed text-on-surface-variant">Piața digitală a creatorilor români.</p>
         </header>
 
@@ -84,7 +84,7 @@ export function DesprePage() {
           </p>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-8 py-3 font-bold text-on-primary no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-control bg-primary px-8 py-3 font-bold text-on-primary no-underline transition-opacity hover:opacity-90"
           >
             Vezi anunțurile
           </Link>

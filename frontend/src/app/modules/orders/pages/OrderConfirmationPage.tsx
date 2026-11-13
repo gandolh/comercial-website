@@ -117,7 +117,7 @@ export function OrderConfirmationPage() {
         </div>
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.status")}</span>
-          <span className={`font-semibold ${isPaid ? "text-primary" : "text-outline"}`}>
+          <span className={`font-semibold ${isPaid ? "text-primary" : "text-on-surface-variant"}`}>
             {t(`orders.status.${order.status}`)}
           </span>
         </div>
@@ -133,7 +133,7 @@ export function OrderConfirmationPage() {
         {isPaid && (
           <Link
             to={listingHref}
-            className="flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-on-primary transition-opacity hover:opacity-90"
+            className="flex items-center justify-center gap-2 rounded-control bg-primary px-6 py-3 font-semibold text-on-primary transition-opacity hover:opacity-90"
           >
             <span className="material-symbols-outlined text-[20px]">download</span>
             {t("orders.confirmation.goDownload")}
@@ -145,7 +145,7 @@ export function OrderConfirmationPage() {
         >
           {t("orders.confirmation.viewOrders")}
         </Link>
-        <Link to="/" className="text-center text-sm text-outline transition-colors hover:text-primary">
+        <Link to="/" className="text-center text-sm text-on-surface-variant transition-colors hover:text-primary">
           {t("orders.confirmation.backHome")}
         </Link>
       </div>

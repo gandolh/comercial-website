@@ -1,4 +1,4 @@
-import { useNavigate } from "@core/lib/router";
+import { Link } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
 
 const CATEGORIES = [
@@ -18,39 +18,39 @@ const CATEGORIES = [
 ];
 
 export function CategoryIndexPage() {
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
-    <main className="min-h-screen pt-8">
-      <section className="bg-surface-container-low px-8 py-16 md:py-24">
-        <div className="mx-auto max-w-screen-xl text-center">
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-on-surface md:text-5xl">
+    <main className="flex-1">
+      <section className="relative z-raised border-b border-outline-variant bg-surface-container-lowest shadow-band">
+        <div className="mx-auto w-full max-w-310 px-4 py-7 md:px-6 md:py-10">
+          <h1 className="font-headline text-3xl leading-9 font-extrabold tracking-tight text-on-surface md:text-hero">
             {t("categories.browseTitle", "Răsfoiește toate categoriile")}
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-on-surface-variant">
+          <p className="mt-3 max-w-[60ch] text-body text-on-surface-variant">
             {t("categories.browseSubtitle", "Găsește exact ceea ce cauți printre mii de anunțuri verificate.")}
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-screen-2xl px-8 py-20">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <section className="mx-auto w-full max-w-310 px-4 pt-8 pb-9 md:px-6 md:pt-12 md:pb-16">
+        <ul className="grid list-none grid-cols-2 gap-3 p-0 md:grid-cols-[repeat(auto-fill,minmax(min(230px,100%),1fr))]">
           {CATEGORIES.map(({ icon, label, slug }) => (
-            <button
-              key={slug}
-              onClick={() => navigate(`/categorii/${slug}`)}
-              className="group flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-8 text-center transition-all hover:border-primary hover:shadow-xl"
-            >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container-low text-primary transition-colors group-hover:bg-primary group-hover:text-on-primary">
-                <span className="material-symbols-outlined" style={{ fontSize: "32px" }}>
-                  {icon}
+            <li key={slug}>
+              <Link
+                to={`/categorii/${slug}`}
+                className="flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest px-2 py-3.5 text-center text-control font-semibold text-on-surface no-underline shadow-card transition-shadow hover:shadow-band md:min-h-16 md:flex-row md:justify-start md:gap-3 md:py-2 md:pr-3.5 md:pl-2.5 md:text-left"
+              >
+                <span className="grid size-11 flex-none place-items-center rounded-full bg-primary-fixed text-on-primary-fixed">
+                  <span className="material-symbols-outlined" aria-hidden="true">
+                    {icon}
+                  </span>
                 </span>
-              </div>
-              <span className="leading-tight font-bold text-on-surface">{label}</span>
-            </button>
+                {label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     </main>
   );

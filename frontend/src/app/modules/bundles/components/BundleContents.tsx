@@ -17,12 +17,12 @@ function BundleChildRow({ child }: BundleChildRowProps) {
         <img src={child.cover_url} alt={child.title} className="h-12 w-12 shrink-0 rounded-lg object-cover" />
       ) : (
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-surface-container">
-          <span className="material-symbols-outlined text-[20px] text-outline">draft</span>
+          <span className="material-symbols-outlined text-[20px] text-on-surface-variant">draft</span>
         </div>
       )}
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-on-surface">{child.title}</p>
-        <p className="mt-0.5 text-xs text-outline capitalize">{child.category}</p>
+        <p className="mt-0.5 text-xs text-on-surface-variant capitalize">{child.category}</p>
       </div>
       <span className="text-sm font-bold whitespace-nowrap text-primary">{formattedPrice}</span>
       <Link
@@ -66,7 +66,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
     return (
       <section className="space-y-4">
         <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
-        <p className="text-sm text-outline">{t("bundles.loadError")}</p>
+        <p className="text-sm text-on-surface-variant">{t("bundles.loadError")}</p>
       </section>
     );
   }
@@ -79,14 +79,14 @@ export function BundleContents({ listingId }: BundleContentsProps) {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
-        <span className="text-sm text-outline">{t("bundles.count", { count: children.length })}</span>
+        <span className="text-sm text-on-surface-variant">{t("bundles.count", { count: children.length })}</span>
       </div>
       <ul className="divide-y divide-surface-container-high overflow-hidden rounded-xl border border-surface-container-high">
         {children.map((child) => (
           <BundleChildRow key={child.id} child={child} />
         ))}
       </ul>
-      <p className="text-xs text-outline">{t("bundles.accessNote")}</p>
+      <p className="text-xs text-on-surface-variant">{t("bundles.accessNote")}</p>
     </section>
   );
 }

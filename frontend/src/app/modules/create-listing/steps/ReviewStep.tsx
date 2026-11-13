@@ -60,7 +60,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
     <div className="space-y-8 duration-500">
       {/* Page heading */}
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">{t("createListing.preview.heading")}</h2>
+        <h2 className="font-headline text-2xl font-extrabold">{t("createListing.preview.heading")}</h2>
         <p className="text-on-surface-variant">{t("createListing.preview.subheading")}</p>
       </div>
 
@@ -75,30 +75,22 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       {/* Summary strip: category · price · license · files */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="space-y-1 rounded-xl bg-surface-container p-4">
-          <p className="text-xs font-medium tracking-wide text-on-surface-variant uppercase">
-            {t("createListing.preview.summaryCategory")}
-          </p>
+          <p className="text-xs font-medium text-on-surface-variant">{t("createListing.preview.summaryCategory")}</p>
           <p className="truncate text-sm font-bold text-on-surface">{categoryLabel}</p>
         </div>
 
         <div className="space-y-1 rounded-xl bg-surface-container p-4">
-          <p className="text-xs font-medium tracking-wide text-on-surface-variant uppercase">
-            {t("createListing.preview.summaryPrice")}
-          </p>
+          <p className="text-xs font-medium text-on-surface-variant">{t("createListing.preview.summaryPrice")}</p>
           <p className="text-sm font-bold text-primary">{priceDisplay}</p>
         </div>
 
         <div className="space-y-1 rounded-xl bg-surface-container p-4">
-          <p className="text-xs font-medium tracking-wide text-on-surface-variant uppercase">
-            {t("createListing.preview.summaryLicense")}
-          </p>
+          <p className="text-xs font-medium text-on-surface-variant">{t("createListing.preview.summaryLicense")}</p>
           <p className="text-sm font-bold text-on-surface">{licenseLabel ?? "—"}</p>
         </div>
 
         <div className="space-y-1 rounded-xl bg-surface-container p-4">
-          <p className="text-xs font-medium tracking-wide text-on-surface-variant uppercase">
-            {t("createListing.preview.summaryFiles")}
-          </p>
+          <p className="text-xs font-medium text-on-surface-variant">{t("createListing.preview.summaryFiles")}</p>
           <p className="text-sm font-bold text-on-surface">
             {fileCount > 0
               ? t("createListing.preview.fileCountSize", {
@@ -131,13 +123,11 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
       )}
 
       {/* Full listing preview card */}
-      <div className="overflow-hidden rounded-[2rem] border border-outline-variant bg-surface-container-low shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-low shadow-sm">
         {/* Preview label overlay at top of card */}
         <div className="flex items-center gap-2 border-b border-primary/20 bg-primary-fixed px-6 py-2">
           <span className="material-symbols-outlined text-base text-primary">preview</span>
-          <span className="text-xs font-bold tracking-widest text-primary uppercase">
-            {t("createListing.preview.cardLabel")}
-          </span>
+          <span className="text-xs font-bold text-primary">{t("createListing.preview.cardLabel")}</span>
         </div>
 
         <div className="space-y-8 p-4 md:p-8">
@@ -146,7 +136,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
             <h1 className="font-headline text-xl font-extrabold tracking-tight text-on-surface">
               {draft.title || t("createListing.preview.untitledPlaceholder")}
             </h1>
-            <p className="text-2xl font-black text-primary">{priceDisplay}</p>
+            <p className="text-2xl font-extrabold text-primary">{priceDisplay}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -219,7 +209,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
           <button
             type="submit"
             disabled={isPublishing}
-            className="flex flex-[2] items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
+            className="flex flex-[2] items-center justify-center gap-2 rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
           >
             {isPublishing ? (
               <>

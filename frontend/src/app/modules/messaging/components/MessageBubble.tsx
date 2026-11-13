@@ -17,7 +17,7 @@ export const MessageBubble: React.FC<Props> = ({ message, isMe }) => {
       >
         <p className="break-words whitespace-pre-wrap">{message.body}</p>
       </div>
-      <span className="mt-1 text-[10px] text-on-surface-variant">{format(new Date(message.created_at), "HH:mm")}</span>
+      <span className="mt-1 text-label text-on-surface-variant">{format(new Date(message.created_at), "HH:mm")}</span>
     </div>
   );
 };

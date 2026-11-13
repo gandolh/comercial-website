@@ -30,7 +30,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
   return (
     <form onSubmit={handleSubmit(onNext)} className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-black">Spune-ne mai multe</h2>
+        <h2 className="font-headline text-2xl font-extrabold">Spune-ne mai multe</h2>
         <p className="text-on-surface-variant">Un titlu clar și o descriere detaliată te ajută să vinzi mai repede.</p>
       </div>
 
@@ -97,7 +97,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
           </button>
           <button
             type="submit"
-            className="flex-[2] rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="flex-[2] rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Continuă"}
           </button>
@@ -108,7 +108,7 @@ export function DetailsStep({ initialData, onNext, onBack, hideFooter = false, s
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="rounded-full bg-primary px-8 py-4 font-bold text-on-primary shadow-md transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
           >
             {submitLabel || "Salvează"}
           </button>

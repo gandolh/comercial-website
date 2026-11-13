@@ -1,10 +1,10 @@
 import { Link } from "@core/lib/router";
 export function ConfidentialitatePage() {
   return (
-    <main className="mx-auto max-w-screen-xl px-4 pt-10 pb-20 md:px-8">
+    <main className="mx-auto max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-black text-on-surface">Politică de Confidențialitate</h1>
+          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Politică de Confidențialitate</h1>
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
