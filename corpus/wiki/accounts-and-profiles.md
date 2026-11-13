@@ -58,3 +58,6 @@ Sign-up and the email password reset are gone: only the owner has an account, ma
 `npm run create-owner`. "Sign in with Ward" (`features/ward/routes.ts`, the vendored `ward-auth` client) is a
 second way in once the owner links it from Settings; it finds the user by `users.ward_subject`.
 See [decisions](decisions.md) → *Two ways in*.
+
+The local password is changed in Settings (`Securitate`, `PasswordSection` → `PATCH /users/me/password`, new password
+at least 12 characters, as at creation). A password changed there stays changed across deploys (`create-owner --if-missing`).

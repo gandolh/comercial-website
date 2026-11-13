@@ -248,3 +248,6 @@ comparison in [brief 14](briefs/done/14-a-redesign-with-hallmark-on-the-estate-b
 
 ## 2026-11-13: brief 15 done (replies that say less)
 The conversation summary stops sending the other party's email and phone, the asset upload its storage key; the avatar URL gets /uploads/; the summary's flags are booleans. Todo replies-that-say-too-much promoted and built. Ready for deploy.
+
+## 2026-11-13: brief 16 done (the password form, the dead files)
+The change-password form is on the account settings page, with Romanian errors and a 12-character floor for the new password; the other eleven never-wired frontend files are deleted and knip's frontend ignore list is gone. Todo the-change-password-form-is-not-wired promoted and built. Ready for deploy (phase `all`).

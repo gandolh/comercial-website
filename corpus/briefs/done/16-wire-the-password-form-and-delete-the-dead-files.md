@@ -42,3 +42,14 @@ Migrations, other features' routes, `backend/core`, `backend/app/vendor/`, `vend
 - Knip's ignore list is empty of the twelve files.
 - The outcome note lists every deleted file, and any kept with the reason.
 - Owner step: deploy with vps-deploy's `piataro` stack (frontend and server both changed, so phase `all`; briefs 10 to 15 also wait for the owner's deploy).
+
+## Outcome (2026-11-13)
+
+Built as written. Commit 9b7a123.
+
+- `PasswordSection` is mounted on `SettingsPage` after `WardSection`. Its errors now come from the status (403 "Parola actuală nu este corectă.", 422 the 12-character message; the form checks length and confirmation before the request); the submit handler is wrapped, so the file has no `no-misused-promises` warning. The toast stays.
+- Server: `changePasswordSchema` takes `current_password` `min(1)` and `new_password` `min(12)` (was 8 for both). The schema test's message follows; three flow tests are new (403 keeps the old password; 422 under 12; success: the old password stops signing in, the new one signs in).
+- Playwright `frontend/e2e/password.spec.ts` (4 tests): wrong current password, short new password (no request made), differing confirmation, success. The success case stubs the API route: a real change would leave the dev account on a password the other specs cannot use (the dev seed's is below the new floor).
+- Deleted, none of them imported: `auth/components/FormField.tsx`, `auth/components/SubmitButton.tsx`, `auth/hooks/useResendVerificationMutation.ts`, `create-listing/components/StepFooter.tsx`, `create-listing/hooks/useCreateDraftMutation.ts`, `listings/components/SpecsBento.tsx`, `settings/components/AvatarUploader.tsx`, `app/queries/locationQueries.ts`, `app/routes/builders.tsx`, `core/index.ts`, `core/shared/constants/cities.ts`. No file turned out to be used. knip's `ignore` list is gone; its `@tanstack/router-devtools` note stays (brief 17).
+- `npm run check` and `bash corpus/lint.sh` exit 0; backend vitest 193 passed; Playwright on the password spec and the overflow, focus-ring and theme specs passed (`--workers=2`).
+- Owner step: deploy phase `all` (frontend and server); briefs 10 to 15 also wait.
