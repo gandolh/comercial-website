@@ -78,7 +78,7 @@ export const ConversationPage: React.FC = () => {
         </div>
 
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-[Manrope] text-sm font-bold text-on-surface">
+          <h2 className="truncate font-headline text-sm font-bold text-on-surface">
             {currentConversation.counterparty.display_name || t("common:messaging.unknown_user")}
           </h2>
           <div className="flex items-center gap-1 text-xs text-on-surface-variant">

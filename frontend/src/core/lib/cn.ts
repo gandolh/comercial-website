@@ -13,7 +13,9 @@ const twMerge = extendTailwindMerge({
   extend: {
     theme: {
       font: ["headline", "body", "label"],
-      shadow: ["ambient", "focus", "focus-error"],
+      shadow: ["ambient", "band", "bar", "card", "focus", "focus-error", "popup", "search"],
+      radius: ["control"],
+      text: ["hero", "title", "price", "body", "card-title", "control", "label"],
     },
     classGroups: {
       z: [{ z: ["nav", "overlay", "popup", "toast"] }],

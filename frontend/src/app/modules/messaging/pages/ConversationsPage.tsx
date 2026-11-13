@@ -26,7 +26,7 @@ export const ConversationsPage: React.FC = () => {
           }`}
         >
           <div className="border-b border-surface-container-low p-4">
-            <h1 className="font-[Manrope] text-xl font-bold text-on-surface">{t("common:messaging.messages")}</h1>
+            <h1 className="font-headline text-xl font-bold text-on-surface">{t("common:messaging.messages")}</h1>
           </div>
           <div className="flex-1 overflow-y-auto">
             {isLoading ? (

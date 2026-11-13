@@ -13,7 +13,7 @@ const DARK_QUERY = "(prefers-color-scheme: dark)";
  * The browser-bar colour per theme: the `background` role of each theme in index.css. The inline script in
  * index.html carries the same two values; theme.test.ts keeps all three in step.
  */
-export const THEME_COLORS: Record<ResolvedTheme, string> = { light: "#faf8ff", dark: "#11131a" };
+export const THEME_COLORS: Record<ResolvedTheme, string> = { light: "#f2f2ee", dark: "#131416" };
 
 function isTheme(value: unknown): value is Theme {
   return value === "light" || value === "dark" || value === "system";

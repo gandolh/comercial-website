@@ -1,93 +1,113 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap");
+@import "@fontsource-variable/schibsted-grotesk";
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 
 @import "tailwindcss";
 
 @theme {
-  /* Carpathian Clear colors */
-  --color-primary: #0040a1;
-  --color-primary-container: #0056d2;
-  --color-primary-fixed: #dae2ff;
-  --color-primary-fixed-dim: #b2c5ff;
-  --color-on-primary: #ffffff;
-  --color-on-primary-container: #ccd8ff;
-  --color-on-primary-fixed: #001847;
-  --color-on-primary-fixed-variant: #0040a1;
-
-  --color-secondary: #006a6a;
-  --color-secondary-container: #8cf3f3;
-  --color-secondary-fixed: #8cf3f3;
-  --color-secondary-fixed-dim: #6fd7d6;
-  --color-on-secondary: #ffffff;
-  --color-on-secondary-container: #007070;
-  --color-on-secondary-fixed: #002020;
-  --color-on-secondary-fixed-variant: #004f4f;
-
-  --color-tertiary: #005312;
-  --color-tertiary-container: #1c6d24;
-  --color-tertiary-fixed: #a3f69c;
-  --color-tertiary-fixed-dim: #88d982;
-  --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #9aec93;
-  --color-on-tertiary-fixed: #002204;
-  --color-on-tertiary-fixed-variant: #005312;
-
-  --color-background: #faf8ff;
-  --color-on-background: #191b23;
-
-  --color-surface: #faf8ff;
-  --color-surface-bright: #faf8ff;
-  --color-surface-dim: #d9d9e4;
-  --color-surface-variant: #e1e2ec;
-  --color-surface-container: #ededf8;
-  --color-surface-container-high: #e7e7f2;
-  --color-surface-container-highest: #e1e2ec;
-  --color-surface-container-low: #f2f3fe;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-tint: #0056d2;
-  --color-on-surface: #191b23;
-  --color-on-surface-variant: #424654;
-
+  /* PiațăRo, "The filter band" (2026-11-13). Light */
+  --color-primary: #1a5f9e;
+  --color-on-primary: #fefefc;
+  --color-primary-container: #154f85;
+  --color-on-primary-container: #d6e8f7;
+  --color-primary-fixed: #d9e8f5;
+  --color-primary-fixed-dim: #a9c9e6;
+  --color-on-primary-fixed: #0e3a63;
+  --color-on-primary-fixed-variant: #1a5f9e;
+  --color-secondary: #375a7f;
+  --color-on-secondary: #fefefc;
+  --color-secondary-container: #dfe7f0;
+  --color-on-secondary-container: #1d3550;
+  --color-secondary-fixed: #dfe7f0;
+  --color-secondary-fixed-dim: #a9c6e4;
+  --color-on-secondary-fixed: #0f2338;
+  --color-on-secondary-fixed-variant: #375a7f;
+  --color-tertiary: #2a6a2f;
+  --color-on-tertiary: #fefefc;
+  --color-tertiary-container: #2a6a2f;
+  --color-on-tertiary-container: #d3f0d0;
+  --color-tertiary-fixed: #cfeccb;
+  --color-tertiary-fixed-dim: #a9d6a6;
+  --color-on-tertiary-fixed: #0b2a0e;
+  --color-on-tertiary-fixed-variant: #2a6a2f;
+  --color-background: #f2f2ee;
+  --color-on-background: #1b1c1f;
+  --color-surface: #f2f2ee;
+  --color-surface-bright: #f8f8f5;
+  --color-surface-dim: #dcdcd6;
+  --color-surface-variant: #e3e3dd;
+  --color-surface-container-lowest: #fefefc;
+  --color-surface-container-low: #e9e8e2;
+  --color-surface-container: #e8e8e3;
+  --color-surface-container-high: #e2e2dc;
+  --color-surface-container-highest: #dbdbd5;
+  --color-surface-tint: #1a5f9e;
+  --color-on-surface: #1b1c1f;
+  --color-on-surface-variant: #4f5157;
+  --color-outline: #7a7c83;
+  --color-outline-variant: #d3d3cc;
+  --color-error: #b3261e;
+  --color-error-container: #f9dedc;
+  --color-on-error: #fefefc;
+  --color-on-error-container: #8c1d18;
+  --color-inverse-surface: #2f3033;
+  --color-inverse-on-surface: #f1f1ed;
+  --color-inverse-primary: #8fc3ee;
+  --color-scrim: #1b1c1f;
+  --color-on-scrim: #fefefc;
+  --color-on-fill: #fefefc;
   --color-rating: #facc15;
+  --color-nav-band: #0f3a63;
+  --color-on-nav-band: #fefefc;
+  --color-on-nav-band-variant: #a9d2f2;
 
-  --color-outline: #737785;
-  --color-outline-variant: #c3c6d6;
+  /* Typography: one face, Schibsted Grotesk (replaces Manrope + Inter) */
+  --font-headline:
+    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:
+    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-label:
+    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --color-error: #ba1a1a;
-  --color-error-container: #ffdad6;
-  --color-on-error: #ffffff;
-  --color-on-error-container: #93000a;
+  /* Type scale: six sizes, three weights (400, 600, 800). NEW: the app had no --text-* tokens */
+  --text-hero: 2.5rem;
+  --text-hero--line-height: 2.875rem;
+  --text-hero--font-weight: 800; /* home head; 30/36 on a phone */
+  --text-title: 1.875rem;
+  --text-title--line-height: 2.25rem;
+  --text-title--font-weight: 800; /* page title, listing title, CTA head; 24/30 on a phone */
+  --text-price: 1.5rem;
+  --text-price--line-height: 1.75rem;
+  --text-price--font-weight: 800; /* card price, wordmark, section head */
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-body--font-weight: 400; /* body, nav, buttons (600) */
+  --text-card-title: 1rem;
+  --text-card-title--line-height: 1.375rem;
+  --text-card-title--font-weight: 600;
+  --text-control: 0.875rem;
+  --text-control--line-height: 1.25rem;
+  --text-control--font-weight: 400; /* segments, chips, labels, meta; chosen = 600 */
+  --text-label: 0.75rem;
+  --text-label--line-height: 1rem;
+  --text-label--font-weight: 400; /* badges, bottom bar */
 
-  --color-inverse-surface: #2e3038;
-  --color-inverse-on-surface: #f0f0fb;
-  --color-inverse-primary: #b2c5ff;
-
-  /* The dim behind a dialog or over a photo, and the text on it; own roles so the dark theme can use black */
-  --color-scrim: #2e3038;
-  --color-on-scrim: #ffffff;
-
-  /* White text on a filled badge that keeps its fill in both themes */
-  --color-on-fill: #ffffff;
-
-  /* Typography */
-  --font-headline: "Manrope", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-label: "Inter", sans-serif;
-
-  /* Border radius */
+  /* Border radius: the app's four stay; one NEW */
   --radius: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
+  --radius-lg: 0.5rem; /* segment (was 8) */
+  --radius-control: 0.625rem; /* NEW: buttons, sort select, fields (10) */
+  --radius-xl: 0.75rem; /* card, track, panel (12) */
+  --radius-2xl: 1rem; /* CTA band, sheet, search (16) */
   --radius-full: 9999px;
 
-  /* Shadow tokens */
-  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.06);
-  --shadow-popup: 0 8px 32px rgba(0, 0, 0, 0.12);
-  --shadow-card: 0 12px 48px rgba(0, 0, 0, 0.04);
-  --shadow-search: 0 20px 50px rgba(0, 64, 161, 0.08);
-  --shadow-focus: 0 0 0 1px rgba(0, 86, 210, 0.3);
-  --shadow-focus-error: 0 0 0 1px rgba(186, 26, 26, 0.4);
+  /* Shadow tokens, light */
+  --shadow-card: 0 1px 2px rgba(27, 28, 31, 0.1), 0 4px 12px rgba(27, 28, 31, 0.08);
+  --shadow-band: 0 2px 4px rgba(27, 28, 31, 0.08), 0 8px 20px rgba(27, 28, 31, 0.07);
+  --shadow-popup: 0 8px 32px rgba(27, 28, 31, 0.16);
+  --shadow-ambient: 0 8px 32px rgba(27, 28, 31, 0.06);
+  --shadow-bar: 0 -2px 12px rgba(27, 28, 31, 0.12);
+  --shadow-search: 0 8px 24px rgba(15, 58, 99, 0.1);
+  --shadow-focus: 0 0 0 1px rgba(26, 95, 158, 0.3);
+  --shadow-focus-error: 0 0 0 1px rgba(179, 38, 30, 0.4);
 
   /* Stacking: the navbar sits under every overlay, a menu or tooltip over a dialog, a toast over all */
   --z-index-raised: 10;
@@ -108,59 +128,68 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-primary: #b2c5ff;
-  --color-primary-container: #d9e2ff;
-  --color-primary-fixed: #1a2a57;
-  --color-primary-fixed-dim: #b2c5ff;
-  --color-on-primary: #002b75;
-  --color-on-primary-container: #001847;
-  --color-on-primary-fixed: #dae2ff;
-  --color-on-primary-fixed-variant: #b2c5ff;
-  --color-secondary: #6fd7d6;
-  --color-secondary-container: #004f4f;
-  --color-secondary-fixed: #003737;
-  --color-secondary-fixed-dim: #006a6a;
-  --color-on-secondary: #003737;
-  --color-on-secondary-container: #8cf3f3;
-  --color-on-secondary-fixed: #8cf3f3;
-  --color-on-secondary-fixed-variant: #6fd7d6;
-  --color-tertiary: #88d982;
+  --color-primary: #8fc3ee;
+  --color-on-primary: #06294a;
+  --color-primary-container: #cfe6fa;
+  --color-on-primary-container: #06294a;
+  --color-primary-fixed: #1d3a55;
+  --color-primary-fixed-dim: #8fc3ee;
+  --color-on-primary-fixed: #d6e8f7;
+  --color-on-primary-fixed-variant: #a9d2f2;
+  --color-secondary: #a9c6e4;
+  --color-on-secondary: #0f2338;
+  --color-secondary-container: #2a3a4c;
+  --color-on-secondary-container: #d5e3f2;
+  --color-secondary-fixed: #1f2d3d;
+  --color-secondary-fixed-dim: #375a7f;
+  --color-on-secondary-fixed: #d5e3f2;
+  --color-on-secondary-fixed-variant: #a9c6e4;
+  --color-tertiary: #8fd18f;
+  --color-on-tertiary: #0c3310;
   --color-tertiary-container: #1c6d24;
-  --color-tertiary-fixed: #002204;
-  --color-tertiary-fixed-dim: #005312;
-  --color-on-tertiary: #00390a;
-  --color-on-tertiary-container: #a3f69c;
-  --color-on-tertiary-fixed: #a3f69c;
-  --color-on-tertiary-fixed-variant: #88d982;
-  --color-background: #11131a;
-  --color-on-background: #e1e2ec;
-  --color-surface: #11131a;
-  --color-surface-bright: #373940;
-  --color-surface-dim: #11131a;
-  --color-surface-variant: #424654;
-  --color-surface-container: #1d1f26;
-  --color-surface-container-high: #282a31;
-  --color-surface-container-highest: #33353c;
-  --color-surface-container-low: #191b22;
-  --color-surface-container-lowest: #0c0e14;
-  --color-surface-tint: #b2c5ff;
-  --color-on-surface: #e1e2ec;
-  --color-on-surface-variant: #c3c6d6;
-  --color-outline: #8d90a0;
-  --color-outline-variant: #424654;
+  --color-on-tertiary-container: #c8f0c4;
+  --color-tertiary-fixed: #15381a;
+  --color-tertiary-fixed-dim: #2a6a2f;
+  --color-on-tertiary-fixed: #c8f0c4;
+  --color-on-tertiary-fixed-variant: #8fd18f;
+  --color-background: #131416;
+  --color-on-background: #e8e8e4;
+  --color-surface: #131416;
+  --color-surface-bright: #3a3c41;
+  --color-surface-dim: #131416;
+  --color-surface-variant: #3b3d42;
+  --color-surface-container-lowest: #232529;
+  --color-surface-container-low: #2e3035;
+  --color-surface-container: #1b1c1f;
+  --color-surface-container-high: #2a2c31;
+  --color-surface-container-highest: #34363b;
+  --color-surface-tint: #8fc3ee;
+  --color-on-surface: #e8e8e4;
+  --color-on-surface-variant: #b5b6b0;
+  --color-outline: #8d8f93;
+  --color-outline-variant: #3b3d42;
   --color-error: #ffb4ab;
-  --color-error-container: #93000a;
-  --color-on-error: #690005;
-  --color-on-error-container: #ffdad6;
-  --color-inverse-surface: #e1e2ec;
-  --color-inverse-on-surface: #2e3038;
-  --color-inverse-primary: #0056d2;
-  --color-scrim: #000000;
-  --color-on-scrim: #ffffff;
-  --color-on-fill: #ffffff;
-  --shadow-focus: 0 0 0 1px rgba(178, 197, 255, 0.4);
+  --color-error-container: #5c1511;
+  --color-on-error: #601410;
+  --color-on-error-container: #f9dedc;
+  --color-inverse-surface: #e8e8e4;
+  --color-inverse-on-surface: #2f3033;
+  --color-inverse-primary: #1a5f9e;
+  --color-scrim: #0a0b0d;
+  --color-on-scrim: #fefefc;
+  --color-on-fill: #fefefc;
+  --color-rating: #facc15;
+  --color-nav-band: #0e2338;
+  --color-on-nav-band: #e8eef5;
+  --color-on-nav-band-variant: #8fc3ee;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-band: 0 2px 4px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.4);
+  --shadow-popup: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-bar: 0 -2px 12px rgba(0, 0, 0, 0.5);
+  --shadow-search: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-focus: 0 0 0 1px rgba(143, 195, 238, 0.4);
   --shadow-focus-error: 0 0 0 1px rgba(255, 180, 171, 0.5);
-  --shadow-search: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
@@ -183,7 +212,7 @@
   h4,
   h5,
   h6 {
-    font-family: "Manrope", sans-serif;
+    font-family: var(--font-headline);
   }
 
   #root {

@@ -39,9 +39,9 @@ describe("the dark theme", () => {
   });
 
   it("keeps the light roles the designs set", () => {
-    expect(role(light, "primary")).toBe("#0040a1");
-    expect(role(light, "surface")).toBe("#faf8ff");
-    expect(role(light, "surface-container-lowest")).toBe("#ffffff");
+    expect(role(light, "primary")).toBe("#1a5f9e");
+    expect(role(light, "surface")).toBe("#f2f2ee");
+    expect(role(light, "surface-container-lowest")).toBe("#fefefc");
   });
 
   it.each([

@@ -8,7 +8,7 @@ export const EmptyInbox: React.FC = () => {
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
         <span className="material-symbols-outlined text-4xl text-on-surface-variant">chat</span>
       </div>
-      <h3 className="mb-2 font-[Manrope] text-lg font-semibold text-on-surface">
+      <h3 className="mb-2 font-headline text-lg font-semibold text-on-surface">
         {t("common:messaging.empty_inbox_title")}
       </h3>
       <p className="max-w-xs text-sm text-on-surface-variant">{t("common:messaging.empty_inbox_description")}</p>
