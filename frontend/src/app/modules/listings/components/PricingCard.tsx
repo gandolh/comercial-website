@@ -75,7 +75,7 @@ export function PricingCard({
         <h1 className="font-headline font-extrabold tracking-[-0.01em] text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title">
           {title}
         </h1>
-        <FavoriteToggle listingId={listingId} className="flex-none bg-surface-container-low shadow-none" />
+        <FavoriteToggle listingId={listingId} className="size-11 flex-none bg-surface-container-low shadow-none" />
       </div>
       <p className="text-3xl leading-9 font-extrabold text-primary tabular-nums">{formattedPrice}</p>
 

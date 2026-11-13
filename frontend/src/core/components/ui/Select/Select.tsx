@@ -1,3 +1,4 @@
+import { cn } from "@core/lib/cn";
 import { forwardRef, type SelectHTMLAttributes } from "react";
 
 interface SelectOption {
@@ -30,17 +31,15 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             id={inputId}
             {...props}
-            className={[
+            className={cn(
               "w-full appearance-none rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
               "h-12 pr-10 pl-3.5 text-body",
-              "outline-none transition-all duration-200 cursor-pointer",
+              "cursor-pointer transition-all duration-200 outline-none",
               "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
-              "disabled:opacity-50 disabled:cursor-not-allowed",
+              "disabled:cursor-not-allowed disabled:opacity-50",
               error ? "ring-2 ring-error" : "",
               className,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            )}
           >
             {placeholder && (
               <option value="" disabled>

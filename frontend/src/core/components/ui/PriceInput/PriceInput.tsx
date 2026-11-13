@@ -1,3 +1,4 @@
+import { cn } from "@core/lib/cn";
 import { forwardRef, type InputHTMLAttributes } from "react";
 import { Checkbox } from "../Checkbox";
 
@@ -40,19 +41,17 @@ export const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
             min={0}
             disabled={negotiable}
             {...props}
-            className={[
+            className={cn(
               "w-full rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
               "h-12 pr-20 pl-3.5 text-body",
-              "outline-none transition-all duration-200",
+              "transition-all duration-200 outline-none",
               "placeholder:text-on-surface-variant",
-              "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+              "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
               "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
-              "disabled:opacity-50 disabled:cursor-not-allowed",
+              "disabled:cursor-not-allowed disabled:opacity-50",
               error ? "ring-2 ring-error" : "",
               className,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            )}
           />
           <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-sm font-medium text-on-surface-variant">
             RON

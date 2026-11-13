@@ -33,7 +33,7 @@ export function ListingGallery({ images, title, category, className }: ListingGa
       </div>
 
       {hasImages && (
-        <div className="flex gap-2 overflow-x-auto pt-3">
+        <div className="flex gap-2 overflow-x-auto pt-7">
           {images.map((image, i) => (
             <button
               key={image.id}
@@ -42,7 +42,7 @@ export function ListingGallery({ images, title, category, className }: ListingGa
               aria-pressed={i === activeIndex}
               className={cn(
                 "h-16 w-22 shrink-0 overflow-hidden rounded-lg transition-opacity",
-                i === activeIndex ? "ring-2 ring-primary ring-inset" : "hover:opacity-80",
+                i === activeIndex ? "outline-2 -outline-offset-2 outline-primary" : "hover:opacity-80",
               )}
               aria-label={`Imagine ${i + 1}`}
             >

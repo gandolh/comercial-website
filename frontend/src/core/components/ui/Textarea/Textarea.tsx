@@ -1,3 +1,4 @@
+import { cn } from "@core/lib/cn";
 import { forwardRef, type TextareaHTMLAttributes } from "react";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -23,18 +24,16 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={inputId}
           rows={rows}
           {...props}
-          className={[
+          className={cn(
             "w-full rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
-            "px-3.5 py-3 text-body resize-y",
-            "outline-none transition-all duration-200",
+            "resize-y px-3.5 py-3 text-body",
+            "transition-all duration-200 outline-none",
             "placeholder:text-on-surface-variant",
             "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
-            "disabled:opacity-50 disabled:cursor-not-allowed",
+            "disabled:cursor-not-allowed disabled:opacity-50",
             error ? "ring-2 ring-error" : "",
             className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          )}
         />
         {error && <p className="mt-1.5 text-sm text-error">{error}</p>}
         {hint && !error && <p className="mt-1.5 text-sm text-on-surface-variant">{hint}</p>}

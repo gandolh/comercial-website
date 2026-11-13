@@ -1,3 +1,4 @@
+import { cn } from "@core/lib/cn";
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -33,20 +34,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             {...props}
-            className={[
+            className={cn(
               "w-full rounded-control bg-surface-container-low text-on-surface ring-1 ring-outline ring-inset",
               "h-12 px-3.5 text-body",
-              "outline-none transition-all duration-200",
+              "transition-all duration-200 outline-none",
               "placeholder:text-on-surface-variant",
               "focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary",
-              "disabled:opacity-50 disabled:cursor-not-allowed",
+              "disabled:cursor-not-allowed disabled:opacity-50",
               error ? "ring-2 ring-error" : "",
               iconLeft ? "pl-10" : "",
               iconRight ? "pr-10" : "",
               className,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            )}
           />
           {iconRight && (
             <span className="absolute top-1/2 right-3 -translate-y-1/2 text-on-surface-variant">{iconRight}</span>
