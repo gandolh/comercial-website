@@ -12,7 +12,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [asset](wiki/asset.md) — The Asset entity: a downloadable file on a listing, its columns, file-format and license rules, and how a download is gated.
 - [bundles](wiki/bundles.md) — Event-template bundles: a listing that sells several child listings at one price, and how buying it grants their downloads.
 - [business-rules](wiki/business-rules.md) — The enforced marketplace rules (listing rate limit, expiry, the publish requirement, pricing, the platform fee) and where each is checked.
-- [carpathian-clear](wiki/carpathian-clear.md) — The Carpathian Clear design system: colour roles, type, radii and where the tokens live.
+- [carpathian-clear](wiki/carpathian-clear.md) — The Carpathian Clear design system as shipped by brief 14 ("The filter band"): colour roles in both themes, the one typeface, radii, shadows, the type scale, the navy shell and where the tokens live; the pre-redesign values are kept as history.
 - [decisions](wiki/decisions.md) — Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire, the house style and its checks (vendored, width 120).
 - [digital-asset-commerce](wiki/digital-asset-commerce.md) — How buyers get files: free downloads, orders gating paid ones through the simulated fake payment (Stripe removed 2026-11-03), and download-all.
 - [digital-pivot-cleanup](wiki/digital-pivot-cleanup.md) — The pivot from the OLX-era physical-goods clone to digital files only: what was removed, and the category overhaul.
@@ -33,7 +33,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [search](wiki/search.md) — Listing search on SQLite FTS5 with diacritics folding ("sablon" matches "șablon").
 - [social-media-templates](wiki/social-media-templates.md) — Market research: social-media template packs for Romanian SMBs (platform reach, the price gap between packs and agencies, what to sell).
 - [stack](wiki/stack.md) — The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-- [status](wiki/status.md) — Dated snapshot (2026-11-12) — PiațăRo as a deployed demo; briefs 01-13 are done (one line each), briefs 10-13 wait for a deploy, and the owner's steps.
+- [status](wiki/status.md) — Dated snapshot (2026-11-13) — PiațăRo as a deployed demo; briefs 01-14 are done (one line each), briefs 10-14 wait for a deploy, and the owner's steps.
 - [user](wiki/user.md) — The User entity: one account type that both buys and sells, its columns, auth fields, seller profile and email opt-outs.
 
 ## Work

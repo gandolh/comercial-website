@@ -235,3 +235,13 @@ Outcome note, the access matrix and the deviations in
 The owner approved the redesign direction "The filter band" for PiațăRo on the estate redesign board, with every
 question on the board standing as proposed: the reopened Carpathian Clear identity, the phone bottom bar instead of
 a Drawer, and the direction itself. The build follows in this brief.
+
+## [2026-11-13] done | Brief 14 — The filter band redesign
+
+Built the approved redesign: the new tokens and one self-hosted face, a navy shell with a phone bottom bar, the
+category and search screens as a raised filter band (a `Filtre` sheet on phones that applies its picks together),
+home, detail, and every undrawn screen on the same patterns. The Carpathian Clear identity, the phone navigation and
+the apply-at-once filters changed ([decisions.md](wiki/decisions.md), [carpathian-clear.md](wiki/carpathian-clear.md)).
+Contrast is tested over both themes and Playwright covers focus rings, reduced motion, 390 px overflow and the theme.
+`Mai multe filtre` is not built until a category has a fourth facet. Outcome note, measurements and the comp
+comparison in [brief 14](briefs/done/14-a-redesign-with-hallmark-on-the-estate-board.md).

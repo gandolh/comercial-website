@@ -81,3 +81,48 @@ Decided 2026-11-10 (owner, Q39): Hallmark, with taste-skill 2.5's useful parts; 
 - Brief 12 owns the wrapper layout, the tokens' names and the theme switch; this brief changes the values and layout on top. The switch must survive in both themes.
 - Brief 11's formatter and lint run on every redesign commit.
 - The frontend is built in the owner's checkout (`docs/deploy.md`), so the owner reruns `npm install` in `frontend/` if the dependencies move.
+
+## Outcome (2026-11-13)
+
+Built as the approved direction "The filter band" (runner-up: "Carpathian Clear, settled"). The owner approved it on
+the estate redesign board on 2026-11-13 with every question standing as proposed ([log.md](../../log.md)).
+Reopened decisions, recorded in [decisions.md](../../wiki/decisions.md) and
+[carpathian-clear.md](../../wiki/carpathian-clear.md): the new identity (Schibsted Grotesk, Voroneț azure `#1a5f9e`,
+a navy `nav-band`, teal gone), a five-place bottom bar for phones instead of a Drawer, and the phone filter sheet
+that applies its picks together (a **behaviour change**: it applies from `Aplică filtrele`, where each pick used to
+apply at once; the wide band still applies each pick at once).
+
+- **Commits:** the approval; tokens, fonts, `cn()` lists and the theme-colour constants; the shell (navy top bar in
+  flow, `BottomBar`, footer, theme switch); the UI primitives (Button, Input, Select, Textarea, Badge, Chip, Card,
+  Switch, Dropdown, Modal, ConfirmDialog, Toast, Slider, a new `Sheet`); category (and search, which shares the band);
+  home; detail; the undrawn screens; contrast and Playwright specs; fixes; the design documents.
+- **Not built:** `Mai multe filtre` (no category has a fourth facet; the owner's call). The Material Symbols icon
+  font keeps its Google Fonts link (owner's call), so icons differ from the board's stroke icons.
+- **New strings** (both locales): `filters.title` Filtre / Filters, `filters.apply` Aplică filtrele / Apply filters,
+  `listing.noPreview` Fără previzualizare / No preview. Changed: `listing.verified` VERIFICAT → Verificat, VERIFIED →
+  Verified. `SellerCard` now says `Vânzător verificat`. No other wording was written.
+- **Contrast** (`frontend/src/contrast.test.ts`, 39 pairs per theme over the stylesheet's own tokens): light text min
+  5.36, large text min 5.83, UI parts min 3.40; dark text min 5.12, large min 9.64, UI parts min 4.08. Brief 12's
+  `index.css.test.ts` still passes.
+- **Specs** (`frontend/e2e/`, Playwright 1.63.0, Chromium, `--workers=2`; they run against a dev server and a seeded
+  scratch API, see `playwright.config.ts`): a visible focus ring on every Tab stop, no running animation under
+  reduced motion, no horizontal overflow at 390 in light and dark, and the theme switch, each over 25 screens (the
+  dev seed's own samples and dev account); plus the filter band and sheet, and the cookie banner, a toast and a
+  modal. 107 vitest tests pass. A first-time `npm run check` is green; `check-base-ui` 0 and 0.
+- **First screen**, as the board measured it: the category's first card spans y 310 to 639 at 1280 by 800 (today's
+  board shot: 192 to 587, with the filter column running past the fold); home tiles whole in the first screen: 14 of
+  14 at 1280, 6 of 14 at 390 and at 360 (the board's twin showed 4 at 360).
+- **Against the comps** (rendered twins, share of pixels differing, light/dark): home 1280 1.2/1.3 %, 390 4.1/4.3 %;
+  category 1280 1.5/1.5 %, 390 8.8/6.3 %; detail 1280 3.2/4.4 %, 390 8.3/7.2 %; category scrolled to the end at 390
+  11.2/7.9 %. What differs: Material Symbols against the board's stroke icons; the fixtures' own times and view counts;
+  the twin marks Categorii on the detail page, the app does not (a listing is not a Categorii route); the filter
+  chip rail's cut and the sheet are real controls the twin only sketches; the footer's last row sits flush against the
+  bottom bar because the bar is in flow.
+- **Owner steps:** `npm install` in `frontend/` (two new pins); then the deploy.
+
+### Deviations
+- Base UI rule 15 (a phone navigation panel is a Drawer) gave way to the owner-approved bottom bar. The filter sheet
+  is a `Dialog` bottom sheet in `components/ui/Sheet`, since it holds a staged form, not a panel to swipe shut.
+- A removable chip is a label with a remove button beside it (the old `Chip` nested a button in a button).
+- `README` and root `CLAUDE.md` still name Manrope, Inter and `#0056D2` (root `CLAUDE.md`, "Design system"); they
+  were outside the files this brief owns and are left for the owner.
