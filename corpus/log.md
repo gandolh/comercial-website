@@ -251,3 +251,6 @@ The conversation summary stops sending the other party's email and phone, the as
 
 ## 2026-11-13: brief 16 done (the password form, the dead files)
 The change-password form is on the account settings page, with Romanian errors and a 12-character floor for the new password; the other eleven never-wired frontend files are deleted and knip's frontend ignore list is gone. Todo the-change-password-form-is-not-wired promoted and built. Ready for deploy (phase `all`).
+
+## 2026-11-13: brief 17 done (the house-style warnings)
+`no-misused-promises`, `no-explicit-any` and `no-console` are errors again and their warning blocks are gone; the hook warnings are fixed; `AppContext` carries a logger. Left: 19 non-null assertions in backend tests and knip's three dependency exceptions. Todo house-style-warnings promoted and built. Ready for deploy (phase `all`).

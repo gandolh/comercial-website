@@ -34,3 +34,16 @@ Migrations, `backend/core`'s source, `backend/app/vendor/`, `vendor/`, deploy fi
 - Each rule that reached zero has no config block; the rest are listed with a reason and a count.
 - No behaviour change: the backend tests and frontend tests pass untouched except where a type changed.
 - Owner step, if shipped code changed: deploy with vps-deploy's `piataro` stack, phase `all`.
+
+## Outcome (2026-11-13)
+
+Built. Commit d89617a. Re-measured first (2026-11-13): backend `no-explicit-any` 35, `no-console` 6, `no-non-null-assertion` 19; frontend `no-misused-promises` 49, `exhaustive-deps` 4, `incompatible-library` 5.
+
+- **`no-misused-promises` (49):** every async handler wrapped as `() => void handler()` (a form's `handleSubmit(onSubmit)` as `(e) => void handleSubmit(onSubmit)(e)`). The warning block is gone; the rule is an error.
+- **`no-explicit-any` (35):** typed from the Kysely table types (`Selectable`, `Updateable`, `SelectQueryBuilder`), `MultipartValue`, `Config` and `string | Date`. `countQuery` in `listings-store.ts` uses `$if` for the verified-seller join. Three reads that took `executeTakeFirst()` and passed the row to a mapper now use `executeTakeFirstOrThrow()` (invoice and order creation, mark-paid). The block is gone.
+- **`no-console` (6):** `AppContext` has `log` (the app's logger); the reminder job, the first-download email and the new-message email log through it (the reminder log no longer prints the owner's email). The block is gone.
+- **Hook warnings (9):** `watch()` became `useWatch` in five forms; `useListingImages` returns its object without a `useMemo` that never held; `licenseLabels` is a module constant; `EmailVerifyPage` depends on the stable `mutate`; `PhoneVerifyModal` reads its handler through `useEffectEvent`.
+- **Left:** `no-non-null-assertion` in 19 backend test lines (not in the todo; they are warnings as the house sets them). knip's three dependency exceptions (`pino`, `@tanstack/router-devtools`, `@fastify/multipart`): dropping or listing them changes a lockfile, so they stay (owner step for a later brief).
+- `CLAUDE.md`'s warning bullet is updated. `npm run check` and `bash corpus/lint.sh` exit 0.
+- Not walked in a browser: the phone-verify auto-submit and the email-verify page (no spec covers them).
+- Owner step: deploy phase `all`, with brief 16; briefs 10 to 15 also wait.
