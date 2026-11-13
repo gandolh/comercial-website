@@ -229,3 +229,9 @@ answered 500). Error text: zod 4's wording; orders, bundles, invoices and review
 message instead of zod's issue list as JSON; an unknown route answers `{ error: "not found" }`. Tests 160 → 187.
 Outcome note, the access matrix and the deviations in
 [brief 13](briefs/done/13-the-server-in-the-code-structure.md).
+
+## [2026-11-13] approved | Brief 14 — the redesign direction
+
+The owner approved the redesign direction "The filter band" for PiațăRo on the estate redesign board, with every
+question on the board standing as proposed: the reopened Carpathian Clear identity, the phone bottom bar instead of
+a Drawer, and the direction itself. The build follows in this brief.
