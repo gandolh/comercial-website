@@ -1,83 +1,72 @@
 # README images
 
 How each image was made, so the next refresh is a re-run. Re-take an image
-when the screen it shows changes.
+when the screen it shows changes. All five were retaken on 2026-11-16, after
+the redesign of 2026-11-13 ("The filter band", corpus brief 14).
 
-All of them come from a throwaway clone of the repo, with the API on a scratch
-`DATABASE_PATH` and `UPLOADS_DIR`. The accounts and the first five listings are
-the demo data the migrations insert. [demo-seed.mjs](demo-seed.mjs) gives those
-listings preview pictures, adds four more listings with small ZIP files, and
-adds two reviews. Every preview is drawn by
-[demo-previews.html](demo-previews.html) from shapes and invented text, so no
-real product, brand or person appears.
+The API ran on a scratch `DATABASE_PATH`, `UPLOADS_DIR` and `ASSETS_DIR`,
+seeded with `npm run seed:samples` and nothing else: the nine sample listings
+the demo shows, their preview pictures and two reviews. Every shot is signed
+out, in the default light theme, with the time zone Europe/Bucharest. Nobody
+real appears. The titles, sellers, reviewers and pictures are invented.
 
 | File | Shows | How to reach that state | Viewport | Taken |
 |---|---|---|---|---|
-| hero.webp | The listings page with filters and 9 results | `/anunturi`, signed out | 1440×900 @2x, scaled to 1600 px wide | 2026-10-16 |
-| listing-buy.webp | A paid listing: format, size, licence, the buy box, the locked file and two reviews | `/anunturi/10000000000000000000000000000001`, scrolled down 1000 px; cropped to y 272 to 1340 of the 2880×1800 capture | 1440×900 @2x, crop scaled to 1600 px | 2026-10-16 |
-| categories.webp | The home page's category grid | `/` signed in, scrolled down 480 px; cropped to y 180 to 1660 | 1440×900 @2x, crop scaled to 1600 px | 2026-10-16 |
-| phone-browse.webp | The listings page on a phone | `/anunturi`; cropped to the top 2000 px | iPhone 14, 390×844 @3x, crop scaled to 780 px | 2026-10-16 |
+| hero.webp | The listings page: the filter band and two rows of results | `/anunturi` | 1440×1052 @2x, the whole viewport, scaled to 1600 px wide | 2026-11-16 |
+| listing-buy.webp | A paid listing: format, size, licence, the buy box, the locked file and two reviews | `/anunturi/sample-icons`; clipped from 44 px above the "Descriere" heading to 20 px below "Raportează Anunțul" | 1440×1500 @2x, clip scaled to 1600 px wide | 2026-11-16 |
+| categories.webp | The home page's category grid | `/`; clipped from 36 px above "Categorii Populare" to 46 px below the "Diverse" card | 1440×1000 @2x, clip scaled to 1600 px wide | 2026-11-16 |
+| phone-browse.webp | The listings page on a phone, with the bottom bar | `/anunturi` | Playwright's `iPhone 14` (390×664 @3x), the whole viewport, scaled to 780 px wide | 2026-11-16 |
+| phone-filters.webp | The phone filter sheet with one pick staged | `/anunturi`, tap **Filtre**, then **Comercială** in the sheet | same as phone-browse | 2026-11-16 |
 
-Before capturing, set `localStorage.cookie_consent = 'rejected'` on the app's
-origin so the cookie banner stays closed. The listing crop stops above the
-"Sfaturi de siguranță" box, which still carries advice from the physical-goods
-version (meet the seller in a public place).
+## Steps
+
+1. Seed a scratch database and start the API on it, in one terminal:
+
+   ```bash
+   cd backend && npm ci
+   export DATABASE_PATH=/tmp/olx-shots/my-olx.db UPLOADS_DIR=/tmp/olx-shots/uploads ASSETS_DIR=/tmp/olx-shots/assets
+   npm run seed:samples
+   JWT_SECRET=$(openssl rand -hex 32) npm run dev
+   ```
+
+2. Start the frontend in a second one: `cd frontend && npm ci && npm run dev`.
+   On other ports, set `PORT` and `CORS_ALLOWED_ORIGINS` for the API, and
+   start Vite with `VITE_API_URL=<api> npx vite --port <port> --strictPort`.
+
+3. In Playwright (Chromium), open each page in a fresh context with
+   `timezoneId: "Europe/Bucharest"`, after an init script sets
+   `localStorage.cookie_consent = "rejected"` and `localStorage.theme = "light"`
+   so the cookie banner stays closed. Wait for network idle and
+   `document.fonts.ready`, then 1.5 s more. Take the shots in the table, with a
+   `clip` where it names one.
+
+4. Convert each PNG:
+
+   ```bash
+   ffmpeg -i in.png -vf "scale=1600:-1:flags=lanczos" -c:v libwebp -quality 82 out.webp   # 780 for the phone shots
+   ```
 
 ## Not taken
 
-- **The "Adaugă anunț" form.** For a new listing the page shows a spinner and
-  never loads. `useDraft` disables its query when there is no draft id, and
-  React Query v5 reports a disabled query with no data as pending, so
-  `isDraftLoading` stays true.
-- **"Anunțurile mele".** The page calls `GET /me/listings`, which the API does
-  not have (404), and shows "Nu am putut încărca anunțurile".
-- **The listing page on a phone.** The "Descriere" heading and the listing id
-  overlap at that width.
-- **Invoices.** The "Factură nouă" tab did not open in the headless browser;
-  not looked into further.
+- **Signed-in screens.** The account pages (dashboard, my listings, orders,
+  invoices, messages, settings) all load, but for a new demo account they are
+  empty, and a sample seller cannot sign in. The README shows the public side
+  only.
 
-## Demo data
+## Preview pictures
 
-1. Clone the repo outside your working copy, then `npm install` and
-   `npm run build` in `backend/`, and `npm install` in `frontend/`.
-2. Render the previews, one PNG per name, at 1200×960:
+The sample listings' previews in `backend/seed/samples/previews/` were drawn by
+[demo-previews.html](demo-previews.html) from shapes and invented text, so no
+real product, brand or person appears. To redraw one, open the page with its
+name as the hash in a 1200×960 viewport and screenshot it. The names are
+`icons`, `dashboard`, `ebook`, `loops`, `fonts`, `social`, `gdpr`, `invite` and
+`code`:
 
-   ```bash
-   mkdir -p /tmp/previews
-   for n in icons dashboard ebook loops fonts social gdpr invite code; do
-     agent-browser --session previews set viewport 1200 960 1
-     agent-browser --session previews open "file://$PWD/docs/images/demo-previews.html#$n"
-     agent-browser --session previews reload   # a hash change alone does not re-run the page script
-     agent-browser --session previews screenshot /tmp/previews/$n.png
-   done
-   ```
-
-3. Start the API on scratch paths, and the frontend:
-
-   ```bash
-   cd backend && JWT_SECRET=$(openssl rand -hex 32) \
-     DATABASE_PATH=/tmp/olx-demo/my-olx.db UPLOADS_DIR=/tmp/olx-demo/uploads npm run dev
-   cd frontend && npm run dev
-   ```
-
-4. Once the API is listening, seed it. The password is the one in the comment
-   at the top of `backend/migrations/20260428010000_seed_data.sql`:
-
-   ```bash
-   read -rs -p 'Demo password: ' DEMO_PASSWORD && export DEMO_PASSWORD
-   node docs/images/demo-seed.mjs /tmp/previews
-   ```
-
-   It prints `Gave 5 seeded listings a preview, added 4 listings and 2 reviews.`
-   Run it once per fresh database; a second run stops partway, on the weekly
-   listing limit.
-
-## Capture method
-
-- Browser: `agent-browser --session olx-readme`, `set viewport 1440 900 2` for
-  desktop, `set device "iPhone 14"` for the phone, then `screenshot` with an
-  absolute path. Sign in through `/autentificare` as `jane.doe@example.com`
-  for the signed-in shots.
-- Stills: PNG to WebP with
-  `ffmpeg -i in.png -vf "crop=...,scale=1600:-1:flags=lanczos" -c:v libwebp -quality 82 out.webp`
-  (780 for the phone).
+```bash
+for n in icons dashboard ebook loops fonts social gdpr invite code; do
+  agent-browser --session previews set viewport 1200 960 1
+  agent-browser --session previews open "file://$PWD/docs/images/demo-previews.html#$n"
+  agent-browser --session previews reload   # a hash change alone does not re-run the page script
+  agent-browser --session previews screenshot "$PWD/backend/seed/samples/previews/$n.png"
+done
+```
