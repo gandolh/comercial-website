@@ -1,5 +1,7 @@
 # The change-password form is not on the Settings page
 
+**Status:** promoted (brief 16, built and closed 2026-11-13)
+
 > Promoted to [brief 16](../briefs/done/16-wire-the-password-form-and-delete-the-dead-files.md) on 2026-11-13.
 
 Found by brief 12 (2026-11-12). `frontend/src/app/modules/settings/components/PasswordSection.tsx` is a complete

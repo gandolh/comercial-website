@@ -1,5 +1,7 @@
 # Replies that say too much, and one wrong URL
 
+**Status:** promoted (brief 15, built and closed 2026-11-13)
+
 > Promoted to [brief 15](../briefs/done/15-replies-that-say-less.md) on 2026-11-13.
 
 Found by brief 13 (2026-11-12) while writing the response schemas. The schemas kept every field as it was (the

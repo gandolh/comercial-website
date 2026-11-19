@@ -1,5 +1,7 @@
 # Fold backend/core into backend/app
 
+**Status:** promoted (brief 18, built and closed 2026-11-13)
+
 > Promoted to [brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md) on 2026-11-13.
 
 The owner's answer to brief 13's board question (2026-11-13): fold the separate
