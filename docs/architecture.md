@@ -7,12 +7,15 @@ disk storage for uploads, the email service and Fastify plugins for errors,
 CORS, compression, multipart and static files. Its `features/` are the
 marketplace on top: one module per area
 (auth, users, listings, images, assets, orders, reviews, bundles, invoices,
-favorites, messaging, the ANAF lookup), each registering its own routes. At
-start-up it applies every new SQL file in `backend/migrations/`. `frontend/`
-is a React app on Vite: TanStack Router for routes, React Query and Axios for
-data (the Axios client adds the Bearer token), React Hook Form and Zod for
-forms, Tailwind CSS v4 with the Carpathian Clear tokens, and react-i18next
-with Romanian as the default language.
+favorites, messaging, payouts, reminders, the ANAF lookup, Sign in with Ward),
+each registering its own routes. At start-up it applies every new SQL file in
+`backend/migrations/`. `frontend/` is a React app on Vite: TanStack Router for
+routes, React Query and Axios for data (the Axios client adds the Bearer
+token), React Hook Form and Zod for forms, Base UI behind the wrappers in
+`src/core/components/ui/`, Tailwind CSS v4 with the Carpathian Clear tokens
+(as the 2026-11-13 redesign set them, in
+[corpus/wiki/carpathian-clear.md](../corpus/wiki/carpathian-clear.md)), and
+react-i18next with Romanian as the default language.
 
 ```mermaid
 flowchart LR
@@ -42,9 +45,10 @@ flowchart LR
    file and a free slot in the week's limit of 5.
 2. A buyer opens the listing. `GET /listings/:id/assets` lists the files by
    name and size, without their storage paths.
-3. For a paid listing the buyer starts an order with `POST /orders`. The
-   payment provider returns a checkout address; in development the fake
-   provider's `POST /orders/:id/mark-paid` stands in for it.
+3. For a paid listing the buyer starts an order with `POST /orders`. The fake
+   payment provider, the only one since 2026-11-03, returns a checkout
+   address, and `POST /orders/:id/mark-paid` lets the buyer mark the order
+   paid. No money moves.
 4. Once the order is paid, `GET /listings/:id/assets/:asset_id/download`
    streams the file to that buyer. A free listing skips the order.
 5. The buyer can now review the listing with `POST /listings/:id/reviews`;

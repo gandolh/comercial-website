@@ -5,8 +5,7 @@ Run PiațăRo on your own machine: the API in `backend/` and the web app in
 
 ## Prerequisites
 
-- Node and npm. No `engines` field pins a version; the steps below were run on
-  Node 24.14.
+- Node 24 or later, and npm. The root `package.json` asks for it (`engines`).
 - `openssl`, or any other way to make a random string for `JWT_SECRET`.
 - Nothing else. There is no Docker, no database server and no mail server; the
   SQLite file and the uploads folder are created on first start.
@@ -15,10 +14,13 @@ Run PiațăRo on your own machine: the API in `backend/` and the web app in
 
 ```bash
 cd backend
-npm install
+npm ci
 cp .env.example .env    # then set JWT_SECRET, e.g. to the output of: openssl rand -hex 32
 npm run dev
 ```
+
+`npm ci` installs the exact versions in the lockfile. Every `package.json` here
+pins its versions exactly.
 
 `npm run dev` runs the app under `tsx watch`, applies any new migrations
 from `backend/migrations/`, and listens on port 8080 on every interface.
@@ -43,6 +45,7 @@ variables (the command line, your shell, a container) win over it.
 | `CORS_ALLOWED_ORIGINS` | Comma-separated origins the browser may call from | `http://localhost:5173` |
 | `FRONTEND_BASE_URL` | The web app's address, used in the links inside emails | `http://localhost:5173` |
 | `LOG_LEVEL` | Fastify log level | `info` |
+| `TRUSTED_PROXIES` | Comma-separated addresses or ranges whose `X-Forwarded-For` the API believes | `loopback` |
 
 `backend/app/data/`, where a local run keeps the database and uploads, is
 gitignored.
@@ -51,7 +54,7 @@ gitignored.
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
@@ -98,9 +101,8 @@ Until 2026-11-03 these rows were migrations, so a database made before then
 already has them; nothing removes them from it.
 
 The image and file records point at files that are not in the repo, so those
-five listings show broken previews until you replace them. The README's
-screenshots use [images/demo-seed.mjs](images/demo-seed.mjs) to do that; the
-steps are in [images/shots.md](images/shots.md).
+five listings show broken previews. For listings with pictures and files, add
+the sample listings below; the README's screenshots show only those.
 
 ## The sample listings
 
@@ -156,14 +158,32 @@ removed on 2026-11-03).
 
 ## Test, typecheck, lint, build
 
+Every check runs from the repo root. The root has its own install, which holds
+the house-style tools (ESLint, Prettier, knip, dependency-cruiser):
+
 ```bash
-cd backend && npm test && npm run typecheck   # vitest; tsc over the app
-cd frontend && npm run lint && npm run build  # eslint; tsc + vite build
+npm ci           # at the root, once
+npm run check    # typecheck, lint, format check, conventions and tests, in both projects
 ```
 
-On 2026-11-03 the backend's 160 tests passed and the typecheck was clean. The
-frontend built, and `npm run lint` reported 9 errors that predate the demo work
-(the same 9 as on 2026-10-16).
+`npm run check:fast` runs both typechecks and ESLint on the changed files only.
+One project at a time:
+
+```bash
+cd backend && npm test && npm run typecheck   # builds the app, then vitest; tsc over the app
+cd frontend && npm test && npm run build      # vitest; tsc + vite build
+```
+
+On 2026-11-16 `npm run check` passed: 193 backend tests, 107 frontend tests,
+no lint errors. It still prints warnings: 19 non-null assertions in backend
+tests, and knip's notes on unused exports.
+
+The frontend's flows are Playwright specs in `frontend/e2e/`: focus rings,
+reduced motion, no overflow at 390 px, the theme switch, the filters, the
+overlays and the password form. They run against a dev server and an API on a
+scratch database seeded with `seed:dev` and `seed:samples`;
+`frontend/playwright.config.ts` and `frontend/e2e/fixtures.ts` name the
+variables they read.
 
 ## Common problems
 
