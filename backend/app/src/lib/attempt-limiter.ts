@@ -6,9 +6,11 @@
  * - per address: 10 in 15 minutes;
  * - per account: 20 in an hour, across addresses.
  *
- * While either is full, `retryAfter` answers the seconds until a slot frees up, and the caller refuses even
+ * While either is full, `begin` answers the seconds until a slot frees up, and the caller refuses even
  * the right password. A refused request is not a wrong try, so waiting is never made longer by trying.
- * A right password clears its address's count (`clear`); the account's stays.
+ * The try is counted when `begin` runs, before the slow password check, so a burst cannot outrun the limit.
+ * A right password clears its address's count and gives back its own account try; the account's earlier
+ * wrong tries stay.
  */
 export interface AttemptLimits {
   addressMax: number;
@@ -23,6 +25,14 @@ export const DEFAULT_ATTEMPT_LIMITS: AttemptLimits = {
   accountMax: 20,
   accountWindowMs: 60 * 60_000,
 };
+
+/** One counted try, from `begin`. */
+export interface Attempt {
+  /** The password was right: the address's count clears and the account takes this try back. */
+  succeed(): void;
+  /** The password was wrong: both counts keep the try (it is counted already). */
+  failed(): void;
+}
 
 const SWEEP_EVERY_MS = 60_000;
 
@@ -52,17 +62,33 @@ export class AttemptLimiter {
     return wait > 0 ? Math.max(1, Math.ceil(wait / 1000)) : 0;
   }
 
-  /** Records a wrong try from `address`, against `accountId` when the account is known. */
-  fail(address: string, accountId?: string): void {
+  /**
+   * Checks the limits and counts the try in one step, before the password is checked, so tries sent at
+   * once cannot all pass the check ahead of the first count. Answers the seconds to wait while `address` or
+   * `accountId` is over its limit (the try is then not counted), else a handle: call `succeed()` on a right
+   * password and `failed()` on a wrong one. A handle never settled counts as a wrong try.
+   */
+  begin(address: string, accountId?: string): number | Attempt {
+    const wait = this.retryAfter(address, accountId);
+    if (wait > 0) return wait;
     const now = this.now();
     this.sweep(now);
     this.push(this.byAddress, address, now);
     if (accountId !== undefined) this.push(this.byAccount, accountId, now);
+    return {
+      succeed: () => {
+        // The address starts again; the account gets this try back, its earlier wrong ones stay.
+        this.byAddress.delete(address);
+        if (accountId !== undefined) this.unpush(this.byAccount, accountId, now);
+      },
+      failed: () => {},
+    };
   }
 
-  /** A right password from `address`: its count starts again. */
-  clear(address: string): void {
-    this.byAddress.delete(address);
+  private unpush(map: Map<string, number[]>, key: string, time: number): void {
+    const times = map.get(key);
+    const at = times?.indexOf(time) ?? -1;
+    if (times && at >= 0) times.splice(at, 1);
   }
 
   private push(map: Map<string, number[]>, key: string, now: number): void {

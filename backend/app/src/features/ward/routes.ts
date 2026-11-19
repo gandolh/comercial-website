@@ -85,13 +85,13 @@ export const wardRoutes: FastifyPluginAsyncZod<WardRoutesOptions> = async (app, 
         .where("id", "=", userId)
         .executeTakeFirst();
       if (!user) throw AppError.notFound();
-      const wait = ctx.passwordLimiter.retryAfter(request.ip, userId);
-      if (wait > 0) throw AppError.rateLimit(wait);
+      const attempt = ctx.passwordLimiter.begin(request.ip, userId);
+      if (typeof attempt === "number") throw AppError.rateLimit(attempt);
       if (!(await verifyPassword(user.password_hash, request.body.current_password))) {
-        ctx.passwordLimiter.fail(request.ip, userId);
+        attempt.failed();
         throw new AppError(403, "current password is incorrect");
       }
-      ctx.passwordLimiter.clear(request.ip);
+      attempt.succeed();
       const ticket = randomBytes(24).toString("base64url");
       tickets.set(ticket, { userId, expires: Date.now() + TICKET_TTL_MS });
       return { ticket };

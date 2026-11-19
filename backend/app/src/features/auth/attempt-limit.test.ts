@@ -110,8 +110,35 @@ describe("wrong password tries are limited", () => {
   it("counts an unknown email against the address only", async () => {
     for (let i = 0; i < 10; i++) expect((await login("x", "10.0.0.1", "nobody@test.ro")).statusCode).toBe(401);
     expect((await login(PASSWORD, "10.0.0.1")).statusCode).toBe(429);
-    // 20 unknown-email tries from other addresses leave the account's own budget untouched
-    for (let a = 1; a <= 4; a++) for (let i = 0; i < 5; i++) await login("x", `10.0.3.${a}`, "nobody@test.ro");
+    // 25 unknown-email tries from other addresses count against no account: the owner's account is
+    // untouched, and so is another unknown email from a fresh address (a shared account key would refuse it)
+    for (let a = 1; a <= 5; a++) for (let i = 0; i < 5; i++) await login("x", `10.0.3.${a}`, "nobody@test.ro");
+    expect((await login("x", "10.0.4.1", "other@test.ro")).statusCode).toBe(401);
     expect((await login(PASSWORD, "10.0.4.1")).statusCode).toBe(200);
+  });
+
+  /** Tries sent at once all wait on argon2, so each must be counted before its password is checked. */
+  describe("a burst sent at once", () => {
+    for (const [name, wrongStatus] of [
+      ["login", 401],
+      ["change", 403],
+      ["ticket", 403],
+    ] as const) {
+      const send = routes[name];
+
+      it(`the ${name} route lets at most 10 wrong tries from one address through`, async () => {
+        const results = await Promise.all(Array.from({ length: 15 }, () => send("wrong")));
+        const checked = results.filter((r) => r.statusCode !== 429);
+        expect(checked.length).toBeLessThanOrEqual(10);
+        expect(checked.every((r) => r.statusCode === wrongStatus)).toBe(true);
+        expect((await send(PASSWORD)).statusCode).toBe(429);
+      });
+
+      it(`the ${name} route lets at most 20 wrong tries on one account through, across addresses`, async () => {
+        const results = await Promise.all(Array.from({ length: 30 }, (_, i) => send("wrong", `10.0.5.${i}`)));
+        expect(results.filter((r) => r.statusCode !== 429).length).toBeLessThanOrEqual(20);
+        expect((await send(PASSWORD, "10.0.6.1")).statusCode).toBe(429);
+      });
+    }
   });
 });

@@ -347,14 +347,14 @@ export const usersRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =
       }
 
       const limiter = ctx.passwordLimiter;
-      const wait = limiter.retryAfter(request.ip, userId);
-      if (wait > 0) throw AppError.rateLimit(wait);
+      const attempt = limiter.begin(request.ip, userId);
+      if (typeof attempt === "number") throw AppError.rateLimit(attempt);
       const isValid = await verifyPassword(user.password_hash, body.current_password);
       if (!isValid) {
-        limiter.fail(request.ip, userId);
+        attempt.failed();
         throw new AppError(403, "current password is incorrect");
       }
-      limiter.clear(request.ip);
+      attempt.succeed();
 
       const newHash = await hashPassword(body.new_password);
       await ctx.db.updateTable("users").set({ password_hash: newHash }).where("id", "=", userId).execute();
