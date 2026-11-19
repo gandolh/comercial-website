@@ -263,3 +263,6 @@ The Ward link ticket now takes the local password (`current_password`: 422 when 
 
 ## 2026-11-19: brief 20 done (wrong password tries are limited)
 Sign-in, the password change and the Ward link ticket share one in-memory limiter: 10 wrong tries in 15 minutes per address, 20 in an hour per account; past either, even the right password gets 429 with `Retry-After`, and the three forms say "Prea multe încercări. Încearcă din nou peste N minute." Todo password-checks-have-no-attempt-limit promoted and built. Ready for deploy (phase `all`).
+
+## 2026-11-19: brief 20 follow-up (a burst could outrun the limit)
+The three routes checked the limiter, awaited argon2, then counted, so tries sent at once all passed the check first. `AttemptLimiter.begin` now checks and counts in one step before the password check; the route settles the handle (`succeed()` clears the address and gives back the account try, `failed()` keeps both). Tests send bursts of 15 and 30 at once on each route; the "unknown email" and "forgets idle keys" tests can now fail. Still Ready for deploy (phase `all`).
