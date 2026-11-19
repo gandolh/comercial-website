@@ -42,3 +42,13 @@ Filed 2026-11-19 by the controller under the owner's rule of 2026-11-17: an app 
 - [ ] The tests above pass and the new backend ones fail on today's code.
 - [ ] `npm run check` at the root exits 0; `bash corpus/lint.sh` exits 0.
 - [ ] End move `ready_for_deploy`, owner step: deploy with vps-deploy's `piataro` stack, phase `all` (server and frontend changed).
+
+## Outcome (2026-11-19)
+
+Built. `POST /auth/ward/link-ticket` takes `{ current_password }`: 422 when missing or empty, 403 `current password is incorrect` when wrong, no ticket either way. `WardSection` has the "Parola actuală" field (a form, so Enter submits), the 403 message, focus back on the field, and a generic message for other failures.
+
+- Backend: `ward/routes.test.ts` has one new test (422 twice, 403, no stored ticket, then the right password); it fails on the old code (200 where 422 is expected, seen by stashing `routes.ts`). The existing link tests send the password and the user rows now carry a real hash.
+- Playwright `ward-link.spec.ts` (Ward status stubbed on, the ticket call stubbed): wrong password shows the message, keeps focus, stays on `/cont/setari`, the request body is `{ current_password }`; another failure shows the generic message; two shots (1280 light, 390 dark) read without clipping.
+- `password.spec.ts` ran in the same pass: its wrong-password case failed because the scratch API's CORS list named `localhost` while the specs used `127.0.0.1`; not touched by this brief.
+- No attempt limit, as decided; todo `password-checks-have-no-attempt-limit` filed.
+- Owner step: deploy with vps-deploy's `piataro` stack, phase `all`.

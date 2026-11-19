@@ -257,3 +257,6 @@ The change-password form is on the account settings page, with Romanian errors a
 
 ## 2026-11-13: brief 18 done (backend/core folded into backend/app)
 `plugins/`, `lib/` and `db/` from the old core package now sit beside `features/` in `backend/app/src`; one package, one `tsc -b`, a Dockerfile without the core stage. No behaviour change, same 193 + 107 tests. Todo fold-backend-core-into-backend-app promoted and built. Ready for deploy (phase `all` with briefs 10 to 17); the docker build is the owner's step.
+
+## 2026-11-19: brief 19 done (linking Ward asks for the password)
+The Ward link ticket now takes the local password (`current_password`: 422 when missing, 403 when wrong, no ticket), and the Settings section asks for it in place with Romanian messages. New todo password-checks-have-no-attempt-limit. Ready for deploy (phase `all`).
