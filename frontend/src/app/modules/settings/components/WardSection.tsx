@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import { isAxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@core/lib/auth";
 import { useSearchParams } from "@core/lib/router";
-import { Button } from "@core/components/ui";
+import { Button, Input } from "@core/components/ui";
 import { fetchWardLinkTicket, fetchWardStatus, wardErrorMessage, wardStartUrl } from "@app/modules/auth/services/ward";
 
 /**
@@ -14,17 +15,31 @@ export function WardSection() {
   const [searchParams] = useSearchParams();
   const ward = useQuery({ queryKey: ["ward-status"], queryFn: fetchWardStatus, staleTime: 60_000 });
   const [starting, setStarting] = useState(false);
+  const [password, setPassword] = useState("");
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   if (!ward.data?.enabled) return null;
 
   const justLinked = searchParams.get("ward") === "linked";
   const error = searchParams.get("ward_error");
   const link = async () => {
+    setLinkError(null);
     setStarting(true);
     try {
-      window.location.href = wardStartUrl(await fetchWardLinkTicket());
-    } catch {
+      window.location.href = wardStartUrl(await fetchWardLinkTicket(password));
+    } catch (err: unknown) {
       setStarting(false);
+      if (isAxiosError(err) && err.response?.status === 403) {
+        setLinkError("Parola actuală nu este corectă.");
+        passwordRef.current?.focus();
+      } else {
+        setLinkError("Nu am putut începe legarea. Încearcă din nou.");
+      }
     }
+  };
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    void link();
   };
 
   return (
@@ -47,14 +62,30 @@ export function WardSection() {
           Contul tău Ward este legat: poți intra și cu „Intră cu Ward” din pagina de autentificare.
         </p>
       ) : (
-        <>
+        <form onSubmit={handleSubmit} className="space-y-4" aria-label="Leagă contul Ward">
           <p className="text-sm text-on-surface-variant">
-            Leagă contul tău Ward o singură dată, ca să poți intra și fără parolă.
+            Leagă contul tău Ward o singură dată, ca să poți intra și fără parolă. Scrie parola actuală ca să confirmi.
           </p>
-          <Button onClick={() => void link()} loading={starting}>
+          <Input
+            ref={passwordRef}
+            label="Parola actuală"
+            id="ward_current_password"
+            type="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
+          {linkError && (
+            <p role="alert" className="text-sm text-error">
+              {linkError}
+            </p>
+          )}
+          <Button type="submit" loading={starting}>
             Leagă contul Ward
           </Button>
-        </>
+        </form>
       )}
     </section>
   );

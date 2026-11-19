@@ -3,7 +3,7 @@ import Database from "better-sqlite3";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runMigrations } from "../../db/migrator.js";
-import { verifyPassword } from "../../lib/tokens.js";
+import { verifyPassword, hashPassword } from "../../lib/tokens.js";
 import { startTestApp } from "../../testing/test-app.js";
 import { createOwner } from "../../create-owner.js";
 import type { WardClient } from "../../../vendor/ward/ward-auth.js";
@@ -62,11 +62,21 @@ describe("sign-in for the owner only", () => {
     t = await startTestApp({}, fakeWard);
     await t.ctx.db
       .insertInto("users")
-      .values({ id: "owner", email: "owner@test.ro", password_hash: "x", email_verified: 1 })
+      .values({
+        id: "owner",
+        email: "owner@test.ro",
+        password_hash: await hashPassword("owner-password-1"),
+        email_verified: 1,
+      })
       .execute();
 
     const ticket = (
-      await t.app.inject({ method: "POST", url: "/auth/ward/link-ticket", headers: t.bearer("owner") })
+      await t.app.inject({
+        method: "POST",
+        url: "/auth/ward/link-ticket",
+        headers: t.bearer("owner"),
+        payload: { current_password: "owner-password-1" },
+      })
     ).json().ticket;
     const start = await t.app.inject({ method: "GET", url: `/auth/ward/start?link=${ticket}` });
     expect(start.statusCode).toBe(302);
@@ -97,11 +107,47 @@ describe("sign-in for the owner only", () => {
     expect(meByWard.json().id).toBe("owner");
   });
 
+  it("asks for the local password before it gives a link ticket", async () => {
+    t = await startTestApp({}, fakeWard);
+    await t.ctx.db
+      .insertInto("users")
+      .values({
+        id: "owner",
+        email: "owner@test.ro",
+        password_hash: await hashPassword("owner-password-1"),
+        email_verified: 1,
+      })
+      .execute();
+    const post = (payload?: Record<string, string>) =>
+      t.app.inject({
+        method: "POST",
+        url: "/auth/ward/link-ticket",
+        headers: t.bearer("owner"),
+        ...(payload !== undefined ? { payload } : {}),
+      });
+    expect((await post()).statusCode).toBe(422);
+    expect((await post({ current_password: "" })).statusCode).toBe(422);
+    const wrong = await post({ current_password: "not-the-password" });
+    expect(wrong.statusCode).toBe(403);
+    expect(wrong.json()).toEqual({ error: "current password is incorrect" });
+    // No ticket was stored: a start with any ticket still answers expired_link.
+    const start = await t.app.inject({ method: "GET", url: "/auth/ward/start?link=anything" });
+    expect(start.headers.location).toBe("http://localhost:5173/cont/setari?ward_error=expired_link");
+    const right = await post({ current_password: "owner-password-1" });
+    expect(right.statusCode).toBe(200);
+    expect(typeof right.json().ticket).toBe("string");
+  });
+
   it("refuses a Ward account nobody linked, a callback without its flow, and a reused ticket", async () => {
     t = await startTestApp({}, fakeWard);
     await t.ctx.db
       .insertInto("users")
-      .values({ id: "owner", email: "owner@test.ro", password_hash: "x", email_verified: 1 })
+      .values({
+        id: "owner",
+        email: "owner@test.ro",
+        password_hash: await hashPassword("owner-password-1"),
+        email_verified: 1,
+      })
       .execute();
     const start = await t.app.inject({ method: "GET", url: "/auth/ward/start" });
     const stranger = await t.app.inject({
@@ -114,7 +160,12 @@ describe("sign-in for the owner only", () => {
     expect(noFlow.headers.location).toBe("http://localhost:5173/autentificare?ward_error=expired");
 
     const ticket = (
-      await t.app.inject({ method: "POST", url: "/auth/ward/link-ticket", headers: t.bearer("owner") })
+      await t.app.inject({
+        method: "POST",
+        url: "/auth/ward/link-ticket",
+        headers: t.bearer("owner"),
+        payload: { current_password: "owner-password-1" },
+      })
     ).json().ticket;
     await t.app.inject({ method: "GET", url: `/auth/ward/start?link=${ticket}` });
     const reused = await t.app.inject({ method: "GET", url: `/auth/ward/start?link=${ticket}` });

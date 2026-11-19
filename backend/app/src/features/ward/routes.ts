@@ -8,7 +8,8 @@
  *
  * Routes, under the API prefix (Caddy strips `/piataro-api`):
  * - GET  /auth/ward/status          { enabled }
- * - POST /auth/ward/link-ticket     (signed in) { ticket }: single use, two minutes, for the link start
+ * - POST /auth/ward/link-ticket     (signed in) { current_password } -> { ticket }: the local password typed
+ *                                   again (403 when wrong, owner rule 2026-11-17); single use, two minutes
  * - GET  /auth/ward/start[?link=T]  sets the flow cookie and redirects to Ward
  * - GET  /auth/ward/callback        finishes; a sign-in lands on the app's /autentificare/ward with the
  *                                   token in the URL fragment, a link on /cont/setari
@@ -20,7 +21,7 @@ import { randomBytes } from "node:crypto";
 import type { FastifyPluginAsyncZod } from "@fastify/type-provider-zod";
 import { z } from "zod";
 import { AppError } from "../../lib/api-error.js";
-import { signToken } from "../../lib/tokens.js";
+import { signToken, verifyPassword } from "../../lib/tokens.js";
 import type { AppContext } from "../../context.js";
 import type { WardClient } from "../../../vendor/ward/ward-auth.js";
 import { requireUserId } from "../../plugins/auth.js";
@@ -51,6 +52,7 @@ const callbackQuerySchema = z.looseObject({});
 const statusSchema = z.object({
   enabled: z.boolean(),
 });
+const linkTicketBodySchema = z.object({ current_password: z.string().min(1) });
 const linkTicketSchema = z.object({
   ticket: z.string(),
 });
@@ -72,11 +74,21 @@ export const wardRoutes: FastifyPluginAsyncZod<WardRoutesOptions> = async (app, 
 
   app.post(
     "/auth/ward/link-ticket",
-    { preHandler: app.authenticate, schema: { response: { 200: linkTicketSchema } } },
+    { preHandler: app.authenticate, schema: { body: linkTicketBodySchema, response: { 200: linkTicketSchema } } },
     async (request) => {
       if (!client) throw AppError.notFound();
+      const userId = requireUserId(request);
+      const user = await ctx.db
+        .selectFrom("users")
+        .select(["password_hash"])
+        .where("id", "=", userId)
+        .executeTakeFirst();
+      if (!user) throw AppError.notFound();
+      if (!(await verifyPassword(user.password_hash, request.body.current_password))) {
+        throw new AppError(403, "current password is incorrect");
+      }
       const ticket = randomBytes(24).toString("base64url");
-      tickets.set(ticket, { userId: requireUserId(request), expires: Date.now() + TICKET_TTL_MS });
+      tickets.set(ticket, { userId, expires: Date.now() + TICKET_TTL_MS });
       return { ticket };
     },
   );

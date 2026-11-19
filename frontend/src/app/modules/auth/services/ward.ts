@@ -12,9 +12,11 @@ export function wardStartUrl(linkTicket?: string): string {
   return apiUrl(`/auth/ward/start${linkTicket ? `?link=${encodeURIComponent(linkTicket)}` : ""}`);
 }
 
-/** A single-use ticket for linking Ward to the signed-in user (the start page is a plain navigation). */
-export async function fetchWardLinkTicket(): Promise<string> {
-  const res = await axiosInstance.post<{ ticket: string }>("/auth/ward/link-ticket");
+/** A single-use ticket for linking Ward to the signed-in user, given the local password typed again (403 when wrong). */
+export async function fetchWardLinkTicket(currentPassword: string): Promise<string> {
+  const res = await axiosInstance.post<{ ticket: string }>("/auth/ward/link-ticket", {
+    current_password: currentPassword,
+  });
   return res.data.ticket;
 }
 
