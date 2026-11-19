@@ -5,6 +5,8 @@
 export class AppError extends Error {
   readonly statusCode: number;
   readonly publicMessage: string;
+  /** Seconds the client should wait, answered as a `Retry-After` header (429 only). */
+  retryAfterSeconds?: number;
   override readonly cause?: unknown;
 
   constructor(statusCode: number, publicMessage: string, cause?: unknown) {
@@ -35,8 +37,10 @@ export class AppError extends Error {
     return new AppError(409, message);
   }
 
-  static rateLimit(): AppError {
-    return new AppError(429, "rate limit exceeded");
+  static rateLimit(retryAfterSeconds?: number): AppError {
+    const error = new AppError(429, "rate limit exceeded");
+    if (retryAfterSeconds !== undefined) error.retryAfterSeconds = retryAfterSeconds;
+    return error;
   }
 
   static internal(cause?: unknown): AppError {

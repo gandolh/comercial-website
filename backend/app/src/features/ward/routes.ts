@@ -9,7 +9,8 @@
  * Routes, under the API prefix (Caddy strips `/piataro-api`):
  * - GET  /auth/ward/status          { enabled }
  * - POST /auth/ward/link-ticket     (signed in) { current_password } -> { ticket }: the local password typed
- *                                   again (403 when wrong, owner rule 2026-11-17); single use, two minutes
+ *                                   again (403 when wrong, owner rule 2026-11-17; 429 with Retry-After
+ *                                   past the shared wrong-password limit); single use, two minutes
  * - GET  /auth/ward/start[?link=T]  sets the flow cookie and redirects to Ward
  * - GET  /auth/ward/callback        finishes; a sign-in lands on the app's /autentificare/ward with the
  *                                   token in the URL fragment, a link on /cont/setari
@@ -84,9 +85,13 @@ export const wardRoutes: FastifyPluginAsyncZod<WardRoutesOptions> = async (app, 
         .where("id", "=", userId)
         .executeTakeFirst();
       if (!user) throw AppError.notFound();
+      const wait = ctx.passwordLimiter.retryAfter(request.ip, userId);
+      if (wait > 0) throw AppError.rateLimit(wait);
       if (!(await verifyPassword(user.password_hash, request.body.current_password))) {
+        ctx.passwordLimiter.fail(request.ip, userId);
         throw new AppError(403, "current password is incorrect");
       }
+      ctx.passwordLimiter.clear(request.ip);
       const ticket = randomBytes(24).toString("base64url");
       tickets.set(ticket, { userId, expires: Date.now() + TICKET_TTL_MS });
       return { ticket };

@@ -22,6 +22,8 @@ const httpPlugin: FastifyPluginAsync<HttpOptions> = async (app, options) => {
     origin: options.corsOrigins,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Authorization", "Content-Type", "Accept"],
+    // A browser on another origin (the dev server) reads Retry-After only when it is exposed.
+    exposedHeaders: ["Retry-After"],
     credentials: true,
   });
 

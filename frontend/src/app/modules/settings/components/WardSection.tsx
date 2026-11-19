@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@core/lib/auth";
 import { useSearchParams } from "@core/lib/router";
 import { Button, Input } from "@core/components/ui";
+import { tooManyTriesMessage } from "@app/modules/auth/services/too-many-tries";
 import { fetchWardLinkTicket, fetchWardStatus, wardErrorMessage, wardStartUrl } from "@app/modules/auth/services/ward";
 
 /**
@@ -29,7 +30,10 @@ export function WardSection() {
       window.location.href = wardStartUrl(await fetchWardLinkTicket(password));
     } catch (err: unknown) {
       setStarting(false);
-      if (isAxiosError(err) && err.response?.status === 403) {
+      const tooMany = tooManyTriesMessage(err);
+      if (tooMany) {
+        setLinkError(tooMany);
+      } else if (isAxiosError(err) && err.response?.status === 403) {
         setLinkError("Parola actuală nu este corectă.");
         passwordRef.current?.focus();
       } else {

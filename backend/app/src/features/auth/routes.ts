@@ -144,18 +144,24 @@ export const authRoutes: FastifyPluginAsyncZod<AppContext> = async (app, ctx) =>
     { schema: { body: loginSchema, response: { 200: authReplySchema } } },
     async (request, reply) => {
       const { email, password } = request.body;
+      const limiter = ctx.passwordLimiter;
 
-      // Find user by email
+      // Find user by email; an unknown email counts against the address only.
       const user = await repo.findByEmail(email);
+      const wait = limiter.retryAfter(request.ip, user?.id);
+      if (wait > 0) throw AppError.rateLimit(wait);
       if (!user) {
+        limiter.fail(request.ip);
         throw AppError.unauthorized();
       }
 
       // Verify password
       const passwordMatch = await verifyPassword(user.password_hash, password);
       if (!passwordMatch) {
+        limiter.fail(request.ip, user.id);
         throw AppError.unauthorized();
       }
+      limiter.clear(request.ip);
 
       // Sign JWT token
       const jwtToken = signToken(user.id, ctx.config.jwtSecret, ctx.config.jwtExpirySeconds);

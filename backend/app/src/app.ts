@@ -2,6 +2,7 @@
 // server.ts listens on it; tests build the same app on a temporary database (test-app.ts). It never listens.
 import { auth } from "./plugins/auth.js";
 import { createDb } from "./db/index.js";
+import { AttemptLimiter } from "./lib/attempt-limiter.js";
 import { createEmailService } from "./lib/email.js";
 import { errors } from "./plugins/errors.js";
 import { http } from "./plugins/http.js";
@@ -66,6 +67,7 @@ export async function buildApp(
     storage: new StorageService({ uploadsDir: config.uploadsDir, publicBaseUrl: config.publicBaseUrl }),
     assetStorage: new StorageService({ uploadsDir: config.assetsDir, publicBaseUrl: config.publicBaseUrl }),
     email: createEmailService({}),
+    passwordLimiter: new AttemptLimiter(),
     log: app.log,
   };
 

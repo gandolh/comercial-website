@@ -2,12 +2,15 @@ import { useState, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { useChangePassword } from "../hooks/useProfile";
 import { Input, Button, toast } from "@core/components/ui";
+import { tooManyTriesMessage } from "@app/modules/auth/services/too-many-tries";
 
 /** The floor the API enforces for a new password (backend `changePasswordSchema`). */
 const MIN_PASSWORD_LENGTH = 12;
 
-/** The message for a failed change: the API answers 403 for a wrong current password and 422 for a bad body. */
+/** The message for a failed change: the API answers 403 for a wrong current password, 429 past the try limit and 422 for a bad body. */
 function failureMessage(err: unknown): string {
+  const tooMany = tooManyTriesMessage(err);
+  if (tooMany) return tooMany;
   if (isAxiosError(err)) {
     if (err.response?.status === 403) return "Parola actuală nu este corectă.";
     if (err.response?.status === 422) return `Parola nouă trebuie să aibă cel puțin ${MIN_PASSWORD_LENGTH} caractere.`;

@@ -27,6 +27,7 @@ const errorHandling: FastifyPluginAsync = async (app) => {
   app.setErrorHandler((error: unknown, request, reply) => {
     if (error instanceof AppError) {
       if (error.statusCode >= 500) request.log.error({ err: error.cause ?? error }, error.publicMessage);
+      if (error.retryAfterSeconds !== undefined) reply.header("retry-after", String(error.retryAfterSeconds));
       return reply.code(error.statusCode).send({ error: error.publicMessage });
     }
 

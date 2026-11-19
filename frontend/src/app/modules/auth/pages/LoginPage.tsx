@@ -6,6 +6,7 @@ import { AuthCardShell } from "../components/AuthCardShell";
 import { Input, Button } from "@core/components/ui";
 import { loginSchema, type LoginInput } from "../schemas";
 import { useLoginMutation } from "../hooks/useLoginMutation";
+import { tooManyTriesMessage } from "../services/too-many-tries";
 import { fetchWardStatus, wardErrorMessage, wardStartUrl } from "../services/ward";
 
 export function LoginPage() {
@@ -54,7 +55,7 @@ export function LoginPage() {
 
         {loginMutation.isError && (
           <div className="rounded-lg bg-error-container p-3 text-sm text-on-error-container">
-            Email sau parolă incorectă. Te rugăm să încerci din nou.
+            {tooManyTriesMessage(loginMutation.error) ?? "Email sau parolă incorectă. Te rugăm să încerci din nou."}
           </div>
         )}
 
