@@ -30,6 +30,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 17 (done, ready for deploy): the held house-style warnings cleared: `no-misused-promises`, `no-explicit-any`, `no-console` are errors again, the hook warnings fixed, `AppContext.log` added. Left: 19 test non-null assertions, knip's three dependency notes. [Brief 17](../briefs/done/17-the-house-style-warnings.md).
 - 18 (done, ready for deploy): `backend/core` folded into `backend/app` (`plugins/`, `lib/`, `db/` beside `features/`; one package, one `tsc -b`, Dockerfile without the core stage). [Brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md).
 - 19 (done, ready for deploy): linking Ward asks for the local password: `POST /auth/ward/link-ticket` takes `current_password` (422 / 403), `WardSection` has the field and the messages. [Brief 19](../briefs/done/19-linking-ward-asks-for-the-password.md).
+- 20 (done, ready for deploy): wrong password tries are limited on sign-in, change password and the Ward link ticket: 10 per 15 minutes per address, 20 per hour per account, 429 with `Retry-After`, a Romanian message in the three forms. [Brief 20](../briefs/done/20-wrong-password-tries-are-limited.md).
 
 ## Owed by the owner
 

@@ -1,6 +1,6 @@
 # Password checks have no attempt limit
 
-**Status:** promoted (brief 20, 2026-11-19)
+**Status:** promoted (brief 20, built and closed 2026-11-19)
 
 > Promoted to [brief 20](../briefs/todo/20-wrong-password-tries-are-limited.md) on 2026-11-19.
 

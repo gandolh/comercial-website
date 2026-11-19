@@ -64,3 +64,14 @@ See [decisions](decisions.md) → *Two ways in*.
 
 The local password is changed in Settings (`Securitate`, `PasswordSection` → `PATCH /users/me/password`, new password
 at least 12 characters, as at creation). A password changed there stays changed across deploys (`create-owner --if-missing`).
+
+### Wrong tries are limited (brief 20)
+
+Sign-in (`POST /auth/login`), the password change and the Ward link ticket share one in-memory limiter
+(`lib/attempt-limiter.ts`, held on `AppContext.passwordLimiter`; a restart clears it). A wrong try is a wrong password,
+or, on sign-in only, an unknown email (which counts against the address only). Budgets: 10 wrong tries in 15 minutes per
+address (`request.ip`), and 20 in an hour per account across addresses. While either is full the route refuses even the
+right password: 429 `rate limit exceeded` with `Retry-After` in seconds (a refusal is not a try, so it does not extend the
+wait). A right password under the limits clears that address's count; the account's stays. The sign-in page, `Securitate`
+and the Ward section show "Prea multe încercări. Încearcă din nou peste N minute." (`too-many-tries.ts`: minutes rounded
+up, "peste un minut" at 60 s or less). CORS exposes `Retry-After`, which only matters on another origin (the dev server).

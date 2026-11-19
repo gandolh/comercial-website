@@ -260,3 +260,6 @@ The change-password form is on the account settings page, with Romanian errors a
 
 ## 2026-11-19: brief 19 done (linking Ward asks for the password)
 The Ward link ticket now takes the local password (`current_password`: 422 when missing, 403 when wrong, no ticket), and the Settings section asks for it in place with Romanian messages. New todo password-checks-have-no-attempt-limit. Ready for deploy (phase `all`).
+
+## 2026-11-19: brief 20 done (wrong password tries are limited)
+Sign-in, the password change and the Ward link ticket share one in-memory limiter: 10 wrong tries in 15 minutes per address, 20 in an hour per account; past either, even the right password gets 429 with `Retry-After`, and the three forms say "Prea multe încercări. Încearcă din nou peste N minute." Todo password-checks-have-no-attempt-limit promoted and built. Ready for deploy (phase `all`).

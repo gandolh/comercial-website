@@ -38,3 +38,13 @@ Three routes check the owner account's local password: `POST /auth/login` (`feat
 
 - [ ] The tests above pass; `npm run check` exit 0; `bash corpus/lint.sh` exit 0.
 - [ ] End move `ready_for_deploy`, owner step: vps-deploy's `piataro` stack, phase `all`.
+
+## Outcome (2026-11-19)
+
+Built. `lib/attempt-limiter.ts` (sliding windows, injectable clock) sits on `AppContext.passwordLimiter`; sign-in, `PATCH /users/me/password` and `POST /auth/ward/link-ticket` check `retryAfter(request.ip, userId)` before the password and call `fail` / `clear` after. 429 carries `Retry-After` (`AppError.rateLimit(seconds)`, set by the error plugin). The sign-in page, `Securitate` and the Ward section show "Prea multe încercări. Încearcă din nou peste N minute." (`auth/services/too-many-tries.ts`).
+
+- Tests: `lib/attempt-limiter.test.ts` (fake clock: window edge, rounding, per-account cap across addresses, success clears the address); `features/auth/attempt-limit.test.ts` (each route: 10 wrong then the right one is 429 with `Retry-After: 900`, free after 15 minutes, addresses apart, success clears, account cap 3600 s, shared budget, unknown email per address only). Seen failing on old code by stashing the three route files: 14 of 17 fail (the 3 "success clears the count" cases pass on old code, as they should).
+- Playwright `too-many-tries.spec.ts` (429 stubbed): sign-in "peste 5 minute", change password rounds 301 s up to "peste 6 minute", Ward section "peste un minut" at 30 s. Ran with `ward-link` and `password` specs against a scratch API: 9 passed.
+- Beyond the brief's file list: `plugins/http.ts` exposes `Retry-After` through CORS (a browser on another origin, the dev server, cannot read it otherwise), `plugins/errors.ts` writes the header, `context.ts` / `app.ts` hold the limiter. Deploy is same-origin, so production is unaffected by the CORS line.
+- A refused request is not counted as a wrong try, so hammering does not lengthen the wait.
+- Owner step: deploy with vps-deploy's `piataro` stack, phase `all`.
