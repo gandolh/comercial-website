@@ -3,7 +3,7 @@
 **Depends on:**
 
 - In comercial-website: [brief 14](../done/14-a-redesign-with-hallmark-on-the-estate-board.md), which shipped "The filter band" with the Material 3 role names, the Light / Dark / System switch, `contrast.test.ts` and the Playwright specs in `frontend/e2e/`. This brief changes values on top of it, not names.
-- The estate redesign board, PiațăRo page, row "Alternative: a Roman rebrand" (board version 38, 2026-11-20). The owner liked the first sketch on 2026-11-20 and asked for it to be refined and briefed; the refined row (Home, Category, Listing detail, the identity card) waits for the owner's approval.
+- The estate redesign board, PiațăRo page, row "Alternative: a Roman rebrand" (board version 38, 2026-11-20). The owner liked the first sketch on 2026-11-20 and asked for it to be refined and briefed; the refined row (Home, Category, Listing detail, the identity card) waits for the owner's approval. The board is a private canvas; its notes on the row are copied in [design/roman-rebrand/board-notes.md](../../../design/roman-rebrand/board-notes.md), with the critique and the renders beside the comps.
 
 **Runs before:** 22, 23, 24, 25 (each restyles screens on these tokens). 26 is independent. **Runs after:** 14.
 

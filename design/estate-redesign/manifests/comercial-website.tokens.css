@@ -1,0 +1,175 @@
+/*
+ * PiațăRo, direction B "The filter band": the token set in the app's own names.
+ * Replaces the colour, typography, radius and shadow groups of the @theme block in
+ * frontend/src/index.css and the :root[data-theme="dark"] block under it; the z-index
+ * group, the @custom-variant, the @layer base rules and the
+ * .material-symbols-outlined rule stay as they are. Material 3 role names are kept,
+ * so every existing class (bg-surface-container-lowest, text-on-surface-variant, ...) keeps working.
+ * Dark note: in dark, surface-container-lowest is the LIGHTEST container (cards lift off the page),
+ * unlike Material 3's order; the code brief should not "fix" it.
+ */
+@theme {
+  /* Colour, light */
+  --color-primary: #1a5f9e;
+  --color-on-primary: #fefefc;
+  --color-primary-container: #154f85;
+  --color-on-primary-container: #d6e8f7;
+  --color-primary-fixed: #d9e8f5;
+  --color-primary-fixed-dim: #a9c9e6;
+  --color-on-primary-fixed: #0e3a63;
+  --color-on-primary-fixed-variant: #1a5f9e;
+  --color-secondary: #375a7f;
+  --color-on-secondary: #fefefc;
+  --color-secondary-container: #dfe7f0;
+  --color-on-secondary-container: #1d3550;
+  --color-secondary-fixed: #dfe7f0;
+  --color-secondary-fixed-dim: #a9c6e4;
+  --color-on-secondary-fixed: #0f2338;
+  --color-on-secondary-fixed-variant: #375a7f;
+  --color-tertiary: #2a6a2f;
+  --color-on-tertiary: #fefefc;
+  --color-tertiary-container: #2a6a2f;
+  --color-on-tertiary-container: #d3f0d0;
+  --color-tertiary-fixed: #cfeccb;
+  --color-tertiary-fixed-dim: #a9d6a6;
+  --color-on-tertiary-fixed: #0b2a0e;
+  --color-on-tertiary-fixed-variant: #2a6a2f;
+  --color-background: #f2f2ee;
+  --color-on-background: #1b1c1f;
+  --color-surface: #f2f2ee;
+  --color-surface-bright: #f8f8f5;
+  --color-surface-dim: #dcdcd6;
+  --color-surface-variant: #e3e3dd;
+  --color-surface-container-lowest: #fefefc;
+  --color-surface-container-low: #e9e8e2;
+  --color-surface-container: #e8e8e3;
+  --color-surface-container-high: #e2e2dc;
+  --color-surface-container-highest: #dbdbd5;
+  --color-surface-tint: #1a5f9e;
+  --color-on-surface: #1b1c1f;
+  --color-on-surface-variant: #4f5157;
+  --color-outline: #7a7c83;
+  --color-outline-variant: #d3d3cc;
+  --color-error: #b3261e;
+  --color-error-container: #f9dedc;
+  --color-on-error: #fefefc;
+  --color-on-error-container: #8c1d18;
+  --color-inverse-surface: #2f3033;
+  --color-inverse-on-surface: #f1f1ed;
+  --color-inverse-primary: #8fc3ee;
+  --color-scrim: #1b1c1f;
+  --color-on-scrim: #fefefc;
+  --color-on-fill: #fefefc;
+  --color-rating: #facc15;
+  --color-nav-band: #0f3a63;
+  --color-on-nav-band: #fefefc;
+  --color-on-nav-band-variant: #a9d2f2;
+
+  /* NEW: the navy shell (top bar, the home CTA band) */
+  /* --color-nav-band, --color-on-nav-band and --color-on-nav-band-variant are listed above with the roles */
+
+  /* Typography: one face, Schibsted Grotesk (replaces Manrope + Inter) */
+  --font-headline: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-label: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Type scale: six sizes, three weights (400, 600, 800). NEW: the app had no --text-* tokens */
+  --text-hero: 2.5rem; --text-hero--line-height: 2.875rem; --text-hero--font-weight: 800; /* home head; 30/36 on a phone */
+  --text-title: 1.875rem; --text-title--line-height: 2.25rem; --text-title--font-weight: 800; /* page title, listing title, CTA head; 24/30 on a phone */
+  --text-price: 1.5rem; --text-price--line-height: 1.75rem; --text-price--font-weight: 800; /* card price, wordmark, section head */
+  --text-body: 1rem; --text-body--line-height: 1.5rem; --text-body--font-weight: 400; /* body, nav, buttons (600) */
+  --text-card-title: 1rem; --text-card-title--line-height: 1.375rem; --text-card-title--font-weight: 600;
+  --text-control: 0.875rem; --text-control--line-height: 1.25rem; --text-control--font-weight: 400; /* segments, chips, labels, meta; chosen = 600 */
+  --text-label: 0.75rem; --text-label--line-height: 1rem; --text-label--font-weight: 400; /* badges, bottom bar */
+
+  /* Border radius: the app's four stay; one NEW */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem; /* segment (was 8) */
+  --radius-control: 0.625rem; /* NEW: buttons, sort select, fields (10) */
+  --radius-xl: 0.75rem; /* card, track, panel (12) */
+  --radius-2xl: 1rem; /* CTA band, sheet, search (16) */
+  --radius-full: 9999px;
+
+  /* Shadow tokens, light */
+  --shadow-card: 0 1px 2px rgba(27,28,31,.10), 0 4px 12px rgba(27,28,31,.08);
+  --shadow-band: 0 2px 4px rgba(27,28,31,.08), 0 8px 20px rgba(27,28,31,.07);
+  --shadow-popup: 0 8px 32px rgba(27,28,31,.16);
+  --shadow-ambient: 0 8px 32px rgba(27,28,31,.06);
+  --shadow-bar: 0 -2px 12px rgba(27,28,31,.12);
+  --shadow-search: 0 8px 24px rgba(15, 58, 99, 0.10);
+  --shadow-focus: 0 0 0 1px rgba(26, 95, 158, 0.3);
+  --shadow-focus-error: 0 0 0 1px rgba(179, 38, 30, 0.4);
+
+  /* Art: the sample icon sheet's colours in the seed preview (an image, the same in both themes; used only by the no-API preview mock) */
+  /* kept out of the theme on purpose: ground #e8f0fb, tile #fefefc, blue #1d5fd0, orange #ee7d0c, teal #0f8f8c, purple #7a2a9e, green #2f8a37 */
+}
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #8fc3ee;
+  --color-on-primary: #06294a;
+  --color-primary-container: #cfe6fa;
+  --color-on-primary-container: #06294a;
+  --color-primary-fixed: #1d3a55;
+  --color-primary-fixed-dim: #8fc3ee;
+  --color-on-primary-fixed: #d6e8f7;
+  --color-on-primary-fixed-variant: #a9d2f2;
+  --color-secondary: #a9c6e4;
+  --color-on-secondary: #0f2338;
+  --color-secondary-container: #2a3a4c;
+  --color-on-secondary-container: #d5e3f2;
+  --color-secondary-fixed: #1f2d3d;
+  --color-secondary-fixed-dim: #375a7f;
+  --color-on-secondary-fixed: #d5e3f2;
+  --color-on-secondary-fixed-variant: #a9c6e4;
+  --color-tertiary: #8fd18f;
+  --color-on-tertiary: #0c3310;
+  --color-tertiary-container: #1c6d24;
+  --color-on-tertiary-container: #c8f0c4;
+  --color-tertiary-fixed: #15381a;
+  --color-tertiary-fixed-dim: #2a6a2f;
+  --color-on-tertiary-fixed: #c8f0c4;
+  --color-on-tertiary-fixed-variant: #8fd18f;
+  --color-background: #131416;
+  --color-on-background: #e8e8e4;
+  --color-surface: #131416;
+  --color-surface-bright: #3a3c41;
+  --color-surface-dim: #131416;
+  --color-surface-variant: #3b3d42;
+  --color-surface-container-lowest: #232529;
+  --color-surface-container-low: #2e3035;
+  --color-surface-container: #1b1c1f;
+  --color-surface-container-high: #2a2c31;
+  --color-surface-container-highest: #34363b;
+  --color-surface-tint: #8fc3ee;
+  --color-on-surface: #e8e8e4;
+  --color-on-surface-variant: #b5b6b0;
+  --color-outline: #8d8f93;
+  --color-outline-variant: #3b3d42;
+  --color-error: #ffb4ab;
+  --color-error-container: #5c1511;
+  --color-on-error: #601410;
+  --color-on-error-container: #f9dedc;
+  --color-inverse-surface: #e8e8e4;
+  --color-inverse-on-surface: #2f3033;
+  --color-inverse-primary: #1a5f9e;
+  --color-scrim: #0a0b0d;
+  --color-on-scrim: #fefefc;
+  --color-on-fill: #fefefc;
+  --color-rating: #facc15;
+  --color-nav-band: #0e2338;
+  --color-on-nav-band: #e8eef5;
+  --color-on-nav-band-variant: #8fc3ee;
+  --shadow-card: 0 1px 2px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.4);
+  --shadow-band: 0 2px 4px rgba(0,0,0,.45), 0 8px 20px rgba(0,0,0,.4);
+  --shadow-popup: 0 8px 32px rgba(0,0,0,.6);
+  --shadow-ambient: 0 8px 32px rgba(0,0,0,.35);
+  --shadow-bar: 0 -2px 12px rgba(0,0,0,.5);
+  --shadow-search: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-focus: 0 0 0 1px rgba(143, 195, 238, 0.4);
+  --shadow-focus-error: 0 0 0 1px rgba(255, 180, 171, 0.5);
+}

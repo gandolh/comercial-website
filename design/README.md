@@ -9,7 +9,8 @@ design/
 ├── screenshots/          # Screen preview images (PNG)
 ├── code/                 # Generated HTML code for each screen
 ├── design-system/        # Design system tokens and documentation
-└── roman-rebrand/        # Comps for the Roman rebrand (briefs 21-26), rendered HTML, light and dark
+├── estate-redesign/      # The approved redesign "The filter band" (brief 14): a copy of the estate board's page, see its README.md
+└── roman-rebrand/        # Comps for the Roman rebrand (briefs 21-26), rendered HTML, light and dark; board-notes.md, critique.md and shots/ copy the board's row
 ```
 
 ## Screens

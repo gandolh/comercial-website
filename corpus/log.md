@@ -269,3 +269,7 @@ The three routes checked the limiter, awaited argon2, then counted, so tries sen
 
 ## 2026-11-20: briefs 21-26 written (a Roman rebrand)
 The owner asked for an alternative look "in the style of the Roman empire". It was sketched on the estate redesign board under PiațăRo, in the row "Alternative: a Roman rebrand", as an identity card plus Home, Category and Listing detail at 1280 light and 390 dark. It kept The filter band's layout and copy, under the working name Mercatus. Two design-critic rounds against the approved screens tuned it. The owner liked the first sketch and asked for it to be refined and briefed. The rendered comps are in `design/roman-rebrand/`. Briefs: 21 tokens and type, 22 the shell, 23 Home, 24 category and search, 25 detail, the undrawn screens and the design documents, 26 the rename (only if the owner picks Mercatus). Nothing is built; 21 starts with the owner's approval of the refined row.
+
+## [2026-11-20] maintenance | The board's design copies move into the repo
+
+The estate redesign board is a private canvas. `design/estate-redesign/` now holds a copy of PiațăRo's page for the approved redesign, "The filter band" (brief 14): directions, rulings, critique, token hand-off, the board's notes, the owner's decisions, the twins and their renders, and today's shots. The Roman rebrand row's notes, critique and renders now sit beside its comps in `design/roman-rebrand/`, and brief 21 points to them, so briefs 21-26 run without the board.
