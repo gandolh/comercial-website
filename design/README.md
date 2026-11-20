@@ -8,7 +8,8 @@ Stitch Project ID: `5209956150192006015`
 design/
 ├── screenshots/          # Screen preview images (PNG)
 ├── code/                 # Generated HTML code for each screen
-└── design-system/        # Design system tokens and documentation
+├── design-system/        # Design system tokens and documentation
+└── roman-rebrand/        # Comps for the Roman rebrand (briefs 21-26), rendered HTML, light and dark
 ```
 
 ## Screens

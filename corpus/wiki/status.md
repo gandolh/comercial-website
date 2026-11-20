@@ -1,6 +1,6 @@
 ---
-summary: Dated snapshot (2026-11-13) — PiațăRo as a deployed demo; briefs 01-14 are done (one line each), briefs 10-14 wait for a deploy, and the owner's steps.
-updated: 2026-11-13
+summary: Dated snapshot (2026-11-20) — PiațăRo as a deployed demo; briefs 01-20 are done (one line each), 10-20 wait for a deploy, 21-26 (the Roman rebrand) are written, and the owner's steps.
+updated: 2026-11-20
 ---
 
 # Status — 2026-11-13
@@ -31,6 +31,12 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 18 (done, ready for deploy): `backend/core` folded into `backend/app` (`plugins/`, `lib/`, `db/` beside `features/`; one package, one `tsc -b`, Dockerfile without the core stage). [Brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md).
 - 19 (done, ready for deploy): linking Ward asks for the local password: `POST /auth/ward/link-ticket` takes `current_password` (422 / 403), `WardSection` has the field and the messages. [Brief 19](../briefs/done/19-linking-ward-asks-for-the-password.md).
 - 20 (done, ready for deploy): wrong password tries are limited on sign-in, change password and the Ward link ticket: 10 per 15 minutes per address, 20 per hour per account, 429 with `Retry-After`, a Romanian message in the three forms. [Brief 20](../briefs/done/20-wrong-password-tries-are-limited.md). Follow-up 2026-11-19: tries are counted before the slow password check, so a burst of parallel wrong tries gets no more than the limit (`AttemptLimiter.begin`).
+- 21 (todo): the Roman identity's tokens and type: Cinzel for titles, Alegreya Sans with lining figures, porphyry, vexillum red, gold for ornament only, bronze prices; the comps are in `design/roman-rebrand/`. Waits for the owner's approval of the board row. [Brief 21](../briefs/todo/21-the-roman-identity-tokens-and-type.md).
+- 22 (todo): the Roman shell: the laurel wordmark, the Greek-key frieze under the bar and over the footer, the year in Roman numerals. [Brief 22](../briefs/todo/22-the-roman-shell.md).
+- 23 (todo): Home as an inscription: the search in a tabula ansata between two columns, arched category niches; first screen kept. [Brief 23](../briefs/todo/23-home-as-an-inscription.md).
+- 24 (todo): category and search in the Roman identity: the band's gold rule, Cinzel titles that never truncate. [Brief 24](../briefs/todo/24-category-and-search-in-the-roman-identity.md).
+- 25 (todo): listing detail and every undrawn screen by the identity's rules; the design documents. [Brief 25](../briefs/todo/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).
+- 26 (todo, owner's call): rename the visible product to Mercatus; only if the owner picks the name. [Brief 26](../briefs/todo/26-rename-the-product-to-mercatus.md).
 
 ## Owed by the owner
 
