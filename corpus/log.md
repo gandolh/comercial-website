@@ -273,3 +273,19 @@ The owner asked for an alternative look "in the style of the Roman empire". It w
 ## [2026-11-20] maintenance | The board's design copies move into the repo
 
 The estate redesign board is a private canvas. `design/estate-redesign/` now holds a copy of PiațăRo's page for the approved redesign, "The filter band" (brief 14): directions, rulings, critique, token hand-off, the board's notes, the owner's decisions, the twins and their renders, and today's shots. The Roman rebrand row's notes, critique and renders now sit beside its comps in `design/roman-rebrand/`, and brief 21 points to them, so briefs 21-26 run without the board.
+
+## [2026-11-21] decision | The owner approves the Roman rebrand row and picks Mercatus
+
+In a session on 2026-11-21 the owner approved the refined "Alternative: a Roman rebrand" row as drawn, so brief 21
+starts, and picked the name Mercatus, so brief 26 runs. Recorded in `design/roman-rebrand/board-notes.md` and
+[decisions.md](wiki/decisions.md).
+
+## [2026-11-21] done | Brief 21 — the Roman identity's tokens and type
+
+Cinzel and Alegreya Sans self-hosted (only their latin and latin-ext subsets), Schibsted Grotesk gone; both comp
+blocks mapped onto the role names, with `action-fill` (and its on and hover roles), `gold`, `gold-ink` and `niche`
+new; lining figures and a 0.5 size adjust at the root; 6px radii and porphyry shadows; Button's filled action and the
+verified Badge. Contrast holds over both themes (text min 5.37 light, 4.85 dark) and a new spec checks the faces,
+the diacritics and the figures. Screens keep brief 14's layout until briefs 22-25. New page
+[roman-identity.md](wiki/roman-identity.md); [carpathian-clear.md](wiki/carpathian-clear.md) is history. Outcome
+note in [brief 21](briefs/done/21-the-roman-identity-tokens-and-type.md).

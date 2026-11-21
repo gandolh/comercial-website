@@ -14,9 +14,11 @@ interface ButtonProps extends ComponentProps<"button"> {
   children?: ReactNode;
 }
 
+// The Roman identity (brief 21): `primary` is the one filled red action per screen, on its own fill (white on it in
+// dark); `secondary` is the tonal porphyry tint, never gold.
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-primary text-on-primary hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+    "bg-action-fill text-on-action-fill hover:bg-action-fill-hover focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   secondary:
     "bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
   outline:
@@ -59,7 +61,7 @@ export function Button({
       {...props}
       disabled={isDisabled}
       className={cn(
-        "inline-flex items-center justify-center rounded-control font-semibold transition-colors duration-200 active:brightness-90",
+        "inline-flex items-center justify-center rounded-control font-bold tracking-wide transition-colors duration-200 active:brightness-90",
         "disabled:cursor-not-allowed disabled:opacity-50",
         "outline-none",
         variantClasses[variant],

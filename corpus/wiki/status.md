@@ -1,6 +1,6 @@
 ---
-summary: Dated snapshot (2026-11-20) — PiațăRo as a deployed demo; briefs 01-20 are done (one line each), 10-20 wait for a deploy, 21-26 (the Roman rebrand) are written, and the owner's steps.
-updated: 2026-11-20
+summary: Dated snapshot (2026-11-21) — PiațăRo as a deployed demo; briefs 01-20 are done (one line each), 10-20 wait for a deploy, 21-26 (the Roman rebrand, approved 2026-11-21) are being built, and the owner's steps.
+updated: 2026-11-21
 ---
 
 # Status — 2026-11-13
@@ -31,7 +31,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 18 (done, ready for deploy): `backend/core` folded into `backend/app` (`plugins/`, `lib/`, `db/` beside `features/`; one package, one `tsc -b`, Dockerfile without the core stage). [Brief 18](../briefs/done/18-fold-backend-core-into-backend-app.md).
 - 19 (done, ready for deploy): linking Ward asks for the local password: `POST /auth/ward/link-ticket` takes `current_password` (422 / 403), `WardSection` has the field and the messages. [Brief 19](../briefs/done/19-linking-ward-asks-for-the-password.md).
 - 20 (done, ready for deploy): wrong password tries are limited on sign-in, change password and the Ward link ticket: 10 per 15 minutes per address, 20 per hour per account, 429 with `Retry-After`, a Romanian message in the three forms. [Brief 20](../briefs/done/20-wrong-password-tries-are-limited.md). Follow-up 2026-11-19: tries are counted before the slow password check, so a burst of parallel wrong tries gets no more than the limit (`AttemptLimiter.begin`).
-- 21 (todo): the Roman identity's tokens and type: Cinzel for titles, Alegreya Sans with lining figures, porphyry, vexillum red, gold for ornament only, bronze prices; the comps are in `design/roman-rebrand/`. Waits for the owner's approval of the board row. [Brief 21](../briefs/todo/21-the-roman-identity-tokens-and-type.md).
+- 21 (done, ready for deploy): the Roman identity's tokens and type: Cinzel (`--font-cap`) and Alegreya Sans self-hosted, lining figures and a 0.5 size adjust at the root, porphyry, vexillum red with its own `action-fill`, gold and bronze (`gold-ink`), the niche fill, 6px radii, porphyry shadows; Button and the verified Badge; contrast over both themes; `e2e/identity.spec.ts`. The owner approved the row on 2026-11-21. [Brief 21](../briefs/done/21-the-roman-identity-tokens-and-type.md), [roman-identity.md](roman-identity.md).
 - 22 (todo): the Roman shell: the laurel wordmark, the Greek-key frieze under the bar and over the footer, the year in Roman numerals. [Brief 22](../briefs/todo/22-the-roman-shell.md).
 - 23 (todo): Home as an inscription: the search in a tabula ansata between two columns, arched category niches; first screen kept. [Brief 23](../briefs/todo/23-home-as-an-inscription.md).
 - 24 (todo): category and search in the Roman identity: the band's gold rule, Cinzel titles that never truncate. [Brief 24](../briefs/todo/24-category-and-search-in-the-roman-identity.md).
@@ -41,7 +41,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 ## Owed by the owner
 
 1. Push this repo and vps-deploy.
-2. `npm ci` in this checkout's `frontend/` (brief 14 added `@fontsource-variable/schibsted-grotesk` 5.3.0 and `@playwright/test` 1.63.0) (the deploy builds it there; brief 11 changed its pins, brief 12 added `clsx`, `tailwind-merge` and `vitest` and dropped `sonner`), and in `backend/` (brief 13 moved zod to 4.6.7 and added the type provider, `fastify-plugin` and `close-with-grace`).
+2. `npm ci` in this checkout's `frontend/` (brief 21 swapped Schibsted Grotesk for `@fontsource/cinzel` and `@fontsource/alegreya-sans` 5.3.0; brief 14 added `@playwright/test` 1.63.0) (the deploy builds it there; brief 11 changed its pins, brief 12 added `clsx`, `tailwind-merge` and `vitest` and dropped `sonner`), and in `backend/` (brief 13 moved zod to 4.6.7 and added the type provider, `fastify-plugin` and `close-with-grace`).
    Once per clone: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 3. In vps-deploy, `npm run setup -- --stack piataro`. It makes `JWT_SECRET` and the Ward client key in
    `secrets/piataro.env`, registers the piataro app at Ward, and asks for `OWNER_EMAIL`, `OWNER_NAME`

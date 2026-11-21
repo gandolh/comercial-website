@@ -1,6 +1,6 @@
 ---
 summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire, the house style and its checks (vendored, width 120).
-updated: 2026-11-12
+updated: 2026-11-21
 ---
 
 # Decisions
@@ -120,4 +120,15 @@ _2026-11-13, built the same day (brief 14); the owner approved "The filter band"
 
 Copy: sentence case for `Verificat` / `Verified` and `Vânzător verificat`; new strings `Filtre`, `Aplică filtrele`
 and `Fără previzualizare` (both locales). A free listing keeps printing `0 RON`.
+
+## The Roman identity replaces Carpathian Clear's look
+_2026-11-21 (brief 21); the owner approved the refined "Alternative: a Roman rebrand" row of the estate redesign
+board, as drawn, and picked the name Mercatus_ — The identity of brief 14 is reopened a second time; its layout, places,
+copy and Material 3 role names stand. Now: Cinzel capitals for the wordmark and fixed titles only, Alegreya Sans for
+the rest (listing titles included), a porphyry shell, vexillum red for the one filled action and the selected state,
+gold for lines and ornament only with a bronze shade for prices, 6px stone-cut radii. Four tokens are new
+(`action-fill`, `gold`, `gold-ink`, `niche`; plus `on-action-fill` and `action-fill-hover`, since dark needs white on a
+deeper red than its salmon `primary`). Rejected: keeping "The filter band" look (the owner asked for the Roman
+alternative), and Cinzel on `--font-headline` (it sits on listing titles, which are user content). See
+[roman-identity.md](roman-identity.md).
 

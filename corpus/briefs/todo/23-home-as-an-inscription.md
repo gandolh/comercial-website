@@ -1,6 +1,6 @@
 # Task 23: Home as an inscription
 
-**Depends on:** [brief 21](21-the-roman-identity-tokens-and-type.md) and [brief 22](22-the-roman-shell.md).
+**Depends on:** [brief 21](../done/21-the-roman-identity-tokens-and-type.md) and [brief 22](22-the-roman-shell.md).
 
 **Runs before:** nothing. **Runs after:** 22.
 

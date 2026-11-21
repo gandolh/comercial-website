@@ -1,6 +1,6 @@
 # Task 22: The Roman shell: wordmark, frieze, footer and bottom bar
 
-**Depends on:** [brief 21](21-the-roman-identity-tokens-and-type.md) (tokens, fonts, `--font-cap`, the gold and
+**Depends on:** [brief 21](../done/21-the-roman-identity-tokens-and-type.md) (tokens, fonts, `--font-cap`, the gold and
 porphyry roles).
 
 **Runs before:** 23, 24, 25. **Runs after:** 21.

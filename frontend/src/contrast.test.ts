@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-// Every text and icon pair the redesign draws, measured over the stylesheet's own tokens in both themes. Text
+// Every text and icon pair the Roman identity draws (brief 21, on brief 14's roles), measured over the stylesheet's own tokens in both themes. Text
 // needs 4.5:1 (3:1 for large text); a UI part (an edge, a ring, a switch) needs 3:1. Set CONTRAST_REPORT=1 to print
 // the table the outcome note quotes.
 const css = readFileSync(new URL("index.css", import.meta.url), "utf8");
@@ -54,10 +54,21 @@ const PAIRS: [fg: string, bg: string, kind: Kind][] = [
   ["error", "surface-container-lowest", "text"],
   ["inverse-on-surface", "inverse-surface", "text"],
   ["inverse-primary", "inverse-surface", "text"],
-  // The navy shell
+  // The porphyry shell, and the verified chip's text on porphyry
   ["on-nav-band", "nav-band", "text"],
   ["on-nav-band-variant", "nav-band", "text"],
   ["nav-band", "on-nav-band", "text"],
+  // The one filled action (white on it in dark), and its hover
+  ["on-action-fill", "action-fill", "text"],
+  ["on-action-fill", "action-fill-hover", "text"],
+  // The tonal porphyry tint and its hover; the porphyry button's hover
+  ["on-secondary-container", "secondary-fixed-dim", "text"],
+  ["on-tertiary-container", "tertiary-fixed-dim", "text"],
+  // Bronze (gold-ink): prices and small words on the ground, the surfaces and the category niche
+  ...(["background", "surface-container-lowest", "surface-container-low", "surface-container", "niche"] as const).map(
+    (bg): [string, string, Kind] => ["gold-ink", bg, "text"],
+  ),
+  ["gold-ink", "niche", "ui"],
   // The footer wordmark (large, bold)
   ["secondary", "surface-container", "large"],
   // UI parts: field and switch edges, rings, the slider thumb
@@ -70,6 +81,8 @@ const PAIRS: [fg: string, bg: string, kind: Kind][] = [
   ["tertiary", "surface-container-low", "ui"],
   ["on-fill", "tertiary-container", "ui"],
   ["on-nav-band-variant", "nav-band", "ui"],
+  // The bar's focus ring (on-nav-band)
+  ["on-nav-band", "nav-band", "ui"],
 ];
 
 const themes = { light: lightBlock, dark: darkBlock } as const;

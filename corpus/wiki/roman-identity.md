@@ -1,0 +1,76 @@
+---
+summary: The Roman identity since 2026-11-21 (briefs 21-25) — colour roles in both themes (porphyry shell, vexillum red, gold and bronze), the two faces (Cinzel capitals, Alegreya Sans), lining figures, stone-cut radii, porphyry shadows, the primitives' looks, and where the tokens live.
+updated: 2026-11-21
+---
+
+# The Roman identity
+
+The look of the marketplace since 2026-11-21: the owner asked for an alternative "in the style of the Roman empire",
+liked the first sketch on the estate redesign board on 2026-11-20 and approved the refined row on 2026-11-21. It keeps
+"The filter band" (brief 14): its layout, places, Romanian copy and the Material 3 role names. Only the values and
+the faces changed. The comps are in [design/roman-rebrand/](../../design/roman-rebrand/). Brief 21 laid the tokens
+and type; 22 the shell, 23 Home, 24 category and search, 25 detail and the undrawn screens. The identity it
+replaced is history on [carpathian-clear.md](carpathian-clear.md).
+
+The tokens live in `frontend/src/index.css`: the `@theme` block (light) and `:root[data-theme="dark"]`.
+
+## Colour roles
+
+| Role | Light | Dark | What it does |
+|---|---|---|---|
+| `nav-band` | `#2d1026` | `#2b0f24` | Porphyry: the top bar, the sell band; `tertiary-container` is the same porphyry (the verified chip, a switch that is on) |
+| `on-nav-band` / `-variant` | `#f7efe2` / `#d8b35c` | same | Text on porphyry / gold on porphyry (the current place's underline, the bar's outlines, the chip's check) |
+| `primary` | `#9a2617` | `#f0937c` | Vexillum red: links, the current place, the selected state's outline, a control in use. Dark keeps a light salmon for text and outlines |
+| `primary-fixed` / `on-primary-fixed` | `#f5e1d9` / `#6a180c` | `#4b1c14` / `#ffd9cf` | The selected state's tint (segments, chips, sheet options) |
+| `action-fill` / `on-action-fill` | `#9a2617` / `#fdf8f0` | `#c24a36` / `#ffffff` | NEW: the one filled action per screen (Button `primary`); `action-fill-hover` `#7c1c0f` / `#a93d2b` |
+| `secondary-container` / `on-` | `#ece2e8` / `#2d1026` | `#3d2735` / `#f3e3ec` | The tonal button: a porphyry tint, never gold; `secondary-fixed-dim` is its hover |
+| `gold` | `#b8892e` | `#b8964d` | NEW: lines and ornament only, never text |
+| `gold-ink` | `#6f5216` | `#dcbb6c` | NEW: bronze, gold's text-safe shade: prices, category icons, small words in gold. `secondary` and `tertiary` hold the same bronze |
+| `niche` | `#efe7d8` | `#2c2324` | NEW: the category niche's fill (brief 23) |
+| `background` = `surface` | `#f1ece2` | `#161112` | Travertine / basalt ground; also the browser-bar colour (`THEME_COLORS`, `index.html`) |
+| `surface-container-lowest` | `#fdfbf6` | `#231b1c` | Marble: cards, the band, panels. In dark it is the lightest container, on purpose, as in brief 14 |
+| `surface-container-low` / `surface-container` | `#eae3d5` / `#e5ddcd` | `#2c2324` / `#1c1617` | Tufa: tracks, fields, the hero band / the footer |
+| `on-surface` / `on-surface-variant` | `#241b17` / `#5a4e46` | `#f2e9dd` / `#c5b8aa` | Ink / muted text |
+| `outline` / `outline-variant` | `#85786c` / `#d6cab7` | `#968a7f` / `#41363a` | Field and switch edges / card edges |
+
+**What red does,** and nothing else: one filled action per screen; the selected state as an outline and a tint;
+links and the current place; a control in use (the slider, an active heart). Errors keep `error` (`#b3261e`).
+`rating` stays `#facc15` for now.
+
+Contrast is tested over the stylesheet itself in `frontend/src/contrast.test.ts` (50 pairs per theme): text at
+4.5:1 or more, large text and UI parts at 3:1. Minimums on 2026-11-21: light text 5.37 (bronze on
+`surface-container`), UI 3.36; dark text 4.85 (white on `action-fill`), UI 4.54.
+
+## Type
+
+- **Cinzel** (`--font-cap`, `font-cap`), 600 and 700: the wordmark, fixed page titles and section titles only.
+  Never user content, labels, buttons, prices or body text. Its text gets `font-size-adjust: none`.
+- **Alegreya Sans** for everything else: `--font-headline`, `--font-body` and `--font-label` are all Alegreya Sans,
+  because `font-headline` is on listing titles (user content). Weights 400, 500, 700 and 800; a `font-semibold`
+  (600) draws 700, the nearest weight loaded.
+- Both are self-hosted from `@fontsource/cinzel` and `@fontsource/alegreya-sans` (5.3.0, exact), only their
+  `latin` and `latin-ext` subsets (ș and ț are in latin-ext). The Material Symbols link stays on Google Fonts.
+- **Figures.** Alegreya Sans defaults to old-style figures, so `body` sets `font-variant-numeric: lining-nums`.
+  Prices, counts, IDs and stats add `tabular-nums`; a base rule gives every `.tabular-nums` the lining figure too
+  (Tailwind writes `font-variant-numeric` whole, so `tabular-nums` alone would drop it).
+- **Size.** Alegreya Sans has a small x-height, so `body` sets `font-size-adjust: 0.5`; the icon font and Cinzel set
+  `none`. Brief 14's `--text-*` sizes stay.
+
+`frontend/e2e/identity.spec.ts` checks that ă â î ș ț render in each face with no fallback glyphs (Chromium's
+`CSS.getPlatformFontsForNode`), that each font file loads once from the app's origin, and that a price, a count and
+an ID compute lining figures.
+
+## Shape and depth
+
+- Stone-cut radii: `rounded-control` and `rounded-xl` 6px (controls, cards, panels), `rounded-2xl` 6px (the sell
+  band, sheets, search), segments `rounded-lg` 4px.
+- Shadows are tinted with porphyry (`rgba(45, 16, 38, …)`) in light; dark keeps black.
+
+## The primitives
+
+- `Button` `primary` is `action-fill` with `on-action-fill`; `secondary` is the tonal tint; all buttons are bold
+  with a little tracking.
+- `Badge` `verified` is the Verificat chip: porphyry, a gold check, a 1px gold inset ring, 4px corners. The laurel
+  marks the brand only, never a seller.
+- `Chip`, the segments and `ThemeSwitch` take their selected state from `primary-fixed` and a `primary` outline;
+  `Card` takes the 6px radius from the token.

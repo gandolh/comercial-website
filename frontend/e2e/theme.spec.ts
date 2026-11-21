@@ -2,7 +2,7 @@ import { test, expect, SCREENS, openScreen } from "./fixtures";
 
 const home = SCREENS[0];
 
-const BACKGROUND = { light: "rgb(242, 242, 238)", dark: "rgb(19, 20, 22)" };
+const BACKGROUND = { light: "rgb(241, 236, 226)", dark: "rgb(22, 17, 18)" };
 
 test("the theme switch sets light, dark and system", async ({ page }) => {
   await openScreen(page, home, "light");

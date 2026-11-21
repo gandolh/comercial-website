@@ -12,7 +12,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const twMerge = extendTailwindMerge({
   extend: {
     theme: {
-      font: ["headline", "body", "label"],
+      font: ["cap", "headline", "body", "label"],
       shadow: ["ambient", "band", "bar", "card", "focus", "focus-error", "popup", "search"],
       radius: ["control"],
       text: ["hero", "title", "price", "body", "card-title", "control", "label"],
