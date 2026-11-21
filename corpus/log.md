@@ -296,3 +296,11 @@ The laurel wordmark in Cinzel capitals (gold on the porphyry bar, ink in the foo
 frieze under the bar and over the footer, the gold current-place underline and gold focus rings on the bar, and the
 footer's year as MMXXVI with "2026" for screen readers. The name lives in one constant, `BRAND`, for brief 26. A new
 spec covers the ornament, the rings and the bar at 360. Outcome note in [brief 22](briefs/done/22-the-roman-shell.md).
+
+## [2026-11-21] done | Brief 23 — Home as an inscription
+
+The search sits in a marble tabula ansata on the tufa band between two fluted gold columns, under a one-line Cinzel
+title; the category tiles have arched niches, the section heads are Cinzel over a gold rule, card prices are bronze
+with a smaller RON, every card carries the verified chip, and the sell band is porphyry with a gold ring and the
+wreath. Brief 14's first screens hold at 1280 × 800 and 390 × 844, measured by a new spec. Outcome note in
+[brief 23](briefs/done/23-home-as-an-inscription.md).

@@ -90,3 +90,21 @@ an ID compute lining figures.
   visually hidden Arabic year beside it; the locale string no longer holds the year.
 - The phone bottom bar keeps brief 14's five places; the current place is red text on a red tint, its pill round.
 
+## Home (brief 23)
+
+- The hero: the tufa band (`surface-container-low`, no shadow), the search in `Tabula` (brand/: a 1px gold border, a
+  5px marble gap and a second gold rule, 4px on phones; dovetail handles 30 × 84, 19 × 54 under 768px, gone under
+  600px) between two `Column`s at the band's edges from 1000px. The tablet is `min(1080px, 100% - 236px)` wide from
+  1000px, `100% - 64px` from 768px, `100% - 40px` from 600px and full width below. The title is Cinzel 600 at 36/42
+  (22/28 and one line on phones).
+- The first screen is brief 14's: at 1280 × 800 the hero ends at y 337 and all 13 tiles and Vezi toate categoriile
+  are whole; at 390 × 844 six tiles are whole above the bottom bar. The ornament gives way, never the content.
+- Category tiles: brief 14's raised card with an arched niche (40 × 48, 44px tall under 600px; a round top over 3px
+  corners, `niche` fill, a gold ring, a bronze icon). The Material Symbols stay in the niches.
+- Section heads: Cinzel 600 at 26/32 (21/28 on phones) over one 1px gold rule.
+- Cards (`ListingCard`, shared by the category grid, the profile, related listings and the dashboard): `CardPrice`,
+  bronze 800 with lining tabular figures and a smaller RON; `Badge variant="verified"`.
+- The sell band: porphyry with a 1px gold inset ring, a Cinzel title, the laurel at 200px on the right (gone under
+  768px, as the comps draw it); Postează un Anunț Acum is the marble fill, Cum funcționează? the gold outline, both
+  with the bar's gold focus ring. Caută is the page's one red fill.
+

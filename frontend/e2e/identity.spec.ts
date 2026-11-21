@@ -50,8 +50,11 @@ test("ă â î ș ț render in Alegreya Sans and in Cinzel, with no fallback gly
   };
   await only("#probe-body", /^Alegreya Sans/);
   await only("#probe-cap", /^Cinzel/);
-  // The page's own text: the hero title, with ă â î.
-  await only("h1", /^Alegreya Sans/);
+  // The page's own text: the hero title (a fixed title, in Cinzel since brief 23) with ă â î, a category label with ș
+  // and a listing title, in Alegreya Sans.
+  await only("h1", /^Cinzel/);
+  await only('section[aria-labelledby="popular-categories"] li:nth-child(2) a', /^Alegreya Sans/);
+  await only("main h3", /^Alegreya Sans/);
 
   // Self-hosted, each file once (the icon font keeps its Google Fonts link).
   const own = fontFiles.filter((url) => !url.includes("fonts.gstatic.com"));
