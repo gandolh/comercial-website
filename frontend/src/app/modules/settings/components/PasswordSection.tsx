@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { useChangePassword } from "../hooks/useProfile";
@@ -61,11 +62,11 @@ export function PasswordSection() {
     <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
       <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-          <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
+          <span className="material-symbols-outlined text-xl text-gold-ink" aria-hidden="true">
             lock
           </span>
         </div>
-        <h2 className="text-xl font-bold text-on-surface">Securitate</h2>
+        <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Securitate</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4" aria-label="Schimbă parola">

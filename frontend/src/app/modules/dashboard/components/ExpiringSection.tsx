@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { differenceInDays, formatDistanceToNow, parseISO } from "date-fns";
@@ -29,7 +30,7 @@ export function ExpiringSection({ listings }: ExpiringSectionProps) {
           <span className="material-symbols-outlined text-error" aria-hidden="true">
             notification_important
           </span>
-          <h2 className="text-xl font-bold text-on-surface">
+          <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>
             {t("dashboard.expiringSoon.title", "Anunțuri care expiră curând")}
           </h2>
           <Badge variant="error" className="ml-1">

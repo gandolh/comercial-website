@@ -147,10 +147,8 @@ export function DashboardPage() {
           <RecentConversations />
 
           {/* Quick Actions */}
-          <div className="space-y-4 rounded-2xl bg-primary-container p-6">
-            <h3 className="font-bold text-on-primary-container">
-              {t("dashboard.quickActions.title", "Acțiuni rapide")}
-            </h3>
+          <div className="space-y-4 rounded-2xl bg-nav-band p-6">
+            <h3 className="font-bold text-on-nav-band">{t("dashboard.quickActions.title", "Acțiuni rapide")}</h3>
             <div className="grid gap-2">
               <Link
                 to="/adauga-anunt"
