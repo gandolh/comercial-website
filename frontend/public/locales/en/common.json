@@ -413,5 +413,9 @@
   "filters": {
     "title": "Filters",
     "apply": "Apply filters"
+  },
+  "search": {
+    "count_one": "1 listing found",
+    "count_other": "{{count}} listings found"
   }
 }

@@ -144,7 +144,7 @@
     "noResults": "Nu am găsit niciun anunț care să corespundă căutării tale.",
     "count_one": "1 anunț găsit",
     "count_few": "{{count}} anunțuri găsite",
-    "count_other": "{{count}} anunțuri găsite",
+    "count_other": "{{count}} de anunțuri găsite",
     "loading": "Se încarcă anunțurile..."
   },
   "categories": {

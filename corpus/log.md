@@ -304,3 +304,11 @@ title; the category tiles have arched niches, the section heads are Cinzel over 
 with a smaller RON, every card carries the verified chip, and the sell band is porphyry with a gold ring and the
 wreath. Brief 14's first screens hold at 1280 × 800 and 390 × 844, measured by a new spec. Outcome note in
 [brief 23](briefs/done/23-home-as-an-inscription.md).
+
+## [2026-11-21] done | Brief 24 — category and search in the Roman identity
+
+The filter band gets a gold rule and a Cinzel title that wraps balanced and is never cut ("Documente & Template-uri
+Legale" whole at 360); a query title stays in Alegreya Sans. Red is only the selected state, the slider and the
+phone's Filtre; the count badge became a tint. The list view takes the bronze price and the verified chip. The
+result count now follows Romanian plurals ("2 anunțuri", "20 de anunțuri"). Outcome note in
+[brief 24](briefs/done/24-category-and-search-in-the-roman-identity.md).

@@ -108,3 +108,18 @@ an ID compute lining figures.
   768px, as the comps draw it); Postează un Anunț Acum is the marble fill, Cum funcționează? the gold outline, both
   with the bar's gold focus ring. Caută is the page's one red fill.
 
+## Category and search (brief 24)
+
+- The band (`categories/components/ResultsBand.tsx`, shared by the category page and the search results) keeps
+  brief 14's behaviour and gets a 1px gold rule along its bottom under its shadow. The title is Cinzel 600, .03em, at
+  30/36 (24/30 on phones), `text-balance` and never truncated; a title that repeats the query is user text and stays
+  Alegreya Sans (`titleIsUserText`).
+- Selected states (segments, the view toggle, the sheet's chips, the active chips) are the red outline and tint;
+  the slider's track and thumbs are red as a control in use; Autor Verificat is porphyry when on. The filter-count
+  badge is the tint too, so on desktop nothing in the band is filled red; on phones Filtre is the one red fill.
+- The readout is "0 RON – 100.000+ RON", a spaced en dash (U+2013), in lining figures like every figure in the band.
+- The count uses the locale's plural keys (`search.count`): "1 anunț găsit", "2 anunțuri găsite", "20 de anunțuri
+  găsite" (Romanian's `other` form, from 20). It was hard-coded with "de" on the category page and without it on the
+  search page.
+- The band's small controls live in `BandControls.tsx`.
+

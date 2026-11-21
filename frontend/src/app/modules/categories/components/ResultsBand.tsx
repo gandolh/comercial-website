@@ -1,23 +1,21 @@
 import { useId, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Chip, RadioGroup, Radio, Select, Sheet, Switch } from "@core/components/ui";
+import { Button, Chip, RadioGroup, Radio, Sheet, Switch } from "@core/components/ui";
 import { Slider } from "@core/components/ui/Slider";
 import { cn } from "@core/lib/cn";
 import type { FilterState } from "../types";
+import { CountBadge, SortSelect, ViewToggle, type ViewMode } from "./BandControls";
 import { FORMAT_OPTIONS, LICENSE_OPTIONS } from "../types";
 import {
   DATE_OPTIONS,
   EMPTY_VALUES,
   PRICE_MAX,
-  SORT_OPTIONS,
   activeFilters,
   formatRON,
   pickValues,
   priceRangeText,
   type FilterValues,
 } from "./filterModel";
-
-type ViewMode = "grid" | "list";
 
 /** "Toate" is the empty value; a radio needs a value of its own, so the group reads it as "all". */
 const ALL = "all";
@@ -145,86 +143,10 @@ function PriceAndSwitch({ values, onChange, priceRange, inline }: PriceProps) {
   );
 }
 
-/** The result count beside Resetează Filtre, and on the phone's Filtre button. */
-function CountBadge({ count, className }: { count: number; className?: string }) {
-  if (count === 0) return null;
-  return (
-    <span
-      className={cn(
-        "inline-grid h-5.5 min-w-5.5 place-items-center rounded-full bg-primary px-1.5 text-label font-semibold text-on-primary",
-        className,
-      )}
-    >
-      {count}
-    </span>
-  );
-}
-
-const toggleButton =
-  "grid place-items-center rounded-lg text-on-surface-variant transition-colors hover:text-on-surface";
-
-function ViewToggle({
-  viewMode,
-  onChange,
-  className,
-}: {
-  viewMode: ViewMode;
-  onChange: (m: ViewMode) => void;
-  className?: string;
-}) {
-  const item = (mode: ViewMode, label: string, icon: string) => (
-    <button
-      type="button"
-      aria-pressed={viewMode === mode}
-      aria-label={label}
-      onClick={() => onChange(mode)}
-      className={cn(
-        toggleButton,
-        "h-8 w-9 aria-pressed:bg-primary-fixed aria-pressed:text-on-primary-fixed aria-pressed:shadow-[inset_0_0_0_1px_var(--color-primary)] max-md:size-11",
-      )}
-    >
-      <span className="material-symbols-outlined" style={{ fontSize: "20px" }} aria-hidden="true">
-        {icon}
-      </span>
-    </button>
-  );
-  return (
-    <div
-      role="group"
-      aria-label="Mod de afișare"
-      className={cn(
-        "flex gap-0.5 rounded-xl bg-surface-container-low p-1 max-md:rounded-control max-md:p-0.5",
-        className,
-      )}
-    >
-      {item("grid", "Vedere grilă", "grid_view")}
-      {item("list", "Vedere listă", "view_list")}
-    </div>
-  );
-}
-
-function SortSelect({
-  value,
-  onChange,
-  className,
-}: {
-  value: FilterState["sortare"];
-  onChange: (v: FilterState["sortare"]) => void;
-  className?: string;
-}) {
-  return (
-    <Select
-      aria-label="Sortare"
-      value={value}
-      onChange={(e) => onChange(e.target.value as FilterState["sortare"])}
-      options={SORT_OPTIONS}
-      className={className}
-    />
-  );
-}
-
 interface ResultsBandProps {
   title: ReactNode;
+  /** A fixed title (a category's name, "Toate anunțurile") is Cinzel; one that repeats the query is user text. */
+  titleIsUserText?: boolean;
   count: ReactNode;
   filters: FilterState;
   viewMode: ViewMode;
@@ -241,6 +163,7 @@ interface ResultsBandProps {
  */
 export function ResultsBand({
   title,
+  titleIsUserText = false,
   count,
   filters,
   viewMode,
@@ -263,15 +186,23 @@ export function ResultsBand({
   return (
     <section
       aria-label="Rezultate"
-      className="relative z-raised border-b border-outline-variant bg-surface-container-lowest shadow-band"
+      className="relative z-raised border-b border-gold bg-surface-container-lowest shadow-band"
     >
       <div className="mx-auto w-full max-w-310 px-4 md:px-6">
         <div className="pt-4 md:flex md:items-center md:justify-between md:gap-6 md:pb-3.5">
           <div className="min-w-0 md:flex md:flex-wrap md:items-baseline md:gap-4">
-            <h1 className="font-headline font-extrabold tracking-[-0.01em] text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title">
+            {/* Never truncated: the longest name, "Documente & Template-uri Legale", wraps balanced on a phone. */}
+            <h1
+              className={cn(
+                "text-balance text-on-surface max-md:text-2xl max-md:leading-[1.875rem] md:text-title",
+                titleIsUserText
+                  ? "font-headline font-extrabold tracking-[-0.01em]"
+                  : "font-cap font-semibold tracking-[0.03em]",
+              )}
+            >
               {title}
             </h1>
-            <p className="mt-0.5 text-body text-on-surface-variant md:mt-0 md:text-control">{count}</p>
+            <p className="mt-0.5 text-body text-on-surface-variant tabular-nums md:mt-0 md:text-control">{count}</p>
           </div>
           <div className="hidden items-center gap-3 md:flex">
             <ViewToggle viewMode={viewMode} onChange={onViewModeChange} />
@@ -308,8 +239,13 @@ export function ResultsBand({
           </ul>
         )}
 
-        <div className="mt-3.5 flex items-center gap-2 md:hidden">
-          <Button onClick={openSheet} iconLeft="tune" className="relative flex-none px-3.5">
+        {/* Under 380px the row tightens so the sort keeps its whole label beside Filtre and the toggle. */}
+        <div className="mt-3.5 flex items-center gap-2 max-[379px]:gap-1.5 md:hidden">
+          <Button
+            onClick={openSheet}
+            iconLeft="tune"
+            className="relative flex-none px-3.5 max-[379px]:gap-1.5 max-[379px]:px-3"
+          >
             {t("filters.title")}
             <CountBadge
               count={active.length}
