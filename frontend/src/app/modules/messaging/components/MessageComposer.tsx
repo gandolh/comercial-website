@@ -58,7 +58,7 @@ export const MessageComposer: React.FC<Props> = ({ onSend, disabled, placeholder
       <button
         type="submit"
         disabled={!body.trim() || disabled || isSending}
-        className="shrink-0 rounded-full bg-primary p-2 text-on-primary transition-opacity hover:opacity-90 disabled:opacity-30"
+        className="shrink-0 rounded-full bg-action-fill p-2 text-on-action-fill transition-opacity hover:opacity-90 disabled:opacity-30"
       >
         <span className="material-symbols-outlined text-xl">send</span>
       </button>
