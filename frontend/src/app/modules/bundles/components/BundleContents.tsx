@@ -1,3 +1,4 @@
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { Link } from "@core/lib/router";
 import { useTranslation } from "react-i18next";
 import { useBundleItems } from "../hooks/useBundleItems";
@@ -52,7 +53,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   if (isLoading) {
     return (
       <section className="space-y-4">
-        <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
+        <h2 className={`${SECTION_TITLE} ${SECTION_RULE} text-on-surface`}>{t("bundles.title")}</h2>
         <div className="divide-y divide-surface-container-high overflow-hidden rounded-xl border border-surface-container-high">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-16 bg-surface-container motion-safe:animate-pulse" />
@@ -65,7 +66,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   if (isError || !children) {
     return (
       <section className="space-y-4">
-        <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
+        <h2 className={`${SECTION_TITLE} ${SECTION_RULE} text-on-surface`}>{t("bundles.title")}</h2>
         <p className="text-sm text-on-surface-variant">{t("bundles.loadError")}</p>
       </section>
     );
@@ -78,7 +79,7 @@ export function BundleContents({ listingId }: BundleContentsProps) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-headline text-lg font-bold text-on-surface">{t("bundles.title")}</h2>
+        <h2 className={`${SECTION_TITLE} ${SECTION_RULE} text-on-surface`}>{t("bundles.title")}</h2>
         <span className="text-sm text-on-surface-variant">{t("bundles.count", { count: children.length })}</span>
       </div>
       <ul className="divide-y divide-surface-container-high overflow-hidden rounded-xl border border-surface-container-high">

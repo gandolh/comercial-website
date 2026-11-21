@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useEffect } from "react";
 import { Navigate, useNavigate, useParams } from "@core/lib/router";
 import { useAuth } from "@core/lib/auth";
@@ -43,13 +44,13 @@ export function CreateListingPage() {
     return (
       <main className="mt-8 flex-1">
         <div className="mx-auto max-w-2xl space-y-6 px-6 py-16 text-center">
-          <h1 className="font-headline text-3xl font-extrabold">Verifică-ți emailul</h1>
+          <h1 className={`${PAGE_TITLE} text-3xl`}>Verifică-ți emailul</h1>
           <p className="text-on-surface-variant">
             Pentru a posta un anunț trebuie să confirmi adresa de email. Verifică inbox-ul și apasă pe linkul de
             confirmare.
           </p>
           <button
-            className="rounded-control bg-primary px-6 py-3 font-semibold text-on-primary"
+            className="rounded-control bg-action-fill px-6 py-3 font-semibold text-on-action-fill"
             onClick={() => navigate("/verifica-email")}
           >
             Retrimite emailul de confirmare

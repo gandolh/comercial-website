@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { requestAssetUploadUrl, putAssetToSignedUrl, commitAsset, deleteAsset } from "../services/assets";
 import type { ListingAsset } from "../services/assets";
@@ -99,7 +100,7 @@ export function AssetUploadStep({
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-extrabold">Adaugă fișierele de descărcare</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Adaugă fișierele de descărcare</h2>
         <p className="text-on-surface-variant">
           Aceasta este cea mai importantă parte - anunțurile cu fișiere clare primesc mai multe descărcări.
         </p>
@@ -202,7 +203,7 @@ export function AssetUploadStep({
             onClick={onNext}
             className={`flex-[2] rounded-full px-8 py-4 font-bold shadow-md transition-all ${
               hasAssets && !isUploading
-                ? "bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container"
+                ? "bg-action-fill text-on-action-fill hover:bg-action-fill-hover"
                 : "cursor-not-allowed bg-surface-container-highest text-on-surface-variant shadow-none"
             }`}
           >

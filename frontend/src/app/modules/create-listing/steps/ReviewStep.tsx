@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -60,7 +61,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
     <div className="space-y-8 duration-500">
       {/* Page heading */}
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-extrabold">{t("createListing.preview.heading")}</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>{t("createListing.preview.heading")}</h2>
         <p className="text-on-surface-variant">{t("createListing.preview.subheading")}</p>
       </div>
 
@@ -209,7 +210,7 @@ export function ReviewStep({ draft, onPublish, onBack, isPublishing }: ReviewSte
           <button
             type="submit"
             disabled={isPublishing}
-            className="flex flex-[2] items-center justify-center gap-2 rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
+            className="flex flex-[2] items-center justify-center gap-2 rounded-control bg-action-fill px-8 py-4 font-bold text-on-action-fill transition-all hover:bg-action-fill-hover disabled:opacity-50"
           >
             {isPublishing ? (
               <>
