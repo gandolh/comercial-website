@@ -81,7 +81,7 @@ function ReviewCard({ review }: { review: Review }) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary-container text-sm font-bold text-on-secondary-container"
             aria-hidden="true"
           >
             {name.charAt(0).toUpperCase()}
@@ -180,7 +180,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
       />
 
       <div className="flex items-center gap-3">
-        <Button type="submit" variant="primary" size="sm" loading={submitMutation.isPending}>
+        <Button type="submit" variant="secondary" size="sm" loading={submitMutation.isPending}>
           {isEditing ? t("reviews.form.update") : t("reviews.form.submit")}
         </Button>
       </div>
