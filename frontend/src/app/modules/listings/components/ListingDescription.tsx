@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import { Panel } from "./Panel";
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 
 interface Feature {
   icon: string;
@@ -31,8 +32,8 @@ export function ListingDescription({
 
   return (
     <Panel aria-labelledby="description-title" className={className}>
-      <div className="border-b border-outline-variant pb-3">
-        <h2 id="description-title" className="text-price font-extrabold text-on-surface">
+      <div className={SECTION_RULE}>
+        <h2 id="description-title" className={`${SECTION_TITLE} text-on-surface`}>
           Descriere
         </h2>
       </div>
@@ -47,12 +48,12 @@ export function ListingDescription({
         <ul className="grid list-none grid-cols-[repeat(auto-fit,minmax(min(180px,100%),1fr))] gap-3 p-0">
           {allSpecs.map((f, i) => (
             <li key={i} className="flex items-center gap-3 rounded-[10px] bg-surface-container-low px-3.5 py-3">
-              <span className="material-symbols-outlined text-primary" aria-hidden="true">
+              <span className="material-symbols-outlined text-gold-ink" aria-hidden="true">
                 {f.icon}
               </span>
               <div>
                 <span className="block text-control text-on-surface-variant">{f.label}</span>
-                <span className="block font-extrabold text-on-surface">{f.value}</span>
+                <span className="block font-extrabold text-on-surface tabular-nums">{f.value}</span>
               </div>
             </li>
           ))}

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@core/lib/router";
 import { useState } from "react";
 import { useAuth } from "@core/lib/auth";
-import { Button } from "@core/components/ui";
+import { Badge, Button } from "@core/components/ui";
 import { Panel } from "./Panel";
 import { ContactSellerModal } from "@app/modules/messaging/components/ContactSellerModal";
 import type { SellerSummary } from "../types";
@@ -49,12 +49,9 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
             <h2 className="text-card-title font-extrabold">{sellerName}</h2>
           </Link>
           {seller.phoneVerified && (
-            <span className="mt-1 inline-flex h-6 items-center gap-1 rounded-xl bg-tertiary-container pr-2.5 pl-2 text-label font-semibold text-on-fill">
-              <span className="material-symbols-outlined" style={{ fontSize: "14px" }} aria-hidden="true">
-                verified
-              </span>
+            <Badge variant="verified" icon="verified" className="mt-1">
               Vânzător verificat
-            </span>
+            </Badge>
           )}
         </div>
         <Link
@@ -90,7 +87,9 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
         </div>
         <div>
           <span className="block text-control text-on-surface-variant">Anunțuri active</span>
-          <span className="block font-semibold text-on-surface">{seller.activeListingsCount} anunțuri</span>
+          <span className="block font-semibold text-on-surface tabular-nums">
+            {seller.activeListingsCount} anunțuri
+          </span>
         </div>
       </div>
     </Panel>

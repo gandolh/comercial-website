@@ -1,3 +1,4 @@
+import { PAGE_TITLE, SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "@core/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -51,7 +52,7 @@ export function EditListingPage() {
   if (error || !listing) {
     return (
       <div className="mx-auto max-w-2xl space-y-4 py-24 text-center">
-        <h2 className="text-2xl font-bold">Anunțul nu a fost găsit.</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Anunțul nu a fost găsit.</h2>
         <button onClick={() => navigate("/")} className="font-bold text-primary hover:underline">
           Înapoi la prima pagină
         </button>
@@ -93,7 +94,7 @@ export function EditListingPage() {
         </button>
 
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <h1 className="text-3xl font-bold">{t("edit.title")}</h1>
+          <h1 className={`${PAGE_TITLE} text-3xl`}>{t("edit.title")}</h1>
           <div className="flex items-center gap-3">
             <RenewButton listingId={listing.id} expiresAt={listing.expiresAt} />
             <button
@@ -111,7 +112,7 @@ export function EditListingPage() {
 
         <div className="grid grid-cols-1 gap-8">
           <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
-            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.details")}</h2>
+            <h2 className={`${SECTION_TITLE} ${SECTION_RULE}`}>{t("edit.sections.details")}</h2>
             <DetailsStep
               initialData={{
                 title: listing.title,
@@ -129,7 +130,7 @@ export function EditListingPage() {
           </section>
 
           <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
-            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.photos")}</h2>
+            <h2 className={`${SECTION_TITLE} ${SECTION_RULE}`}>{t("edit.sections.photos")}</h2>
             <PhotosStep
               listingId={listing.id}
               images={listing.images}
@@ -139,7 +140,7 @@ export function EditListingPage() {
           </section>
 
           <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
-            <h2 className="border-b pb-4 text-xl font-bold">{t("edit.sections.locationPrice")}</h2>
+            <h2 className={`${SECTION_TITLE} ${SECTION_RULE}`}>{t("edit.sections.locationPrice")}</h2>
             <LocationPriceStep
               initialData={{
                 priceRon: listing.priceRon,

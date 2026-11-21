@@ -42,7 +42,9 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
               key={p}
               onClick={() => onPageChange(p)}
               className={`h-12 w-12 rounded-full font-semibold transition-colors ${
-                p === currentPage ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container"
+                p === currentPage
+                  ? "bg-primary-fixed text-on-primary-fixed ring-1 ring-primary ring-inset"
+                  : "text-on-surface-variant hover:bg-surface-container"
               }`}
             >
               {p}

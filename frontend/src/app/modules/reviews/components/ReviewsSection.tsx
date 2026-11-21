@@ -1,3 +1,4 @@
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
@@ -216,8 +217,8 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
   return (
     <section className="space-y-6" aria-labelledby="reviews-heading">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 id="reviews-heading" className="font-headline text-lg font-bold text-on-surface">
+      <div className={`${SECTION_RULE} flex items-center justify-between gap-4`}>
+        <h2 id="reviews-heading" className={`${SECTION_TITLE} text-on-surface`}>
           {t("reviews.title")}
         </h2>
       </div>

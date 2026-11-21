@@ -75,7 +75,10 @@ function PaginationButton({ children, onClick, disabled, active, ...props }: Pag
         "min-w-[2.25rem] h-9 px-2 rounded-lg text-sm font-medium transition-all duration-150",
         "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         "disabled:opacity-40 disabled:cursor-not-allowed",
-        active ? "bg-primary text-on-primary" : "text-on-surface-variant hover:bg-surface-container-high",
+        // The current page is the selected state: an outline and a tint, not a fill (brief 25).
+        active
+          ? "bg-primary-fixed text-on-primary-fixed ring-1 ring-primary ring-inset"
+          : "text-on-surface-variant hover:bg-surface-container-high",
       ].join(" ")}
     >
       {children}
