@@ -123,3 +123,29 @@ an ID compute lining figures.
   search page.
 - The band's small controls live in `BandControls.tsx`.
 
+## Listing detail and every other screen (brief 25)
+
+- **Listing detail, as drawn.** The listing title stays Alegreya Sans 800 (user content). Section titles (Descriere,
+  Fișiere incluse, Recenzii cumpărători, Anunțuri Similare, the paywall's Activ digital plătit, a bundle's contents)
+  are Cinzel 600 at 26/32 over a 1px gold rule. The price is bronze with a smaller RON; Descarcă Asset is the one red
+  fill, Contactează Autorul the tonal tint, the seller card's Contactează autorul an outline, and the paywall's Cumpără
+  the porphyry fill. Spec icons are bronze; specs, counts and the ID use tabular figures.
+- **The title classes** live in `core/components/brand/titles.ts`: `PAGE_TITLE` (Cinzel 600, .03em, balanced; the page
+  keeps its size), `SECTION_TITLE` (26/32, 21/28 on phones) and `SECTION_RULE`. A 36px Cinzel title is 28/36 under
+  768px, because Cinzel runs wider ("Confidențialitate" overflowed 390px).
+- **The rules, on every screen** (listings, create-listing, account and dashboard, messages, orders and invoices,
+  auth, legal):
+  - Cinzel only on fixed page and section titles. A title holding a name stays Alegreya Sans (the dashboard's
+    greeting), as do card headings, accordion questions and form labels.
+  - One filled red action per screen, on `action-fill` (inline `bg-primary` fills moved to it, so dark gets its red).
+    A second action is outlined, tonal or porphyry (My listings' per-card Activează, the paywall's Cumpără).
+  - Selected states are the red outline and tint, never a fill: both paginations' current page, the wizard's current
+    step and chosen category, the invoices page's current tab.
+  - Not red: your own messages (porphyry tint), the "Copertă" tag and the dashboard's quick actions (porphyry), a paid
+    order's status and the "already yours" note (porphyry tint), decorative and stat icons (bronze), the quota meter
+    (bronze), the About page's demo panel (porphyry with a gold ring and a marble button, like Home's sell band).
+  - Tabular figures where numbers line up: prices, stats, the quota, the earnings ledger, the invoice form and list.
+- **Checks.** `frontend/e2e/screens.spec.ts` opens each of the 25 screens at 1280 × 800 and 390 × 844 in both themes:
+  at most one filled red button in the first screen, and Cinzel nowhere but fixed titles and the wordmark (never in
+  a listing, a name, a message, a review or a form field).
+

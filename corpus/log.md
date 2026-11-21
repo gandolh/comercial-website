@@ -312,3 +312,13 @@ Legale" whole at 360); a query title stays in Alegreya Sans. Red is only the sel
 phone's Filtre; the count badge became a tint. The list view takes the bronze price and the verified chip. The
 result count now follows Romanian plurals ("2 anunțuri", "20 de anunțuri"). Outcome note in
 [brief 24](briefs/done/24-category-and-search-in-the-roman-identity.md).
+
+## [2026-11-21] done | Brief 25 — listing detail and every other screen in the Roman identity
+
+Listing detail as drawn (Cinzel section titles over a gold rule, the bronze price, Descarcă Asset the one red fill, the
+verified seller chip), and the identity's rules on every other screen in seven group commits: Cinzel fixed titles, one
+red fill per screen on `action-fill`, selected states as tints, no decorative red, tabular figures. A new spec checks
+the 25 screens at two widths in both themes. The design documents name the Roman identity:
+`design/design-system/roman-identity.json`, `design/README.md`, the root `CLAUDE.md` and `README.md`;
+[roman-identity.md](wiki/roman-identity.md) is finished from the code. Outcome note in
+[brief 25](briefs/done/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).

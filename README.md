@@ -77,7 +77,7 @@ Then open <http://localhost:5173/>. Instead of passing `JWT_SECRET` each time, y
 | `backend/seed/` | The local demo data (`npm run seed:dev`, development only) and the sample listings' previews (`npm run seed:samples`) |
 | `frontend/` | The React app, and its Playwright specs in `frontend/e2e/` |
 | `infrastructure/` | The API's container: `Dockerfile` and `docker-compose.yml` ([docs/deploy.md](docs/deploy.md)) |
-| `design/` | The Carpathian Clear design system and the HTML mock-ups |
+| `design/` | The design systems (the Roman identity, and Carpathian Clear as history), the comps and the HTML mock-ups |
 | `corpus/` | Project wiki: features, market research, business rules, log |
 | `docs/` | Setup, the deploy, architecture and the images here |
 | `package.json`, `vendor/`, `scripts/` | The house-style tools and checks; `npm run check` at the root runs them over both projects |
@@ -86,7 +86,7 @@ Then open <http://localhost:5173/>. Instead of passing `JWT_SECRET` each time, y
 
 - [docs/](docs/README.md): setup, the deploy, architecture, and the images used here
 - [corpus/](corpus/index.md): the project wiki, with the features, market research and business rules
-- [design/](design/README.md): the Carpathian Clear design system and the mock-ups the UI was first built from; the colours and type the redesign shipped are in [corpus/wiki/carpathian-clear.md](corpus/wiki/carpathian-clear.md)
+- [design/](design/README.md): the design systems, the Roman rebrand's comps and the mock-ups the UI was first built from; the look that ships, Cinzel capitals over Alegreya Sans with a porphyry shell, vexillum red and gold, is in [corpus/wiki/roman-identity.md](corpus/wiki/roman-identity.md)
 
 ## License
 

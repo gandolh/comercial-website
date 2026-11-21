@@ -119,13 +119,19 @@ are the API contract. `.claude/rules/server.md` has the rules.
 - **Shared:** `src/core/lib/` holds axios with the bearer token, auth, i18n and the query client.
 - **Server state:** React Query v5 + Axios. **i18n:** react-i18next, Romanian default.
 
-### Design system: Carpathian Clear
+### Design system: the Roman identity
 
-Tokens in `design/design-system/carpathian-clear.json` (Material Design 3 conventions) and
-`frontend/src/index.css`: primary `#1a5f9e`, secondary `#375a7f`, tertiary `#2a6a2f` in light;
-Schibsted Grotesk throughout (since the 2026-11-13 redesign). What shipped is
-[corpus/wiki/carpathian-clear.md](corpus/wiki/carpathian-clear.md); `design/design-system/carpathian-clear.md`
-is the original concept document.
+Since 2026-11-21 (briefs 21-25), on brief 14's layout and Material 3 role names. Tokens in
+`frontend/src/index.css` (`@theme` light, `:root[data-theme="dark"]`) and `design/design-system/roman-identity.json`
+(light values). Two faces, self-hosted: **Cinzel** (`font-cap`) for the wordmark, fixed page titles and section titles
+only, never user content; **Alegreya Sans** for everything else, with lining figures and a 0.5 size adjust at the root.
+The roles: porphyry `nav-band` (`#2d1026`) for the shell; vexillum red `primary` (`#9a2617`) for links, the current
+place, the selected state (outline and tint) and a control in use, and `action-fill` for the one filled action per
+screen; `gold` (`#b8892e`) for lines and ornament only, `gold-ink` (bronze, `#6f5216`) for prices and small words;
+`niche` for the category niches; travertine and marble neutrals. Radii 6px (4px segments). The ornament (laurel,
+frieze, Home's tablet and columns) is in `frontend/src/core/components/brand/`, with `BRAND`, the visible name, and
+the title classes. What shipped is [corpus/wiki/roman-identity.md](corpus/wiki/roman-identity.md); Carpathian Clear
+(`carpathian-clear.json`, [corpus/wiki/carpathian-clear.md](corpus/wiki/carpathian-clear.md)) is history.
 
 ### Key business rules
 
