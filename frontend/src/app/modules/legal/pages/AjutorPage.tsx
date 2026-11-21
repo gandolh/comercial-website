@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { Accordion, AccordionItem } from "@core/components/ui";
 
@@ -92,7 +93,7 @@ export function AjutorPage() {
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Ajutor & Întrebări Frecvente</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Ajutor & Întrebări Frecvente</h1>
           <p className="text-lg text-on-surface-variant">Găsești răspunsuri rapide la cele mai comune întrebări.</p>
         </header>
 
@@ -103,9 +104,7 @@ export function AjutorPage() {
         >
           {FAQ_ITEMS.map((group) => (
             <section key={group.category} className="space-y-3">
-              <h2 className="border-b border-outline-variant pb-2 font-headline text-xl font-bold text-on-surface">
-                {group.category}
-              </h2>
+              <h2 className={`${PAGE_TITLE} border-b border-gold pb-2 text-xl text-on-surface`}>{group.category}</h2>
               <div className="space-y-2">
                 {group.questions.map((item) => (
                   <AccordionItem
@@ -125,13 +124,13 @@ export function AjutorPage() {
           <span className="material-symbols-outlined block text-on-secondary-container" style={{ fontSize: "36px" }}>
             chat
           </span>
-          <h2 className="font-headline text-xl font-bold text-on-secondary-container">Nu ai găsit răspunsul?</h2>
+          <h2 className={`${PAGE_TITLE} text-xl text-on-secondary-container`}>Nu ai găsit răspunsul?</h2>
           <p className="text-sm text-on-secondary-container/80">
             Echipa noastră de suport răspunde în 2 zile lucrătoare.
           </p>
           <a
             href="mailto:suport@my-olx.ro"
-            className="inline-flex items-center justify-center rounded-control bg-primary px-6 py-2.5 text-sm font-semibold text-on-primary no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-control bg-action-fill px-6 py-2.5 text-sm font-semibold text-on-action-fill no-underline transition-opacity hover:opacity-90"
           >
             Trimite un email
           </a>

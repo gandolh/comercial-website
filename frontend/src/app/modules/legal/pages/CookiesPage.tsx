@@ -1,9 +1,11 @@
+import { PAGE_TITLE } from "@core/components/brand";
+
 export function CookiesPage() {
   return (
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Politică de Cookies</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Politică de Cookies</h1>
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
@@ -95,7 +97,7 @@ export function CookiesPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-headline text-xl font-bold text-on-surface">{title}</h2>
+      <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>{title}</h2>
       <div className="leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );
