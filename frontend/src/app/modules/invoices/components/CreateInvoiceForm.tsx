@@ -144,7 +144,7 @@ export function CreateInvoiceForm({ profile, onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className="space-y-8">
+    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} className="space-y-8 tabular-nums">
       {/* Header info */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>

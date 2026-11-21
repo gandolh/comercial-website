@@ -22,7 +22,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
 
   if (hasPaidOrder) {
     return (
-      <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">
+      <div className="flex items-center gap-2 rounded-xl bg-secondary-container px-4 py-3 text-sm font-semibold text-on-secondary-container">
         <span className="material-symbols-outlined text-[20px]">verified</span>
         {t("orders.buyButton.owned")}
       </div>

@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@core/components/ui";
@@ -9,6 +10,9 @@ import { CreateInvoiceForm } from "../components/CreateInvoiceForm";
 import { InvoiceProfileForm } from "../components/InvoiceProfileForm";
 
 type View = "list" | "create" | "profile";
+
+// The current tab is the selected state, an outline and a tint, never a red fill (brief 25).
+const SELECTED_TAB = "bg-primary-fixed text-on-primary-fixed ring-1 ring-primary ring-inset hover:bg-primary-fixed";
 
 export function InvoicesPage() {
   const { t } = useTranslation();
@@ -34,9 +38,7 @@ export function InvoicesPage() {
         {/* Header */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="font-headline text-3xl font-extrabold text-on-surface">
-              {t("invoices.page.title", "Facturi")}
-            </h1>
+            <h1 className={`${PAGE_TITLE} text-3xl text-on-surface`}>{t("invoices.page.title", "Facturi")}</h1>
             <p className="mt-1 text-sm text-on-surface-variant">
               {t("invoices.page.subtitle", "Generează și descarcă facturi PDF și e-Factura XML.")}
             </p>
@@ -44,24 +46,30 @@ export function InvoicesPage() {
           <div className="flex gap-2">
             <Button
               type="button"
-              variant={view === "list" ? "primary" : "ghost"}
+              variant="ghost"
               size="sm"
+              aria-pressed={view === "list"}
+              className={view === "list" ? SELECTED_TAB : undefined}
               onClick={() => setView("list")}
             >
               {t("invoices.page.tabList", "Istoricul meu")}
             </Button>
             <Button
               type="button"
-              variant={view === "create" ? "primary" : "ghost"}
+              variant="ghost"
               size="sm"
+              aria-pressed={view === "create"}
+              className={view === "create" ? SELECTED_TAB : undefined}
               onClick={() => setView("create")}
             >
               {t("invoices.page.tabCreate", "Factură nouă")}
             </Button>
             <Button
               type="button"
-              variant={view === "profile" ? "primary" : "ghost"}
+              variant="ghost"
               size="sm"
+              aria-pressed={view === "profile"}
+              className={view === "profile" ? SELECTED_TAB : undefined}
               onClick={() => setView("profile")}
             >
               {t("invoices.page.tabProfile", "Profil facturare")}
@@ -72,7 +80,9 @@ export function InvoicesPage() {
         {/* List view */}
         {view === "list" && (
           <section>
-            <h2 className="mb-4 text-xl font-bold text-on-surface">{t("invoices.list.heading", "Facturi generate")}</h2>
+            <h2 className={`${PAGE_TITLE} mb-4 text-xl text-on-surface`}>
+              {t("invoices.list.heading", "Facturi generate")}
+            </h2>
             {invoicesLoading && (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
@@ -93,7 +103,9 @@ export function InvoicesPage() {
         {/* Create view */}
         {view === "create" && (
           <section>
-            <h2 className="mb-4 text-xl font-bold text-on-surface">{t("invoices.create.heading", "Factură nouă")}</h2>
+            <h2 className={`${PAGE_TITLE} mb-4 text-xl text-on-surface`}>
+              {t("invoices.create.heading", "Factură nouă")}
+            </h2>
             {!profileLoading && <CreateInvoiceForm profile={profile} onCreated={() => setView("list")} />}
             {profileLoading && (
               <div className="h-8 w-48 rounded-sm bg-surface-container-low motion-safe:animate-pulse" />
@@ -104,7 +116,7 @@ export function InvoicesPage() {
         {/* Profile view */}
         {view === "profile" && (
           <section>
-            <h2 className="mb-2 text-xl font-bold text-on-surface">
+            <h2 className={`${PAGE_TITLE} mb-2 text-xl text-on-surface`}>
               {t("invoices.profile.heading", "Profilul de facturare")}
             </h2>
             <p className="mb-4 text-sm text-on-surface-variant">
