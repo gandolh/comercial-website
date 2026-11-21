@@ -78,8 +78,8 @@ export const PhoneVerifyModal: React.FC<PhoneVerifyModalProps> = ({ open, onOpen
       {step === "phone" ? (
         <form onSubmit={(e) => void handleRequestCode(e)} className="space-y-4">
           <div className="mb-2 flex flex-col items-center text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-              <span className="material-symbols-outlined text-2xl text-primary" aria-hidden="true">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-niche ring-1 ring-gold">
+              <span className="material-symbols-outlined text-2xl text-gold-ink" aria-hidden="true">
                 phone
               </span>
             </div>
