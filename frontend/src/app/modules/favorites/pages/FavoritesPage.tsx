@@ -23,7 +23,9 @@ export function FavoritesPage() {
           <span className="material-symbols-outlined text-gold-ink" style={{ fontSize: "56px" }}>
             favorite
           </span>
-          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Nu ai încă anunțuri salvate</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+            Nu ai încă anunțuri salvate
+          </h1>
           <p className="text-on-surface-variant">
             Când salvezi anunțuri, le vei găsi aici pentru a reveni rapid la ele.
           </p>
@@ -41,7 +43,9 @@ export function FavoritesPage() {
   return (
     <main className="mx-auto w-full max-w-310 space-y-8 px-4 pt-10 pb-20 md:px-6">
       <div>
-        <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Favoritele mele</h1>
+        <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+          Favoritele mele
+        </h1>
         <p className="mt-2 text-on-surface-variant">{data?.totalCount ?? 0} anunțuri salvate</p>
       </div>
 

@@ -93,7 +93,9 @@ export function AjutorPage() {
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
-          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Ajutor & Întrebări Frecvente</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+            Ajutor & Întrebări Frecvente
+          </h1>
           <p className="text-lg text-on-surface-variant">Găsești răspunsuri rapide la cele mai comune întrebări.</p>
         </header>
 

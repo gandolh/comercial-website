@@ -45,7 +45,7 @@ export function PublicProfilePage() {
   if (!profile) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-24 text-center">
-        <h1 className={`${PAGE_TITLE} mb-4 text-4xl`}>{t("seller.notFound")}</h1>
+        <h1 className={`${PAGE_TITLE} mb-4 text-4xl max-md:text-[28px] max-md:leading-9`}>{t("seller.notFound")}</h1>
         <p className="text-on-surface-variant">{t("seller.notFoundDesc")}</p>
       </div>
     );

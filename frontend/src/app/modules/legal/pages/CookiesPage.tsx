@@ -5,7 +5,9 @@ export function CookiesPage() {
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface`}>Politică de Cookies</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+            Politică de Cookies
+          </h1>
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
