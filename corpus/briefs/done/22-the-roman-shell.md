@@ -81,3 +81,7 @@ Decided on the board, 2026-11-20:
 - Briefs 23 to 25 assume the shell is done and only touch page content.
 - Brief 26 changes the name constant, the locale strings and the page `<title>`; this brief leaves them saying
   PiațăRo.
+
+---
+
+> **Done 2026-11-21.** `core/components/brand/` holds `BRAND` (`{ name: "PiațăRo", lettering: "PIAȚĂRO" }`, the one place brief 26 changes), `Wordmark` (bar and ink tones), `Laurel` (the comps' two paths, copied) and `Frieze` (the comps' meander; `useId` gives each instance its own pattern id). The Wordmark left `Navbar.tsx`; Footer and AuthLayout import it from `brand/`. The bar: gold underline with square ends, gold outlines, and an explicit gold focus ring on every bar control (there was no global ring; the bar relied on the browser's default); the place and unread counts became round pills with tabular figures. The footer's frieze replaced its top border; `footer.copyright` lost `© {{year}}` in both locales, and the component writes `© <RomanYear/>` before it. The bottom bar's pill is `rounded-full` (brief 21's 6px `2xl` had squared it). `toRoman` has 15 tests (the ten numbers asked for, and five refusals). `e2e/shell.spec.ts` (new, 11 tests) checks the numeral and the "2026" in the accessibility tree, that every shell drawing is `aria-hidden` with no tab stop inside or on it, that each bar control's ring clears 3:1 against porphyry, and no overflow with everything in the bar inside the viewport at 390 and 360, signed out and in, light and dark. All 127 Playwright specs pass; `npm run check` passes.

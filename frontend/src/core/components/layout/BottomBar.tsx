@@ -5,7 +5,7 @@ import { useAuth } from "@core/lib/auth";
 const tabClass =
   "group flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 px-0.5 text-label whitespace-nowrap text-on-surface-variant no-underline data-[status=active]:font-semibold data-[status=active]:text-primary";
 const pillClass =
-  "grid h-7 w-14 place-items-center rounded-2xl group-data-[status=active]:bg-primary-fixed group-data-[status=active]:text-on-primary-fixed";
+  "grid h-7 w-14 place-items-center rounded-full group-data-[status=active]:bg-primary-fixed group-data-[status=active]:text-on-primary-fixed";
 
 interface Tab {
   to: string;

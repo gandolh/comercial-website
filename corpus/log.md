@@ -289,3 +289,10 @@ verified Badge. Contrast holds over both themes (text min 5.37 light, 4.85 dark)
 the diacritics and the figures. Screens keep brief 14's layout until briefs 22-25. New page
 [roman-identity.md](wiki/roman-identity.md); [carpathian-clear.md](wiki/carpathian-clear.md) is history. Outcome
 note in [brief 21](briefs/done/21-the-roman-identity-tokens-and-type.md).
+
+## [2026-11-21] done | Brief 22 — the Roman shell
+
+The laurel wordmark in Cinzel capitals (gold on the porphyry bar, ink in the footer and the auth pages), the Greek-key
+frieze under the bar and over the footer, the gold current-place underline and gold focus rings on the bar, and the
+footer's year as MMXXVI with "2026" for screen readers. The name lives in one constant, `BRAND`, for brief 26. A new
+spec covers the ornament, the rings and the bar at 360. Outcome note in [brief 22](briefs/done/22-the-roman-shell.md).

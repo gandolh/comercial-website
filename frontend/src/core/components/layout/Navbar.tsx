@@ -8,25 +8,18 @@ import { useUnreadCount } from "@app/modules/messaging/hooks/useUnreadCount";
 import { useNavigate } from "@core/lib/router";
 import { Dropdown, dropdownSeparator } from "@core/components/ui";
 import type { DropdownItem } from "@core/components/ui";
+import { Frieze, Wordmark } from "@core/components/brand";
 
-/** The wordmark: the second half takes the band's accent colour (the footer sets its own). */
-export function Wordmark({ className }: { className?: string }) {
-  return (
-    <Link
-      to="/"
-      aria-label="PiațăRo, acasă"
-      className={`inline-flex rounded-md text-price font-extrabold tracking-[-0.01em] whitespace-nowrap no-underline ${className ?? ""}`}
-    >
-      Piață<b className="font-extrabold text-(--wordmark-accent)">Ro</b>
-    </Link>
-  );
-}
+// The porphyry bar (brief 22): the current place underlined 3px in gold with square ends; outlines and focus rings in
+// gold (8.7:1 on porphyry), so a ring always shows on the bar.
+const barFocus = "focus-visible:outline-2 focus-visible:outline-on-nav-band-variant";
 
-const placeClass =
-  "relative flex h-full items-center gap-2 px-4 text-body text-on-nav-band no-underline transition-colors hover:text-on-nav-band-variant data-[status=active]:font-semibold data-[status=active]:after:absolute data-[status=active]:after:right-3 data-[status=active]:after:bottom-0 data-[status=active]:after:left-3 data-[status=active]:after:h-[3px] data-[status=active]:after:rounded-t-[3px] data-[status=active]:after:bg-on-nav-band";
+const placeClass = `relative flex h-full items-center gap-2 px-4 text-body text-on-nav-band no-underline transition-colors hover:text-on-nav-band-variant focus-visible:-outline-offset-4 ${barFocus} data-[status=active]:font-semibold data-[status=active]:after:absolute data-[status=active]:after:right-3 data-[status=active]:after:bottom-0 data-[status=active]:after:left-3 data-[status=active]:after:h-[3px] data-[status=active]:after:bg-on-nav-band-variant`;
 
-const navButton =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-control border border-on-nav-band-variant bg-transparent px-4.5 text-body whitespace-nowrap text-on-nav-band no-underline transition-colors hover:bg-on-nav-band/10 active:brightness-90";
+const navButton = `inline-flex h-11 items-center justify-center gap-2 rounded-control border border-on-nav-band-variant bg-transparent px-4.5 text-body whitespace-nowrap text-on-nav-band no-underline transition-colors hover:bg-on-nav-band/10 active:brightness-90 focus-visible:outline-offset-2 ${barFocus}`;
+
+const countClass =
+  "inline-grid h-6 min-w-6 place-items-center rounded-full bg-on-nav-band px-1.5 text-control font-semibold text-nav-band tabular-nums";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -69,83 +62,78 @@ export function Navbar() {
   const unread = isAuthenticated ? (unreadCount.data ?? 0) : 0;
 
   return (
-    <header className="sticky top-0 z-nav h-14 bg-nav-band text-on-nav-band md:h-16">
-      <div className="mx-auto flex h-full w-full max-w-310 items-center gap-3 px-4 md:gap-6 md:px-6 xl:gap-10">
-        <Wordmark className="text-on-nav-band [--wordmark-accent:var(--color-on-nav-band-variant)]" />
+    <>
+      <header className="sticky top-0 z-nav h-14 bg-nav-band text-on-nav-band md:h-16">
+        <div className="mx-auto flex h-full w-full max-w-310 items-center gap-3 px-4 md:gap-6 md:px-6 xl:gap-10">
+          <Wordmark tone="bar" />
 
-        <nav aria-label="Principal" className="hidden h-full flex-1 gap-1 md:flex">
-          <Link to="/categorii" className={placeClass}>
-            {t("nav.categories")}
-          </Link>
-          <Link to="/favorite" className={placeClass}>
-            {t("nav.favorites")}
-            {favoriteCount > 0 && (
-              <span className="inline-grid h-6 min-w-6 place-items-center rounded-xl bg-on-nav-band px-1.5 text-control font-semibold text-nav-band">
-                {favoriteCount}
-              </span>
-            )}
-          </Link>
-          <Link to="/mesaje" className={placeClass}>
-            {t("nav.messages")}
-            {unread > 0 && (
-              <span className="inline-grid h-6 min-w-6 place-items-center rounded-xl bg-on-nav-band px-1.5 text-control font-semibold text-nav-band">
-                {unread}
-              </span>
-            )}
-          </Link>
-        </nav>
-
-        <div className="ml-auto flex items-center gap-2">
-          {isAuthenticated ? (
-            <>
-              <button
-                type="button"
-                className={cn(navButton, "hidden w-11 border-transparent px-0 min-[360px]:inline-flex")}
-                aria-label="Notificări"
-              >
-                <span className="material-symbols-outlined" aria-hidden="true">
-                  notifications
-                </span>
-              </button>
-              <span className="hidden md:inline-flex">
-                <Dropdown
-                  trigger={
-                    <button
-                      type="button"
-                      className={cn(navButton, "max-[1100px]:w-11 max-[1100px]:border-transparent max-[1100px]:px-0")}
-                      aria-label="Profil"
-                    >
-                      <span className="material-symbols-outlined" aria-hidden="true">
-                        person
-                      </span>
-                      {user?.email && (
-                        <span className="hidden min-[1101px]:inline">
-                          {user.display_name || user.email.split("@")[0]}
-                        </span>
-                      )}
-                    </button>
-                  }
-                  items={userMenuItems}
-                  align="end"
-                />
-              </span>
-              <Link
-                to="/adauga-anunt"
-                className={cn(
-                  navButton,
-                  "border-on-nav-band bg-on-nav-band px-3.5 font-semibold text-nav-band hover:bg-on-nav-band/90 md:px-4.5",
-                )}
-              >
-                {t("nav.addListing")}
-              </Link>
-            </>
-          ) : (
-            <Link to="/autentificare" className={cn(navButton, "max-md:hidden")}>
-              Conectare
+          <nav aria-label="Principal" className="hidden h-full flex-1 gap-1 md:flex">
+            <Link to="/categorii" className={placeClass}>
+              {t("nav.categories")}
             </Link>
-          )}
+            <Link to="/favorite" className={placeClass}>
+              {t("nav.favorites")}
+              {favoriteCount > 0 && <span className={countClass}>{favoriteCount}</span>}
+            </Link>
+            <Link to="/mesaje" className={placeClass}>
+              {t("nav.messages")}
+              {unread > 0 && <span className={countClass}>{unread}</span>}
+            </Link>
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2">
+            {isAuthenticated ? (
+              <>
+                <button
+                  type="button"
+                  className={cn(navButton, "hidden w-11 border-transparent px-0 min-[360px]:inline-flex")}
+                  aria-label="Notificări"
+                >
+                  <span className="material-symbols-outlined" aria-hidden="true">
+                    notifications
+                  </span>
+                </button>
+                <span className="hidden md:inline-flex">
+                  <Dropdown
+                    trigger={
+                      <button
+                        type="button"
+                        className={cn(navButton, "max-[1100px]:w-11 max-[1100px]:border-transparent max-[1100px]:px-0")}
+                        aria-label="Profil"
+                      >
+                        <span className="material-symbols-outlined" aria-hidden="true">
+                          person
+                        </span>
+                        {user?.email && (
+                          <span className="hidden min-[1101px]:inline">
+                            {user.display_name || user.email.split("@")[0]}
+                          </span>
+                        )}
+                      </button>
+                    }
+                    items={userMenuItems}
+                    align="end"
+                  />
+                </span>
+                <Link
+                  to="/adauga-anunt"
+                  className={cn(
+                    navButton,
+                    "border-on-nav-band bg-on-nav-band px-3.5 font-semibold text-nav-band hover:bg-on-nav-band/90 md:px-4.5",
+                  )}
+                >
+                  {t("nav.addListing")}
+                </Link>
+              </>
+            ) : (
+              <Link to="/autentificare" className={cn(navButton, "max-md:hidden")}>
+                Conectare
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <Frieze place="bar" />
+    </>
   );
 }

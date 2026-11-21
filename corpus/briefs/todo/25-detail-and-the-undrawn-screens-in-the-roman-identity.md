@@ -1,6 +1,6 @@
 # Task 25: Listing detail and the undrawn screens in the Roman identity
 
-**Depends on:** [brief 21](../done/21-the-roman-identity-tokens-and-type.md) and [brief 22](22-the-roman-shell.md).
+**Depends on:** [brief 21](../done/21-the-roman-identity-tokens-and-type.md) and [brief 22](../done/22-the-roman-shell.md).
 Run it after 23 and 24, because this brief writes the design documents from what shipped.
 
 **Runs before:** nothing. **Runs after:** 23, 24.

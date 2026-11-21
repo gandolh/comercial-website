@@ -2,7 +2,7 @@
 
 **Depends on:** the owner's answer on the board's ask: is the name Mercatus, or does PiațăRo stay? Run this
 brief only for Mercatus. If PiațăRo stays, move this brief to `superseded/` with that note.
-It also needs [brief 22](22-the-roman-shell.md), which puts the name in one constant.
+It also needs [brief 22](../done/22-the-roman-shell.md), which puts the name in one constant.
 
 **Runs before:** nothing. **Runs after:** 22.
 

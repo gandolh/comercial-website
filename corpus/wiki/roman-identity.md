@@ -74,3 +74,19 @@ an ID compute lining figures.
   marks the brand only, never a seller.
 - `Chip`, the segments and `ThemeSwitch` take their selected state from `primary-fixed` and a `primary` outline;
   `Card` takes the 6px radius from the token.
+
+## The shell (brief 22)
+
+- `frontend/src/core/components/brand/`: `BRAND` (`name` for sentences and accessible names, `lettering` for the
+  wordmark), `Wordmark` (`tone="bar"` gold, `tone="ink"` ink with a gold laurel), `Laurel` (the comps' path, not
+  redrawn) and `Frieze` (`place="bar"` or `"footer"`, a unique pattern id per instance). All ornament is
+  `aria-hidden`, unfocusable and without a hit area.
+- The wordmark: Cinzel 700 at 26px, .12em; 18px at .07em with a 20px laurel under 768px; on the bar the laurel hides
+  under 380px, so the signed-in bar (bell, Adaugă Anunț) fits at 360px.
+- The bar: porphyry, the current place underlined 3px in gold with square ends, Conectare and the account button
+  outlined in gold. Focus rings on the bar are gold (8.7:1 on porphyry); places draw theirs inset.
+- The frieze sits under the bar (it scrolls away; the bar stays) and over the footer, never inside content.
+- The footer: `© <year> {footer.copyright}`, the year as `toRoman(year)` (`core/lib/roman.ts`) `aria-hidden`, with a
+  visually hidden Arabic year beside it; the locale string no longer holds the year.
+- The phone bottom bar keeps brief 14's five places; the current place is red text on a red tint, its pill round.
+
