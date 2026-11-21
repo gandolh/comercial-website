@@ -47,7 +47,7 @@ export function ContactPage() {
           <dl className="space-y-2 text-sm leading-relaxed text-on-surface-variant">
             <div className="flex gap-2">
               <dt className="min-w-24 font-semibold text-on-surface">Denumire:</dt>
-              <dd>SC PiațăRo SRL</dd>
+              <dd>SC Mercatus SRL</dd>
             </div>
             <div className="flex gap-2">
               <dt className="min-w-24 font-semibold text-on-surface">CUI:</dt>

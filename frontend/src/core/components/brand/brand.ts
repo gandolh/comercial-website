@@ -1,5 +1,6 @@
 /**
  * The product's visible name, in one place (brief 22): `name` for sentences and accessible names, `lettering` for the
- * wordmark's Cinzel capitals. Brief 26 changes these two values.
+ * wordmark's Cinzel capitals, which cut U as V the way Roman inscriptions do. Mercatus since brief 26 (2026-11-21); the
+ * code name my-olx, the base path /piataro/ and the API's /piataro-api stay.
  */
-export const BRAND = { name: "PiațăRo", lettering: "PIAȚĂRO" } as const;
+export const BRAND = { name: "Mercatus", lettering: "MERCATVS" } as const;

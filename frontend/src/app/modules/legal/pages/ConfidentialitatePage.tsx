@@ -13,7 +13,7 @@ export function ConfidentialitatePage() {
 
         <Section title="1. Operatorul de date">
           <p>
-            <strong>SC PiațăRo SRL</strong> (denumită în continuare „my-olx", „noi" sau „operatorul"), cu sediul în
+            <strong>SC Mercatus SRL</strong> (denumită în continuare „my-olx", „noi" sau „operatorul"), cu sediul în
             București, România, este operatorul datelor tale cu caracter personal, conform Regulamentului (UE) 2016/679
             (GDPR) și Legii nr. 190/2018.
           </p>

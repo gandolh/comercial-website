@@ -1,7 +1,8 @@
 # README images
 
 How each image was made, so the next refresh is a re-run. Re-take an image
-when the screen it shows changes. All five were retaken on 2026-11-16, after
+when the screen it shows changes. All five were retaken on 2026-11-21, after
+the Roman identity and the rename to Mercatus (corpus briefs 21-26), on top of
 the redesign of 2026-11-13 ("The filter band", corpus brief 14).
 
 The API ran on a scratch `DATABASE_PATH`, `UPLOADS_DIR` and `ASSETS_DIR`,
@@ -12,11 +13,11 @@ real appears. The titles, sellers, reviewers and pictures are invented.
 
 | File | Shows | How to reach that state | Viewport | Taken |
 |---|---|---|---|---|
-| hero.webp | The listings page: the filter band and two rows of results | `/anunturi` | 1440×1052 @2x, the whole viewport, scaled to 1600 px wide | 2026-11-16 |
-| listing-buy.webp | A paid listing: format, size, licence, the buy box, the locked file and two reviews | `/anunturi/sample-icons`; clipped from 44 px above the "Descriere" heading to 20 px below "Raportează Anunțul" | 1440×1500 @2x, clip scaled to 1600 px wide | 2026-11-16 |
-| categories.webp | The home page's category grid | `/`; clipped from 36 px above "Categorii Populare" to 46 px below the "Diverse" card | 1440×1000 @2x, clip scaled to 1600 px wide | 2026-11-16 |
-| phone-browse.webp | The listings page on a phone, with the bottom bar | `/anunturi` | Playwright's `iPhone 14` (390×664 @3x), the whole viewport, scaled to 780 px wide | 2026-11-16 |
-| phone-filters.webp | The phone filter sheet with one pick staged | `/anunturi`, tap **Filtre**, then **Comercială** in the sheet | same as phone-browse | 2026-11-16 |
+| hero.webp | The listings page: the filter band and two rows of results | `/anunturi` | 1440×1052 @2x, the whole viewport, scaled to 1600 px wide | 2026-11-21 |
+| listing-buy.webp | A paid listing: format, size, licence, the buy box, the locked file and two reviews | `/anunturi/sample-icons`; clipped from 44 px above the "Descriere" heading to 20 px below "Raportează Anunțul" | 1440×1500 @2x, clip scaled to 1600 px wide | 2026-11-21 |
+| categories.webp | The home page's category grid | `/`; clipped from 36 px above "Categorii Populare" to 46 px below the "Diverse" card | 1440×1000 @2x, clip scaled to 1600 px wide | 2026-11-21 |
+| phone-browse.webp | The listings page on a phone, with the bottom bar | `/anunturi` | Playwright's `iPhone 14` (390×664 @3x), the whole viewport, scaled to 780 px wide | 2026-11-21 |
+| phone-filters.webp | The phone filter sheet with one pick staged | `/anunturi`, tap **Filtre**, then **Comercială** in the sheet | same as phone-browse | 2026-11-21 |
 
 ## Steps
 

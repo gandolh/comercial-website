@@ -132,3 +132,12 @@ deeper red than its salmon `primary`). Rejected: keeping "The filter band" look 
 alternative), and Cinzel on `--font-headline` (it sits on listing titles, which are user content). See
 [roman-identity.md](roman-identity.md).
 
+## The product is called Mercatus
+_2026-11-21 (brief 26); the owner picked the name on the Roman rebrand row's ask_ — The visible name changes from
+PiațăRo to Mercatus, Latin for "market" (Mercurius, the god of trade, shares the root), set in one constant (`BRAND`,
+`frontend/src/core/components/brand/brand.ts`); the wordmark letters it MERCATVS, the way Roman inscriptions cut U as V.
+Only what users see changes: the code name `my-olx`, the `@my-olx/*` packages, the repo, the `/piataro/` base path and
+`/piataro-api`, vps-deploy's `piataro` stack, the container and the database stay, because renaming them is a deploy
+change with redirects and can be its own brief. Rejected: keeping PiațăRo in the same Roman capitals (the identity
+card's third lockup), which the owner did not pick.
+

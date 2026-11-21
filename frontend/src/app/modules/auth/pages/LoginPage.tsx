@@ -28,7 +28,7 @@ export function LoginPage() {
   };
 
   return (
-    <AuthCardShell title="Autentifică-te" description="PiațăRo este o demonstrație: doar proprietarul are cont.">
+    <AuthCardShell title="Autentifică-te" description="Mercatus este o demonstrație: doar proprietarul are cont.">
       {wardError && (
         <div className="mb-4 rounded-lg bg-error-container p-3 text-sm text-on-error-container">
           {wardErrorMessage(wardError)}

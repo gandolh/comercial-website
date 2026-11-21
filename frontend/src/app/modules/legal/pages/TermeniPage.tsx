@@ -13,7 +13,7 @@ export function TermeniPage() {
 
         <Section title="1. Despre my-olx">
           <p>
-            my-olx este o platformă online de comercializare a activelor digitale, operată de SC PiațăRo SRL, cu sediul
+            my-olx este o platformă online de comercializare a activelor digitale, operată de SC Mercatus SRL, cu sediul
             în România. Platforma permite vânzătorilor să încarce și să vândă fișiere descărcabile (software, grafică,
             șabloane, audio, video, e-bookuri, fonturi, cod sursă și altele), iar cumpărătorilor să le achiziționeze și
             descărce.

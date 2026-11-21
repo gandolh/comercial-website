@@ -173,7 +173,7 @@ const REVIEWS = [
 
 /** A ZIP holding one stored text file that says it is a demo file (about 64 KB). */
 export function sampleZip(title: string): Buffer {
-  const line = Buffer.from(`Fișier demonstrativ PiațăRo pentru „${title}”. Nu conține un produs real.\n`);
+  const line = Buffer.from(`Fișier demonstrativ Mercatus pentru „${title}”. Nu conține un produs real.\n`);
   const data = Buffer.alloc(64 * 1024);
   for (let at = 0; at < data.length; at += line.length) line.copy(data, at);
   const name = Buffer.from("CITESTE.txt");

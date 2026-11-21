@@ -24,9 +24,9 @@ export async function fetchWardLinkTicket(currentPassword: string): Promise<stri
 export function wardErrorMessage(code: string): string {
   switch (code) {
     case "not_linked":
-      return "Acest cont Ward nu este legat de niciun cont PiațăRo. Intră cu parola și leagă-l din Setări.";
+      return "Acest cont Ward nu este legat de niciun cont Mercatus. Intră cu parola și leagă-l din Setări.";
     case "already_linked":
-      return "Acest cont Ward este deja legat de alt cont PiațăRo.";
+      return "Acest cont Ward este deja legat de alt cont Mercatus.";
     case "expired":
     case "expired_link":
       return "Autentificarea cu Ward a expirat. Încearcă din nou.";

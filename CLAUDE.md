@@ -9,7 +9,8 @@ wiki, the numbered briefs (`todo/`, `done/`, `superseded/`) and the immutable so
 
 ## Project Overview
 
-**PiațăRo** (the name the UI shows; code name **my-olx**, the `@my-olx/*` packages) is a Romanian
+**Mercatus** (the name the UI shows since 2026-11-21, set in `frontend/src/core/components/brand/brand.ts`; before it,
+PiațăRo; code name **my-olx**, the `@my-olx/*` packages, and the `/piataro/` base path stay) is a Romanian
 **digital-files marketplace**: sellers upload downloadable files, buyers download them. No physical
 goods, no shipping. Since 2026-11-03 it is being turned into a **deployed demo with fake payments**
 that only the owner signs into (`corpus/wiki/decisions.md`).

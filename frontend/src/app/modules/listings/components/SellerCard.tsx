@@ -16,7 +16,7 @@ export function SellerCard({ seller, listingId, isDigitalAsset = false }: Seller
   const { user, isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const sellerName = seller.displayName || (isDigitalAsset ? "Autor PiațăRo" : "Vânzător PiațăRo");
+  const sellerName = seller.displayName || (isDigitalAsset ? "Autor Mercatus" : "Vânzător Mercatus");
 
   const isOwner = user?.id === seller.id;
 

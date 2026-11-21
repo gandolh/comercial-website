@@ -1,4 +1,4 @@
-# Deploying PiațăRo
+# Deploying Mercatus
 
 The demo runs on the estate's VPS, deployed by the **vps-deploy** repo (its
 `stacks/piataro.ts`). Two halves:

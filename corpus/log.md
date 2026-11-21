@@ -322,3 +322,13 @@ the 25 screens at two widths in both themes. The design documents name the Roman
 `design/design-system/roman-identity.json`, `design/README.md`, the root `CLAUDE.md` and `README.md`;
 [roman-identity.md](wiki/roman-identity.md) is finished from the code. Outcome note in
 [brief 25](briefs/done/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).
+
+## [2026-11-21] done | Brief 26 — the product is called Mercatus
+
+The visible name is Mercatus: the wordmark MERCATVS ("Mercatus, acasă"), the tab title, the footer, the sign-in card,
+the legal pages' operator, the Ward messages and the sample files' text, all from or beside the one `BRAND` constant;
+the README (with its five images retaken), the CLAUDE files and the docs say it too. The paths, packages, stack and
+container keep `piataro` and `my-olx`. [decisions.md](wiki/decisions.md) records the rename and
+[glossary.md](wiki/glossary.md) the name. Owner steps: Ward's display name, and deleting the seeded sample ZIPs so
+the deploy rewrites them. New todo: the legal pages still show the code name my-olx. With this, briefs 21-26 are done.
+Outcome note in [brief 26](briefs/done/26-rename-the-product-to-mercatus.md).

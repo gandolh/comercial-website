@@ -18,7 +18,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [digital-pivot-cleanup](wiki/digital-pivot-cleanup.md) — The pivot from the OLX-era physical-goods clone to digital files only: what was removed, and the category overhaul.
 - [expiry-reminders](wiki/expiry-reminders.md) — Expiry-reminder emails three days before and on the day a listing expires, with the opt-out and no duplicates.
 - [gdpr-kits](wiki/gdpr-kits.md) — Market research: Romanian GDPR document kits, the documents the law requires, competitors' prices and the gap for sector packs.
-- [glossary](wiki/glossary.md) — The project's vocabulary — PiațăRo vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
+- [glossary](wiki/glossary.md) — The project's vocabulary — Mercatus (formerly PiațăRo) vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
 - [invoicing](wiki/invoicing.md) — The offline invoice generator (PDF and UBL 2.1 e-Factura XML, issuer profiles) and the ANAF CUI lookup; never checked against live ANAF, which the owner dropped on 2026-11-03.
 - [legal-and-compliance](wiki/legal-and-compliance.md) — The static legal and info pages, and the GDPR cookie-consent banner.
 - [listing-lifecycle](wiki/listing-lifecycle.md) — The listing preview before publishing, and expiry and renewal in the dashboard.
@@ -34,7 +34,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [search](wiki/search.md) — Listing search on SQLite FTS5 with diacritics folding ("sablon" matches "șablon").
 - [social-media-templates](wiki/social-media-templates.md) — Market research: social-media template packs for Romanian SMBs (platform reach, the price gap between packs and agencies, what to sell).
 - [stack](wiki/stack.md) — The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-- [status](wiki/status.md) — Dated snapshot (2026-11-21) — PiațăRo as a deployed demo; briefs 01-20 are done (one line each), 10-20 wait for a deploy, 21-26 (the Roman rebrand, approved 2026-11-21) are being built, and the owner's steps.
+- [status](wiki/status.md) — Dated snapshot (2026-11-21) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-26 are done (one line each), 10-26 wait for a deploy (21-26: the Roman identity and the rename), and the owner's steps.
 - [user](wiki/user.md) — The User entity: one account type that both buys and sells, its columns, auth fields, seller profile and email opt-outs.
 
 ## Work

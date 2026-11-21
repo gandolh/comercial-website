@@ -1,5 +1,5 @@
 ---
-summary: Dated snapshot (2026-11-21) — PiațăRo as a deployed demo; briefs 01-20 are done (one line each), 10-20 wait for a deploy, 21-26 (the Roman rebrand, approved 2026-11-21) are being built, and the owner's steps.
+summary: Dated snapshot (2026-11-21) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-26 are done (one line each), 10-26 wait for a deploy (21-26: the Roman identity and the rename), and the owner's steps.
 updated: 2026-11-21
 ---
 
@@ -36,7 +36,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 23 (done, ready for deploy): Home as an inscription: the search in a tabula ansata on the tufa band between two fluted columns (from 1000px), the Cinzel title on one line, arched category niches, Cinzel section heads over a gold rule, bronze card prices with a smaller RON and the verified chip on every card, the porphyry sell band with its wreath; the first screens hold (hero ends at y 337 at 1280 × 800, six tiles whole at 390 × 844); `e2e/home.spec.ts`. [Brief 23](../briefs/done/23-home-as-an-inscription.md).
 - 24 (done, ready for deploy): category and search in the Roman identity: the band's gold rule, Cinzel titles that wrap balanced and never truncate (a query title stays Alegreya Sans), the filter-count badge as a tint, Filtre the phone's one red fill, bronze prices and the verified chip in the list view, the count in Romanian plural forms (`search.count`, "de" from 20); `e2e/category.spec.ts`. [Brief 24](../briefs/done/24-category-and-search-in-the-roman-identity.md).
 - 25 (done, ready for deploy): listing detail as drawn (Cinzel section titles over a gold rule, the bronze price, one red fill, the verified seller chip) and every other screen by the identity's rules (Cinzel fixed titles, one red fill per screen on `action-fill`, selected states as tints, no decorative red, tabular figures), in seven screen-group commits; `e2e/screens.spec.ts` over the 25 screens; `design/design-system/roman-identity.json`, the root `CLAUDE.md`, `README.md` and `design/README.md` name the Roman identity. [Brief 25](../briefs/done/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).
-- 26 (todo, owner's call): rename the visible product to Mercatus; only if the owner picks the name. [Brief 26](../briefs/todo/26-rename-the-product-to-mercatus.md).
+- 26 (done, ready for deploy): the visible product is Mercatus: `BRAND`, the wordmark MERCATVS ("Mercatus, acasă"), the tab title, the footer, the sign-in card, the legal pages, the Ward messages, the sample files' text, the README (its five images retaken) and the docs; the paths, packages and stack keep `piataro`/`my-olx`; `e2e/rename.spec.ts`. [Brief 26](../briefs/done/26-rename-the-product-to-mercatus.md).
 
 ## Owed by the owner
 
@@ -57,5 +57,12 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
    open Comenzile mele, Facturi, Mesaje, Câștiguri and Setări once. A stored value outside a response schema
    would answer 500 there while `/health` stays green. If `JWT_SECRET` were ever missing,
    the container now exits at start with `JWT_SECRET environment variable is required`.
+
+7. After briefs 21-26's deploy (ship them together, so no mixed look goes live): in Ward's client registry, set the
+   piataro client's display name to Mercatus (this repo prints only its own text). The sample files already on the
+   server keep "Fișier demonstrativ PiațăRo" inside their ZIPs: `seed:samples` writes a file only when it is missing,
+   so delete `<ASSETS_DIR>/samples/*/*.zip` (on the server, `/srv/piataro-api/data/assets/samples/`) and the deploy's
+   server phase writes them again, the same size. Any outside page that names the demo (a portfolio, a link list)
+   needs the new name by hand.
 
 [docs/deploy.md](../../docs/deploy.md) has the details and a password reset.

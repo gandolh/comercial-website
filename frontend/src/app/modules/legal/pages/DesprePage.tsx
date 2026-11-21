@@ -82,7 +82,7 @@ export function DesprePage() {
 
         {/* Porphyry with a gold ring, like Home's sell band; its button is the marble fill (brief 25). */}
         <section className="space-y-4 rounded-2xl bg-nav-band p-8 text-center ring-1 ring-on-nav-band-variant ring-inset">
-          <h2 className={`${PAGE_TITLE} text-2xl text-on-nav-band`}>PiațăRo este o demonstrație.</h2>
+          <h2 className={`${PAGE_TITLE} text-2xl text-on-nav-band`}>Mercatus este o demonstrație.</h2>
           <p className="text-on-nav-band">
             Conturile noi nu sunt deschise, iar plățile sunt simulate. Poți răsfoi toate anunțurile.
           </p>
