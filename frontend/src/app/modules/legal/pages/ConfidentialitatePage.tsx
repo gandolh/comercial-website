@@ -1,16 +1,19 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { Link } from "@core/lib/router";
 export function ConfidentialitatePage() {
   return (
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Politică de Confidențialitate</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+            Politică de Confidențialitate
+          </h1>
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
         <Section title="1. Operatorul de date">
           <p>
-            <strong>SC PiațăRo SRL</strong> (denumită în continuare „my-olx", „noi" sau „operatorul"), cu sediul în
+            <strong>SC Mercatus SRL</strong> (denumită în continuare „my-olx", „noi" sau „operatorul"), cu sediul în
             București, România, este operatorul datelor tale cu caracter personal, conform Regulamentului (UE) 2016/679
             (GDPR) și Legii nr. 190/2018.
           </p>
@@ -158,7 +161,7 @@ export function ConfidentialitatePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-headline text-xl font-bold text-on-surface">{title}</h2>
+      <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>{title}</h2>
       <div className="leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );

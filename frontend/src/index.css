@@ -5,75 +5,95 @@
 
 @import "tailwindcss";
 
-/* The face: one self-hosted variable file from @fontsource (registers "Schibsted Grotesk Variable"). */
-@import "@fontsource-variable/schibsted-grotesk/wght.css" layer(vendor);
+/* The faces, self-hosted from @fontsource (brief 21): Cinzel 600 and 700 for the capitals, Alegreya Sans 400, 500,
+   700 and 800 for everything else, each in its latin and latin-ext subsets (ă â î in latin, ș ț in latin-ext). */
+@import "@fontsource/cinzel/latin-600.css" layer(vendor);
+@import "@fontsource/cinzel/latin-ext-600.css" layer(vendor);
+@import "@fontsource/cinzel/latin-700.css" layer(vendor);
+@import "@fontsource/cinzel/latin-ext-700.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-400.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-ext-400.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-500.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-ext-500.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-700.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-ext-700.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-800.css" layer(vendor);
+@import "@fontsource/alegreya-sans/latin-ext-800.css" layer(vendor);
 
 @theme {
-  /* PiațăRo, "The filter band" (2026-11-13). Light */
-  --color-primary: #1a5f9e;
-  --color-on-primary: #fefefc;
-  --color-primary-container: #154f85;
-  --color-on-primary-container: #d6e8f7;
-  --color-primary-fixed: #d9e8f5;
-  --color-primary-fixed-dim: #a9c9e6;
-  --color-on-primary-fixed: #0e3a63;
-  --color-on-primary-fixed-variant: #1a5f9e;
-  --color-secondary: #375a7f;
-  --color-on-secondary: #fefefc;
-  --color-secondary-container: #dfe7f0;
-  --color-on-secondary-container: #1d3550;
-  --color-secondary-fixed: #dfe7f0;
-  --color-secondary-fixed-dim: #a9c6e4;
-  --color-on-secondary-fixed: #0f2338;
-  --color-on-secondary-fixed-variant: #375a7f;
-  --color-tertiary: #2a6a2f;
-  --color-on-tertiary: #fefefc;
-  --color-tertiary-container: #2a6a2f;
-  --color-on-tertiary-container: #d3f0d0;
-  --color-tertiary-fixed: #cfeccb;
-  --color-tertiary-fixed-dim: #a9d6a6;
-  --color-on-tertiary-fixed: #0b2a0e;
-  --color-on-tertiary-fixed-variant: #2a6a2f;
-  --color-background: #f2f2ee;
-  --color-on-background: #1b1c1f;
-  --color-surface: #f2f2ee;
-  --color-surface-bright: #f8f8f5;
-  --color-surface-dim: #dcdcd6;
-  --color-surface-variant: #e3e3dd;
-  --color-surface-container-lowest: #fefefc;
-  --color-surface-container-low: #e9e8e2;
-  --color-surface-container: #e8e8e3;
-  --color-surface-container-high: #e2e2dc;
-  --color-surface-container-highest: #dbdbd5;
-  --color-surface-tint: #1a5f9e;
-  --color-on-surface: #1b1c1f;
-  --color-on-surface-variant: #4f5157;
-  --color-outline: #7a7c83;
-  --color-outline-variant: #d3d3cc;
+  /* The Roman identity (brief 21, 2026-11-21), on brief 14's role names. Light. Porphyry shell, vexillum red for
+     the one filled action, the selected state, links and a control in use; gold for lines and ornament only, its
+     text-safe shade (gold-ink, bronze) for prices and small words; travertine and marble neutrals. */
+  --color-primary: #9a2617;
+  --color-on-primary: #fdf8f0;
+  --color-primary-container: #7c1c0f;
+  --color-on-primary-container: #fde3da;
+  --color-primary-fixed: #f5e1d9;
+  --color-primary-fixed-dim: #e9b9aa;
+  --color-on-primary-fixed: #6a180c;
+  --color-on-primary-fixed-variant: #9a2617;
+  --color-secondary: #6f5216;
+  --color-on-secondary: #fdf8f0;
+  --color-secondary-container: #ece2e8; /* the tonal button: a porphyry tint, never gold */
+  --color-on-secondary-container: #2d1026;
+  --color-secondary-fixed: #ece2e8;
+  --color-secondary-fixed-dim: #dfd0da; /* the tonal button's hover */
+  --color-on-secondary-fixed: #2d1026;
+  --color-on-secondary-fixed-variant: #6f5216;
+  --color-tertiary: #6f5216;
+  --color-on-tertiary: #fdf8f0;
+  --color-tertiary-container: #2d1026; /* porphyry: the verified chip, a switch that is on */
+  --color-on-tertiary-container: #f7efe2;
+  --color-tertiary-fixed: #f3e7cf;
+  --color-tertiary-fixed-dim: #4a1f3f; /* the porphyry button's hover */
+  --color-on-tertiary-fixed: #2d1026;
+  --color-on-tertiary-fixed-variant: #6f5216;
+  --color-background: #f1ece2;
+  --color-on-background: #241b17;
+  --color-surface: #f1ece2;
+  --color-surface-bright: #f7f3ec;
+  --color-surface-dim: #ddd5c6;
+  --color-surface-variant: #e5ddcd;
+  --color-surface-container-lowest: #fdfbf6;
+  --color-surface-container-low: #eae3d5;
+  --color-surface-container: #e5ddcd;
+  --color-surface-container-high: #dcd3c2;
+  --color-surface-container-highest: #d3c9b7;
+  --color-surface-tint: #9a2617;
+  --color-on-surface: #241b17;
+  --color-on-surface-variant: #5a4e46;
+  --color-outline: #85786c;
+  --color-outline-variant: #d6cab7;
   --color-error: #b3261e;
   --color-error-container: #f9dedc;
-  --color-on-error: #fefefc;
+  --color-on-error: #fdf8f0;
   --color-on-error-container: #8c1d18;
-  --color-inverse-surface: #2f3033;
-  --color-inverse-on-surface: #f1f1ed;
-  --color-inverse-primary: #8fc3ee;
-  --color-scrim: #1b1c1f;
-  --color-on-scrim: #fefefc;
-  --color-on-fill: #fefefc;
+  --color-inverse-surface: #2f2725;
+  --color-inverse-on-surface: #f4eee4;
+  --color-inverse-primary: #f0937c;
+  --color-scrim: #1b1412;
+  --color-on-scrim: #fdf8f0;
+  --color-on-fill: #fdf8f0;
   --color-rating: #facc15;
-  --color-nav-band: #0f3a63;
-  --color-on-nav-band: #fefefc;
-  --color-on-nav-band-variant: #a9d2f2;
+  --color-nav-band: #2d1026;
+  --color-on-nav-band: #f7efe2;
+  --color-on-nav-band-variant: #d8b35c;
+  /* NEW in brief 21 */
+  --color-action-fill: #9a2617; /* the one filled action per screen */
+  --color-on-action-fill: #fdf8f0;
+  --color-action-fill-hover: #7c1c0f;
+  --color-gold: #b8892e; /* lines and ornament only, never text */
+  --color-gold-ink: #6f5216; /* bronze: prices, category icons, small words in gold */
+  --color-niche: #efe7d8; /* the category niche's fill */
 
-  /* Typography: one face, Schibsted Grotesk (replaces Manrope + Inter) */
-  --font-headline:
-    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body:
-    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-label:
-    "Schibsted Grotesk Variable", "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Typography: Cinzel capitals (--font-cap) for the wordmark, fixed page titles and section titles only; Alegreya
+     Sans for everything else, listing titles included (user content). */
+  --font-cap: "Cinzel", "Trajan Pro", Georgia, serif;
+  --font-headline: "Alegreya Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Alegreya Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-label: "Alegreya Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Type scale: six sizes, three weights (400, 600, 800). NEW: the app had no --text-* tokens */
+  /* Type scale: six sizes, three weights (400, 600, 800; Alegreya Sans has no 600, so it draws 700) */
   --text-hero: 2.5rem;
   --text-hero--line-height: 2.875rem;
   --text-hero--font-weight: 800; /* home head; 30/36 on a phone */
@@ -82,7 +102,7 @@
   --text-title--font-weight: 800; /* page title, listing title, CTA head; 24/30 on a phone */
   --text-price: 1.5rem;
   --text-price--line-height: 1.75rem;
-  --text-price--font-weight: 800; /* card price, wordmark, section head */
+  --text-price--font-weight: 800; /* card price, section head */
   --text-body: 1rem;
   --text-body--line-height: 1.5rem;
   --text-body--font-weight: 400; /* body, nav, buttons (600) */
@@ -96,22 +116,22 @@
   --text-label--line-height: 1rem;
   --text-label--font-weight: 400; /* badges, bottom bar */
 
-  /* Border radius: the app's four stay; one NEW */
+  /* Border radius: stone-cut (brief 21): 6px cards and controls, 4px segments */
   --radius: 0.25rem;
-  --radius-lg: 0.5rem; /* segment (was 8) */
-  --radius-control: 0.625rem; /* NEW: buttons, sort select, fields (10) */
-  --radius-xl: 0.75rem; /* card, track, panel (12) */
-  --radius-2xl: 1rem; /* CTA band, sheet, search (16) */
+  --radius-lg: 0.25rem; /* segment (4) */
+  --radius-control: 0.375rem; /* buttons, sort select, fields (6) */
+  --radius-xl: 0.375rem; /* card, track, panel (6) */
+  --radius-2xl: 0.375rem; /* CTA band, sheet, search (6) */
   --radius-full: 9999px;
 
-  /* Shadow tokens, light */
-  --shadow-card: 0 1px 2px rgba(27, 28, 31, 0.1), 0 4px 12px rgba(27, 28, 31, 0.08);
-  --shadow-band: 0 2px 4px rgba(27, 28, 31, 0.08), 0 8px 20px rgba(27, 28, 31, 0.07);
-  --shadow-popup: 0 8px 32px rgba(27, 28, 31, 0.16);
-  --shadow-ambient: 0 8px 32px rgba(27, 28, 31, 0.06);
-  --shadow-bar: 0 -2px 12px rgba(27, 28, 31, 0.12);
-  --shadow-search: 0 8px 24px rgba(15, 58, 99, 0.1);
-  --shadow-focus: 0 0 0 1px rgba(26, 95, 158, 0.3);
+  /* Shadow tokens, light: tinted with porphyry (#2d1026) */
+  --shadow-card: 0 1px 2px rgba(45, 16, 38, 0.1), 0 4px 12px rgba(45, 16, 38, 0.07);
+  --shadow-band: 0 2px 4px rgba(45, 16, 38, 0.08), 0 8px 20px rgba(45, 16, 38, 0.06);
+  --shadow-popup: 0 8px 32px rgba(45, 16, 38, 0.16);
+  --shadow-ambient: 0 8px 32px rgba(45, 16, 38, 0.06);
+  --shadow-bar: 0 -2px 12px rgba(45, 16, 38, 0.12);
+  --shadow-search: 0 8px 24px rgba(45, 16, 38, 0.1);
+  --shadow-focus: 0 0 0 1px rgba(154, 38, 23, 0.3);
   --shadow-focus-error: 0 0 0 1px rgba(179, 38, 30, 0.4);
 
   /* Stacking: the navbar sits under every overlay, a menu or tooltip over a dialog, a toast over all */
@@ -133,67 +153,75 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-primary: #8fc3ee;
-  --color-on-primary: #06294a;
-  --color-primary-container: #cfe6fa;
-  --color-on-primary-container: #06294a;
-  --color-primary-fixed: #1d3a55;
-  --color-primary-fixed-dim: #8fc3ee;
-  --color-on-primary-fixed: #d6e8f7;
-  --color-on-primary-fixed-variant: #a9d2f2;
-  --color-secondary: #a9c6e4;
-  --color-on-secondary: #0f2338;
-  --color-secondary-container: #2a3a4c;
-  --color-on-secondary-container: #d5e3f2;
-  --color-secondary-fixed: #1f2d3d;
-  --color-secondary-fixed-dim: #375a7f;
-  --color-on-secondary-fixed: #d5e3f2;
-  --color-on-secondary-fixed-variant: #a9c6e4;
-  --color-tertiary: #8fd18f;
-  --color-on-tertiary: #0c3310;
-  --color-tertiary-container: #1c6d24;
-  --color-on-tertiary-container: #c8f0c4;
-  --color-tertiary-fixed: #15381a;
-  --color-tertiary-fixed-dim: #2a6a2f;
-  --color-on-tertiary-fixed: #c8f0c4;
-  --color-on-tertiary-fixed-variant: #8fd18f;
-  --color-background: #131416;
-  --color-on-background: #e8e8e4;
-  --color-surface: #131416;
-  --color-surface-bright: #3a3c41;
-  --color-surface-dim: #131416;
-  --color-surface-variant: #3b3d42;
-  --color-surface-container-lowest: #232529;
-  --color-surface-container-low: #2e3035;
-  --color-surface-container: #1b1c1f;
-  --color-surface-container-high: #2a2c31;
-  --color-surface-container-highest: #34363b;
-  --color-surface-tint: #8fc3ee;
-  --color-on-surface: #e8e8e4;
-  --color-on-surface-variant: #b5b6b0;
-  --color-outline: #8d8f93;
-  --color-outline-variant: #3b3d42;
+  /* The Roman identity, dark: the porphyry bar over a basalt ground. Primary stays a light salmon for links, text and
+     outlines; the filled action has its own deeper red (action-fill) with white on it. */
+  --color-primary: #f0937c;
+  --color-on-primary: #2e0b05;
+  --color-primary-container: #f6b2a1;
+  --color-on-primary-container: #2e0b05;
+  --color-primary-fixed: #4b1c14;
+  --color-primary-fixed-dim: #f0937c;
+  --color-on-primary-fixed: #ffd9cf;
+  --color-on-primary-fixed-variant: #f6b2a1;
+  --color-secondary: #dcbb6c;
+  --color-on-secondary: #2a1d05;
+  --color-secondary-container: #3d2735;
+  --color-on-secondary-container: #f3e3ec;
+  --color-secondary-fixed: #3d2735;
+  --color-secondary-fixed-dim: #4a3242;
+  --color-on-secondary-fixed: #f3e3ec;
+  --color-on-secondary-fixed-variant: #dcbb6c;
+  --color-tertiary: #dcbb6c;
+  --color-on-tertiary: #2a1d05;
+  --color-tertiary-container: #2b0f24;
+  --color-on-tertiary-container: #f7efe2;
+  --color-tertiary-fixed: #3a2c10;
+  --color-tertiary-fixed-dim: #3d1a35;
+  --color-on-tertiary-fixed: #f7efe2;
+  --color-on-tertiary-fixed-variant: #dcbb6c;
+  --color-background: #161112;
+  --color-on-background: #f2e9dd;
+  --color-surface: #161112;
+  --color-surface-bright: #3a3031;
+  --color-surface-dim: #161112;
+  --color-surface-variant: #41363a;
+  --color-surface-container-lowest: #231b1c;
+  --color-surface-container-low: #2c2324;
+  --color-surface-container: #1c1617;
+  --color-surface-container-high: #362c2d;
+  --color-surface-container-highest: #403536;
+  --color-surface-tint: #f0937c;
+  --color-on-surface: #f2e9dd;
+  --color-on-surface-variant: #c5b8aa;
+  --color-outline: #968a7f;
+  --color-outline-variant: #41363a;
   --color-error: #ffb4ab;
   --color-error-container: #5c1511;
   --color-on-error: #601410;
   --color-on-error-container: #f9dedc;
-  --color-inverse-surface: #e8e8e4;
-  --color-inverse-on-surface: #2f3033;
-  --color-inverse-primary: #1a5f9e;
-  --color-scrim: #0a0b0d;
-  --color-on-scrim: #fefefc;
-  --color-on-fill: #fefefc;
+  --color-inverse-surface: #f2e9dd;
+  --color-inverse-on-surface: #2f2725;
+  --color-inverse-primary: #9a2617;
+  --color-scrim: #0b0809;
+  --color-on-scrim: #fdf8f0;
+  --color-on-fill: #fdf8f0;
   --color-rating: #facc15;
-  --color-nav-band: #0e2338;
-  --color-on-nav-band: #e8eef5;
-  --color-on-nav-band-variant: #8fc3ee;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-band: 0 2px 4px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.4);
-  --shadow-popup: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --color-nav-band: #2b0f24;
+  --color-on-nav-band: #f7efe2;
+  --color-on-nav-band-variant: #d8b35c;
+  --color-action-fill: #c24a36;
+  --color-on-action-fill: #ffffff;
+  --color-action-fill-hover: #a93d2b;
+  --color-gold: #b8964d;
+  --color-gold-ink: #dcbb6c;
+  --color-niche: #2c2324;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-band: 0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.25);
+  --shadow-popup: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-ambient: 0 8px 32px rgba(0, 0, 0, 0.35);
-  --shadow-bar: 0 -2px 12px rgba(0, 0, 0, 0.5);
+  --shadow-bar: 0 -2px 12px rgba(0, 0, 0, 0.45);
   --shadow-search: 0 8px 24px rgba(0, 0, 0, 0.45);
-  --shadow-focus: 0 0 0 1px rgba(143, 195, 238, 0.4);
+  --shadow-focus: 0 0 0 1px rgba(240, 147, 124, 0.4);
   --shadow-focus-error: 0 0 0 1px rgba(255, 180, 171, 0.5);
 }
 
@@ -202,9 +230,13 @@
     box-sizing: border-box;
   }
 
+  /* Alegreya Sans defaults to old-style figures and has a small x-height: the root sets lining figures and a 0.5
+     size adjust, which every Alegreya Sans text inherits (brief 21). */
   body {
     margin: 0;
     font-family: var(--font-body);
+    font-variant-numeric: lining-nums;
+    font-size-adjust: 0.5;
     background-color: var(--color-background);
     color: var(--color-on-surface);
     -webkit-font-smoothing: antialiased;
@@ -218,6 +250,17 @@
   h5,
   h6 {
     font-family: var(--font-headline);
+  }
+
+  /* Cinzel is drawn at its own size. */
+  .font-cap {
+    font-size-adjust: none;
+  }
+
+  /* tabular-nums alone would drop the root's lining figures (Tailwind writes font-variant-numeric whole), so a
+     tabular number keeps lining-nums in it. */
+  .tabular-nums {
+    --tw-numeric-figure: lining-nums;
   }
 
   #root {
@@ -236,6 +279,7 @@
     "GRAD" 0,
     "opsz" 24;
   font-size: 24px;
+  font-size-adjust: none; /* not the root's 0.5: an icon keeps its size */
   line-height: 1;
   user-select: none;
 }

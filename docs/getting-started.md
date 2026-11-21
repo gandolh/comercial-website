@@ -1,6 +1,6 @@
 # Getting started
 
-Run PiațăRo on your own machine: the API in `backend/` and the web app in
+Run Mercatus on your own machine: the API in `backend/` and the web app in
 `frontend/`. They are separate npm projects with their own lockfiles.
 
 ## Prerequisites

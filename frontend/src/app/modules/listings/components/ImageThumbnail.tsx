@@ -31,7 +31,7 @@ export function ImageThumbnail({
 
       <div className="absolute top-2 left-2 flex gap-2">
         {isCover ? (
-          <span className="rounded-full bg-primary px-2 py-1 text-xs font-bold text-on-primary">Copertă</span>
+          <span className="rounded-full bg-nav-band px-2 py-1 text-xs font-bold text-on-nav-band">Copertă</span>
         ) : (
           <button
             type="button"

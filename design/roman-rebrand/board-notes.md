@@ -11,4 +11,5 @@ The estate redesign board is a private canvas. Its PiațăRo page holds this alt
 
 ## The owner's answers
 
-None yet (2026-11-20): the name (Mercatus or PiațăRo) and the approval of this row are open. Brief 21 waits for the approval and brief 26 for the name.
+2026-11-21, in a session: the owner approves this row as drawn (brief 21 starts) and picks **Mercatus** (brief 26 runs).
+(2026-11-20: none yet.)

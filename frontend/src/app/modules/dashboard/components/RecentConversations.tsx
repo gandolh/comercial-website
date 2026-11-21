@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useTranslation } from "react-i18next";
 import { Link } from "@core/lib/router";
 import { useConversations } from "@app/modules/messaging/hooks/useConversations";
@@ -24,7 +25,7 @@ export function RecentConversations() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-on-surface">
+        <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>
           {t("dashboard.messages.recentTitle", "Conversații recente")}
         </h2>
         <Link to="/mesaje" className="text-sm font-bold text-primary hover:underline">
@@ -39,7 +40,7 @@ export function RecentConversations() {
             to={`/mesaje/${conv.id}`}
             className="group flex items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest p-4 transition-colors hover:bg-surface-container-low"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary-container font-bold text-on-secondary-container">
               {(conv.counterparty?.display_name || "U").charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">

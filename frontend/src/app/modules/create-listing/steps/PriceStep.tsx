@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Switch } from "@core/components/ui";
@@ -35,7 +36,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
   return (
     <form onSubmit={(e) => void handleSubmit(onNext)(e)} className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-extrabold">Stabilește prețul</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Stabilește prețul</h2>
         <p className="text-on-surface-variant">Cât costă produsul tău?</p>
       </div>
 
@@ -83,7 +84,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
           </button>
           <button
             type="submit"
-            className="flex-[2] rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="flex-[2] rounded-control bg-action-fill px-8 py-4 font-bold text-on-action-fill transition-all hover:bg-action-fill-hover"
           >
             {submitLabel || "Continuă"}
           </button>
@@ -94,7 +95,7 @@ export function PriceStep({ initialData, onNext, onBack, hideFooter = false, sub
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
+            className="rounded-control bg-action-fill px-8 py-4 font-bold text-on-action-fill transition-all hover:bg-action-fill-hover"
           >
             {submitLabel || "Salvează"}
           </button>

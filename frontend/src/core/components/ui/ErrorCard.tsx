@@ -13,7 +13,7 @@ export function ErrorCard({ message, onRetry }: ErrorCardProps) {
       {onRetry && (
         <button
           onClick={onRetry}
-          className="rounded-control bg-primary px-6 py-2 font-bold text-on-primary transition-colors hover:bg-primary-container"
+          className="rounded-control bg-action-fill px-6 py-2 font-bold tracking-wide text-on-action-fill transition-colors hover:bg-action-fill-hover"
         >
           Încearcă din nou
         </button>

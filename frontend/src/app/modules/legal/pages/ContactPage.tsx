@@ -1,9 +1,11 @@
+import { PAGE_TITLE } from "@core/components/brand";
+
 export function ContactPage() {
   return (
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Contact</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>Contact</h1>
           <p className="text-lg text-on-surface-variant">
             Suntem aici pentru a te ajuta. Alege canalul potrivit nevoii tale.
           </p>
@@ -41,11 +43,11 @@ export function ContactPage() {
         </div>
 
         <section className="space-y-4 rounded-2xl bg-surface-container p-8">
-          <h2 className="font-headline text-xl font-bold text-on-surface">Date de identificare</h2>
+          <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Date de identificare</h2>
           <dl className="space-y-2 text-sm leading-relaxed text-on-surface-variant">
             <div className="flex gap-2">
               <dt className="min-w-24 font-semibold text-on-surface">Denumire:</dt>
-              <dd>SC PiațăRo SRL</dd>
+              <dd>SC Mercatus SRL</dd>
             </div>
             <div className="flex gap-2">
               <dt className="min-w-24 font-semibold text-on-surface">CUI:</dt>
@@ -66,7 +68,7 @@ export function ContactPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="font-headline text-xl font-bold text-on-surface">Timp de răspuns</h2>
+          <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Timp de răspuns</h2>
           <p className="leading-relaxed text-on-surface-variant">
             Ne străduim să răspundem la toate solicitările în termen de{" "}
             <strong className="text-on-surface">2 zile lucrătoare</strong>. Solicitările GDPR sunt procesate în termenul
@@ -93,7 +95,7 @@ function ContactCard({
 }) {
   return (
     <div className="space-y-3 rounded-2xl bg-surface-container p-6 transition-shadow hover:shadow-md">
-      <span className="material-symbols-outlined block text-primary" style={{ fontSize: "28px" }}>
+      <span className="material-symbols-outlined block text-gold-ink" style={{ fontSize: "28px" }}>
         {icon}
       </span>
       <div>

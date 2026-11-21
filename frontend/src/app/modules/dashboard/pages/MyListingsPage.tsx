@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useMyListings } from "../hooks/useMyListings";
@@ -91,7 +92,7 @@ export function MyListingsPage() {
     <main className="mx-auto min-h-screen w-full max-w-310 space-y-8 px-4 py-12 pt-8 md:px-6">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
+          <h1 className={`${PAGE_TITLE} text-3xl text-on-surface`}>
             {t("dashboard.listings.title", "Anunțurile mele")}
           </h1>
           <p className="text-on-surface-variant">
@@ -100,7 +101,7 @@ export function MyListingsPage() {
         </div>
         <Link
           to="/adauga-anunt"
-          className="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container"
+          className="flex items-center justify-center gap-2 rounded-xl bg-action-fill px-6 py-3 font-bold text-on-action-fill transition-all hover:bg-action-fill-hover"
         >
           <span className="material-symbols-outlined">add_circle</span>
           {t("nav.addListing")}
@@ -160,7 +161,7 @@ export function MyListingsPage() {
           </div>
           <Link
             to="/adauga-anunt"
-            className="inline-block rounded-xl bg-primary px-8 py-3 font-bold text-on-primary transition-all hover:shadow-band"
+            className="inline-block rounded-xl border border-outline px-8 py-3 font-bold text-on-surface transition-colors hover:bg-surface-container-low"
           >
             {t("nav.addListing")}
           </Link>
@@ -203,7 +204,7 @@ export function MyListingsPage() {
                       <span className="rounded-sm bg-surface-container-high px-2 py-0.5">{listing.category}</span>
                     </div>
                     <h3 className="truncate text-lg font-bold text-on-surface">{listing.title}</h3>
-                    <div className="text-xl font-extrabold text-primary">
+                    <div className="text-xl font-extrabold text-gold-ink tabular-nums">
                       {listing.priceRon ? `${listing.priceRon} RON` : "Preț negociabil"}
                     </div>
                   </div>
@@ -242,7 +243,7 @@ export function MyListingsPage() {
                   {activeTab === "inactive" && (
                     <button
                       onClick={() => void handleAction(() => activate.mutateAsync(listing.id))}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-bold text-on-primary transition-colors hover:opacity-90 md:flex-none"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-outline px-4 py-2 font-bold text-on-surface transition-colors hover:bg-surface-container-low md:flex-none"
                     >
                       <span className="material-symbols-outlined text-sm">play_arrow</span>
                       {t("listing.actions.activate")}

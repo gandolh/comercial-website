@@ -84,7 +84,7 @@ export const ConversationPage: React.FC = () => {
           <div className="flex items-center gap-1 text-xs text-on-surface-variant">
             <span className="truncate">{currentConversation.listing.title}</span>
             <span>·</span>
-            <span className="shrink-0 font-semibold text-primary">
+            <span className="shrink-0 font-semibold text-gold-ink tabular-nums">
               {currentConversation.listing.price_ron
                 ? formatPrice(currentConversation.listing.price_ron)
                 : t("common:listings.free")}

@@ -12,7 +12,10 @@ export const MessageBubble: React.FC<Props> = ({ message, isMe }) => {
     <div className={`mb-4 flex flex-col ${isMe ? "items-end" : "items-start"}`}>
       <div
         className={`max-w-[70%] rounded-2xl p-3 text-sm ${
-          isMe ? "rounded-br-none bg-primary text-on-primary" : "rounded-bl-none bg-surface-container text-on-surface"
+          // Your own messages sit on the porphyry tint: red is only for the one action and selected states (brief 25).
+          isMe
+            ? "rounded-br-none bg-secondary-container text-on-secondary-container"
+            : "rounded-bl-none bg-surface-container text-on-surface"
         }`}
       >
         <p className="break-words whitespace-pre-wrap">{message.body}</p>

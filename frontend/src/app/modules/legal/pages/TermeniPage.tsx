@@ -1,15 +1,19 @@
+import { PAGE_TITLE } from "@core/components/brand";
+
 export function TermeniPage() {
   return (
     <main className="mx-auto w-full max-w-310 px-4 pt-10 pb-20 md:px-6">
       <div className="mx-auto max-w-3xl space-y-10">
         <header className="space-y-3">
-          <h1 className="font-headline text-4xl font-extrabold text-on-surface">Termeni și Condiții</h1>
+          <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
+            Termeni și Condiții
+          </h1>
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
         <Section title="1. Despre my-olx">
           <p>
-            my-olx este o platformă online de comercializare a activelor digitale, operată de SC PiațăRo SRL, cu sediul
+            my-olx este o platformă online de comercializare a activelor digitale, operată de SC Mercatus SRL, cu sediul
             în România. Platforma permite vânzătorilor să încarce și să vândă fișiere descărcabile (software, grafică,
             șabloane, audio, video, e-bookuri, fonturi, cod sursă și altele), iar cumpărătorilor să le achiziționeze și
             descărce.
@@ -122,7 +126,7 @@ export function TermeniPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3">
-      <h2 className="font-headline text-xl font-bold text-on-surface">{title}</h2>
+      <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>{title}</h2>
       <div className="leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );

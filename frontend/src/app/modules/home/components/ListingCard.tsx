@@ -4,6 +4,26 @@ import { useMemo } from "react";
 import type { ListingCard as ListingCardItem } from "@app/types/listing";
 import { FavoriteToggle } from "@app/modules/favorites/components/FavoriteToggle";
 import { PreviewImage } from "@app/modules/listings/components/PreviewImage";
+import { Badge } from "@core/components/ui";
+
+/**
+ * A card's price (brief 23): bronze, 800, lining tabular figures, with a smaller RON after it in the same colour.
+ * Shared by the category list view (brief 24).
+ */
+export function CardPrice({ priceRon }: { priceRon: number | null | undefined }) {
+  return (
+    <span className="text-price font-extrabold text-gold-ink tabular-nums">
+      {priceRon != null ? (
+        <>
+          {priceRon.toLocaleString("ro-RO")}
+          <small className="ml-1 text-sm font-bold tracking-[0.04em]">RON</small>
+        </>
+      ) : (
+        "Gratuit"
+      )}
+    </span>
+  );
+}
 
 interface ListingCardProps {
   listing: ListingCardItem;
@@ -25,12 +45,9 @@ export function ListingCard({ listing }: ListingCardProps) {
         <PreviewImage src={listing.coverUrl} alt={listing.title} category={listing.category} />
         <FavoriteToggle listingId={listing.id} className="absolute top-3 right-3" size="sm" />
         {listing.sellerVerified && (
-          <span className="absolute bottom-3 left-3 inline-flex h-6 items-center gap-1 rounded-xl bg-tertiary-container pr-2.5 pl-2 text-label font-semibold text-on-fill">
-            <span className="material-symbols-outlined" style={{ fontSize: "14px" }} aria-hidden="true">
-              verified
-            </span>
+          <Badge variant="verified" icon="verified" className="absolute bottom-3 left-3">
             {t("listing.verified")}
-          </span>
+          </Badge>
         )}
         {isExpired && (
           <span className="absolute right-3 bottom-3 inline-flex h-6 items-center rounded-xl bg-error px-2.5 text-label font-semibold text-on-error">
@@ -40,9 +57,7 @@ export function ListingCard({ listing }: ListingCardProps) {
       </div>
 
       <div className="flex flex-col gap-1 px-4 pt-4 pb-4.5">
-        <span className="text-price font-extrabold text-primary tabular-nums">
-          {listing.priceRon != null ? `${listing.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
-        </span>
+        <CardPrice priceRon={listing.priceRon} />
         <h3 className="line-clamp-2 text-card-title text-on-surface transition-colors group-hover:text-primary">
           {listing.title}
         </h3>

@@ -65,7 +65,7 @@ export function InvoiceList({ invoices }: Props) {
             <div className="mt-0.5 truncate text-sm text-on-surface-variant">
               {t("invoices.list.buyer", "Client:")} {inv.buyer_name}
             </div>
-            <div className="mt-0.5 text-sm font-semibold text-primary">
+            <div className="mt-0.5 text-sm font-semibold text-gold-ink tabular-nums">
               {inv.total.toFixed(2)} {inv.currency}
             </div>
           </div>

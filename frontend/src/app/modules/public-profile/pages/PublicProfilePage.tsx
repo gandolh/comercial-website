@@ -1,11 +1,13 @@
+import { PAGE_TITLE, SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { useParams } from "@core/lib/router";
 import { usePublicProfile, useUserListings } from "../hooks/usePublicProfile";
 import type { PublicUserResponse } from "../services/profile";
 import { ListingCard } from "@app/modules/home/components/ListingCard";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
-import { ShieldCheck, Calendar, Package, Download, Globe, AtSign, Link2, ExternalLink } from "lucide-react";
+import { Calendar, Package, Download, Globe, AtSign, Link2, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Badge } from "@core/components/ui";
 
 /** Extended profile type including seller profile fields added in migration 20260615010000. */
 interface SellerProfile extends PublicUserResponse {
@@ -43,7 +45,7 @@ export function PublicProfilePage() {
   if (!profile) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-24 text-center">
-        <h1 className="mb-4 text-4xl font-extrabold">{t("seller.notFound")}</h1>
+        <h1 className={`${PAGE_TITLE} mb-4 text-4xl max-md:text-[28px] max-md:leading-9`}>{t("seller.notFound")}</h1>
         <p className="text-on-surface-variant">{t("seller.notFoundDesc")}</p>
       </div>
     );
@@ -74,10 +76,9 @@ export function PublicProfilePage() {
             <div className="mb-2 flex flex-wrap items-center justify-center gap-3 md:justify-start">
               <h1 className="text-3xl font-extrabold">{profile.display_name || "Utilizator"}</h1>
               {profile.phone_verified && (
-                <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-                  <ShieldCheck className="h-4 w-4" />
-                  <span>{t("seller.verifiedSeller")}</span>
-                </div>
+                <Badge variant="verified" icon="verified">
+                  {t("seller.verifiedSeller")}
+                </Badge>
               )}
             </div>
 
@@ -172,7 +173,7 @@ export function PublicProfilePage() {
       </div>
 
       {/* Listings Grid */}
-      <h2 className="mb-8 text-2xl font-extrabold">{t("seller.listingsTitle")}</h2>
+      <h2 className={`${SECTION_TITLE} ${SECTION_RULE} mb-8`}>{t("seller.listingsTitle")}</h2>
 
       {isListingsLoading ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

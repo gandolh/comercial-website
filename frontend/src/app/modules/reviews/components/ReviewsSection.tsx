@@ -1,3 +1,4 @@
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
@@ -80,7 +81,7 @@ function ReviewCard({ review }: { review: Review }) {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary-container text-sm font-bold text-on-secondary-container"
             aria-hidden="true"
           >
             {name.charAt(0).toUpperCase()}
@@ -179,7 +180,7 @@ function ReviewForm({ listingId, existingReview, onSuccess }: ReviewFormProps) {
       />
 
       <div className="flex items-center gap-3">
-        <Button type="submit" variant="primary" size="sm" loading={submitMutation.isPending}>
+        <Button type="submit" variant="secondary" size="sm" loading={submitMutation.isPending}>
           {isEditing ? t("reviews.form.update") : t("reviews.form.submit")}
         </Button>
       </div>
@@ -216,8 +217,8 @@ export function ReviewsSection({ listingId, canReview }: ReviewsSectionProps) {
   return (
     <section className="space-y-6" aria-labelledby="reviews-heading">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
-        <h2 id="reviews-heading" className="font-headline text-lg font-bold text-on-surface">
+      <div className={`${SECTION_RULE} flex items-center justify-between gap-4`}>
+        <h2 id="reviews-heading" className={`${SECTION_TITLE} text-on-surface`}>
           {t("reviews.title")}
         </h2>
       </div>

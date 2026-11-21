@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams, Navigate } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useCategoryListings } from "../hooks/useCategoryListings";
@@ -23,6 +24,7 @@ function parseFilters(params: URLSearchParams): FilterState {
 }
 
 export function CategoryPage() {
+  const { t } = useTranslation();
   const { slug = "" } = useParams<{ slug: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -70,7 +72,9 @@ export function CategoryPage() {
     <>
       <ResultsBand
         title={label}
-        count={isFetching ? <Skeleton className="mt-1 h-5 w-48" /> : `${data?.totalCount ?? 0} de anunțuri găsite`}
+        count={
+          isFetching ? <Skeleton className="mt-1 h-5 w-48" /> : t("search.count", { count: data?.totalCount ?? 0 })
+        }
         filters={filters}
         viewMode={viewMode}
         onViewModeChange={setViewMode}

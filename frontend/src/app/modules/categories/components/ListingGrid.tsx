@@ -1,7 +1,7 @@
 import { Link } from "@core/lib/router";
-import { Button } from "@core/components/ui";
+import { Badge, Button } from "@core/components/ui";
 import { CardSkeleton } from "@core/components/ui/Skeleton";
-import { ListingCard } from "@app/modules/home/components/ListingCard";
+import { CardPrice, ListingCard } from "@app/modules/home/components/ListingCard";
 import { PreviewImage } from "@app/modules/listings/components/PreviewImage";
 import { FavoriteToggle } from "@app/modules/favorites/components/FavoriteToggle";
 import type { ListingCard as ListingCardItem } from "@app/types/listing";
@@ -74,15 +74,13 @@ export function ListingGrid({ listings, isLoading, viewMode, onReset }: ListingG
               <PreviewImage src={l.coverUrl} alt={l.title} category={l.category} iconSize={32} />
             </div>
             <div className="flex min-w-0 flex-col justify-center gap-1 p-4 pr-14">
-              <span className="text-price font-extrabold text-primary tabular-nums">
-                {l.priceRon !== null ? `${l.priceRon.toLocaleString("ro-RO")} RON` : "Gratuit"}
-              </span>
+              <CardPrice priceRon={l.priceRon} />
               <h3 className="text-card-title text-on-surface">{l.title}</h3>
               <p className="text-control text-on-surface-variant">{formatRelativeTime(l.postedAt)}</p>
               {l.sellerVerified && (
-                <span className="inline-flex h-6 items-center gap-1 self-start rounded-xl bg-tertiary-container px-2.5 text-label font-semibold text-on-fill">
+                <Badge variant="verified" icon="verified" className="self-start">
                   Verificat
-                </span>
+                </Badge>
               )}
             </div>
             <FavoriteToggle listingId={l.id} className="absolute top-2 right-2" size="sm" />

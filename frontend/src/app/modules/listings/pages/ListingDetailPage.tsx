@@ -2,6 +2,7 @@ import { Link, useParams } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { Skeleton } from "@core/components/ui/Skeleton";
 import { Button } from "@core/components/ui";
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { Panel } from "../components/Panel";
 import { useListingDetail } from "../hooks/useListingDetail";
 import { useRelatedListings } from "../hooks/useRelatedListings";
@@ -77,11 +78,11 @@ function AssetFileList({ listingId, assets, isPaidListing = false, canDownload =
 
   return (
     <Panel aria-labelledby="files-title">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="files-title" className="text-price font-extrabold text-on-surface">
+      <div className={`${SECTION_RULE} flex flex-wrap items-baseline justify-between gap-2`}>
+        <h2 id="files-title" className={`${SECTION_TITLE} text-on-surface`}>
           {t("listing_files.title")}
         </h2>
-        <span className="text-control text-on-surface-variant">
+        <span className="text-control text-on-surface-variant tabular-nums">
           {t("listing_files.count", { count: assets.length })}
           {" · "}
           {t("listing_files.totalSize", { size: formatBytes(totalBytes) })}
@@ -96,12 +97,12 @@ function AssetFileList({ listingId, assets, isPaidListing = false, canDownload =
               key={asset.id}
               className="flex list-none items-center gap-4 bg-surface-container-lowest px-4 py-3 transition-colors hover:bg-surface-container-low"
             >
-              <span className="material-symbols-outlined text-primary" aria-hidden="true">
+              <span className="material-symbols-outlined text-gold-ink" aria-hidden="true">
                 draft
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-control font-semibold text-on-surface">{asset.originalFilename}</p>
-                <p className="mt-0.5 text-label text-on-surface-variant">
+                <p className="mt-0.5 text-label text-on-surface-variant tabular-nums">
                   {formatBytes(asset.fileSizeBytes)} · {asset.contentType}
                 </p>
               </div>
@@ -320,7 +321,7 @@ export function ListingDetailPage() {
 
               {isDigitalAsset && isPaidListing && !canDownload && (
                 <Panel aria-labelledby="paywall-title" className="bg-surface-container-low">
-                  <h2 id="paywall-title" className="text-price font-extrabold text-on-surface">
+                  <h2 id="paywall-title" className={`${SECTION_TITLE} ${SECTION_RULE} text-on-surface`}>
                     {t("orders.download.paywall.title")}
                   </h2>
                   <p className="text-control text-on-surface-variant">{t("orders.download.paywall.body")}</p>

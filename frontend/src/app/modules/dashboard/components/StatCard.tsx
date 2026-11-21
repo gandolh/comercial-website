@@ -11,8 +11,9 @@ interface StatCardProps {
 
 export function StatCard({ title, value, label, icon, to, color = "primary" }: StatCardProps) {
   const colorClasses = {
-    primary: "text-primary bg-primary/10",
-    secondary: "text-primary bg-primary-fixed",
+    // Bronze icons in the niche fill, as the category icons: red is for actions and selected states (brief 25).
+    primary: "text-gold-ink bg-niche",
+    secondary: "text-on-secondary-container bg-secondary-container",
     error: "text-error bg-error/10",
     info: "text-info bg-info/10",
   };
@@ -33,7 +34,7 @@ export function StatCard({ title, value, label, icon, to, color = "primary" }: S
       <div className="space-y-1">
         <p className="text-sm font-medium text-on-surface-variant">{title}</p>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-extrabold text-on-surface">{value}</span>
+          <span className="text-3xl font-extrabold text-on-surface tabular-nums">{value}</span>
           <span className="text-sm font-medium text-on-surface-variant">{label}</span>
         </div>
       </div>

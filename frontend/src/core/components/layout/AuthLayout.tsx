@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Outlet } from "@tanstack/react-router";
-import { Wordmark } from "./Navbar";
+import { Wordmark } from "@core/components/brand";
 
 function AuthPageLoader() {
   return (
@@ -16,7 +16,7 @@ export function AuthLayout() {
       <div className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <Wordmark className="text-title text-on-surface [--wordmark-accent:var(--color-primary)]" />
+            <Wordmark tone="ink" />
           </div>
           <Suspense fallback={<AuthPageLoader />}>
             <Outlet />

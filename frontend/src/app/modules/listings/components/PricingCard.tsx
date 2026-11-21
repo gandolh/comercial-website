@@ -33,8 +33,6 @@ export function PricingCard({
   const { t } = useTranslation();
   const { user } = useAuth();
   const isOwner = user?.id === sellerId;
-  const formattedPrice = priceRon != null ? `${priceRon.toLocaleString("ro-RO")} RON` : "Gratuit";
-
   const navigate = useNavigate();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -77,13 +75,23 @@ export function PricingCard({
         </h1>
         <FavoriteToggle listingId={listingId} className="size-11 flex-none bg-surface-container-low shadow-none" />
       </div>
-      <p className="text-3xl leading-9 font-extrabold text-primary tabular-nums">{formattedPrice}</p>
+      {/* The price: bronze, 800, lining tabular figures, a smaller RON (brief 25). */}
+      <p className="text-3xl leading-9 font-extrabold text-gold-ink tabular-nums">
+        {priceRon != null ? (
+          <>
+            {priceRon.toLocaleString("ro-RO")}
+            <small className="ml-1.5 text-lg font-bold tracking-[0.04em]">RON</small>
+          </>
+        ) : (
+          "Gratuit"
+        )}
+      </p>
 
       <div className="flex flex-col gap-3">
         {isOwner ? (
           <Link
             to={`/anunturi/${listingId}/editeaza`}
-            className="inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-control bg-primary px-5 text-body font-semibold text-on-primary no-underline transition-colors hover:bg-primary-container active:brightness-90"
+            className="inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-control bg-action-fill px-5 text-body font-bold tracking-wide text-on-action-fill no-underline transition-colors hover:bg-action-fill-hover focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:brightness-90"
           >
             <span className="material-symbols-outlined" aria-hidden="true">
               edit
@@ -118,7 +126,7 @@ export function PricingCard({
         onClose={() => setIsContactModalOpen(false)}
       />
 
-      <div className="flex justify-between gap-3 border-t border-outline-variant pt-4 text-control text-on-surface-variant">
+      <div className="flex justify-between gap-3 border-t border-outline-variant pt-4 text-control text-on-surface-variant tabular-nums">
         {isDigitalAsset && (
           <span className="inline-flex items-center gap-2">
             <span className="material-symbols-outlined" style={{ fontSize: "18px" }} aria-hidden="true">

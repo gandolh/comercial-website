@@ -273,3 +273,62 @@ The owner asked for an alternative look "in the style of the Roman empire". It w
 ## [2026-11-20] maintenance | The board's design copies move into the repo
 
 The estate redesign board is a private canvas. `design/estate-redesign/` now holds a copy of PiațăRo's page for the approved redesign, "The filter band" (brief 14): directions, rulings, critique, token hand-off, the board's notes, the owner's decisions, the twins and their renders, and today's shots. The Roman rebrand row's notes, critique and renders now sit beside its comps in `design/roman-rebrand/`, and brief 21 points to them, so briefs 21-26 run without the board.
+
+## [2026-11-21] decision | The owner approves the Roman rebrand row and picks Mercatus
+
+In a session on 2026-11-21 the owner approved the refined "Alternative: a Roman rebrand" row as drawn, so brief 21
+starts, and picked the name Mercatus, so brief 26 runs. Recorded in `design/roman-rebrand/board-notes.md` and
+[decisions.md](wiki/decisions.md).
+
+## [2026-11-21] done | Brief 21 — the Roman identity's tokens and type
+
+Cinzel and Alegreya Sans self-hosted (only their latin and latin-ext subsets), Schibsted Grotesk gone; both comp
+blocks mapped onto the role names, with `action-fill` (and its on and hover roles), `gold`, `gold-ink` and `niche`
+new; lining figures and a 0.5 size adjust at the root; 6px radii and porphyry shadows; Button's filled action and the
+verified Badge. Contrast holds over both themes (text min 5.37 light, 4.85 dark) and a new spec checks the faces,
+the diacritics and the figures. Screens keep brief 14's layout until briefs 22-25. New page
+[roman-identity.md](wiki/roman-identity.md); [carpathian-clear.md](wiki/carpathian-clear.md) is history. Outcome
+note in [brief 21](briefs/done/21-the-roman-identity-tokens-and-type.md).
+
+## [2026-11-21] done | Brief 22 — the Roman shell
+
+The laurel wordmark in Cinzel capitals (gold on the porphyry bar, ink in the footer and the auth pages), the Greek-key
+frieze under the bar and over the footer, the gold current-place underline and gold focus rings on the bar, and the
+footer's year as MMXXVI with "2026" for screen readers. The name lives in one constant, `BRAND`, for brief 26. A new
+spec covers the ornament, the rings and the bar at 360. Outcome note in [brief 22](briefs/done/22-the-roman-shell.md).
+
+## [2026-11-21] done | Brief 23 — Home as an inscription
+
+The search sits in a marble tabula ansata on the tufa band between two fluted gold columns, under a one-line Cinzel
+title; the category tiles have arched niches, the section heads are Cinzel over a gold rule, card prices are bronze
+with a smaller RON, every card carries the verified chip, and the sell band is porphyry with a gold ring and the
+wreath. Brief 14's first screens hold at 1280 × 800 and 390 × 844, measured by a new spec. Outcome note in
+[brief 23](briefs/done/23-home-as-an-inscription.md).
+
+## [2026-11-21] done | Brief 24 — category and search in the Roman identity
+
+The filter band gets a gold rule and a Cinzel title that wraps balanced and is never cut ("Documente & Template-uri
+Legale" whole at 360); a query title stays in Alegreya Sans. Red is only the selected state, the slider and the
+phone's Filtre; the count badge became a tint. The list view takes the bronze price and the verified chip. The
+result count now follows Romanian plurals ("2 anunțuri", "20 de anunțuri"). Outcome note in
+[brief 24](briefs/done/24-category-and-search-in-the-roman-identity.md).
+
+## [2026-11-21] done | Brief 25 — listing detail and every other screen in the Roman identity
+
+Listing detail as drawn (Cinzel section titles over a gold rule, the bronze price, Descarcă Asset the one red fill, the
+verified seller chip), and the identity's rules on every other screen in seven group commits: Cinzel fixed titles, one
+red fill per screen on `action-fill`, selected states as tints, no decorative red, tabular figures. A new spec checks
+the 25 screens at two widths in both themes. The design documents name the Roman identity:
+`design/design-system/roman-identity.json`, `design/README.md`, the root `CLAUDE.md` and `README.md`;
+[roman-identity.md](wiki/roman-identity.md) is finished from the code. Outcome note in
+[brief 25](briefs/done/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).
+
+## [2026-11-21] done | Brief 26 — the product is called Mercatus
+
+The visible name is Mercatus: the wordmark MERCATVS ("Mercatus, acasă"), the tab title, the footer, the sign-in card,
+the legal pages' operator, the Ward messages and the sample files' text, all from or beside the one `BRAND` constant;
+the README (with its five images retaken), the CLAUDE files and the docs say it too. The paths, packages, stack and
+container keep `piataro` and `my-olx`. [decisions.md](wiki/decisions.md) records the rename and
+[glossary.md](wiki/glossary.md) the name. Owner steps: Ward's display name, and deleting the seeded sample ZIPs so
+the deploy rewrites them. New todo: the legal pages still show the code name my-olx. With this, briefs 21-26 are done.
+Outcome note in [brief 26](briefs/done/26-rename-the-product-to-mercatus.md).

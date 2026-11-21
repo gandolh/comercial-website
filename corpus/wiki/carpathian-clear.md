@@ -1,9 +1,12 @@
 ---
-summary: The Carpathian Clear design system as shipped by brief 14 ("The filter band"): colour roles in both themes, the one typeface, radii, shadows, the type scale, the navy shell and where the tokens live; the pre-redesign values are kept as history.
-updated: 2026-11-13
+summary: History since 2026-11-21 (the Roman identity replaced it) — the Carpathian Clear design system as shipped by brief 14 ("The filter band"): colour roles in both themes, the one typeface, radii, shadows, the type scale, the navy shell and where the tokens live; the pre-redesign values are kept as history.
+updated: 2026-11-21
 ---
 
 # Carpathian Clear Design System
+
+> **History since 2026-11-21.** The Roman identity (briefs 21-25) replaced these values and the face; the role names
+> stay. What ships now is [roman-identity.md](roman-identity.md).
 
 The visual language of PiațăRo (code name my-olx). It follows Material Design 3 role names. Brief 14 (2026-11-13)
 changed the values and the layout and kept every role name. Token file for the design tool:

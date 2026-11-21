@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "@core/lib/router";
 import { ErrorCard } from "@core/components/ui/ErrorCard";
 import { useCategoryListings } from "@app/modules/categories/hooks/useCategoryListings";
@@ -21,6 +22,7 @@ function parseFilters(params: URLSearchParams): FilterState {
 }
 
 export function SearchResultsPage() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -61,7 +63,8 @@ export function SearchResultsPage() {
     <>
       <ResultsBand
         title={q ? `Rezultate pentru "${q}"` : "Toate anunțurile"}
-        count={isFetching ? "Se încarcă..." : `${data?.totalCount || 0} anunțuri găsite`}
+        titleIsUserText={Boolean(q)}
+        count={isFetching ? "Se încarcă..." : t("search.count", { count: data?.totalCount ?? 0 })}
         filters={filters}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
