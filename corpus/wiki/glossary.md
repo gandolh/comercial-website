@@ -1,13 +1,16 @@
 ---
-summary: The project's vocabulary — PiațăRo vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
-updated: 2026-11-03
+summary: The project's vocabulary — Mercatus (formerly PiațăRo) vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
+updated: 2026-11-21
 ---
 
 # Glossary
 
-**PiațăRo**:
-The product's name, as the UI shows it. `my-olx` is the code name of the packages (`@my-olx/*`).
-_Avoid_: my-olx in user-facing text, OLX.
+**Mercatus**:
+The product's name, as the UI shows it, since 2026-11-21 (Latin for "market"); `BRAND` in
+`frontend/src/core/components/brand/brand.ts`. The wordmark letters it MERCATVS, cutting U as V; everywhere else it is
+written Mercatus. `my-olx` is the code name of the packages (`@my-olx/*`), and `piataro` stays in the paths, the stack
+and the container.
+_Avoid_: PiațăRo (the name until 2026-11-21), Mercatvs in sentences, my-olx in user-facing text, OLX.
 
 **Listing**:
 What a seller offers: a title, description, price in RON (or free) and at least one asset.
@@ -26,7 +29,7 @@ A listing seeded at deploy under a seller profile that cannot sign in; it never 
 _Avoid_: demo listing, fixture.
 
 **Platform fee**:
-PiațăRo's cut of a paid order, 2.5%, recorded on the order at sale time.
+Mercatus's cut of a paid order, 2.5%, recorded on the order at sale time.
 _Avoid_: commission, take rate.
 
 **Payout**:

@@ -1,12 +1,12 @@
-# PiațăRo
+# Mercatus
 
 A Romanian marketplace for digital files. Creators sell templates, graphics, fonts, source code, audio, e-books and other downloads, priced in lei, and buyers pay and download them. Nothing physical, so no shipping. In the code the project is called `my-olx`.
 
 <p align="center">
-  <img src="docs/images/hero.webp" width="100%" alt="The PiațăRo listings page, Toate anunțurile with 9 results: a navy top bar, a filter band with choices for licence type, file format and publication date, a price slider and a verified-author switch, and two rows of listing cards with preview pictures and prices in RON, such as an SVG icon pack for 49 RON, a GDPR kit for 99 RON and wedding invitations for 45 RON">
+  <img src="docs/images/hero.webp" width="100%" alt="The Mercatus listings page, Toate anunțurile with 9 results: a dark plum top bar with the gold MERCATVS wordmark and a laurel over a Greek-key frieze, a filter band with choices for licence type, file format and publication date, a price slider and a verified-author switch, and two rows of listing cards with preview pictures and bronze prices in RON, such as an SVG icon pack for 49 RON, a GDPR kit for 99 RON and wedding invitations for 45 RON">
 </p>
 
-**Status:** Being turned into a deployed demo, decided on 2026-11-03. Payments are simulated, only the owner signs in, and visitors browse read-only. Browsing, listing pages, creating listings, and buying and reviewing through the built-in fake payment provider work locally. The UI was redesigned on 2026-11-13. The deploy is written but, per the project wiki's status of 2026-11-13, has not run yet, so there is no live link. Emails only go to the server log. It takes no real money.
+**Status:** Being turned into a deployed demo, decided on 2026-11-03. Payments are simulated, only the owner signs in, and visitors browse read-only. Browsing, listing pages, creating listings, and buying and reviewing through the built-in fake payment provider work locally. The UI was redesigned on 2026-11-13 and given a Roman identity, under the name Mercatus, on 2026-11-21. The deploy is written but, per the project wiki's status of 2026-11-13, has not run yet, so there is no live link. Emails only go to the server log. It takes no real money.
 
 ## What it does
 
@@ -17,21 +17,21 @@ A Romanian marketplace for digital files. Creators sell templates, graphics, fon
 - Generates invoices as PDF and as e-Factura XML (UBL 2.1), with company details filled in from a CUI through ANAF.
 - Expires listings after 30 days, with reminder emails before and on the day, and allows 5 new listings a week per account.
 
-The market research in the corpus found no Romanian platform that combines Romanian-language listings, prices in lei and e-Factura invoices; the closest local shops sell only legal documents. PiațăRo leaves out physical goods, shipping and locations on purpose.
+The market research in the corpus found no Romanian platform that combines Romanian-language listings, prices in lei and e-Factura invoices; the closest local shops sell only legal documents. Mercatus leaves out physical goods, shipping and locations on purpose.
 
 ## Screenshots
 
-![A listing page for an SVG icon pack: format ZIP, commercial licence; a paid-asset box with a Cumpără button for 49 RON and a note that the payment is simulated; the included file iconite-svg.zip marked Blocat; and buyer reviews averaging 4.5 from two reviewers](docs/images/listing-buy.webp)
+![A listing page for an SVG icon pack, its section titles in Roman capitals over gold rules: format ZIP, commercial licence; a paid-asset box with a Cumpără button for 49 RON and a note that the payment is simulated; the included file iconite-svg.zip marked Blocat; and buyer reviews averaging 4.5 from two reviewers](docs/images/listing-buy.webp)
 
 A paid listing. The file stays locked (Blocat) until the order is paid, and only buyers who paid can review.
 
-![Categorii Populare on the home page: a grid of 13 category cards with icons, from Grafică & Ilustrații and Șabloane & Template-uri to Modele 3D & AR and Invitații Digitale](docs/images/categories.webp)
+![Categorii Populare on the home page, in Roman capitals over a gold rule: a grid of 13 category cards, each icon in an arched niche, from Grafică & Ilustrații and Șabloane & Template-uri to Modele 3D & AR and Invitații Digitale](docs/images/categories.webp)
 
 The home page's categories.
 
 | On a phone | The filters on a phone |
 |---|---|
-| <img src="docs/images/phone-browse.webp" width="300" alt="The listings page on a phone: 9 results, a Filtre button, a sort menu, a row of filter chips, the first card, an SVG icon pack for 49 RON, and a five-place bar at the bottom: Acasă, Categorii, Favorite, Mesaje, Conectare"> | <img src="docs/images/phone-filters.webp" width="300" alt="The Filtre sheet open on a phone: licence, file format and publication date choices with Comercială picked, and the buttons Resetează Filtre and Aplică filtrele"> |
+| <img src="docs/images/phone-browse.webp" width="300" alt="The listings page on a phone: the MERCATVS bar, 9 results, a red Filtre button, a sort menu, a row of filter chips, the first card, an SVG icon pack for 49 RON, and a five-place bar at the bottom: Acasă, Categorii, Favorite, Mesaje, Conectare"> | <img src="docs/images/phone-filters.webp" width="300" alt="The Filtre sheet open on a phone: licence, file format and publication date choices with Comercială picked, and the buttons Resetează Filtre and Aplică filtrele"> |
 
 On a phone the filters move into a sheet, and the picks apply together from **Aplică filtrele**.
 
@@ -77,7 +77,7 @@ Then open <http://localhost:5173/>. Instead of passing `JWT_SECRET` each time, y
 | `backend/seed/` | The local demo data (`npm run seed:dev`, development only) and the sample listings' previews (`npm run seed:samples`) |
 | `frontend/` | The React app, and its Playwright specs in `frontend/e2e/` |
 | `infrastructure/` | The API's container: `Dockerfile` and `docker-compose.yml` ([docs/deploy.md](docs/deploy.md)) |
-| `design/` | The Carpathian Clear design system and the HTML mock-ups |
+| `design/` | The design systems (the Roman identity, and Carpathian Clear as history), the comps and the HTML mock-ups |
 | `corpus/` | Project wiki: features, market research, business rules, log |
 | `docs/` | Setup, the deploy, architecture and the images here |
 | `package.json`, `vendor/`, `scripts/` | The house-style tools and checks; `npm run check` at the root runs them over both projects |
@@ -86,7 +86,7 @@ Then open <http://localhost:5173/>. Instead of passing `JWT_SECRET` each time, y
 
 - [docs/](docs/README.md): setup, the deploy, architecture, and the images used here
 - [corpus/](corpus/index.md): the project wiki, with the features, market research and business rules
-- [design/](design/README.md): the Carpathian Clear design system and the mock-ups the UI was first built from; the colours and type the redesign shipped are in [corpus/wiki/carpathian-clear.md](corpus/wiki/carpathian-clear.md)
+- [design/](design/README.md): the design systems, the Roman rebrand's comps and the mock-ups the UI was first built from; the look that ships, Cinzel capitals over Alegreya Sans with a porphyry shell, vexillum red and gold, is in [corpus/wiki/roman-identity.md](corpus/wiki/roman-identity.md)
 
 ## License
 

@@ -24,7 +24,7 @@ export function EmailVerifyPage() {
           <p className="mb-4 text-on-surface-variant">Link-ul de verificare este invalid sau lipsește.</p>
           <Link
             to="/"
-            className="inline-block rounded-lg bg-primary px-6 py-2 text-on-primary transition-colors hover:bg-primary-container"
+            className="inline-block rounded-lg bg-action-fill px-6 py-2 text-on-action-fill transition-colors hover:bg-action-fill-hover"
           >
             Înapoi la pagina principală
           </Link>
@@ -64,7 +64,7 @@ export function EmailVerifyPage() {
           </p>
           <Link
             to="/autentificare"
-            className="inline-block rounded-lg bg-primary px-6 py-2 text-on-primary transition-colors hover:bg-primary-container"
+            className="inline-block rounded-lg bg-action-fill px-6 py-2 text-on-action-fill transition-colors hover:bg-action-fill-hover"
           >
             Autentifică-te
           </Link>
@@ -86,7 +86,7 @@ export function EmailVerifyPage() {
           </p>
           <button
             onClick={() => navigate("/")}
-            className="rounded-lg bg-primary px-6 py-2 text-on-primary transition-colors hover:bg-primary-container"
+            className="rounded-lg bg-action-fill px-6 py-2 text-on-action-fill transition-colors hover:bg-action-fill-hover"
           >
             Înapoi la pagina principală
           </button>

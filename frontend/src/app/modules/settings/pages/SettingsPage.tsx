@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { useAuth } from "@core/lib/auth";
 import { Button } from "@core/components/ui";
@@ -13,7 +14,7 @@ export function SettingsPage() {
   return (
     <main className="mt-8 pb-24">
       <div className="mx-auto max-w-4xl px-6">
-        <h1 className="mb-8 font-headline text-3xl font-extrabold">Setările contului</h1>
+        <h1 className={`${PAGE_TITLE} mb-8 text-3xl`}>Setările contului</h1>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
@@ -21,11 +22,11 @@ export function SettingsPage() {
             <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
               <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
+                  <span className="material-symbols-outlined text-xl text-gold-ink" aria-hidden="true">
                     person
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-on-surface">Informații Profil</h2>
+                <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Informații Profil</h2>
               </div>
 
               <div className="space-y-4">
@@ -64,11 +65,11 @@ export function SettingsPage() {
             <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
               <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                  <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
+                  <span className="material-symbols-outlined text-xl text-gold-ink" aria-hidden="true">
                     phone
                   </span>
                 </div>
-                <h2 className="text-xl font-bold text-on-surface">Verificare Telefon</h2>
+                <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Verificare Telefon</h2>
               </div>
 
               <div className="flex flex-col items-center gap-6 md:flex-row">
@@ -100,7 +101,7 @@ export function SettingsPage() {
 
               {user?.phone_verified && (
                 <div className="flex items-start gap-3 rounded-xl border border-primary/10 bg-primary/5 p-4">
-                  <span className="material-symbols-outlined mt-0.5 shrink-0 text-primary" aria-hidden="true">
+                  <span className="material-symbols-outlined mt-0.5 shrink-0 text-gold-ink" aria-hidden="true">
                     shield
                   </span>
                   <div className="text-sm text-on-surface-variant">

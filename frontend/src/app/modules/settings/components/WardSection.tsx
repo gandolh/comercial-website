@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useRef, useState, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -50,11 +51,11 @@ export function WardSection() {
     <section className="space-y-4 rounded-2xl border border-outline-variant bg-surface-container-low p-6 shadow-sm">
       <div className="flex items-center gap-4 border-b border-outline-variant pb-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-          <span className="material-symbols-outlined text-xl text-primary" aria-hidden="true">
+          <span className="material-symbols-outlined text-xl text-gold-ink" aria-hidden="true">
             key
           </span>
         </div>
-        <h2 className="text-xl font-bold text-on-surface">Autentificare cu Ward</h2>
+        <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Autentificare cu Ward</h2>
       </div>
       {error && (
         <div className="rounded-lg bg-error-container p-3 text-sm text-on-error-container">

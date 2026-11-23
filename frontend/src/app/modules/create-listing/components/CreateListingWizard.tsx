@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useState } from "react";
 import { useNavigate } from "@core/lib/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -135,7 +136,7 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
   if (draftError) {
     return (
       <div className="mx-auto max-w-2xl space-y-4 py-24 text-center">
-        <h2 className="text-2xl font-bold">Ups! Ceva n-a mers bine.</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Ups! Ceva n-a mers bine.</h2>
         <button onClick={() => navigate("/adauga-anunt")} className="font-bold text-primary hover:underline">
           Începe de la capăt
         </button>
@@ -166,9 +167,9 @@ export function CreateListingWizard({ draftId, draft, isDraftLoading, draftError
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
                     isActive
-                      ? "bg-primary text-on-primary"
+                      ? "bg-primary-fixed text-on-primary-fixed ring-1 ring-primary ring-inset"
                       : isCompleted
-                        ? "bg-primary-container text-on-primary-container"
+                        ? "bg-secondary-container text-on-secondary-container"
                         : "bg-surface-container-high text-on-surface-variant"
                   }`}
                 >

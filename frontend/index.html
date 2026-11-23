@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f2f2ee" />
-    <title>PiațăRo — Anunțuri din toată România</title>
+    <meta name="theme-color" content="#f1ece2" />
+    <title>Mercatus — Anunțuri din toată România</title>
     <script>
       // The saved theme before the first paint, so a dark visitor never sees a light flash; light on a first visit.
       // The colours are the `background` role of each theme in src/index.css (src/core/lib/theme.test.ts checks).
@@ -13,7 +13,7 @@
         var saved = localStorage.getItem("theme");
         var dark = saved === "dark" || (saved === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#131416" : "#f2f2ee");
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#161112" : "#f1ece2");
       } catch (error) {
         document.documentElement.dataset.theme = "light";
       }

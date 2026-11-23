@@ -1,3 +1,4 @@
+import { SECTION_RULE, SECTION_TITLE } from "@core/components/brand";
 import { useId, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "@core/components/ui";
@@ -100,7 +101,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
 
   return (
     <section className="space-y-6 rounded-2xl border border-outline-variant bg-surface p-6">
-      <h2 className="border-b pb-4 text-xl font-bold">{t("bundles.edit.sectionTitle")}</h2>
+      <h2 className={`${SECTION_TITLE} ${SECTION_RULE}`}>{t("bundles.edit.sectionTitle")}</h2>
 
       {/* Toggle */}
       <div className="flex items-center justify-between gap-4">
@@ -221,7 +222,7 @@ export function BundleManagerSection({ listingId, isBundle, priceRon, onSaved }:
           type="button"
           onClick={() => void handleSave()}
           disabled={setItems.isPending}
-          className="inline-flex items-center gap-2 rounded-control bg-primary px-6 py-2.5 text-base font-semibold text-on-primary transition-all outline-none hover:bg-primary-container focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-control bg-action-fill px-6 py-2.5 text-base font-semibold text-on-action-fill transition-all outline-none hover:bg-action-fill-hover focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {setItems.isPending && (
             <span className="material-symbols-outlined text-xl motion-safe:animate-spin" aria-hidden="true">

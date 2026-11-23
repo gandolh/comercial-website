@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@core/lib/router";
@@ -72,7 +73,7 @@ export function OrderConfirmationPage() {
     return (
       <main className="flex min-h-[50vh] flex-col items-center justify-center space-y-4 px-4 pt-10 pb-20">
         <span className="material-symbols-outlined text-[64px] text-error">error</span>
-        <h1 className="text-2xl font-bold text-on-surface">{t("orders.confirmation.errorTitle")}</h1>
+        <h1 className={`${PAGE_TITLE} text-2xl text-on-surface`}>{t("orders.confirmation.errorTitle")}</h1>
         <p className="text-on-surface-variant">{error ?? t("orders.confirmation.loadError")}</p>
         <Link to="/" className="font-bold text-primary hover:underline">
           {t("orders.confirmation.backHome")}
@@ -88,18 +89,14 @@ export function OrderConfirmationPage() {
     <main className="mx-auto w-full max-w-lg space-y-8 px-4 pt-10 pb-20">
       {isPaid ? (
         <div className="flex flex-col items-center space-y-4 text-center">
-          <span className="material-symbols-outlined text-[72px] text-primary">check_circle</span>
-          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
-            {t("orders.confirmation.successTitle")}
-          </h1>
+          <span className="material-symbols-outlined text-[72px] text-gold-ink">check_circle</span>
+          <h1 className={`${PAGE_TITLE} text-3xl text-on-surface`}>{t("orders.confirmation.successTitle")}</h1>
           <p className="text-on-surface-variant">{t("orders.confirmation.successBody")}</p>
         </div>
       ) : (
         <div className="flex flex-col items-center space-y-4 text-center">
           <span className="material-symbols-outlined text-[72px] text-error">cancel</span>
-          <h1 className="font-headline text-3xl font-extrabold text-on-surface">
-            {t("orders.confirmation.pendingTitle")}
-          </h1>
+          <h1 className={`${PAGE_TITLE} text-3xl text-on-surface`}>{t("orders.confirmation.pendingTitle")}</h1>
           <p className="text-on-surface-variant">{t("orders.confirmation.pendingBody")}</p>
         </div>
       )}
@@ -111,13 +108,13 @@ export function OrderConfirmationPage() {
         </div>
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.amount")}</span>
-          <span className="font-bold text-primary">
+          <span className="font-bold text-gold-ink tabular-nums">
             {order.amount_ron.toLocaleString("ro-RO")} {order.currency}
           </span>
         </div>
         <div className="flex justify-between">
           <span className="text-on-surface-variant">{t("orders.confirmation.status")}</span>
-          <span className={`font-semibold ${isPaid ? "text-primary" : "text-on-surface-variant"}`}>
+          <span className={`font-semibold ${isPaid ? "text-on-surface" : "text-on-surface-variant"}`}>
             {t(`orders.status.${order.status}`)}
           </span>
         </div>
@@ -133,7 +130,7 @@ export function OrderConfirmationPage() {
         {isPaid && (
           <Link
             to={listingHref}
-            className="flex items-center justify-center gap-2 rounded-control bg-primary px-6 py-3 font-semibold text-on-primary transition-opacity hover:opacity-90"
+            className="flex items-center justify-center gap-2 rounded-control bg-action-fill px-6 py-3 font-semibold text-on-action-fill transition-opacity hover:opacity-90"
           >
             <span className="material-symbols-outlined text-[20px]">download</span>
             {t("orders.confirmation.goDownload")}

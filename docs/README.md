@@ -1,4 +1,4 @@
-# PiațăRo docs
+# Mercatus docs
 
 Start with the [main README](../README.md). This folder holds what it links to.
 

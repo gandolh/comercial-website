@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { ImageUploader } from "../../listings/components/ImageUploader";
 import { ImageGalleryEditor } from "../../listings/components/ImageGalleryEditor";
 import { useListingImagesMutations } from "../../listings/hooks/useListingImages";
@@ -24,7 +25,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-extrabold">Imagini de previzualizare</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Imagini de previzualizare</h2>
         <p className="text-on-surface-variant">Adaugă poze cu produsul tău pentru o prezentare mai bună (opțional).</p>
       </div>
 
@@ -68,7 +69,7 @@ export function PhotosStep({ listingId, images, onImagesChange, onNext, onBack, 
             type="button"
             disabled={isUploading}
             onClick={onNext}
-            className="flex-[2] rounded-control bg-primary px-8 py-4 font-bold text-on-primary transition-all hover:bg-primary-container hover:text-on-primary-container disabled:opacity-50"
+            className="flex-[2] rounded-control bg-action-fill px-8 py-4 font-bold text-on-action-fill transition-all hover:bg-action-fill-hover disabled:opacity-50"
           >
             {isUploading ? "Se încarcă..." : "Continuă"}
           </button>

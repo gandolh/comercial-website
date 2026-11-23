@@ -2,7 +2,7 @@
 
 **Depends on:** the owner's answer on the board's ask: is the name Mercatus, or does PiațăRo stay? Run this
 brief only for Mercatus. If PiațăRo stays, move this brief to `superseded/` with that note.
-It also needs [brief 22](22-the-roman-shell.md), which puts the name in one constant.
+It also needs [brief 22](../done/22-the-roman-shell.md), which puts the name in one constant.
 
 **Runs before:** nothing. **Runs after:** 22.
 
@@ -71,3 +71,7 @@ PiațăRo shows up across the frontend today, and twice in the backend:
 - [ ] The outcome note lists the owner's steps: the Ward client's display name, and any outside page that names
       the demo.
 - [ ] `npm run check` passes and `bash corpus/lint.sh` ends clean.
+
+---
+
+> **Done 2026-11-21.** The owner picked Mercatus on 2026-11-21. `BRAND` is `{ name: "Mercatus", lettering: "MERCATVS" }`, so the wordmark reads MERCATVS with the accessible name "Mercatus, acasă", and the auth card's name follows it. Replaced, keeping each sentence grammatical: the `<title>`, `footer.copyright` (ro and en), the Ward helper's two messages, the login card's line, Termeni, Confidențialitate and Contact ("SC Mercatus SRL"), Despre's demo panel, `SellerCard`'s fallbacks ("Autor Mercatus", "Vânzător Mercatus"), `EarningsSection`'s line and comment, the sample files' text in `seed-samples.ts` and the fee comment in `lib/payout-fee.ts`. The grep (`frontend/src frontend/public frontend/index.html backend/app/src`) now finds PiațăRo nowhere; what still names it is history (briefs, the log, `raw/`, the board's copies under `design/`, the comps, `carpathian-clear.*`) and the new glossary and decision entries that say it was the name. Docs: `README.md` (title, product name; its five images retaken on a samples-only database by `docs/images/shots.md`, which now says 2026-11-21), the root `CLAUDE.md` and `corpus/CLAUDE.md`; beyond the brief's list, the titles and first lines of `docs/README.md`, `deploy.md`, `architecture.md` and `getting-started.md`, which named the product. Unchanged on purpose: `my-olx`, `@my-olx/*`, `/piataro/` and `/piataro-api`, the `piataro` stack, cookie names and the Ward client id. A build with `PIATARO_BASE=/piataro/` still serves every asset from `/piataro/`. `e2e/rename.spec.ts` (new) checks the tab title, the wordmark's text and name, the footer, the sign-in card and four legal pages; `e2e/shell.spec.ts` passes at 360 signed in with the longer MERCATVS. One correction to the brief: rerunning `npm run seed:samples` does not rewrite sample files that exist (`writeIfMissing`), so the ZIPs already on the server keep the old line until they are deleted; the ZIP stays the same size (its text is padded to 64 KB). Owner steps (in `status.md`, step 7): the Ward client's display name in Ward's registry; delete `/srv/piataro-api/data/assets/samples/*/*.zip` so the deploy writes them again; rename the demo on any outside page. Found and captured as a todo, not changed: the legal pages still use the code name my-olx as the platform's name (`todos/the-legal-pages-show-the-code-name.md`).

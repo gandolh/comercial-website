@@ -1,3 +1,5 @@
+import { PAGE_TITLE } from "@core/components/brand";
+
 const CATEGORIES = [
   { icon: "palette", label: "Grafică & Ilustrații", slug: "grafica" },
   { icon: "dashboard_customize", label: "Șabloane & Template-uri", slug: "sabloane" },
@@ -23,7 +25,7 @@ export function CategoryStep({ onSelect, selectedCategory }: CategoryStepProps) 
   return (
     <div className="space-y-8 duration-500">
       <div className="space-y-2 text-center">
-        <h2 className="font-headline text-2xl font-extrabold">Ce vinzi astăzi?</h2>
+        <h2 className={`${PAGE_TITLE} text-2xl`}>Ce vinzi astăzi?</h2>
         <p className="text-on-surface-variant">Alege categoria care se potrivește cel mai bine anunțului tău.</p>
       </div>
 
@@ -34,15 +36,15 @@ export function CategoryStep({ onSelect, selectedCategory }: CategoryStepProps) 
             onClick={() => onSelect(slug)}
             className={`group flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 p-6 text-center transition-all ${
               selectedCategory === slug
-                ? "border-primary bg-primary-container text-on-primary-container shadow-md"
+                ? "border-primary bg-primary-fixed text-on-primary-fixed shadow-md"
                 : "border-transparent bg-surface-container-low hover:border-outline-variant hover:shadow-band"
             }`}
           >
             <div
               className={`flex h-14 w-14 items-center justify-center rounded-full transition-colors ${
                 selectedCategory === slug
-                  ? "bg-primary text-on-primary"
-                  : "bg-surface-container-lowest text-primary group-hover:bg-primary group-hover:text-on-primary"
+                  ? "bg-surface-container-lowest text-primary ring-1 ring-primary"
+                  : "bg-niche text-gold-ink ring-1 ring-gold group-hover:text-primary"
               }`}
             >
               <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>

@@ -22,7 +22,7 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
 
   if (hasPaidOrder) {
     return (
-      <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">
+      <div className="flex items-center gap-2 rounded-xl bg-secondary-container px-4 py-3 text-sm font-semibold text-on-secondary-container">
         <span className="material-symbols-outlined text-[20px]">verified</span>
         {t("orders.buyButton.owned")}
       </div>
@@ -68,7 +68,8 @@ export function BuyButton({ listingId, priceRon, hasPaidOrder = false, onAlready
       <button
         onClick={() => void handleBuy()}
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-control bg-primary px-6 py-3 text-base font-bold text-on-primary transition-all hover:opacity-90 disabled:opacity-60"
+        // Porphyry, not red: on the listing page Descarcă Asset is the one red fill (brief 25).
+        className="flex w-full items-center justify-center gap-2 rounded-control bg-tertiary-container px-6 py-3 text-base font-bold tracking-wide text-on-tertiary-container transition-colors outline-none hover:bg-tertiary-fixed-dim focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-60"
         aria-label={t("orders.buyButton.ariaLabel", { price: priceRon })}
       >
         <span className="material-symbols-outlined text-[20px]">{loading ? "hourglass_empty" : "shopping_cart"}</span>

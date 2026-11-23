@@ -22,7 +22,7 @@ export function QuotaCard({ count, limit, resetsAt }: QuotaCardProps) {
             {t("dashboard.quota.subtitle", "Anunțuri postate în ultimele 7 zile")}
           </p>
         </div>
-        <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">
+        <div className="rounded-full bg-niche px-3 py-1 text-sm font-bold text-gold-ink tabular-nums">
           {count} / {limit}
         </div>
       </div>
@@ -30,7 +30,7 @@ export function QuotaCard({ count, limit, resetsAt }: QuotaCardProps) {
       <div className="space-y-4">
         <div className="h-3 overflow-hidden rounded-full bg-surface-container-high">
           <div
-            className={`h-full transition-all duration-500 ${count >= limit ? "bg-error" : "bg-primary"}`}
+            className={`h-full transition-all duration-500 ${count >= limit ? "bg-error" : "bg-gold-ink"}`}
             style={{ width: `${percentage}%` }}
           />
         </div>

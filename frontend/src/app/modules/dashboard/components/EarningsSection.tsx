@@ -6,7 +6,7 @@ import { fetchEarnings, requestPayout } from "../services/earnings";
 const ron = (v: number) => `${v.toLocaleString("ro-RO", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} RON`;
 
 /**
- * Câștiguri: the seller's balance from paid orders after PiațăRo's fee, recent sales with their fee
+ * Câștiguri: the seller's balance from paid orders after Mercatus's fee, recent sales with their fee
  * and net, and a simulated payout (corpus decisions.md: no money moves in the demo).
  */
 export function EarningsSection() {
@@ -27,12 +27,12 @@ export function EarningsSection() {
   const lastPayout = e.payouts[0];
 
   return (
-    <section className="space-y-5 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6">
+    <section className="space-y-5 rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 tabular-nums">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="mb-1 text-lg font-bold text-on-surface">Câștiguri</h3>
           <p className="text-sm text-on-surface-variant">
-            Din vânzări, după comisionul PiațăRo de {feePercent}%. Retragerile sunt simulate: nu se transferă bani.
+            Din vânzări, după comisionul Mercatus de {feePercent}%. Retragerile sunt simulate: nu se transferă bani.
           </p>
         </div>
         <div className="text-right">

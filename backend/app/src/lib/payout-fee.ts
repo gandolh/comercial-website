@@ -1,5 +1,5 @@
 /**
- * The platform fee: PiațăRo's cut of a paid order (corpus decisions.md). One constant; an order
+ * The platform fee: Mercatus's cut of a paid order (corpus decisions.md). One constant; an order
  * records its fee when it is paid, so changing this never touches past orders.
  */
 export const PLATFORM_FEE_RATE = 0.025;

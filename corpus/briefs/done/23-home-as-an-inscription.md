@@ -1,6 +1,6 @@
 # Task 23: Home as an inscription
 
-**Depends on:** [brief 21](21-the-roman-identity-tokens-and-type.md) and [brief 22](22-the-roman-shell.md).
+**Depends on:** [brief 21](../done/21-the-roman-identity-tokens-and-type.md) and [brief 22](../done/22-the-roman-shell.md).
 
 **Runs before:** nothing. **Runs after:** 22.
 
@@ -90,3 +90,7 @@ Decided on the board, 2026-11-20, after two critique rounds. Each item says what
 ## Interplay
 
 - The Material Symbols icons stay, as brief 14 kept them, so the niches hold those, not the comps' stroke icons.
+
+---
+
+> **Done 2026-11-21.** `Tabula` (the frame, the inner rule as an inset bordered layer rather than a box-shadow string, the two handles) and `Column` are new in `core/components/brand/`, all ornament `aria-hidden` and unfocusable. The hero, niches, section heads, card price (`CardPrice`, exported for brief 24's list view) and sell band are built as the brief says; tile labels are 16px with `text-balance`, so "Șabloane & Template-uri" no longer breaks at its hyphen. Measured with Playwright (`e2e/home.spec.ts`, 9 tests): at 1280 × 800 the hero ends at y 337 (limit 340) with all 14 tiles whole, in light and dark; at 390 × 844 six tiles are whole and the title is one line; no overflow at 390 and 360; Caută is the one filled red button in each theme; every drawing in `main` is `aria-hidden` with nothing focusable inside; the field keeps its placeholder and its label "Caută anunțuri". The focus-ring and reduced-motion specs cover Home as before. `e2e/identity.spec.ts` now expects the hero title in Cinzel and a category label and a listing title in Alegreya Sans. Against the comps' renders (1280 light, 390 dark), what remains different: the wordmark reads PIAȚĂRO until brief 26; the niches hold Material Symbols, not the comps' stroke icons; the cards show the seed's listings and previews; the verified chip keeps brief 14's check rosette in gold; the sell band's wreath goes under 768px, as the comps draw it, where the brief said 600px (between 600 and 767px it would sit on the text). All 136 Playwright specs pass (108 shot specs skip); `npm run check` passes.

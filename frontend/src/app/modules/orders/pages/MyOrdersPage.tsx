@@ -1,3 +1,4 @@
+import { PAGE_TITLE } from "@core/components/brand";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "@core/lib/router";
@@ -6,7 +7,7 @@ import { useNavigate } from "@core/lib/router";
 import { ordersService, type Order } from "../services/orders.service";
 
 const STATUS_STYLES: Record<string, string> = {
-  paid: "bg-primary/10 text-primary",
+  paid: "bg-secondary-container text-on-secondary-container",
   pending: "bg-tertiary/10 text-tertiary",
   failed: "bg-error-container text-on-error-container",
   cancelled: "bg-surface-container-highest text-on-surface-variant",
@@ -48,9 +49,7 @@ export function MyOrdersPage() {
   return (
     <main className="mx-auto w-full max-w-screen-md space-y-8 px-4 pt-10 pb-20 md:px-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-headline text-3xl font-extrabold tracking-[-0.01em] text-on-surface">
-          {t("orders.list.title")}
-        </h1>
+        <h1 className={`${PAGE_TITLE} text-3xl text-on-surface`}>{t("orders.list.title")}</h1>
       </div>
 
       {loading && (
@@ -67,7 +66,7 @@ export function MyOrdersPage() {
           <p className="text-on-surface-variant">{t("orders.list.empty")}</p>
           <Link
             to="/"
-            className="rounded-control bg-primary px-6 py-2 font-semibold text-on-primary transition-opacity hover:opacity-90"
+            className="rounded-control bg-action-fill px-6 py-2 font-semibold text-on-action-fill transition-opacity hover:opacity-90"
           >
             {t("orders.list.browse")}
           </Link>
@@ -102,7 +101,7 @@ export function MyOrdersPage() {
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-lg font-bold text-primary">
+                <span className="text-lg font-bold text-gold-ink tabular-nums">
                   {order.amount_ron.toLocaleString("ro-RO")} {order.currency}
                 </span>
                 {order.status === "paid" && (

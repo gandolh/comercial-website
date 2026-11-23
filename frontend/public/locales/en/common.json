@@ -27,7 +27,7 @@
     "noPreview": "No preview"
   },
   "footer": {
-    "copyright": "© {{year}} PiațăRo. All rights reserved.",
+    "copyright": "Mercatus. All rights reserved.",
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
     "cookies": "Cookie Policy",
@@ -413,5 +413,9 @@
   "filters": {
     "title": "Filters",
     "apply": "Apply filters"
+  },
+  "search": {
+    "count_one": "1 listing found",
+    "count_other": "{{count}} listings found"
   }
 }
