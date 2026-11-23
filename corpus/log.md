@@ -343,3 +343,10 @@ new-message email. The contact addresses are `@mercatus.example`, with a line on
 too; history keeps my-olx. [decisions.md](wiki/decisions.md) records it. Owner step: move the box's `my-olx.db` to
 `mercatus.db` before the deploy. Closes the todo the-legal-pages-show-the-code-name. Outcome note in
 [brief 27](briefs/done/27-retire-the-code-name-my-olx.md).
+
+## [2026-11-23] brief | Brief 28 — the terms cite the right consumer law
+
+Filed from the romania-law research (just-a-bot's corpus, `corpus/wiki/research-romania-law.md` there). Termeni
+section 4 cites GEO 141/2021 for the 14-day withdrawal right, which is OUG 34/2014 art. 9, and lists two of the
+three conditions of the digital-content exception (art. 16 alin. (1) lit. m)). Section 8 links the EU ODR
+platform, closed from 2025-07-20 by Regulamentul (UE) 2024/3228. See [the brief](briefs/todo/28-the-terms-cite-the-right-consumer-law.md).
