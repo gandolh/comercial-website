@@ -18,7 +18,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [digital-pivot-cleanup](wiki/digital-pivot-cleanup.md) — The pivot from the OLX-era physical-goods clone to digital files only: what was removed, and the category overhaul.
 - [expiry-reminders](wiki/expiry-reminders.md) — Expiry-reminder emails three days before and on the day a listing expires, with the opt-out and no duplicates.
 - [gdpr-kits](wiki/gdpr-kits.md) — Market research: Romanian GDPR document kits, the documents the law requires, competitors' prices and the gap for sector packs.
-- [glossary](wiki/glossary.md) — The project's vocabulary — Mercatus (formerly PiațăRo) vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
+- [glossary](wiki/glossary.md) — The project's vocabulary — Mercatus (formerly PiațăRo and, in the code, my-olx), listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
 - [invoicing](wiki/invoicing.md) — The offline invoice generator (PDF and UBL 2.1 e-Factura XML, issuer profiles) and the ANAF CUI lookup; never checked against live ANAF, which the owner dropped on 2026-11-03.
 - [legal-and-compliance](wiki/legal-and-compliance.md) — The static legal and info pages, and the GDPR cookie-consent banner.
 - [listing-lifecycle](wiki/listing-lifecycle.md) — The listing preview before publishing, and expiry and renewal in the dashboard.
@@ -27,14 +27,14 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [niche-packs](wiki/niche-packs.md) — Market research: Romanian embroidery patterns and folklore colouring pages as digital products (evidence, pricing, opportunity), and the summary table for all four niches.
 - [notifications](wiki/notifications.md) — Transactional email on a new message and on a sale, and the opt-out.
 - [open-questions](wiki/open-questions.md) — Nothing is open. The real-launch questions the demo decision parked were dropped by the owner on 2026-11-04.
-- [overview](wiki/overview.md) — What PiațăRo (code name my-olx) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
+- [overview](wiki/overview.md) — What Mercatus (PiațăRo until 2026-11-21, code name my-olx until 2026-11-23) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
 - [product-ideas](wiki/product-ideas.md) — A brainstorm of product categories and platform features for a Romania-focused digital marketplace.
 - [reviews-ratings](wiki/reviews-ratings.md) — Verified-purchase reviews: a 1-5 star rating plus text, one per buyer per listing, and the average on the listing page.
 - [roman-identity](wiki/roman-identity.md) — The Roman identity since 2026-11-21 (briefs 21-25) — colour roles in both themes (porphyry shell, vexillum red, gold and bronze), the two faces (Cinzel capitals, Alegreya Sans), lining figures, stone-cut radii, porphyry shadows, the primitives' looks, and where the tokens live.
 - [search](wiki/search.md) — Listing search on SQLite FTS5 with diacritics folding ("sablon" matches "șablon").
 - [social-media-templates](wiki/social-media-templates.md) — Market research: social-media template packs for Romanian SMBs (platform reach, the price gap between packs and agencies, what to sell).
 - [stack](wiki/stack.md) — The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-- [status](wiki/status.md) — Dated snapshot (2026-11-21) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-26 are done (one line each), 10-26 wait for a deploy (21-26: the Roman identity and the rename), and the owner's steps.
+- [status](wiki/status.md) — Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-27 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
 - [user](wiki/user.md) — The User entity: one account type that both buys and sells, its columns, auth fields, seller profile and email opt-outs.
 
 ## Work
