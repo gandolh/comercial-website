@@ -67,9 +67,12 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
    needs the new name by hand.
 
 8. Before brief 27's deploy, if the API has run on the box: the database file is now `mercatus.db`, so move the old
-   one first, or the API starts on an empty file (the old one would stay where it is). On the box:
-   `sudo docker stop piataro-api`, then in `/srv/piataro-api/data` run `sudo mv my-olx.db mercatus.db`, and the same
-   for `my-olx.db-wal` and `my-olx.db-shm` if they are there. Then deploy as usual. On this machine, `npm ci` in
-   `backend/` (the workspace package is now `@mercatus/app`).
+   one first, or the API starts on an empty file (the old one would stay where it is). On the server, as the services
+   account (its own rootless daemon, as in [docs/deploy.md](../../docs/deploy.md)'s password reset), in
+   `/srv/piataro-api`:
+   `export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock && docker compose -f infrastructure/docker-compose.yml stop piataro-api`,
+   then in `data/` run `mv my-olx.db mercatus.db`, and the same for `my-olx.db-wal` and `my-olx.db-shm` if they are
+   there (`sudo` if the files' owner is the container's mapped user). Then deploy as usual: `node cli.ts piataro deploy`
+   from vps-deploy.
 
 [docs/deploy.md](../../docs/deploy.md) has the details and a password reset.
