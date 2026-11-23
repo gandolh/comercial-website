@@ -23,7 +23,8 @@ The page lists the first two conditions and leaves out the third.
 **Section 8's "SAL" link goes to a platform that no longer exists.** The link is `ec.europa.eu/consumers/odr`,
 the EU's online dispute resolution platform (SOL in Romanian, not SAL). Regulamentul (UE) 2024/3228 repealed
 the regulation behind it from 2025-07-20 and closed the platform (`ue/regulament/2024/3228/text.md@2d4c02b`).
-SAL, alternative dispute resolution, is a national procedure under OG 38/2015, which ANPC runs.
+SAL, alternative dispute resolution, is the national procedure set up by OG 38/2015
+(`og/2015/38/art-001.md@2d4c02b`); the build finds ANPC's SAL page and checks it answers.
 
 Upstream marks OUG 34/2014 `stale`: its newest form held is from 2022-07-20, last checked against the portal on
 2026-01-19. So confirm both articles on the official page before writing:
