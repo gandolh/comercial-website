@@ -13,10 +13,10 @@
     "lint": "eslint . && npm --prefix backend run lint && npm --prefix frontend run lint",
     "test": "npm --prefix backend test && npm --prefix frontend test",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm run check:conventions && npm test",
+    "format:check": "prettier --check . --cache --cache-location node_modules/.cache/prettier-check/.prettier-cache",
+    "check": "node scripts/check.mjs typecheck lint format:check check:conventions test",
     "check:fast": "npm --prefix backend run check:fast && npm --prefix frontend run check:fast && node scripts/check-fast.mjs",
-    "check:conventions": "npm --prefix backend run knip && npm --prefix frontend run knip && depcruise backend/app/src frontend/src && node vendor/house-style/bin/check-base-ui.mjs && node vendor/house-style/bin/check-structure.mjs",
+    "check:conventions": "npm --prefix backend run knip && npm --prefix frontend run knip && depcruise backend/app/src frontend/src --cache node_modules/.cache/dependency-cruiser && node vendor/house-style/bin/check-base-ui.mjs && node vendor/house-style/bin/check-structure.mjs",
     "house-style:sync": "node vendor/house-style/bin/sync.mjs"
   },
   "devDependencies": {
