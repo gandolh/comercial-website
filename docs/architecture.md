@@ -1,6 +1,6 @@
 # Architecture
 
-Mercatus is two npm projects. `backend/` is an npm workspace with one package, `@my-olx/app`. Its
+Mercatus is two npm projects. `backend/` is an npm workspace with one package, `@mercatus/app`. Its
 `db/`, `lib/` and `plugins/` folders are the engine: a Kysely instance over
 SQLite (better-sqlite3) with a small migrator, JWT and Argon2 for sign-in,
 disk storage for uploads, the email service and Fastify plugins for errors,
@@ -23,7 +23,7 @@ flowchart LR
     web["frontend/<br/>React + Vite"]
   end
   subgraph api["backend/"]
-    app["@my-olx/app<br/>features/"]
+    app["@mercatus/app<br/>features/"]
     core["db/, lib/, plugins/<br/>db, auth, storage, email"]
   end
   db[("SQLite")]

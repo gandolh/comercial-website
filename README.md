@@ -1,6 +1,6 @@
 # Mercatus
 
-A Romanian marketplace for digital files. Creators sell templates, graphics, fonts, source code, audio, e-books and other downloads, priced in lei, and buyers pay and download them. Nothing physical, so no shipping. In the code the project is called `my-olx`.
+A Romanian marketplace for digital files. Creators sell templates, graphics, fonts, source code, audio, e-books and other downloads, priced in lei, and buyers pay and download them. Nothing physical, so no shipping. The code uses the same name.
 
 <p align="center">
   <img src="docs/images/hero.webp" width="100%" alt="The Mercatus listings page, Toate anunțurile with 9 results: a dark plum top bar with the gold MERCATVS wordmark and a laurel over a Greek-key frieze, a filter band with choices for licence type, file format and publication date, a price slider and a verified-author switch, and two rows of listing cards with preview pictures and bronze prices in RON, such as an SVG icon pack for 49 RON, a GDPR kit for 99 RON and wedding invitations for 45 RON">
@@ -39,12 +39,12 @@ The screens show the nine sample listings `npm run seed:samples` adds, the same 
 
 ## How it works
 
-Two separate npm projects. `backend/` is a Fastify API in one package, `@my-olx/app`. Its `features/` folder holds the marketplace routes (listings, files, orders, reviews, bundles, invoices, messages, payouts), and `db/`, `lib/` and `plugins/` hold the engine (SQLite through Kysely with migrations that run at start-up, JWT and Argon2 sign-in, files on disk, email). `frontend/` is a React app on Vite with TanStack Router, React Query, Base UI, Tailwind CSS v4 and react-i18next, in Romanian by default. Payments go through a fake provider; no money moves.
+Two separate npm projects. `backend/` is a Fastify API in one package, `@mercatus/app`. Its `features/` folder holds the marketplace routes (listings, files, orders, reviews, bundles, invoices, messages, payouts), and `db/`, `lib/` and `plugins/` hold the engine (SQLite through Kysely with migrations that run at start-up, JWT and Argon2 sign-in, files on disk, email). `frontend/` is a React app on Vite with TanStack Router, React Query, Base UI, Tailwind CSS v4 and react-i18next, in Romanian by default. Payments go through a fake provider; no money moves.
 
 ```mermaid
 flowchart LR
   web["frontend/<br/>React + Vite, port 5173"] -- "JSON over HTTP, Bearer token" --> api["backend/app<br/>Fastify, port 8080"]
-  api --> db[("SQLite<br/>my-olx.db")]
+  api --> db[("SQLite<br/>mercatus.db")]
   api --> files[("Files on disk<br/>public previews, private paid files")]
   api -. "CUI lookup" .-> anaf["ANAF"]
 ```
@@ -72,7 +72,7 @@ Then open <http://localhost:5173/>. Instead of passing `JWT_SECRET` each time, y
 
 | Path | What lives there |
 |---|---|
-| `backend/app/` | `@my-olx/app`, the server: plugins, lib, db and the marketplace features |
+| `backend/app/` | `@mercatus/app`, the server: plugins, lib, db and the marketplace features |
 | `backend/migrations/` | SQL migrations, applied at start-up |
 | `backend/seed/` | The local demo data (`npm run seed:dev`, development only) and the sample listings' previews (`npm run seed:samples`) |
 | `frontend/` | The React app, and its Playwright specs in `frontend/e2e/` |

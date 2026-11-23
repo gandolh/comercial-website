@@ -332,3 +332,14 @@ container keep `piataro` and `my-olx`. [decisions.md](wiki/decisions.md) records
 [glossary.md](wiki/glossary.md) the name. Owner steps: Ward's display name, and deleting the seeded sample ZIPs so
 the deploy rewrites them. New todo: the legal pages still show the code name my-olx. With this, briefs 21-26 are done.
 Outcome note in [brief 26](briefs/done/26-rename-the-product-to-mercatus.md).
+
+## [2026-11-23] done | Brief 27 — the code name my-olx is retired
+
+The owner asked for every my-olx to take the new name. The package is `@mercatus/app` (the backend project
+`mercatus-backend`, its lockfile names only), the database file `mercatus.db` in the config default, `.env.example`,
+the Dockerfile and the compose file, and Mercatus stands in the legal pages, both locales' about title and the
+new-message email. The contact addresses are `@mercatus.example`, with a line on Contact saying they are examples:
+`mercatus.ro` is someone else's live mail domain. The CLAUDE files, README, docs and wiki say the code uses the name
+too; history keeps my-olx. [decisions.md](wiki/decisions.md) records it. Owner step: move the box's `my-olx.db` to
+`mercatus.db` before the deploy. Closes the todo the-legal-pages-show-the-code-name. Outcome note in
+[brief 27](briefs/done/27-retire-the-code-name-my-olx.md).

@@ -1,6 +1,6 @@
 ---
-summary: Dated snapshot (2026-11-21) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-26 are done (one line each), 10-26 wait for a deploy (21-26: the Roman identity and the rename), and the owner's steps.
-updated: 2026-11-21
+summary: Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-27 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
+updated: 2026-11-23
 ---
 
 # Status — 2026-11-13
@@ -37,6 +37,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 24 (done, ready for deploy): category and search in the Roman identity: the band's gold rule, Cinzel titles that wrap balanced and never truncate (a query title stays Alegreya Sans), the filter-count badge as a tint, Filtre the phone's one red fill, bronze prices and the verified chip in the list view, the count in Romanian plural forms (`search.count`, "de" from 20); `e2e/category.spec.ts`. [Brief 24](../briefs/done/24-category-and-search-in-the-roman-identity.md).
 - 25 (done, ready for deploy): listing detail as drawn (Cinzel section titles over a gold rule, the bronze price, one red fill, the verified seller chip) and every other screen by the identity's rules (Cinzel fixed titles, one red fill per screen on `action-fill`, selected states as tints, no decorative red, tabular figures), in seven screen-group commits; `e2e/screens.spec.ts` over the 25 screens; `design/design-system/roman-identity.json`, the root `CLAUDE.md`, `README.md` and `design/README.md` name the Roman identity. [Brief 25](../briefs/done/25-detail-and-the-undrawn-screens-in-the-roman-identity.md).
 - 26 (done, ready for deploy): the visible product is Mercatus: `BRAND`, the wordmark MERCATVS ("Mercatus, acasă"), the tab title, the footer, the sign-in card, the legal pages, the Ward messages, the sample files' text, the README (its five images retaken) and the docs; the paths, packages and stack keep `piataro`/`my-olx`; `e2e/rename.spec.ts`. [Brief 26](../briefs/done/26-rename-the-product-to-mercatus.md).
+- 27 (done, ready for deploy): the code name my-olx is retired: `@mercatus/app`, `mercatus-backend`, the database file `mercatus.db`, Mercatus in the legal pages and the new-message email, the contact addresses `@mercatus.example` with a line on Contact saying they are examples; `e2e/rename.spec.ts` checks the six legal pages. [Brief 27](../briefs/done/27-retire-the-code-name-my-olx.md).
 
 ## Owed by the owner
 
@@ -64,5 +65,11 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
    so delete `<ASSETS_DIR>/samples/*/*.zip` (on the server, `/srv/piataro-api/data/assets/samples/`) and the deploy's
    server phase writes them again, the same size. Any outside page that names the demo (a portfolio, a link list)
    needs the new name by hand.
+
+8. Before brief 27's deploy, if the API has run on the box: the database file is now `mercatus.db`, so move the old
+   one first, or the API starts on an empty file (the old one would stay where it is). On the box:
+   `sudo docker stop piataro-api`, then in `/srv/piataro-api/data` run `sudo mv my-olx.db mercatus.db`, and the same
+   for `my-olx.db-wal` and `my-olx.db-shm` if they are there. Then deploy as usual. On this machine, `npm ci` in
+   `backend/` (the workspace package is now `@mercatus/app`).
 
 [docs/deploy.md](../../docs/deploy.md) has the details and a password reset.

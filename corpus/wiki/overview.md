@@ -1,11 +1,11 @@
 ---
-summary: What PiațăRo (code name my-olx) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
-updated: 2026-11-04
+summary: What Mercatus (PiațăRo until 2026-11-21, code name my-olx until 2026-11-23) is, a Romanian digital-files marketplace, and where it stands: a deployed demo with fake payments, decided 2026-11-03.
+updated: 2026-11-23
 ---
 
-# my-olx — Project Overview
+# Mercatus — Project Overview
 
-**my-olx** is a Romanian digital-assets marketplace. Sellers upload downloadable files; buyers purchase and download them. No physical goods, no shipping. The platform is entirely in Romanian, prices in RON, and targets Romanian creators, freelancers, and SMBs.
+**Mercatus** is a Romanian digital-assets marketplace. Sellers upload downloadable files; buyers purchase and download them. No physical goods, no shipping. The platform is entirely in Romanian, prices in RON, and targets Romanian creators, freelancers, and SMBs.
 
 ## What it is
 
@@ -25,7 +25,7 @@ See [decisions.md](decisions.md) and [status.md](status.md).
 
 | Layer | Tech |
 |---|---|
-| Backend | Node.js + TypeScript + Fastify; npm workspace (`@my-olx/app`) |
+| Backend | Node.js + TypeScript + Fastify; npm workspace (`@mercatus/app`) |
 | DB | SQLite (`better-sqlite3`) + Kysely; migrations auto-run at startup |
 | Auth | JWT + Argon2 |
 | Storage | Disk (`data/uploads/`); served via `@fastify/static` at `/uploads/<key>` |

@@ -1,6 +1,6 @@
 ---
 summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire, the house style and its checks (vendored, width 120).
-updated: 2026-11-21
+updated: 2026-11-23
 ---
 
 # Decisions
@@ -140,4 +140,14 @@ Only what users see changes: the code name `my-olx`, the `@my-olx/*` packages, t
 `/piataro-api`, vps-deploy's `piataro` stack, the container and the database stay, because renaming them is a deploy
 change with redirects and can be its own brief. Rejected: keeping PiațăRo in the same Roman capitals (the identity
 card's third lockup), which the owner did not pick.
+
+## The code name my-olx is retired
+_2026-11-23 (brief 27); the owner asked for every my-olx to take the new name_ — The code says Mercatus too: the
+package `@mercatus/app`, the backend project `mercatus-backend`, the database file `mercatus.db` (config default,
+Dockerfile, compose file), and Mercatus in every sentence the legal pages and the new-message email showed my-olx in.
+The database file's rename means the box's `/data/my-olx.db` has to move to `/data/mercatus.db` before the deploy, or
+the API starts on an empty file. The contact addresses on the legal pages become `@mercatus.example`, and Contact says
+they are examples (owner's pick). Rejected: `@mercatus.ro`, a live domain with mail that belongs to someone else;
+keeping `@my-olx.ro`, which would leave the old name on screen. `/piataro/`, `/piataro-api`, the `piataro` stack and
+container, and the repo name are not my-olx and stay.
 

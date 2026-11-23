@@ -85,8 +85,8 @@ export function CookiesPage() {
         <Section title="Contact">
           <p>
             Pentru întrebări referitoare la utilizarea cookie-urilor, scrie-ne la{" "}
-            <a href="mailto:privacy@my-olx.ro" className="text-primary hover:underline">
-              privacy@my-olx.ro
+            <a href="mailto:privacy@mercatus.example" className="text-primary hover:underline">
+              privacy@mercatus.example
             </a>
             .
           </p>

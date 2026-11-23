@@ -19,7 +19,7 @@ repo root; `.dockerignore` keeps the frontend, the corpus and the designs out).
 
 - published on `127.0.0.1` only, port `PIATARO_PORT` (default 8807);
 - everything it stores in `/data`, a bind mount (`PIATARO_DATA_DIR`, default
-  `data/` at the repo root): the database `my-olx.db`, `uploads/` (listing
+  `data/` at the repo root): the database `mercatus.db`, `uploads/` (listing
   images, served publicly) and `assets/` (the files for sale, served only
   through the download routes);
 - migrations applied when the server starts;

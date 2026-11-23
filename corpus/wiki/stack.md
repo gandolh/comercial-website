@@ -1,6 +1,6 @@
 ---
 summary: The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-updated: 2026-11-12
+updated: 2026-11-23
 ---
 
 # Tech Stack
@@ -14,7 +14,7 @@ updated: 2026-11-12
 **Workspace:**
 ```
 backend/
-  app/         ← @my-olx/app  — server.ts, app.ts, config.ts, features/<name>/, plugins/ (errors, http, auth), lib/, db/ (Kysely, migrator, shared stores)
+  app/         ← @mercatus/app  — server.ts, app.ts, config.ts, features/<name>/, plugins/ (errors, http, auth), lib/, db/ (Kysely, migrator, shared stores)
   migrations/  ← raw .sql files (SQLite); auto-applied at startup
 ```
 
@@ -28,7 +28,7 @@ querystring, body and a response schema per success status), with its required p
 9.9.3 and `openapi-types` 12.1.3, installed but unused at run time. `fastify-plugin` 6.0.1 wraps core's
 plugins; `close-with-grace` 2.5.0 ends the process on SIGTERM.
 
-**DB:** SQLite (`better-sqlite3`) + Kysely. Synchronous migrator; auto-runs `migrations/*.sql` at every server startup. DB file: `backend/data/my-olx.db`.
+**DB:** SQLite (`better-sqlite3`) + Kysely. Synchronous migrator; auto-runs `migrations/*.sql` at every server startup. DB file: `backend/data/mercatus.db`.
 
 **Schema notes (SQLite specifics):**
 - Timestamps: TEXT (ISO 8601 strings)
@@ -73,7 +73,7 @@ cd frontend && npm run dev  # starts Vite on :5173
 
 | What | Path |
 |---|---|
-| Database | `backend/data/my-olx.db` |
+| Database | `backend/data/mercatus.db` |
 | Uploads (images) | `backend/app/data/uploads/` |
 | Assets (files for sale) | `backend/app/data/assets/` |
 | Public URL | `http://localhost:8080/uploads/<key>` |

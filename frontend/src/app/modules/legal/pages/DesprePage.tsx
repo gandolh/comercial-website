@@ -7,7 +7,7 @@ export function DesprePage() {
       <div className="mx-auto max-w-3xl space-y-12">
         <header className="space-y-4">
           <h1 className={`${PAGE_TITLE} text-4xl text-on-surface max-md:text-[28px] max-md:leading-9`}>
-            Despre my-olx
+            Despre Mercatus
           </h1>
           <p className="text-xl leading-relaxed text-on-surface-variant">Piața digitală a creatorilor români.</p>
         </header>
@@ -15,9 +15,9 @@ export function DesprePage() {
         <section className="space-y-4">
           <h2 className={`${PAGE_TITLE} text-2xl text-on-surface`}>Misiunea noastră</h2>
           <p className="leading-relaxed text-on-surface-variant">
-            my-olx este construit pentru creatorii digitali din România — designeri, programatori, muzicieni, scriitori
-            — care vor să monetizeze munca lor fără comisioane ascunse și fără birocrație. Credim că activele digitale
-            de calitate merită o piață locală, în românește, cu prețuri în lei.
+            Mercatus este construit pentru creatorii digitali din România — designeri, programatori, muzicieni,
+            scriitori — care vor să monetizeze munca lor fără comisioane ascunse și fără birocrație. Credim că activele
+            digitale de calitate merită o piață locală, în românește, cu prețuri în lei.
           </p>
         </section>
 
@@ -43,7 +43,7 @@ export function DesprePage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className={`${PAGE_TITLE} text-2xl text-on-surface`}>De ce my-olx?</h2>
+          <h2 className={`${PAGE_TITLE} text-2xl text-on-surface`}>De ce Mercatus?</h2>
           <ul className="space-y-3">
             {[
               {

@@ -88,7 +88,7 @@ export function resolveDataPaths(env: NodeJS.ProcessEnv = process.env): {
 } {
   const parsed = dataPathsSchema.parse(env);
   return {
-    databasePath: parsed.DATABASE_PATH ?? path.resolve("data/my-olx.db"),
+    databasePath: parsed.DATABASE_PATH ?? path.resolve("data/mercatus.db"),
     uploadsDir: parsed.UPLOADS_DIR ?? path.resolve("data/uploads"),
     assetsDir: parsed.ASSETS_DIR ?? path.resolve("data/assets"),
   };

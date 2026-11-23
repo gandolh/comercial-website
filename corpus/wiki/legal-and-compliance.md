@@ -1,6 +1,6 @@
 ---
 summary: The static legal and info pages, and the GDPR cookie-consent banner.
-updated: 2026-05-29
+updated: 2026-11-23
 ---
 
 # Legal & Compliance (Static Pages, Cookie Consent)
@@ -15,7 +15,7 @@ A new `legal` frontend module (TanStack Router) with 6 pages of coherent Romania
 - `/termeni` — Termeni și Condiții (digital content delivery, 14-day withdrawal exception, ANPC/SAL).
 - `/confidentialitate` — Politică de Confidențialitate (GDPR / Law 190/2018; data controller, rights, ANSPDCP).
 - `/politica-cookies` (alias `/cookies`) — Politică de Cookies (Law 506/2004).
-- `/despre` — Despre my-olx.
+- `/despre` — Despre Mercatus.
 - `/contact` — Contact.
 - `/ajutor` — Ajutor & FAQ (accordion).
 

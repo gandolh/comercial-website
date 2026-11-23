@@ -69,7 +69,7 @@ describe("loadConfig", () => {
   });
 
   it("refuses to start without JWT_SECRET in production, a container's environment included", () => {
-    const env = { NODE_ENV: "production", PORT: "8807", DATABASE_PATH: "/data/my-olx.db" };
+    const env = { NODE_ENV: "production", PORT: "8807", DATABASE_PATH: "/data/mercatus.db" };
     expect(() => loadConfig(env)).toThrow(ConfigError);
     expect(() => loadConfig(env)).toThrow("JWT_SECRET environment variable is required");
     expect(() => loadConfig({ ...env, JWT_SECRET: "" })).toThrow("JWT_SECRET environment variable is required");

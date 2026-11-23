@@ -38,7 +38,7 @@ variables (the command line, your shell, a container) win over it.
 | `JWT_SECRET` | Signs sign-in tokens. **Required**: the API stops at start-up without it | none |
 | `JWT_EXPIRY_SECONDS` | Token lifetime | `86400` |
 | `HOST`, `PORT` | Where the API listens | `0.0.0.0`, `8080` |
-| `DATABASE_PATH` | The SQLite file | `data/my-olx.db` under the folder the API runs in, which is `backend/app/` |
+| `DATABASE_PATH` | The SQLite file | `data/mercatus.db` under the folder the API runs in, which is `backend/app/` |
 | `UPLOADS_DIR` | Listing preview images, served publicly at `/uploads/` | `data/uploads` under the same folder |
 | `ASSETS_DIR` | The files for sale, outside the public folder; they go out only through the download routes | `data/assets` under the same folder |
 | `PUBLIC_BASE_URL` | The API's own address, used in image and file URLs | `http://localhost:<PORT>` |

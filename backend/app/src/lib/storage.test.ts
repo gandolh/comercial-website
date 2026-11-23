@@ -50,7 +50,7 @@ describe("Storage Module", () => {
 
   describe("StorageService.deleteObject", () => {
     it("does not throw when file does not exist", async () => {
-      const uploadsDir = await mkdtemp(path.join(tmpdir(), "my-olx-test-"));
+      const uploadsDir = await mkdtemp(path.join(tmpdir(), "mercatus-test-"));
       try {
         const service = new StorageService({ uploadsDir, publicBaseUrl: "http://localhost" });
         await expect(service.deleteObject("nonexistent/file.txt")).resolves.not.toThrow();

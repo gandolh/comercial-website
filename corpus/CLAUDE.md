@@ -3,8 +3,8 @@
 This directory is the project's wiki and work tracker, maintained by the LLM. The owner curates
 sources and asks questions; the LLM curates the synthesis and tracks the work. Chat evaporates;
 reusable findings get folded back here. The product is **Mercatus** (the name the UI shows since 2026-11-21;
-PiațăRo before it); the code
-name is `my-olx` (the `@my-olx/*` packages).
+PiațăRo before it); the
+code uses the same name since 2026-11-23 (`@mercatus/app`; `my-olx` before it).
 
 ## Layout
 

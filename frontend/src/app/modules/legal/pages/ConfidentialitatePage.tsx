@@ -13,14 +13,14 @@ export function ConfidentialitatePage() {
 
         <Section title="1. Operatorul de date">
           <p>
-            <strong>SC Mercatus SRL</strong> (denumită în continuare „my-olx", „noi" sau „operatorul"), cu sediul în
+            <strong>SC Mercatus SRL</strong> (denumită în continuare „Mercatus", „noi" sau „operatorul"), cu sediul în
             București, România, este operatorul datelor tale cu caracter personal, conform Regulamentului (UE) 2016/679
             (GDPR) și Legii nr. 190/2018.
           </p>
           <p className="mt-3">
             Contact DPO:{" "}
-            <a href="mailto:privacy@my-olx.ro" className="text-primary hover:underline">
-              privacy@my-olx.ro
+            <a href="mailto:privacy@mercatus.example" className="text-primary hover:underline">
+              privacy@mercatus.example
             </a>
           </p>
         </Section>
@@ -112,8 +112,8 @@ export function ConfidentialitatePage() {
           </ul>
           <p className="mt-4">
             Pentru exercitarea drepturilor, contactează-ne la{" "}
-            <a href="mailto:privacy@my-olx.ro" className="text-primary hover:underline">
-              privacy@my-olx.ro
+            <a href="mailto:privacy@mercatus.example" className="text-primary hover:underline">
+              privacy@mercatus.example
             </a>
             . Vei primi răspuns în cel mult 30 de zile.
           </p>

@@ -11,18 +11,18 @@ export function TermeniPage() {
           <p className="text-sm text-on-surface-variant">Ultima actualizare: 1 mai 2026</p>
         </header>
 
-        <Section title="1. Despre my-olx">
+        <Section title="1. Despre Mercatus">
           <p>
-            my-olx este o platformă online de comercializare a activelor digitale, operată de SC Mercatus SRL, cu sediul
-            în România. Platforma permite vânzătorilor să încarce și să vândă fișiere descărcabile (software, grafică,
-            șabloane, audio, video, e-bookuri, fonturi, cod sursă și altele), iar cumpărătorilor să le achiziționeze și
-            descărce.
+            Mercatus este o platformă online de comercializare a activelor digitale, operată de SC Mercatus SRL, cu
+            sediul în România. Platforma permite vânzătorilor să încarce și să vândă fișiere descărcabile (software,
+            grafică, șabloane, audio, video, e-bookuri, fonturi, cod sursă și altele), iar cumpărătorilor să le
+            achiziționeze și descărce.
           </p>
         </Section>
 
         <Section title="2. Acceptarea termenilor">
           <p>
-            Prin accesarea și utilizarea platformei my-olx, ești de acord cu prezentele Termeni și Condiții. Dacă nu
+            Prin accesarea și utilizarea platformei Mercatus, ești de acord cu prezentele Termeni și Condiții. Dacă nu
             ești de acord, nu utiliza serviciile noastre. Utilizatorii minori (sub 18 ani) trebuie să obțină acordul
             unui tutore legal.
           </p>
@@ -35,7 +35,7 @@ export function TermeniPage() {
             după achiziție.
           </p>
           <p className="mt-3">
-            Formatul și dimensiunea fiecărui fișier sunt indicate pe pagina anunțului. my-olx nu garantează
+            Formatul și dimensiunea fiecărui fișier sunt indicate pe pagina anunțului. Mercatus nu garantează
             compatibilitatea fișierelor cu sisteme sau software terțe.
           </p>
         </Section>
@@ -76,8 +76,9 @@ export function TermeniPage() {
 
         <Section title="7. Răspundere">
           <p>
-            my-olx este o platformă intermediară și nu poartă răspundere pentru conținutul activelor digitale publicate
-            de vânzători. Vânzătorii sunt singurii responsabili pentru acuratețea descrierilor și drepturile de autor.
+            Mercatus este o platformă intermediară și nu poartă răspundere pentru conținutul activelor digitale
+            publicate de vânzători. Vânzătorii sunt singurii responsabili pentru acuratețea descrierilor și drepturile
+            de autor.
           </p>
         </Section>
 
@@ -113,8 +114,8 @@ export function TermeniPage() {
         <Section title="10. Contact">
           <p>
             Pentru întrebări legate de acești termeni, ne poți contacta la:{" "}
-            <a href="mailto:legal@my-olx.ro" className="text-primary hover:underline">
-              legal@my-olx.ro
+            <a href="mailto:legal@mercatus.example" className="text-primary hover:underline">
+              legal@mercatus.example
             </a>
           </p>
         </Section>

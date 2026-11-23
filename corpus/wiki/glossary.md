@@ -1,6 +1,6 @@
 ---
-summary: The project's vocabulary — Mercatus (formerly PiațăRo) vs my-olx, listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
-updated: 2026-11-21
+summary: The project's vocabulary — Mercatus (formerly PiațăRo and, in the code, my-olx), listing, asset, order, sample listing, platform fee, payout — one definition each with the words it displaces.
+updated: 2026-11-23
 ---
 
 # Glossary
@@ -8,9 +8,9 @@ updated: 2026-11-21
 **Mercatus**:
 The product's name, as the UI shows it, since 2026-11-21 (Latin for "market"); `BRAND` in
 `frontend/src/core/components/brand/brand.ts`. The wordmark letters it MERCATVS, cutting U as V; everywhere else it is
-written Mercatus. `my-olx` is the code name of the packages (`@my-olx/*`), and `piataro` stays in the paths, the stack
-and the container.
-_Avoid_: PiațăRo (the name until 2026-11-21), Mercatvs in sentences, my-olx in user-facing text, OLX.
+written Mercatus. The code took the name on 2026-11-23 (`@mercatus/app`, `mercatus.db`); `piataro` stays in the paths,
+the stack and the container.
+_Avoid_: PiațăRo (the name until 2026-11-21), my-olx (the code name until 2026-11-23), Mercatvs in sentences, OLX.
 
 **Listing**:
 What a seller offers: a title, description, price in RON (or free) and at least one asset.

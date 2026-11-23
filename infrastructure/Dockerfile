@@ -91,7 +91,7 @@ ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=8807 \
     LOG_LEVEL=info \
-    DATABASE_PATH=/data/my-olx.db \
+    DATABASE_PATH=/data/mercatus.db \
     UPLOADS_DIR=/data/uploads \
     ASSETS_DIR=/data/assets
 # The database, the public uploads (listing images) and the files for sale. A

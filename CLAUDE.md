@@ -9,14 +9,14 @@ wiki, the numbered briefs (`todo/`, `done/`, `superseded/`) and the immutable so
 
 ## Project Overview
 
-**Mercatus** (the name the UI shows since 2026-11-21, set in `frontend/src/core/components/brand/brand.ts`; before it,
-PiațăRo; code name **my-olx**, the `@my-olx/*` packages, and the `/piataro/` base path stay) is a Romanian
-**digital-files marketplace**: sellers upload downloadable files, buyers download them. No physical
+**Mercatus** (the name the UI shows since 2026-11-21, set in `frontend/src/core/components/brand/brand.ts`, and the
+code's since 2026-11-23, as in `@mercatus/app`; PiațăRo and my-olx before; the `/piataro/` base path stays) is a
+Romanian **digital-files marketplace**: sellers upload downloadable files, buyers download them. No physical
 goods, no shipping. Since 2026-11-03 it is being turned into a **deployed demo with fake payments**
 that only the owner signs into (`corpus/wiki/decisions.md`).
 
 Two npm projects with their own lockfiles: `backend/` (Node + TypeScript + Fastify, a workspace of
-`@my-olx/app`, Kysely over SQLite with `better-sqlite3`, files on disk) and
+`@mercatus/app`, Kysely over SQLite with `better-sqlite3`, files on disk) and
 `frontend/` (React + Vite + TanStack Router + React Query + Tailwind v4). Exact-pinned dependencies.
 The root `package.json` holds the house-style tools and scripts that call into the two (vps-deploy needs
 one at the checkout's root).
@@ -69,7 +69,7 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 
 - Three `package.json` files, three lockfiles: `backend/`, `frontend/`, and the root for the tools. None is a
   workspace of another.
-- `backend/` is a workspace of one package, `@my-olx/app` (`core/` was folded into `app/src` on 2026-11-13).
+- `backend/` is a workspace of one package, `@mercatus/app` (`core/` was folded into `app/src` on 2026-11-13).
 - The frontend has two vitest files (the `cn()` merge, and the stylesheet read as text: dark-theme contrast, the
   browser-bar colours); flows are checked in Playwright. Its gate is typecheck, lint, those tests and build.
 - `vendor/house-style/` is a generated copy: never edit it, `npm run house-style:sync` refreshes it.
@@ -94,7 +94,7 @@ The frontend calls the API at `VITE_API_URL` (default `http://localhost:8080` in
 
 ```
 backend/
-  app/src/        @my-olx/app: server.ts (the entry: listens), app.ts (buildApp), config.ts (the one
+  app/src/        @mercatus/app: server.ts (the entry: listens), app.ts (buildApp), config.ts (the one
                   reader of the environment), features/<name>/ (routes.ts, schemas.ts, service.ts,
                   store.ts, index.ts: auth, users, favorites, listings, images, assets, bundles,
                   messaging, orders, reviews, payouts, invoices, anaf, ward, health, reminders),

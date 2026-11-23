@@ -31,7 +31,7 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: "${PIATARO_PORT:-8807}"
-      DATABASE_PATH: /data/my-olx.db
+      DATABASE_PATH: /data/mercatus.db
       UPLOADS_DIR: /data/uploads
       ASSETS_DIR: /data/assets
     volumes:

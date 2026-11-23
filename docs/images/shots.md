@@ -25,7 +25,7 @@ real appears. The titles, sellers, reviewers and pictures are invented.
 
    ```bash
    cd backend && npm ci
-   export DATABASE_PATH=/tmp/olx-shots/my-olx.db UPLOADS_DIR=/tmp/olx-shots/uploads ASSETS_DIR=/tmp/olx-shots/assets
+   export DATABASE_PATH=/tmp/mercatus-shots/mercatus.db UPLOADS_DIR=/tmp/mercatus-shots/uploads ASSETS_DIR=/tmp/mercatus-shots/assets
    npm run seed:samples
    JWT_SECRET=$(openssl rand -hex 32) npm run dev
    ```

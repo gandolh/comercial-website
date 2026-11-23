@@ -1,6 +1,6 @@
 ---
 summary: A brainstorm of product categories and platform features for a Romania-focused digital marketplace.
-updated: 2026-05-28
+updated: 2026-11-23
 ---
 
 # Product Ideas & Business Brainstorming
@@ -118,7 +118,7 @@ No existing Romanian platform combines: Romanian language + RON pricing + e-Fact
 | Envato / ThemeForest | ✗ | ✗ | ✗ | ✗ |
 | Gumroad | ✗ | ✗ | ✗ | ✗ |
 | legalup.ro / kitgdpr.ro | ✓ | ✓ | ✗ | Limited |
-| **my-olx** | ✓ | ✓ | ✓ planned | ✓ |
+| **Mercatus** | ✓ | ✓ | ✓ planned | ✓ |
 
 ## See also
 

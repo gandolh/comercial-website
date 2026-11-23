@@ -1,5 +1,5 @@
 {
-  "name": "my-olx-backend",
+  "name": "mercatus-backend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,18 +7,18 @@
     "app"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace @my-olx/app",
-    "build": "npm run build --workspace @my-olx/app",
+    "dev": "npm run dev --workspace @mercatus/app",
+    "build": "npm run build --workspace @mercatus/app",
     "pretest": "npm run build",
     "test": "vitest run",
     "typecheck": "tsc -b app",
     "lint": "eslint .",
     "knip": "knip",
     "check:fast": "npm run typecheck && node ../scripts/check-fast.mjs",
-    "migrate": "npm run migrate --workspace @my-olx/app",
-    "seed:dev": "npm run seed:dev --workspace @my-olx/app",
-    "create-owner": "npm run create-owner --workspace @my-olx/app",
-    "seed:samples": "npm run seed:samples --workspace @my-olx/app"
+    "migrate": "npm run migrate --workspace @mercatus/app",
+    "seed:dev": "npm run seed:dev --workspace @mercatus/app",
+    "create-owner": "npm run create-owner --workspace @mercatus/app",
+    "seed:samples": "npm run seed:samples --workspace @mercatus/app"
   },
   "devDependencies": {
     "typescript": "6.0.3",

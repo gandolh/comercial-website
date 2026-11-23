@@ -112,7 +112,7 @@ function emailFooter(unsubscribeUrl: string): string {
   return `
     <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb" />
     <p style="font-size:12px;color:#9ca3af;margin:0">
-      my-olx — piața activelor digitale<br/>
+      Mercatus — piața activelor digitale<br/>
       Nu mai dorești să primești notificări?
       <a href="${unsubscribeUrl}" style="color:#0056D2">Dezabonează-te</a>
     </p>
@@ -156,7 +156,7 @@ export function newMessageEmail(params: {
     <html lang="ro">
     <head><meta charset="UTF-8" /></head>
     <body style="font-family:Inter,sans-serif;color:#111827;max-width:600px;margin:0 auto;padding:24px">
-      <h2 style="color:#0056D2;margin-top:0">Ai un mesaj nou pe my-olx</h2>
+      <h2 style="color:#0056D2;margin-top:0">Ai un mesaj nou pe Mercatus</h2>
       <p>${greeting}</p>
       <p><strong>${from}</strong> ți-a trimis un mesaj legat de anunțul
         <em>&ldquo;${listingTitle}&rdquo;</em>:</p>
@@ -178,7 +178,7 @@ export function newMessageEmail(params: {
 
   return {
     to: recipientEmail,
-    subject: "Ai un mesaj nou pe my-olx",
+    subject: "Ai un mesaj nou pe Mercatus",
     html,
     text,
   };

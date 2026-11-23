@@ -8,7 +8,7 @@ import path from "node:path";
 
 /** A bare Fastify with the HTTP plugins and a health route, as the app registers them. */
 async function buildApp(overrides: Partial<HttpOptions> = {}) {
-  const uploadsDir = await mkdtemp(path.join(tmpdir(), "my-olx-test-"));
+  const uploadsDir = await mkdtemp(path.join(tmpdir(), "mercatus-test-"));
   const app = Fastify();
   await app.register(http, { corsOrigins: ["http://localhost:5173"], uploadsDir, ...overrides });
   app.get("/health", async () => ({ status: "ok" }));

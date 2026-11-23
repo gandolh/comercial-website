@@ -80,7 +80,7 @@ const FAQ_ITEMS = [
       },
       {
         q: "Ce fac dacă un fișier descărcat conține malware?",
-        a: "Contactează-ne imediat la suport@my-olx.ro cu dovezile necesare. Vom suspenda anunțul și vom procesa rambursarea.",
+        a: "Contactează-ne imediat la suport@mercatus.example cu dovezile necesare. Vom suspenda anunțul și vom procesa rambursarea.",
       },
     ],
   },
@@ -131,7 +131,7 @@ export function AjutorPage() {
             Echipa noastră de suport răspunde în 2 zile lucrătoare.
           </p>
           <a
-            href="mailto:suport@my-olx.ro"
+            href="mailto:suport@mercatus.example"
             className="inline-flex items-center justify-center rounded-control bg-action-fill px-6 py-2.5 text-sm font-semibold text-on-action-fill no-underline transition-opacity hover:opacity-90"
           >
             Trimite un email

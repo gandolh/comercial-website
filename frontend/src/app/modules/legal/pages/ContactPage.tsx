@@ -16,31 +16,35 @@ export function ContactPage() {
             icon="support_agent"
             title="Suport general"
             description="Probleme cu contul, descărcări, anunțuri."
-            contact="suport@my-olx.ro"
-            href="mailto:suport@my-olx.ro"
+            contact="suport@mercatus.example"
+            href="mailto:suport@mercatus.example"
           />
           <ContactCard
             icon="gavel"
             title="Legal & Conformitate"
             description="Termeni, GDPR, drepturi de autor, retrageri."
-            contact="legal@my-olx.ro"
-            href="mailto:legal@my-olx.ro"
+            contact="legal@mercatus.example"
+            href="mailto:legal@mercatus.example"
           />
           <ContactCard
             icon="security"
             title="Confidențialitate"
             description="Exercitare drepturi GDPR, ștergere date, portabilitate."
-            contact="privacy@my-olx.ro"
-            href="mailto:privacy@my-olx.ro"
+            contact="privacy@mercatus.example"
+            href="mailto:privacy@mercatus.example"
           />
           <ContactCard
             icon="campaign"
             title="Parteneriate & PR"
             description="Colaborări, reclamații media, propuneri de parteneriat."
-            contact="hello@my-olx.ro"
-            href="mailto:hello@my-olx.ro"
+            contact="hello@mercatus.example"
+            href="mailto:hello@mercatus.example"
           />
         </div>
+
+        <p className="text-sm text-on-surface-variant">
+          Mercatus este o demonstrație, așa că adresele de mai sus sunt exemple: nu primesc e-mailuri.
+        </p>
 
         <section className="space-y-4 rounded-2xl bg-surface-container p-8">
           <h2 className={`${PAGE_TITLE} text-xl text-on-surface`}>Date de identificare</h2>

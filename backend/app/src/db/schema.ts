@@ -1,7 +1,7 @@
 import type { ColumnType, Generated } from "kysely";
 
 /**
- * Full database schema for the my-olx SQLite database, typed for Kysely.
+ * Full database schema for the Mercatus SQLite database, typed for Kysely.
  *
  * Conventions:
  * - `Generated<string>` for TEXT columns with DB defaults (id, created_at, ...).

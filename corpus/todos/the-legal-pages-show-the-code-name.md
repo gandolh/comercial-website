@@ -1,5 +1,9 @@
 # The legal pages show the code name my-olx
 
+**Status:** promoted (brief 27, built and closed 2026-11-23)
+
+> Promoted to [brief 27](../briefs/done/27-retire-the-code-name-my-olx.md) on 2026-11-23.
+
 Captured 2026-11-21, during brief 26 (the rename to Mercatus).
 
 The glossary says to avoid `my-olx` in user-facing text, but the legal pages use it as the platform's name: "Despre

@@ -1,4 +1,4 @@
-// @my-olx/app — the entry: settings, the data folder, the app, shutdown, listen. Nothing else listens.
+// @mercatus/app — the entry: settings, the data folder, the app, shutdown, listen. Nothing else listens.
 // The container starts this file (`node app/dist/server.js`, infrastructure/Dockerfile).
 import closeWithGrace from "close-with-grace";
 import { buildApp } from "./app.js";
