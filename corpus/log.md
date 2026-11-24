@@ -357,3 +357,15 @@ Termeni section 4 now cites OUG nr. 34/2014 art. 9 alin. (1) for the 14 days and
 digital-content exception, with all three conditions; GEO 141/2021 is gone. Section 8's SAL item links ANPC's SAL
 platform and the closed EU ODR link is gone. New `e2e/legal-citations.spec.ts`. See
 [the brief](briefs/done/28-the-terms-cite-the-right-consumer-law.md).
+
+## [2026-11-24] brief | Brief 29 from the infra review of 2026-11-24
+
+Filed from the estate's infra review: the image's three `FROM` lines are pinned to `node:24.22.1-alpine`, the
+estate's one base. Ships with `node cli.ts piataro server`.
+
+The same review asked whether the expiry reminders need work before the API may sleep (the owner agreed on
+2026-11-24 that it may). They don't: the job runs 10 s after every start and then every 6 hours
+(`features/reminders/service.ts`), and it picks what is due from the `reminder_*_sent_at` columns, so a start
+after a sleep catches up. `app.ts` builds the mail with `createEmailService({})`, which has no host and only logs
+(`lib/email.ts`), so a reminder sent late or twice is a log line, and no wake timer is needed. No brief filed for
+it.
