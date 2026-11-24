@@ -76,4 +76,6 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
    there (`sudo` if the files' owner is the container's mapped user). Then deploy as usual: `node cli.ts piataro deploy`
    from vps-deploy.
 
+9. Brief 29 pins the image's node base: it ships with the next `node cli.ts piataro server`, after step 8.
+
 [docs/deploy.md](../../docs/deploy.md) has the details and a password reset.

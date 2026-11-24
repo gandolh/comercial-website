@@ -51,3 +51,14 @@ controller.
 ## Owner steps
 
 - `node cli.ts piataro server` from vps-deploy. The image builds on the box.
+
+## Outcome
+
+Built 2026-11-24 by the controller (b5f412e). Ready for deploy: `node cli.ts piataro server` (brief 27's database
+move comes first if it hasn't run yet).
+
+- **Step 1**: the three `FROM` lines are `node:24.22.1-alpine`, with a comment on why the base is pinned.
+- **Step 2**: the image builds (221 MB before, 222 MB after: the pinned Node patch). On a scratch data folder,
+  with a throwaway `JWT_SECRET` (the API exits at start without one), it turned healthy; `/health` answered
+  `{"status":"ok"}`; Node is v24.22.1. Test images and the container were removed.
+- `npm run check` exits 0; `bash corpus/lint.sh` passes.

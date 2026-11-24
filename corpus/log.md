@@ -369,3 +369,8 @@ The same review asked whether the expiry reminders need work before the API may 
 after a sleep catches up. `app.ts` builds the mail with `createEmailService({})`, which has no host and only logs
 (`lib/email.ts`), so a reminder sent late or twice is a log line, and no wake timer is needed. No brief filed for
 it.
+
+## [2026-11-24] brief | 29 The image's node base is pinned
+
+Built. The three `FROM` lines are `node:24.22.1-alpine`. The image (222 MB) turned healthy on scratch data.
+Ready for deploy: `node cli.ts piataro server`. See [briefs/done/29-the-images-node-base-is-pinned.md](briefs/done/29-the-images-node-base-is-pinned.md).
