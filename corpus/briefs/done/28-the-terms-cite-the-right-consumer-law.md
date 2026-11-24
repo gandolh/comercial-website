@@ -72,3 +72,22 @@ page gets wrong and adds nothing else.
 - The demo says "Prin inițierea descărcării, confirmi pierderea dreptului de retragere", but the checkout asks for
   no express consent, which art. 16 lit. m) needs. A consent tick at checkout is out of this brief. Add it in a
   later brief, or leave it for a demo with fake payments?
+
+## Outcome (2026-11-24)
+
+Built. Termeni section 4 is titled "Dreptul de retragere (OUG nr. 34/2014)": the 14 days cite art. 9 alin. (1), the
+exception cites art. 16 alin. (1) lit. m) with its three conditions, and GEO 141/2021 appears nowhere. The closing
+sentence ("Prin inițierea descărcării, confirmi pierderea dreptului de retragere") was cut: the checkout asks for no
+express consent, so it would read false next to the three conditions. Section 8's SAL item links
+`https://reclamatiisal.anpc.ro/` (ANPC's SAL complaint platform; checked on 2026-11-24: HTTP 200, "Depune cerere SAL").
+ANPC Order 270/2026, which amended Order 449/2022, made it the SAL address and dropped the ODR/SOL references; the
+source is a press summary of ANPC's communiqué, not the Order's text. The ODR link is gone.
+
+Official text read: `https://legislatie.just.ro/Public/DetaliiDocument/158913` (OUG 34/2014), on 2026-11-24. Art. 9
+alin. (1) and art. 16 alin. (1) lit. m) held as the brief says (lit. m) last amended by OUG 58/2022); no later change.
+
+Checks: `e2e/legal-citations.spec.ts` passes against Vite; `npm run check` passes (one backend test,
+`attempt-limit`, timed out once under load and passed on the rerun); `bash corpus/lint.sh` clean.
+
+Open owner decision: the checkout asks for no prior express consent, which art. 16 lit. m) needs. Add a consent tick in
+a later brief, or leave it for a demo with fake payments?

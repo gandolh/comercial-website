@@ -349,4 +349,11 @@ too; history keeps my-olx. [decisions.md](wiki/decisions.md) records it. Owner s
 Filed from the romania-law research (just-a-bot's corpus, `corpus/wiki/research-romania-law.md` there). Termeni
 section 4 cites GEO 141/2021 for the 14-day withdrawal right, which is OUG 34/2014 art. 9, and lists two of the
 three conditions of the digital-content exception (art. 16 alin. (1) lit. m)). Section 8 links the EU ODR
-platform, closed from 2025-07-20 by Regulamentul (UE) 2024/3228. See [the brief](briefs/todo/28-the-terms-cite-the-right-consumer-law.md).
+platform, closed from 2025-07-20 by Regulamentul (UE) 2024/3228. See [the brief](briefs/done/28-the-terms-cite-the-right-consumer-law.md).
+
+## [2026-11-24] done | Brief 28 — the terms cite the right consumer law
+
+Termeni section 4 now cites OUG nr. 34/2014 art. 9 alin. (1) for the 14 days and art. 16 alin. (1) lit. m) for the
+digital-content exception, with all three conditions; GEO 141/2021 is gone. Section 8's SAL item links ANPC's SAL
+platform and the closed EU ODR link is gone. New `e2e/legal-citations.spec.ts`. See
+[the brief](briefs/done/28-the-terms-cite-the-right-consumer-law.md).

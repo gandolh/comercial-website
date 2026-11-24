@@ -12,7 +12,7 @@ from todos `static-pages`, `gdpr-cookie-consent`.
 
 A new `legal` frontend module (TanStack Router) with 6 pages of coherent Romanian content:
 
-- `/termeni` — Termeni și Condiții (digital content delivery, 14-day withdrawal exception, ANPC/SAL).
+- `/termeni` — Termeni și Condiții (digital content delivery; the 14-day withdrawal right cites OUG 34/2014 art. 9 alin. (1) and its digital-content exception art. 16 alin. (1) lit. m) with all three conditions; ANPC and SAL through ANPC's SAL platform, no EU ODR link since the platform closed on 2025-07-20). Checked against the official text on 2026-11-24 (brief 28).
 - `/confidentialitate` — Politică de Confidențialitate (GDPR / Law 190/2018; data controller, rights, ANSPDCP).
 - `/politica-cookies` (alias `/cookies`) — Politică de Cookies (Law 506/2004).
 - `/despre` — Despre Mercatus.
