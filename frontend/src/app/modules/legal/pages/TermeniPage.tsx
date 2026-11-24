@@ -40,21 +40,22 @@ export function TermeniPage() {
           </p>
         </Section>
 
-        <Section title="4. Dreptul de retragere (GEO 141/2021)">
+        <Section title="4. Dreptul de retragere (OUG nr. 34/2014)">
           <p>
-            În conformitate cu GEO 141/2021, ai dreptul de a te retrage dintr-un contract de conținut digital în termen
-            de <strong>14 zile calendaristice</strong> de la data achiziției, fără a preciza motive și fără costuri
-            suplimentare, <em>cu excepția</em> cazului în care:
+            În conformitate cu art. 9 alin. (1) din OUG nr. 34/2014, ai dreptul de a te retrage dintr-un contract la
+            distanță în termen de <strong>14 zile calendaristice</strong>, fără a justifica decizia și fără costuri
+            suplimentare, <em>cu excepția</em> contractelor de furnizare de conținut digital care nu este livrat pe un
+            suport material (art. 16 alin. (1) lit. m)), dacă executarea a început și sunt îndeplinite toate cele trei
+            condiții:
           </p>
           <ul className="mt-3 list-inside list-disc space-y-1 text-on-surface-variant">
-            <li>Ai consimțit expres că livrarea conținutului digital începe imediat după achiziție, și</li>
+            <li>ți-ai dat acordul prealabil expres pentru începerea descărcării în cursul perioadei de retragere,</li>
+            <li>ai confirmat că ai luat cunoștință de faptul că îți vei pierde astfel dreptul de retragere, și</li>
             <li>
-              Ai confirmat că ai înțeles că dreptul de retragere se pierde în momentul în care descărcarea a început.
+              Mercatus ți-a trimis confirmarea încheierii contractului, conform art. 7 alin. (2) sau art. 8 alin. (7)
+              din aceeași ordonanță.
             </li>
           </ul>
-          <p className="mt-3">
-            Prin inițierea descărcării, confirmi pierderea dreptului de retragere conform condițiilor de mai sus.
-          </p>
         </Section>
 
         <Section title="5. Prețuri și monedă">
@@ -90,15 +91,8 @@ export function TermeniPage() {
               sector 1, București
             </li>
             <li>
-              <strong>SAL</strong> — Soluționare Alternativă a Litigiilor:
-              <a
-                href="https://ec.europa.eu/consumers/odr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-1 text-primary hover:underline"
-              >
-                ec.europa.eu/consumers/odr
-              </a>
+              <strong>SAL</strong> — Soluționarea Alternativă a Litigiilor, procedura națională prevăzută de OG nr.
+              38/2015
             </li>
           </ul>
         </Section>
