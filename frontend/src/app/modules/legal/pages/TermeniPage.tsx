@@ -91,8 +91,16 @@ export function TermeniPage() {
               sector 1, București
             </li>
             <li>
-              <strong>SAL</strong> — Soluționarea Alternativă a Litigiilor, procedura națională prevăzută de OG nr.
-              38/2015
+              <strong>SAL</strong> — Soluționarea Alternativă a Litigiilor, procedura prevăzută de OG nr. 38/2015, prin
+              platforma ANPC:
+              <a
+                href="https://reclamatiisal.anpc.ro/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-1 text-primary hover:underline"
+              >
+                reclamatiisal.anpc.ro
+              </a>
             </li>
           </ul>
         </Section>
