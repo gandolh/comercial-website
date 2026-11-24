@@ -6,6 +6,9 @@ paths:
 # The frontend (`frontend/src`)
 
 - Read the `base-ui` skill before you add or change a component.
+- Browsers: Chrome on Android decides what to build; Safari on iPhone,
+  Firefox and desktop Safari must keep working. Before you use a platform
+  feature newer than Baseline Widely available, read the `web-platform` skill.
 - Base UI is imported only by the wrappers in `frontend/src/core/components/ui/<Name>/`, from subpaths
   (`@base-ui/react/slider`). Pages import the wrapper, never `@base-ui/react`.
 - Styling is Tailwind utilities, with the tokens from `@theme` in `frontend/src/index.css`. Add no new `.css`
