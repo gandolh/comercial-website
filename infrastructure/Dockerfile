@@ -28,7 +28,11 @@
 # ---------------------------------------------------------------------------
 # deps — full install, with the toolchain native modules need
 # ---------------------------------------------------------------------------
-FROM node:24-alpine AS deps
+# Every stage uses one exact base. A floating `node:24-alpine` follows the tag on
+# the day of the build, so the box ends up holding several bases and every cache
+# entry keyed on the old one goes dead; the estate moves to a new patch in one
+# sweep instead.
+FROM node:24.22.1-alpine AS deps
 # better-sqlite3 11.7.0 has no prebuild for Node 24, so it compiles here.
 # argon2 ships a musl prebuild and needs none of this.
 RUN apk add --no-cache python3 make g++
@@ -49,7 +53,7 @@ RUN npm run build
 # ---------------------------------------------------------------------------
 # proddeps — runtime dependencies only, native modules built here
 # ---------------------------------------------------------------------------
-FROM node:24-alpine AS proddeps
+FROM node:24.22.1-alpine AS proddeps
 RUN apk add --no-cache python3 make g++
 WORKDIR /app
 COPY backend/package.json backend/package-lock.json ./
@@ -70,7 +74,7 @@ RUN cd node_modules \
 # ---------------------------------------------------------------------------
 # prod — slim runtime: no compiler, no test code, no TypeScript
 # ---------------------------------------------------------------------------
-FROM node:24-alpine AS prod
+FROM node:24.22.1-alpine AS prod
 LABEL org.opencontainers.image.title="piataro" \
       org.opencontainers.image.description="PiațăRo API: a demo marketplace for digital files"
 # wget, for the healthcheck below, ships in node:alpine's busybox.
