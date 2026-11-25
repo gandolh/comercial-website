@@ -374,3 +374,9 @@ it.
 
 Built. The three `FROM` lines are `node:24.22.1-alpine`. The image (222 MB) turned healthy on scratch data.
 Ready for deploy: `node cli.ts piataro server`. See [briefs/done/29-the-images-node-base-is-pinned.md](briefs/done/29-the-images-node-base-is-pinned.md).
+
+## [2026-11-25] todo | Brief 30: the colour mode is kept under Mercatus's own key
+
+Filed from the owner's report that the colour-mode picker acts across apps. Mercatus and six other apps on the shared
+domain keep the choice under the bare `theme` key; it moves to `piataro.theme`, carrying the old value over once.
+Ships with `node cli.ts piataro all`.
