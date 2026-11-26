@@ -34,7 +34,7 @@ Start here. Triage on the summary lines; open at most 2–3 pages.
 - [search](wiki/search.md) — Listing search on SQLite FTS5 with diacritics folding ("sablon" matches "șablon").
 - [social-media-templates](wiki/social-media-templates.md) — Market research: social-media template packs for Romanian SMBs (platform reach, the price gap between packs and agencies, what to sell).
 - [stack](wiki/stack.md) — The tech stack: the Fastify, Kysely and SQLite backend workspace, the React and Vite frontend, auth and storage, and how they fit.
-- [status](wiki/status.md) — Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-27 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
+- [status](wiki/status.md) — Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-30 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
 - [user](wiki/user.md) — The User entity: one account type that both buys and sells, its columns, auth fields, seller profile and email opt-outs.
 
 ## Work

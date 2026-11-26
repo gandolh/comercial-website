@@ -1,6 +1,6 @@
 ---
 summary: Locked calls future briefs must not relitigate — the project is a deployed demo with fake payments (Stripe removed, no live ANAF), only the owner signs in (own login plus Ward, linked by Ward subject), a fake payout ledger at 2.5%, the /piataro address, sample listings that never expire, the house style and its checks (vendored, width 120).
-updated: 2026-11-23
+updated: 2026-11-26
 ---
 
 # Decisions
@@ -82,7 +82,8 @@ icon sizes stay as recorded exceptions).
 
 ## The theme: Light, Dark or System, on this device
 _2026-11-10, built 2026-11-12 (brief 12)_ — A `data-theme` attribute on `<html>` carries the choice; `dark:` keys
-off it, never off the system setting. A first visit is light; the choice lives in `localStorage` (no server
+off it, never off the system setting. A first visit is light; the choice lives in `localStorage` under `piataro.theme` since brief 30 (the bare `theme` was shared by every app on the
+domain; it is read once to carry the choice over, never written) (no server
 setting, since only the owner has an account); System is resolved in script and follows the browser live. The
 control is a `RadioGroup` in the footer, reachable signed out. Rejected: following the system on a first visit
 and a toggle in the profile menu.

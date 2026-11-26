@@ -67,3 +67,21 @@ All settled. None of them is open.
 
 - Settled 2026-11-25 (owner): "color-mode picker should be per app, not per ward account." The key, the carry-over
   and the legacy name are the controller's calls, the same in all seven apps.
+
+## Outcome
+
+Built 2026-11-26. Ready for deploy: `node cli.ts piataro deploy` (the web build only).
+
+- **Step 1**: the key is `piataro.theme` in the boot script (`frontend/index.html`) and the store (`KEY`, with
+  `LEGACY_THEME_KEY` and `readLegacyTheme` for the one-time read). Both write the carried-over value to
+  `piataro.theme` and never write or delete the bare `theme`.
+- **Step 2**: `frontend/src/core/lib/theme.test.ts` (new, node environment with a stubbed `localStorage`): own key
+  wins, bare `dark` carries over and is written to `piataro.theme` only, the bare key is untouched after a choice,
+  unknown values read as light, blocked storage reads as light. The file is outside the list of files the brief
+  owns, but step 2 asks for the tests and the frontend had none for the store.
+- **Step 3**: `e2e/fixtures.ts` seeds `piataro.theme`.
+- Walked in Chromium on the dev server: a bare `dark` gave a dark first paint and was copied to `piataro.theme`;
+  the switch wrote only `piataro.theme`; with the bare key set to `light` and a reload, the page stayed dark.
+  `e2e/theme.spec.ts` passes (3 tests). The rest of the e2e specs need the API and were not run.
+- `npm run check` exits 0 (Node 24); `bash corpus/lint.sh` passes.
+- The board was not updated: brief-board was not available in this session.

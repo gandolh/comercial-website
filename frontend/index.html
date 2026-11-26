@@ -9,8 +9,14 @@
     <script>
       // The saved theme before the first paint, so a dark visitor never sees a light flash; light on a first visit.
       // The colours are the `background` role of each theme in src/index.css (src/core/lib/theme.test.ts checks).
+      // piataro.theme is the app's own key; the bare "theme" is read once to carry an old choice over, never written.
       try {
-        var saved = localStorage.getItem("theme");
+        var saved = localStorage.getItem("piataro.theme");
+        if (saved !== "light" && saved !== "dark" && saved !== "system") {
+          var legacy = localStorage.getItem("theme");
+          saved = legacy === "light" || legacy === "dark" || legacy === "system" ? legacy : null;
+          if (saved) localStorage.setItem("piataro.theme", saved);
+        }
         var dark = saved === "dark" || (saved === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
         document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#161112" : "#f1ece2");

@@ -64,7 +64,7 @@ export async function openScreen(page: Page, screen: Screen, theme: Theme = "lig
   const token = screen.signedIn ? await sessionToken() : null;
   await page.addInitScript(
     ([t, tk]) => {
-      localStorage.setItem("theme", t as string);
+      localStorage.setItem("piataro.theme", t as string);
       localStorage.setItem("cookie_consent", "accepted");
       if (tk) localStorage.setItem("auth_token", tk);
     },

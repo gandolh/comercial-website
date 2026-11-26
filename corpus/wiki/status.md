@@ -1,6 +1,6 @@
 ---
-summary: Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-27 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
-updated: 2026-11-23
+summary: Dated snapshot (2026-11-23) — Mercatus (PiațăRo until 2026-11-21) as a deployed demo; briefs 01-30 are done (one line each), 10-27 wait for a deploy (21-27: the Roman identity and the rename), and the owner's steps.
+updated: 2026-11-26
 ---
 
 # Status — 2026-11-13
@@ -39,6 +39,7 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
 - 26 (done, ready for deploy): the visible product is Mercatus: `BRAND`, the wordmark MERCATVS ("Mercatus, acasă"), the tab title, the footer, the sign-in card, the legal pages, the Ward messages, the sample files' text, the README (its five images retaken) and the docs; the paths, packages and stack keep `piataro`/`my-olx`; `e2e/rename.spec.ts`. [Brief 26](../briefs/done/26-rename-the-product-to-mercatus.md).
 - 27 (done, ready for deploy): the code name my-olx is retired: `@mercatus/app`, `mercatus-backend`, the database file `mercatus.db`, Mercatus in the legal pages and the new-message email, the contact addresses `@mercatus.example` with a line on Contact saying they are examples; `e2e/rename.spec.ts` checks the six legal pages. [Brief 27](../briefs/done/27-retire-the-code-name-my-olx.md).
 - 28 (done, ready for deploy): Termeni section 4 cites OUG 34/2014 art. 9 alin. (1) and art. 16 alin. (1) lit. m) with its three conditions (GEO 141/2021 gone); section 8's SAL item links ANPC's SAL platform and the closed ODR link is gone; `e2e/legal-citations.spec.ts`. Open owner decision: a consent tick at checkout. [Brief 28](../briefs/done/28-the-terms-cite-the-right-consumer-law.md).
+- 30 (done, ready for deploy): the colour mode is kept under `piataro.theme` instead of the bare `theme` that seven apps on the shared domain wrote; the old value carries over once, in the boot script and the store, and the bare key is never written. [Brief 30](../briefs/done/30-the-colour-mode-is-kept-under-its-own-key.md).
 
 ## Owed by the owner
 
@@ -77,5 +78,6 @@ updates 2026-10-23. On 2026-11-03 the owner decided it becomes a deployed demo
    from vps-deploy.
 
 9. Brief 29 pins the image's node base: it ships with the next `node cli.ts piataro server`, after step 8.
+10. Brief 30 (the colour-mode key) ships with the web deploy, `node cli.ts piataro deploy`; no server restart. On the first load Mercatus takes the mode last picked in any app, once.
 
 [docs/deploy.md](../../docs/deploy.md) has the details and a password reset.
